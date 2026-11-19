@@ -55,6 +55,7 @@ dependencies = [
 wandb = ["wandb>=0.19"]
 accelerators = ["torch"]
 qnn-export = ["onnx"]
+cluster = ["ray>=2.40,<3"]
 
 [project.scripts]
 omega-x-evolution = "omega_x_evolution.__main__:main"
@@ -78,6 +79,7 @@ omega-x-research = "omega_x_evolution.runtime:main"
 omega-x-semantic-memory = "omega_x_evolution.semantic_memory:main"
 omega-x-training = "omega_x_evolution.training:main"
 omega-x-bitproof = "omega_x_evolution.bitproof:main"
+omega-x-cluster = "omega_x_evolution.cluster:main"
 omega-x-teams-durable = "omega_x_evolution.team_recovery:main"
 shinka_omega = "shinka.omega.__main__:main"
 shinka_launch = "shinka.cli.launch:main"

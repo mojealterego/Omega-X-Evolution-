@@ -1,0 +1,15 @@
+OMEGA-X Evolution 0.22.0.dev1 — asynchronous MAP-Elites cluster
+Base: 7ef14b459819bf9506b8ed88c6fdf9e67028447f
+Base ZIP SHA-256 7b268df1938ba2e2c04107f51d4d2fcadcf80d71b3c9afd3bc87c40ad27ab8af; 454/454 tracked Git blobs matched.
+RED: initial missing cluster module; later mandatory challenge omission test failed as expected before verification fix.
+GREEN: python -m pytest -q tests/test_omega_v22.py — 14 passed in 7.30s.
+REGRESSION (final module): python -m pytest -q tests/test_omega*.py — 188 passed in 42.60s, exit 0 (14 new tests).
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.60s, exit 0 (existing isolated dependency shim).
+COMPILE: python -m compileall -q omega_x_evolution tests scripts/verify_ray_cluster.py — exit 0.
+METADATA: TOML parsed, 0.22.0.dev1, 23 canonical entry points verified callable.
+FULL UPSTREAM: python -m pytest -q — 72 collection errors, exit 2; missing dependencies remain. No concealment by skipping.
+PROCESS: 16 islands, 4 actual spawned worker processes, 128 proposals, 80 commits, 32 received migrations, 26 retained at admission, 72 occupied cells; score 0.5591341064073991 -> 0.8742485746075842. Elapsed wall time 3.29s; no speedup comparison.
+SIMULATION: 256 logical islands, 1 process, 1024 proposals, 768 commits, 511 received migrations, 367 retained at admission, 1000 occupied cells; score 0.5591341064073991 -> 0.8841800533435723. Elapsed 8.34s. Not physical machines.
+MEASURED: 3 islands, 2 actual spawned workers, 12 proposals, 14 latency profile records (including migrants), 12 rejected profiles, no champion improvement. Actual host measurements are scheduling dependent; decision checks independently replayed, timing values trusted from worker. Test doubles also exercise rejection and missing-gate tampering.
+RECOVERY: lost actor response simulation; intentional worker os._exit and BrokenProcessPool, replay from persisted revision through fresh process backend; authentication and CAS integrity tests; no global round barrier test with delayed actor.
+RAY: python -m pip install 'ray>=2.40,<3' failed: no matching distribution available in configured index. PYTHONPATH=. python scripts/verify_ray_cluster.py --address local exited 1 with explicit missing-Ray error. Adapter and physical Ray acceptance script implemented but unexecuted against real Ray. No external machines, real Ray actor restart, external cluster throughput or physical independence claimed. No paid inference, no active workflow. Existing engine.py, workers.py, checkpoint.py, performance.py bytes preserved.
