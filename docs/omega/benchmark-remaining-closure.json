@@ -1,0 +1,201 @@
+{
+  "logistics": {
+    "feasible": true,
+    "bits": [
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0
+    ],
+    "energy": 5,
+    "scale": 1,
+    "exhaustive": true,
+    "objective_evaluations": 66,
+    "external": {
+      "samples": 8,
+      "feasible_samples": 2,
+      "best_energy": 5
+    }
+  },
+  "external_sampler": "exact classical enumeration, not QPU",
+  "tensor": {
+    "feasible": true,
+    "bits": [
+      1,
+      1,
+      0
+    ],
+    "energy": 0,
+    "scale": 10000,
+    "exhaustive": true,
+    "objective_evaluations": 8,
+    "external": null
+  },
+  "architecture": {
+    "schema": "omega-memory-score-program-v1",
+    "snapshot_sha256": "e3f68005bf758c0511a48495cde14261b2ee59f143ef60166808d9cd19c51769",
+    "structure_sha256": "9c47d2071dae49dc4b2297fd84aa1fe563eac12fb2a7ae4edbae7a7e79f91044",
+    "hyperedges": 8,
+    "evaluations": 24,
+    "selected": [
+      "prop",
+      [
+        "lex"
+      ]
+    ],
+    "challenger": [
+      "prop",
+      [
+        "lex"
+      ]
+    ],
+    "promoted": true,
+    "validation": {
+      "mrr": 0.5,
+      "work": 7
+    },
+    "baseline_validation": {
+      "mrr": 0.0,
+      "work": 3
+    },
+    "test": {
+      "mrr": 0.5,
+      "work": 7
+    },
+    "baseline_test": {
+      "mrr": 0.0,
+      "work": 3
+    },
+    "test_evaluations": 2,
+    "work": 2618
+  },
+  "proof": {
+    "schema": "omega-extensional-proof-v1",
+    "proved": true,
+    "left": [
+      "add",
+      [
+        "and",
+        [
+          "x"
+        ],
+        [
+          "y"
+        ]
+      ],
+      [
+        "xor",
+        [
+          "x"
+        ],
+        [
+          "y"
+        ]
+      ]
+    ],
+    "right": [
+      "or",
+      [
+        "x"
+      ],
+      [
+        "y"
+      ]
+    ],
+    "ring_certificate": null,
+    "solver": {
+      "status": "unsat",
+      "proved": true,
+      "domain_size": 4294967296,
+      "query_sha256": "824318164daee3778d54ebf6ea33c74df55e2108b66bdac773c8dc03df7f61c0",
+      "semantics": "pure modular u16 IR, not compiler equivalence"
+    },
+    "lean": null,
+    "require_lean": false,
+    "domain_size": 4294967296,
+    "definition": "pure function equality over BitVec 16 \u00d7 BitVec 16"
+  },
+  "infinite_discovery": {
+    "proved": 98,
+    "refuted": 30,
+    "unknown": 0
+  },
+  "rational_law": {
+    "schema": "omega-laurent-law-v1",
+    "data_sha256": "f5cbffaed618f62cd63403dec3b0f2051e9ecc2a3baed307a01e2e26ca14102c",
+    "library_size": 1,
+    "attempts": 1,
+    "terms": [
+      {
+        "exponents": [
+          1,
+          -2
+        ],
+        "coefficient": 1.0000000000000002
+      }
+    ],
+    "validation_rmse": 9.525371362957096e-17,
+    "test_rmse": 1.9843025916406203e-16,
+    "test_evaluations": 1,
+    "domain": "nonzero measured coordinates; empirical relation, not a proof of a physical law"
+  },
+  "transformer": {
+    "rounds": 2,
+    "spent_steps": 8,
+    "attempts": 8,
+    "base_unchanged": true,
+    "trainable_parameters": 192,
+    "frozen_parameters": 27574,
+    "replay_verified": true,
+    "history": [
+      {
+        "actual_steps": 4,
+        "train_before": 0.0023097507655620575,
+        "train_after": 0.0019379820441827178,
+        "validation_before": 0.03189801424741745,
+        "validation_candidate": 0.031936727464199066,
+        "retention_before": 0.026747500523924828,
+        "retention_candidate": 0.026873081922531128,
+        "promoted": false,
+        "candidate_sha256": "87e8ab7dc4403913bbce7729598ba09e0dfbf684d59aa9ae0c75c7f0a609c764",
+        "active_sha256": "2d951b28a923d2e2bcda008e016f003b6b21b3e6b1aa050e41cf96faec2e5b2d",
+        "round": 1,
+        "records": 4
+      },
+      {
+        "actual_steps": 4,
+        "train_before": 0.025117862969636917,
+        "train_after": 0.02473398484289646,
+        "validation_before": 0.03189801424741745,
+        "validation_candidate": 0.03191005066037178,
+        "retention_before": 0.026747500523924828,
+        "retention_candidate": 0.02676708996295929,
+        "promoted": false,
+        "candidate_sha256": "4a2b6302d2bf6b71c7f5a844ce8f6e0b2c8877c8758e7f5d4f5187a9a08ffcc8",
+        "active_sha256": "2d951b28a923d2e2bcda008e016f003b6b21b3e6b1aa050e41cf96faec2e5b2d",
+        "round": 2,
+        "records": 4
+      }
+    ],
+    "test_mse": 0.03309536352753639,
+    "base_test_mse": 0.03309536352753639,
+    "backend": "tiny-decoder-cpu"
+  },
+  "tpu_contract": {
+    "backend": "jax-cpu-simulation",
+    "seed": 42,
+    "epochs": 16,
+    "reference_verified": true,
+    "loss_before": 0.5147737860679626,
+    "loss_after": 0.02674906700849533,
+    "weights_sha256": "e2b5ea1981ec0c6c3e25d4973c1a0e5174e826d52592d425927c4a2e1e504f78"
+  }
+}

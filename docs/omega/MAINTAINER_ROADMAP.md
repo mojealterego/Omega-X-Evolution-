@@ -23,4 +23,4 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 
 These are distinct acceptance gates, not promises of physical validation, consciousness, mathematical completeness or exponential speedup. No automatic changes to evaluator authorization, safety policy, external infrastructure or financial limits. The existing closure register retains infrastructure and upstream dependency blockers.
 
-The maintainer requires sequential closure of the review list before proceeding. Requirements 1–4 map to v26/v33; see [formal safety closure](FORMAL_SAFETY_CLOSURE.md). No work on points 5–12 or v36 is included in this patch.
+The maintainer requires sequential closure of the review list before proceeding. Requirements 1–4 map to v26/v33; see [formal safety closure](FORMAL_SAFETY_CLOSURE.md). The v35.1 patch did not address points 5–12 or v36. The v35.2 corrective release extends points 5–12; see [requirement-by-requirement evidence and residual gates](REMAINING_REQUIREMENTS_CLOSURE.md). v36 remains open.

@@ -47,6 +47,25 @@ class Switchboard:
         self._revision+=1
         return self.state()
 
+
+CLUSTER_OPTIONAL = ('tensor', 'holographic', 'topological')
+
+
+def cluster_mask(history, allowed):
+    """Pure replay of signed/persisted pressure observations; gates never switch off."""
+    if type(allowed) is not tuple or not set(allowed)<=set(CLUSTER_OPTIONAL) or len(set(allowed))!=len(allowed) or len(history)>100:
+        raise ValueError('cluster mask contract')
+    enabled=allowed; streak=0; trace=[]
+    for raw in history:
+        t=Telemetry(**raw);pressure=max(t.cpu,t.memory,t.queue)
+        if pressure>=85:enabled=();streak=0
+        elif pressure<=50:
+            streak=min(2,streak+1)
+            if streak==2:enabled=allowed
+        else:streak=0
+        trace.append({'sample':raw,'enabled':list(enabled),'recovery_streak':streak,'mandatory':list(MANDATORY)})
+    return trace
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--samples',default='[[90,20,20],[30,30,30],[30,30,30]]');a=p.parse_args()
     if len(a.samples)>8192:raise ValueError('sample size')

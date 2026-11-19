@@ -25,7 +25,7 @@ from multiprocessing import get_context
 
 from .engine import (Archive, Artifact, Audit, BASELINE, Cascade, Expression,
                      Genome, apply_patch, score, simulated_proposal)
-from . import performance, annealed, holographic, safety_synthesis
+from . import performance, annealed, holographic, safety_synthesis, epigenetics
 from .topology import TopologicalArchive, TopologyPolicy
 from .workers import EvaluationInput, evaluate_one
 
@@ -61,10 +61,12 @@ class ClusterConfig:
     annealed: bool = False
     holographic: bool = False
     formal_safety: bool = False
+    epigenetic: bool = False
+    pressure_schedule: tuple[tuple[int, int, int], ...] = ()
 
     @property
     def feedback(self):
-        return self.annealed or self.holographic or self.formal_safety
+        return self.annealed or self.holographic or self.formal_safety or self.epigenetic
 
     def __post_init__(self):
         fields = (self.islands,self.rounds,self.batch,self.budget,self.parallelism,
@@ -76,13 +78,21 @@ class ClusterConfig:
             0 <= self.seed < 2**32 and 1 <= self.timeout <= 3600 and
             self.islands * (self.rounds*(self.batch+1)+1) <= MAX_WORK):
             raise ValueError('cluster resource bounds')
-        if any(type(x) is not bool for x in (self.annealed,self.holographic,self.formal_safety)) or (self.feedback and min(self.budget,self.islands*self.rounds*self.batch)+self.islands*(self.rounds+1)>8192):
+        if any(type(x) is not bool for x in (self.annealed,self.holographic,self.formal_safety,self.epigenetic)) or (self.feedback and min(self.budget,self.islands*self.rounds*self.batch)+self.islands*(self.rounds+1)>8192):
             raise ValueError('adaptive feedback/proof work bounds')
         if self.topology is not None and not isinstance(self.topology,TopologyPolicy):
             raise ValueError('invalid topology policy')
         if self.policy is not None and (not isinstance(self.policy,performance.Policy) or
                 min(self.budget,self.islands*self.rounds*self.batch)+self.islands*(self.rounds+1)>performance.MAX_ATTEMPTS):
             raise ValueError('performance profiling attempt cap')
+
+        if type(self.pressure_schedule) is not tuple or len(self.pressure_schedule) not in (0,self.rounds) or (self.pressure_schedule and not self.epigenetic):raise ValueError('pressure schedule')
+        for row in self.pressure_schedule:
+            if type(row) is not tuple or len(row)!=3:raise ValueError('pressure row')
+            epigenetics.Telemetry(*row)
+
+    def enabled_blocks(self):
+        return tuple(x for x,enabled in zip(epigenetics.CLUSTER_OPTIONAL,(self.annealed,self.holographic,self.topology is not None)) if enabled)
 
     def allowance(self, i):
         return self.budget//self.islands + int(i < self.budget%self.islands)
@@ -92,7 +102,7 @@ def contract(cfg):
     root=Path(__file__).parent
     return {'schema':'omega-cluster-v1','config':asdict(cfg),'python':list(sys.version_info[:3]),
             'source':{n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in
-                      ('cluster.py','engine.py','workers.py','performance.py','topology.py','annealed.py','holographic.py','safety_synthesis.py','modal.py','interval_checker.py')}}
+                      ('cluster.py','engine.py','workers.py','performance.py','topology.py','annealed.py','holographic.py','safety_synthesis.py','modal.py','interval_checker.py','epigenetics.py')}}
 
 
 def artifact(value):
@@ -121,6 +131,7 @@ def initial_state(cfg,i):
         'migration_history':[],'outgoing':None,'performance_records':[],
         'elite':asdict(a),'occupied_cells':1})
     book=safety_synthesis.RuleBook();book.learn(BASELINE,safety_synthesis.prove(BASELINE));state['safety_rules']=book.snapshot()
+    if cfg.epigenetic:state['pressure_history']=[]
     if cfg.feedback:state['trajectories']=[];state['foreign_trajectories']=[]
     if cfg.formal_safety:
         certificate=safety_synthesis.prove(BASELINE)
@@ -213,6 +224,12 @@ class IslandActor:
                 s['migration_history'].append({'source':origin,'revision':rev,'origin_id':incoming.id,
                     'id':ident,'accepted':passed,'retained':retained})
         if not final:
+            active=set(cfg.enabled_blocks())
+            if cfg.epigenetic:
+                sample=epigenetics.Telemetry(*cfg.pressure_schedule[r-1]) if cfg.pressure_schedule else epigenetics.Telemetry.sample(min(100,100*cfg.batch//16))
+                history=[x['sample'] for x in s['pressure_history']]+[asdict(sample)]
+                s['pressure_history']=epigenetics.cluster_mask(history,cfg.enabled_blocks())
+                active=set(s['pressure_history'][-1]['enabled'])
             async def propose():
                 for w in range(min(cfg.batch,cfg.allowance(i)-s['attempts'])):
                     parent=a.sample(0,rng);model='deep' if w==0 else 'fast'
@@ -220,15 +237,15 @@ class IslandActor:
                         'contract':'Return one exact SEARCH/REPLACE expression patch over x,y in [0,1].'})
                     patch=None;action=6;proposal_seed=None
                     records=holographic.bounded_records(s.get('trajectories',[]),s.get('foreign_trajectories',[]))
-                    hits=holographic.Memory(records).retrieve(parent.code,3) if cfg.holographic else []
-                    if isinstance(a,TopologicalArchive) and (r+w)%2==0:
+                    hits=holographic.Memory(records).retrieve(parent.code,3) if 'holographic' in active else []
+                    if 'topological' in active and isinstance(a,TopologicalArchive) and (r+w)%2==0:
                         patch=a.guided_patch(parent,rng)
-                    if patch is None and cfg.annealed:
+                    if patch is None and 'tensor' in active:
                         temperature=max(.1,1-r/max(1,cfg.rounds))
                         probabilities=annealed.policy(parent.code,records,temperature=temperature,associations=hits)
                         action=rng.choices(range(annealed.ACTIONS),probabilities)[0]
                         proposal_seed=rng.randrange(2**32);patch=annealed.propose(parent.code,action,proposal_seed)
-                    if patch is None and cfg.holographic and not cfg.annealed:
+                    if patch is None and 'holographic' in active and 'tensor' not in active:
                         hit=next((h['record'] for h in hits if h['record']['accepted'] and h['record']['reward']>0 and h['record']['child']!=parent.code),None)
                         if hit is not None:patch=f'<<<<<<< SEARCH\n{parent.code}\n=======\n{hit["child"]}\n>>>>>>> REPLACE'
                     if patch is None:
@@ -383,6 +400,13 @@ def verify_transition(cfg,old,new,migrant,champion,final):
                 raise ClusterError('migration retention mismatch')
         if new['safety_rules']!=rules.snapshot():raise ClusterError('invalid learned safety rule registry')
         if mcount and mid not in a.lineage:raise ClusterError('missing migrant')
+        if cfg.epigenetic:
+            prior=old['pressure_history'];history=new['pressure_history']
+            if len(history)!=len(prior)+int(not final) or history[:len(prior)]!=prior or history!=epigenetics.cluster_mask([x['sample'] for x in history],cfg.enabled_blocks()):raise ClusterError('invalid epigenetic history')
+            if not final:
+                if cfg.pressure_schedule and history[-1]['sample']!=asdict(epigenetics.Telemetry(*cfg.pressure_schedule[r-1])):raise ClusterError('pressure schedule mismatch')
+                if 'tensor' not in history[-1]['enabled'] and any(t['action']<annealed.ACTIONS for t in new['trajectories'][len(old['trajectories']):]):raise ClusterError('disabled tensor action')
+        elif 'pressure_history' in new:raise ClusterError('unexpected epigenetics')
         _verify_feedback(cfg,old,new,migrant,consume,mid,n,r,grid,challenge,byid)
         if isinstance(a,TopologicalArchive):
             a.adapt()
@@ -601,7 +625,7 @@ def main():
     p.add_argument('--db',type=Path,required=True);p.add_argument('--key-file',type=Path,required=True)
     p.add_argument('--backend',choices=('process','ray','simulation'),default='process');p.add_argument('--ray-address');p.add_argument('--distinct-nodes',action='store_true')
     p.add_argument('--topology',action='store_true');p.add_argument('--topology-depth',type=int,default=4);p.add_argument('--topology-split-count',type=int,default=4);p.add_argument('--topology-window',type=int,default=64)
-    p.add_argument('--annealed',action='store_true');p.add_argument('--holographic',action='store_true');p.add_argument('--formal-safety',action='store_true')
+    p.add_argument('--epigenetic',action='store_true');p.add_argument('--annealed',action='store_true');p.add_argument('--holographic',action='store_true');p.add_argument('--formal-safety',action='store_true')
     p.add_argument('--performance-regression',action='store_true');p.add_argument('--resume',action='store_true');p.add_argument('--stop-after',type=int)
     args=vars(p.parse_args());db=args.pop('db');key_file=args.pop('key_file');mode=args.pop('backend');address=args.pop('ray_address');distinct=args.pop('distinct_nodes');resume=args.pop('resume');stop=args.pop('stop_after');policy=performance.Policy() if args.pop('performance_regression') else None
     if mode=='ray' and not address or mode!='ray' and (address or distinct):p.error('Ray requires --ray-address; Ray flags cannot be used with local backend')

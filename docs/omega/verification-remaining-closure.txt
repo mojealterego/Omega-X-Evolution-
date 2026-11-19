@@ -1,0 +1,35 @@
+OMEGA-X Evolution 0.35.2.dev1 — existing maintainer requirements 5–12 (corrective extension, no new roadmap stage)
+BASE main 7d9a0fa7c03b0fca88ef845b0c9a50609bd0afd9, tree d429ea9a167d5965b3a69749262d309bd95bf9a0; ZIP SHA256 07fc4068a3048eb82b37f61734e158d50bb57208feabf5877b6a106e0382ca7a; all 505 tracked blobs matched, CRC passed.
+RED: tests/test_omega_remaining_closure.py initial missing optimization module (exit 2); additional tests reproduced missing simulate_tpu and Mesh.sync_once before implementation.
+REGRESSION: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q tests/test_omega*.py — 298 passed in 87.16s, exit 0, 24 added tests.
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.48s, exit 0, existing dependency shim.
+UPSTREAM COLLECTION: python -m pytest -q --collect-only — 401 collected, 72 collection errors, exit 2. No full upstream pass.
+COMPILE: python -m compileall -q omega_x_evolution tests scripts/benchmark_remaining_closure.py — exit 0; 35 canonical CLI entry points callable, local cloud and online training help smoke.
+BENCHMARK: PYTHONPATH=. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 JAX_PLATFORMS=cpu python scripts/benchmark_remaining_closure.py — exit 0; see raw JSON.
+5: exact feasible allocation energy 5; exact external classical enumeration sampler returned two feasible of eight samples, locally recomputed; tensor error 0. No QPU.
+6: 24 typed score trees, eight derived hyperedges, selected graph propagation, MRR .5 vs 0 on tiny heldout fixture. No arbitrary primitive invention.
+7: actual three loopback peers via HTTP, transitive signed discovery, durable bounded gossip, unauthorized target rejected. Separate prior mTLS tests remain.
+8: three added cluster switches under pressure, three existing swarm optional blocks, mandatory formal gates preserved, resume replay.
+9: actual native Z3 mixed bitwise arithmetic whole-domain UNSAT; generated extensional Lean, tool unavailable fail closed. No Lean/Isabelle proof execution.
+10: signed two-phase quorum, round change lock, absent leader and catchup, reconfiguration, stale lease and result rejected. Actual local peer HTTP; not complete BFT liveness.
+11a: exact 128 polynomial conjectures, 98 proved, 30 refuted, no unknown on fixture; inverse-square synthetic recovery test RMSE 1.9843e-16.
+11b: real tiny causal attention decoder CPU train 192 LoRA parameters, 27574 frozen, 8 steps in 2 evolution rounds, restart replay. Both adapters rejected; heldout MSE unchanged .03309536. Pretrained model/CUDA absent.
+12: actual HTTPS Kubernetes contract server with stateful creation/deletion, injected lost response, tamper, budget, UID checks; CPU job subprocess and JAX CPU using same TPU trainer math, 16 updates, loss .5147738 -> .0267491, reference verified. CUDA absent fails closed. No external compute allocation or billing claims.
+Scope: all 5–12 extended locally; full original goals not all closed. External or research residuals in REMAINING_REQUIREMENTS_CLOSURE.md. v36 unchanged. No new branch, external provisioning or active GitHub workflows.
+ENV: Python 3.13.5 / Linux 6.18.57 x86_64 / Torch 2.10.0+cpu / NumPy 2.3.5; no CUDA, Lean, Isabelle, Ocean, Transformers or Ray.
+SHA256 809e60eec6fb6f70f5351db2e3b8a0b4081563d5972682ef6735c8d02945286c docs/omega/REMAINING_REQUIREMENTS_CLOSURE.md
+SHA256 1df113e3b7ddaf4446584d7dbb8456fd12ee8680fa90075bd81a80d47ed4eb11 docs/omega/benchmark-remaining-closure.json
+SHA256 74b24cfeb5b40fda049a66f5c33e9e32d6754da1cf051c96f4495800133b1941 omega_x_evolution/architecture_synthesis.py
+SHA256 66fcf93ea4edf0df3dfa9091ac5db7caded0c2d304c2b94bb3a2008657cb1da1 omega_x_evolution/bft.py
+SHA256 3f62efbcf30cae0a4c9eb1faaf5996120c357da98ce58176147b2c510a6a3dee omega_x_evolution/bft_transport.py
+SHA256 5882f63b0f0db90c5254a38d7a1dbb29e16d6ba56c19cff5c70cd1ab2a146cbb omega_x_evolution/cloud.py
+SHA256 7651850369e40dd6ef3cd4dc32f6c9be89713ddb33bc850f51f55f97919e6b99 omega_x_evolution/cloud_worker.py
+SHA256 5cf651f6afdb49174637af633c14d42f19bf5eee3206d25120399cfd2bb68ed5 omega_x_evolution/cluster.py
+SHA256 be8bdb1ecbc55817d7a4fc37cc8055bb547343e0583008c2fc02db31eb839bf2 omega_x_evolution/epigenetics.py
+SHA256 ec9a9a28cd7cd50781ee7145b3b684124d85499a523af1667c018cd901eb801f omega_x_evolution/higher_order.py
+SHA256 b37138422bf6e4167f859c778392118b52e6f024d6f7fa65f3e56578f1db669c omega_x_evolution/infinite_discovery.py
+SHA256 099c1f4a2bf9f74a404e4642d8a47e4c7d4937e6e95ca3e7466f1cad9b799763 omega_x_evolution/llm_plasticity.py
+SHA256 73ce1a8cc9c4b804d5d1cd4b2ec829d841053ad13f756217df8cf9c9960f429b omega_x_evolution/mesh.py
+SHA256 30c88ef685923224c187602e8cfbd0689d506ca7c1cf9dd4fc6437fdfceaceb7 omega_x_evolution/optimization.py
+SHA256 6d6f9b8bac0ef063e92443091b98762aa859131f275c3acde0c12a58be26fbe2 scripts/benchmark_remaining_closure.py
+SHA256 c105e262d0dfaa72f932cf862bd82540e275cf4e9a264d876bb475bb33d343d2 tests/test_omega_remaining_closure.py
