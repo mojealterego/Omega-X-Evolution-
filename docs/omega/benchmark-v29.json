@@ -1,0 +1,932 @@
+{
+  "qubo": [
+    {
+      "seed": 81,
+      "exact": {
+        "backend": "exact",
+        "indices": [
+          0,
+          3,
+          4,
+          6
+        ],
+        "energy": -4244,
+        "objective_evaluations": 1820,
+        "wall_seconds": 0.01132791399868438
+      },
+      "anneal": {
+        "backend": "classical-anneal",
+        "indices": [
+          0,
+          3,
+          4,
+          6
+        ],
+        "energy": -4244,
+        "objective_evaluations": 513,
+        "wall_seconds": 0.005337462996976683
+      },
+      "random": {
+        "objective_evaluations": 513,
+        "energy": -4244,
+        "indices": [
+          0,
+          3,
+          4,
+          6
+        ],
+        "wall_seconds": 0.004071324998221826
+      }
+    },
+    {
+      "seed": 82,
+      "exact": {
+        "backend": "exact",
+        "indices": [
+          1,
+          10,
+          11,
+          15
+        ],
+        "energy": -4220,
+        "objective_evaluations": 1820,
+        "wall_seconds": 0.012063252997904783
+      },
+      "anneal": {
+        "backend": "classical-anneal",
+        "indices": [
+          1,
+          10,
+          11,
+          15
+        ],
+        "energy": -4220,
+        "objective_evaluations": 513,
+        "wall_seconds": 0.004155619000812294
+      },
+      "random": {
+        "objective_evaluations": 513,
+        "energy": -4177,
+        "indices": [
+          2,
+          10,
+          11,
+          15
+        ],
+        "wall_seconds": 0.003968282999267103
+      }
+    },
+    {
+      "seed": 83,
+      "exact": {
+        "backend": "exact",
+        "indices": [
+          0,
+          1,
+          4,
+          13
+        ],
+        "energy": -3821,
+        "objective_evaluations": 1820,
+        "wall_seconds": 0.01060435199906351
+      },
+      "anneal": {
+        "backend": "classical-anneal",
+        "indices": [
+          0,
+          1,
+          4,
+          13
+        ],
+        "energy": -3821,
+        "objective_evaluations": 513,
+        "wall_seconds": 0.004526041997451102
+      },
+      "random": {
+        "objective_evaluations": 513,
+        "energy": -3816,
+        "indices": [
+          0,
+          1,
+          13,
+          15
+        ],
+        "wall_seconds": 0.005208254002354806
+      }
+    },
+    {
+      "seed": 84,
+      "exact": {
+        "backend": "exact",
+        "indices": [
+          4,
+          9,
+          12,
+          14
+        ],
+        "energy": -4231,
+        "objective_evaluations": 1820,
+        "wall_seconds": 0.011450735000835266
+      },
+      "anneal": {
+        "backend": "classical-anneal",
+        "indices": [
+          4,
+          9,
+          12,
+          14
+        ],
+        "energy": -4231,
+        "objective_evaluations": 513,
+        "wall_seconds": 0.004168838000623509
+      },
+      "random": {
+        "objective_evaluations": 513,
+        "energy": -4200,
+        "indices": [
+          4,
+          8,
+          9,
+          14
+        ],
+        "wall_seconds": 0.00399172800098313
+      }
+    }
+  ],
+  "architecture": {
+    "schema": "omega-memory-architecture-v1",
+    "snapshot_sha256": "009223f370c0ff95dead7e5fe666d58d02e7b0aa8a4fe8285106e80e69567462",
+    "evaluations": 56,
+    "selected": {
+      "lexical": 1,
+      "associative": 0,
+      "hops": 1,
+      "decay": 1
+    },
+    "dag": [
+      "authenticated_snapshot",
+      "query",
+      "lexical_index",
+      "rank_fusion",
+      "provenance_diffusion",
+      "bounded_cited_results"
+    ],
+    "challenger": {
+      "lexical": 1,
+      "associative": 0,
+      "hops": 1,
+      "decay": 1
+    },
+    "train": {
+      "mrr": 0.5,
+      "work": 136,
+      "queries": 8
+    },
+    "validation": {
+      "mrr": 0.5,
+      "work": 136,
+      "queries": 8
+    },
+    "baseline_validation": {
+      "mrr": 0.0,
+      "work": 128,
+      "queries": 8
+    },
+    "promoted": true,
+    "test": {
+      "mrr": 0.5,
+      "work": 136,
+      "queries": 8
+    },
+    "baseline_test": {
+      "mrr": 0.0,
+      "work": 128,
+      "queries": 8
+    },
+    "search": [
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.0,
+        "work": 128,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.020833333333333332,
+        "work": 16384,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.020833333333333332,
+        "work": 16384,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.020833333333333332,
+        "work": 16512,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.020833333333333332,
+        "work": 16512,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.0,
+        "work": 128,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.020833333333333332,
+        "work": 16512,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 0,
+          "decay": 1
+        },
+        "mrr": 0.020833333333333332,
+        "work": 16512,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.25744047619047616,
+        "work": 16449,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.18348214285714284,
+        "work": 16449,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.13958333333333334,
+        "work": 16449,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.25744047619047616,
+        "work": 16449,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.18348214285714284,
+        "work": 16449,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.13958333333333334,
+        "work": 16449,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 136,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.5,
+        "work": 136,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.5,
+        "work": 136,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.4583333333333333,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.32708333333333334,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.4375,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.32708333333333334,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.24791666666666667,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 136,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.5,
+        "work": 136,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.5,
+        "work": 136,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.5,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.4583333333333333,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 1,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 1,
+          "decay": 2
+        },
+        "mrr": 0.4583333333333333,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 1,
+          "decay": 3
+        },
+        "mrr": 0.32708333333333334,
+        "work": 16577,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.25744047619047616,
+        "work": 16490,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.18348214285714284,
+        "work": 16489,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 1,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.13958333333333334,
+        "work": 16485,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.25744047619047616,
+        "work": 16490,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.18348214285714284,
+        "work": 16489,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 0,
+          "associative": 2,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.13958333333333334,
+        "work": 16485,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 144,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.5,
+        "work": 144,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 0,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.5,
+        "work": 144,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 16619,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.4583333333333333,
+        "work": 16618,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 1,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.32708333333333334,
+        "work": 16614,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.4375,
+        "work": 16619,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.32708333333333334,
+        "work": 16618,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 1,
+          "associative": 2,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.24791666666666667,
+        "work": 16613,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 144,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.5,
+        "work": 144,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 0,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.5,
+        "work": 144,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 16619,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.5,
+        "work": 16618,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 1,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.4583333333333333,
+        "work": 16614,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 2,
+          "decay": 1
+        },
+        "mrr": 0.5,
+        "work": 16619,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 2,
+          "decay": 2
+        },
+        "mrr": 0.4583333333333333,
+        "work": 16618,
+        "queries": 8
+      },
+      {
+        "plan": {
+          "lexical": 2,
+          "associative": 2,
+          "hops": 2,
+          "decay": 3
+        },
+        "mrr": 0.32708333333333334,
+        "work": 16614,
+        "queries": 8
+      }
+    ]
+  },
+  "federation": {
+    "source": {
+      "schema": "omega-async-cluster-v1",
+      "complete": true,
+      "islands": 4,
+      "commits": 16,
+      "attempts": 48,
+      "rejections": 0,
+      "budget": 48,
+      "occupied_cells": 19,
+      "lineage_size": 58,
+      "migrations_seen": 6,
+      "migrations_accepted": 6,
+      "migrations_retained": 4,
+      "performance_profiled": 0,
+      "performance_rejections": 0,
+      "baseline_score": 0.5591341064073991,
+      "champion_score": 0.8658401760721383,
+      "champion": "-(x+y+0.679*(x-y)*(x-y)/(0.0115+x*y)+2.303)",
+      "holdout_quality": 0.9060596323475184,
+      "island_rounds": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "trajectory_count": 48,
+      "foreign_trajectories": 32,
+      "formal_checks": 54,
+      "formal_rejections": 0,
+      "action_counts": [
+        9,
+        5,
+        7,
+        7,
+        13,
+        7,
+        0
+      ],
+      "workers": 2
+    },
+    "server_processes": 3,
+    "received": [
+      4,
+      4,
+      4
+    ],
+    "duplicate_suppressed": true,
+    "selection": {
+      "backend": "classical-anneal",
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "energy": -3470,
+      "objective_evaluations": 513,
+      "wall_seconds": 0.007794427998305764
+    },
+    "local_evolution": [
+      {
+        "attempts": 32,
+        "accepted": 32,
+        "baseline": 0.8658401760721383,
+        "champion": 0.8718484797251239,
+        "selection": {
+          "backend": "classical-anneal",
+          "indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "energy": -3501,
+          "objective_evaluations": 513,
+          "wall_seconds": 0.0038836499988974538
+        }
+      },
+      {
+        "attempts": 32,
+        "accepted": 32,
+        "baseline": 0.8718484797251239,
+        "champion": 0.8718484797251239,
+        "selection": {
+          "backend": "classical-anneal",
+          "indices": [
+            0,
+            1,
+            3,
+            4
+          ],
+          "energy": -3509,
+          "objective_evaluations": 513,
+          "wall_seconds": 0.004050694999023108
+        }
+      }
+    ],
+    "archive_sizes": [
+      4,
+      4,
+      4
+    ],
+    "published_nodes": 4,
+    "graph_total_nodes": 5
+  },
+  "physical_quantum": false
+}
