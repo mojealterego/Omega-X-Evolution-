@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v35.5%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v36.0%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v35.5
+## Current implementation — v36.0
 
 | Component | Capability |
 |---|---|
@@ -116,6 +116,7 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v33 | Zero-shot axiomatic discovery | Bounded proof and counterexample search; finite algebra enumeration |
 | v34 | On-the-fly weight plasticity | Actual low-rank CPU updates on verified trajectories; no LLM weights |
 | v35 | Autonomous infrastructure orchestration | Local process lifecycle and budget accounting; external provisioning open |
+| v36 | Green Computing | Paired measured process CPU timing, estimated energy/carbon with explicit provenance and bounds; physical energy attribution open |
 
 See [extended maintainer roadmap v36](docs/omega/MAINTAINER_ROADMAP.md).
 
@@ -135,7 +136,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.35.5.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.36.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -348,3 +349,12 @@ See [residual recovery and evidence](docs/omega/RESIDUAL_RECOVERY_V354.md). No n
 ## Corrective release v35.5
 
 See [terminal-round recovery, durable budget extension and offline dependency verification](docs/omega/RESIDUAL_RECOVERY_V355.md). No new roadmap stage.
+
+## v36 — Green Computing and certified round recovery
+
+See [v36 implementation and acceptance](docs/omega/EVOLUTION_V36.md). The paired green profile uses actual process CPU time and operator-supplied power/intensity scenarios; it does not attribute measured electricity to the workload. BFT replicas can synchronize directly to a higher round with a genuine quorum timeout certificate while preserving locks. [Reproducible verification](docs/omega/verification-v36.txt) records the remaining GATE-09 blockers.
+
+```sh
+omega-x-green --task squares --seed 42 --budget 128 --repeats 3 --watts 5 15 35 --power-source 'illustrative CPU power scenario' --intensity 400 --intensity-source 'illustrative grid scenario'
+python scripts/verify_bft_lemmas.py
+```

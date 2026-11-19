@@ -58,11 +58,17 @@ class Pacemaker:
         if r<MAX_ROUND-1:
             # Advanced peers retain the signed certificate; lagging peers can
             # catch up without trusting a remote clock or claimed round index.
+            certificates=[]
             for v in views.values():
+                if not isinstance(v,dict):continue
+                for field in ('latest_timeout_certificate','timeout_certificate'):
+                    cert=v.get(field)
+                    if (type(cert) is dict and type(cert.get('round')) is int and
+                            r<=cert['round']<MAX_ROUND-1):
+                        certificates.append(cert)
+            for cert in sorted(certificates,key=lambda c:c['round'],reverse=True):
                 try:
-                    cert=v['timeout_certificate']
-                    if cert is not None:
-                        self.replica.advance_certified(cert);self._reset();return report('advanced')
+                    self.replica.catch_up_round(cert);self._reset();return report('advanced')
                 except _ERRORS:continue
         expired=self.clock()>=self.deadline or f'{r}:timeout' in d['votes']
         terminal_expired=expired and r==MAX_ROUND-1

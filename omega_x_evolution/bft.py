@@ -211,12 +211,29 @@ class Replica:
             if type(cert) is not dict or set(cert)!={'round','votes'} or cert['round']!=r or cert!=timeout_quorum(d['state'],cert['votes'],r):raise ValueError('invalid timeout certificate')
             d['timeouts'][str(r)]=cert;d['round']+=1;self.store.save(rev+1,d)
         return self.status()
+    def catch_up_round(self,cert):
+        """Advance directly from a locally authenticated quorum timeout.
+
+        A certificate for a higher round implies a quorum reached that round.
+        Round numbers only increase at this height; prior locks and all durable
+        votes survive. No missing intermediate certificate is synthesized.
+        """
+        with _lock(self.path):
+            rev,d=self._load();self._active(d);r=d['round']
+            if (type(cert) is not dict or set(cert)!={'round','votes'} or
+                    type(cert['round']) is not int or not r<=cert['round']<MAX_ROUND-1 or
+                    cert!=timeout_quorum(d['state'],cert['votes'],cert['round'])):
+                raise ValueError('invalid or stale timeout certificate')
+            d['timeouts'][str(cert['round'])]=cert;d['round']=cert['round']+1
+            self.store.save(rev+1,d)
+        return self.status()
     def view(self,height,round):
         if type(height) is not int or not 1<=height<=MAX_HEIGHT or type(round) is not int or not 0<=round<MAX_ROUND:raise ValueError('view bounds')
         d=self.inspect();s=d['state']
-        if height<s['height']:return {'commit':d['log'][height-1],'timeout_vote':None,'timeout_certificate':None}
-        if height>s['height']:return {'commit':None,'timeout_vote':None,'timeout_certificate':None}
-        return {'commit':None,'timeout_vote':d['votes'].get(f'{round}:timeout'),'timeout_certificate':d['timeouts'].get(str(round))}
+        if height<s['height']:return {'commit':d['log'][height-1],'timeout_vote':None,'timeout_certificate':None,'latest_timeout_certificate':None}
+        if height>s['height']:return {'commit':None,'timeout_vote':None,'timeout_certificate':None,'latest_timeout_certificate':None}
+        latest=max(d['timeouts'],key=int,default=None)
+        return {'commit':None,'timeout_vote':d['votes'].get(f'{round}:timeout'),'timeout_certificate':d['timeouts'].get(str(round)),'latest_timeout_certificate':d['timeouts'].get(latest)}
     def propose(self,block,statuses):
         with _lock(self.path):
             rev,d=self._load();self._active(d);s=d['state'];r=d['round'];_apply(s,block)

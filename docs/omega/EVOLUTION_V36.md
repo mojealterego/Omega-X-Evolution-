@@ -1,0 +1,27 @@
+# v36.0 — energy/carbon profiles and residual gate recovery
+
+Base main `a4330e505db2a44162e41ee1c4461e9880808352`. Source-bound BFT genesis/checkpoints intentionally cannot be silently migrated across the implementation change. No new branch, paid computation, external deployment or weakened acceptance conditions.
+
+## Green Computing acceptance
+
+`omega_x_evolution.green` executes the actual `discovery.discover` code in alternating enumeration/evolution pairs, with an identical dataset digest, seed and proposal count. Fixture creation and an explicit warmup are excluded. Per run, process CPU and wall time are measured using monotonic clocks; operator supplies low/central/high watts per CPU-second, a power-source description, scenario carbon intensity in gCO2e/kWh, and intensity provenance. No default unknown wattage is presented as a measurement. `energy_Wh = CPU_ns * watts / 3.6e12`; `carbon_g = energy_Wh * intensity_g_per_kWh / 1000`. Bounds are power scenarios, not confidence intervals; carbon intensity is fixed. Each report binds hardware, Python and sources; it preserves the held-out RMSE and equal proposal budgets together with energy differences. No fitness change or promotion based on these measurements. Power scenarios exclude idle, accelerators, DRAM, network, embodied emissions; other concurrent CPU in this process may affect timing. No physical powercap meter exposed here. Counter wrap helper checks a single-wrap model with trusted maximum power and rejects ambiguous/unphysical samples; not a hardware reading.
+
+Test IDs: `tests/test_omega_green.py` — seven cases (unit conversion, invalid/NaN calibration, counter ambiguity, real paired execution). The model scenario and hardware/provenance data are in `green-example-v36.json`. The six-run example with seed 42, squares, 128 proposals, three pairs reached held-out RMSE zero in both strategies for all pairs. This establishes comparable work, not a claim of energy savings. The declared v36 roadmap criterion explicitly allows clearly estimated energy. PASS for this scope only.
+
+## BFT certified synchronization
+
+`Replica.catch_up_round` verifies a higher round's n-f signed timeout quorum against the current height, campaign, parent, membership, and round. No vote or lock is discarded, no missing intermediate QC is fabricated, and no old or out-of-limit certificate is accepted. Existing sequential `advance_certified` semantics remain. `view` returns the highest stored timeout certificate as additional evidence; the pacemaker tries valid candidate certificates in descending round order. Catch-up is monotonic/persistent and does not allow a vote at a lower round. Two RED/GREEN tests `tests/test_omega_certified_round_sync.py` accelerate a partitioned laggard by ten rounds with a genuine prior lock, restart it, achieve a signed commit, and reject signature tampering and replay. 26 related tests pass. The two arithmetic proof obligations in `BFT_LEMMAS_V36.smt2` are proven by real Z3 (UNSAT counterexample queries) for integer cardinalities n>3f, f>=0: two quorums of n-f share more than f members; f+1 distinct leaders include an honest one. `scripts/verify_bft_lemmas.py` additionally exhaustively checks 199296 actual `leader` rotation cases across the implementation's legal n, f, height and round bounds. These lemmas do not establish whole-protocol liveness, leader responsiveness, timely delivery, or recovery beyond the terminal round. The terminal Byzantine leader is still an open case; progress during permanent quorum loss is not possible.
+
+## Overall acceptance (GATE-09)
+
+| Obligation | Result |
+|---|---|
+| v36 estimated energy/carbon | PASS in explicitly declared scope |
+| BFT recovery and rotation lemmas | PASS in tested/mathematical scope; general partial-synchrony liveness OPEN |
+| Architecture synthesis | Previously verified finite compositional resumable search; unrestricted synthesis OPEN |
+| Lean/Isabelle | BLOCKED: Lean stage0 configuration succeeds with locally available Node headers 1.49.2 and runtime LibUV 1.50.0, GMP enabled, no leantar installation. Experimental header/runtime mismatch, no complete compiler, no kernel verification. 240 s bounded build ends exit 124 (C/C++ and substantial stdlib compiled). Isabelle absent. Native Z3 obligations are separate from these kernels. |
+| Large pretrained LLM | BLOCKED: real small decoder/LoRA regression, but compatible large full-precision weights, sufficient RAM, and fully resolved Transformers runtime unavailable. No large LLM training claimed. |
+| Physical infrastructure | Deterministic and native local evidence only; no physical meter/accelerator/cluster acceptance claimed. |
+| Upstream | FAIL: 1472 tests collected, 4 collection errors, exit 2, experimental overlay. Missing CPython jiter and instructor; direct official wheel downloads were attempted but inaccessible. Existing incompatible provider/training dependencies not papered over. |
+
+Source-backed test and build output in `verification-v36.txt`. The first concurrent hardening run failed a process-start timing assumption (empty child PID log); the isolated repeat passed 38/38. This scheduling sensitivity remains documented, no changes to tests to hide it. Full 331 OMEGA tests passed in the final native run. No general/unrestricted mathematical or production claim. GATE-09 remains BLOCKED, not automatically PASS merely because v36 is accepted.

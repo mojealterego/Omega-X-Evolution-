@@ -1,0 +1,288 @@
+{
+  "schema": "omega-green-v1",
+  "mode": "estimated-process-cpu",
+  "task": "squares",
+  "seed": 42,
+  "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+  "budget_per_run": 128,
+  "repeats": 3,
+  "calibration": {
+    "low_w": 5.0,
+    "central_w": 15.0,
+    "high_w": 35.0,
+    "power_source": "hypothetical CPU power scenario; not calibrated meter",
+    "intensity_g_per_kwh": 400.0,
+    "intensity_source": "illustrative constant scenario; not measured grid"
+  },
+  "hardware": {
+    "machine": "x86_64",
+    "system": "Linux",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "python": "3.13.5",
+    "clock": "perf_counter_ns/process_time_ns",
+    "code_sha256": {
+      "green.py": "c5cc7c9357b83c24ffecc158a6aec29bcab105bf06a9670a862d9c76eac4e875",
+      "discovery.py": "991966fcb2e61992b4437bcc8746bb3c98a110e528939bdfd6aa996f294c8393",
+      "engine.py": "f6b87df0b7c2ef8df06ff8dfddd37a245e7747860c0a4aef661fc659420f7014"
+    }
+  },
+  "runs": [
+    {
+      "pair": 0,
+      "strategy": "enumeration",
+      "result": {
+        "schema": "omega-discovery-v1",
+        "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+        "seed": 42,
+        "strategy": "enumeration",
+        "attempts": 128,
+        "unique_attempts": 128,
+        "valid_candidates": 124,
+        "first_exact_attempt": 47,
+        "expression": "((x*x)+(y*y))",
+        "operations": 3,
+        "nodes": 7,
+        "training_rmse": 0.0,
+        "holdout_rmse": 0.0,
+        "holdout_evaluations": 1,
+        "empirical_match": true
+      },
+      "reading": {
+        "wall_ns": 201074768,
+        "cpu_ns": 97194886
+      },
+      "estimate": {
+        "method": "estimated-process-cpu",
+        "energy_wh": {
+          "low": 0.00013499289722222223,
+          "central": 0.00040497869166666666,
+          "high": 0.0009449502805555555
+        },
+        "carbon_g": {
+          "low": 5.399715888888889e-05,
+          "central": 0.00016199147666666667,
+          "high": 0.0003779801122222222
+        },
+        "scope": "process CPU only; excludes idle, GPU, DRAM, network, embodied carbon",
+        "interval": "operator power scenario bounds, not statistical confidence interval; intensity fixed"
+      }
+    },
+    {
+      "pair": 0,
+      "strategy": "evolution",
+      "result": {
+        "schema": "omega-discovery-v1",
+        "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+        "seed": 42,
+        "strategy": "evolution",
+        "attempts": 128,
+        "unique_attempts": 122,
+        "valid_candidates": 121,
+        "first_exact_attempt": 47,
+        "expression": "((x*x)+(y*y))",
+        "operations": 3,
+        "nodes": 7,
+        "training_rmse": 0.0,
+        "holdout_rmse": 0.0,
+        "holdout_evaluations": 1,
+        "empirical_match": true
+      },
+      "reading": {
+        "wall_ns": 22838112,
+        "cpu_ns": 22832471
+      },
+      "estimate": {
+        "method": "estimated-process-cpu",
+        "energy_wh": {
+          "low": 3.1711765277777775e-05,
+          "central": 9.513529583333334e-05,
+          "high": 0.00022198235694444445
+        },
+        "carbon_g": {
+          "low": 1.2684706111111111e-05,
+          "central": 3.805411833333334e-05,
+          "high": 8.879294277777779e-05
+        },
+        "scope": "process CPU only; excludes idle, GPU, DRAM, network, embodied carbon",
+        "interval": "operator power scenario bounds, not statistical confidence interval; intensity fixed"
+      }
+    },
+    {
+      "pair": 1,
+      "strategy": "evolution",
+      "result": {
+        "schema": "omega-discovery-v1",
+        "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+        "seed": 42,
+        "strategy": "evolution",
+        "attempts": 128,
+        "unique_attempts": 122,
+        "valid_candidates": 121,
+        "first_exact_attempt": 47,
+        "expression": "((x*x)+(y*y))",
+        "operations": 3,
+        "nodes": 7,
+        "training_rmse": 0.0,
+        "holdout_rmse": 0.0,
+        "holdout_evaluations": 1,
+        "empirical_match": true
+      },
+      "reading": {
+        "wall_ns": 22749630,
+        "cpu_ns": 22442762
+      },
+      "estimate": {
+        "method": "estimated-process-cpu",
+        "energy_wh": {
+          "low": 3.117050277777778e-05,
+          "central": 9.351150833333333e-05,
+          "high": 0.00021819351944444445
+        },
+        "carbon_g": {
+          "low": 1.2468201111111112e-05,
+          "central": 3.7404603333333336e-05,
+          "high": 8.727740777777777e-05
+        },
+        "scope": "process CPU only; excludes idle, GPU, DRAM, network, embodied carbon",
+        "interval": "operator power scenario bounds, not statistical confidence interval; intensity fixed"
+      }
+    },
+    {
+      "pair": 1,
+      "strategy": "enumeration",
+      "result": {
+        "schema": "omega-discovery-v1",
+        "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+        "seed": 42,
+        "strategy": "enumeration",
+        "attempts": 128,
+        "unique_attempts": 128,
+        "valid_candidates": 124,
+        "first_exact_attempt": 47,
+        "expression": "((x*x)+(y*y))",
+        "operations": 3,
+        "nodes": 7,
+        "training_rmse": 0.0,
+        "holdout_rmse": 0.0,
+        "holdout_evaluations": 1,
+        "empirical_match": true
+      },
+      "reading": {
+        "wall_ns": 30433688,
+        "cpu_ns": 14207528
+      },
+      "estimate": {
+        "method": "estimated-process-cpu",
+        "energy_wh": {
+          "low": 1.973267777777778e-05,
+          "central": 5.919803333333334e-05,
+          "high": 0.00013812874444444446
+        },
+        "carbon_g": {
+          "low": 7.893071111111112e-06,
+          "central": 2.3679213333333334e-05,
+          "high": 5.525149777777778e-05
+        },
+        "scope": "process CPU only; excludes idle, GPU, DRAM, network, embodied carbon",
+        "interval": "operator power scenario bounds, not statistical confidence interval; intensity fixed"
+      }
+    },
+    {
+      "pair": 2,
+      "strategy": "enumeration",
+      "result": {
+        "schema": "omega-discovery-v1",
+        "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+        "seed": 42,
+        "strategy": "enumeration",
+        "attempts": 128,
+        "unique_attempts": 128,
+        "valid_candidates": 124,
+        "first_exact_attempt": 47,
+        "expression": "((x*x)+(y*y))",
+        "operations": 3,
+        "nodes": 7,
+        "training_rmse": 0.0,
+        "holdout_rmse": 0.0,
+        "holdout_evaluations": 1,
+        "empirical_match": true
+      },
+      "reading": {
+        "wall_ns": 10122973,
+        "cpu_ns": 10009850
+      },
+      "estimate": {
+        "method": "estimated-process-cpu",
+        "energy_wh": {
+          "low": 1.3902569444444445e-05,
+          "central": 4.170770833333333e-05,
+          "high": 9.731798611111112e-05
+        },
+        "carbon_g": {
+          "low": 5.561027777777779e-06,
+          "central": 1.6683083333333333e-05,
+          "high": 3.892719444444445e-05
+        },
+        "scope": "process CPU only; excludes idle, GPU, DRAM, network, embodied carbon",
+        "interval": "operator power scenario bounds, not statistical confidence interval; intensity fixed"
+      }
+    },
+    {
+      "pair": 2,
+      "strategy": "evolution",
+      "result": {
+        "schema": "omega-discovery-v1",
+        "dataset_sha256": "cdf0e32894c3498ded9d0e2a42e76cd857e263be212cd72a3cd98667b7fb9186",
+        "seed": 42,
+        "strategy": "evolution",
+        "attempts": 128,
+        "unique_attempts": 122,
+        "valid_candidates": 121,
+        "first_exact_attempt": 47,
+        "expression": "((x*x)+(y*y))",
+        "operations": 3,
+        "nodes": 7,
+        "training_rmse": 0.0,
+        "holdout_rmse": 0.0,
+        "holdout_evaluations": 1,
+        "empirical_match": true
+      },
+      "reading": {
+        "wall_ns": 13360607,
+        "cpu_ns": 13235194
+      },
+      "estimate": {
+        "method": "estimated-process-cpu",
+        "energy_wh": {
+          "low": 1.838221388888889e-05,
+          "central": 5.514664166666667e-05,
+          "high": 0.00012867549722222224
+        },
+        "carbon_g": {
+          "low": 7.352885555555557e-06,
+          "central": 2.205865666666667e-05,
+          "high": 5.147019888888889e-05
+        },
+        "scope": "process CPU only; excludes idle, GPU, DRAM, network, embodied carbon",
+        "interval": "operator power scenario bounds, not statistical confidence interval; intensity fixed"
+      }
+    }
+  ],
+  "comparisons": {
+    "equal_proposal_budget": true,
+    "candidate": "evolution",
+    "baseline": "enumeration",
+    "paired_energy_delta_wh": [
+      -0.0003098433958333333,
+      3.4313474999999994e-05,
+      1.3438933333333338e-05
+    ],
+    "median_energy_delta_wh": 1.3438933333333338e-05,
+    "paired_holdout_rmse_delta": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "limitations": "CPU time is measured for the process, not an isolated meter; results are host-specific, not a carbon reduction claim."
+}
