@@ -2,7 +2,8 @@
 
 The core route uses the genuine upstream BitVec.add/sub definitions and
 kernel-checked Nat lemmas. It requires no Mathlib or external SAT solver.
-Other IR operations use the original Std BVDecide route, never a fake solver.
+All six IR operations additionally support a kernel-checked lemma route.
+Unsolved equations use the original Std BVDecide route, never a fake solver.
 """
 from __future__ import annotations
 
@@ -118,6 +119,84 @@ def lean_source(a: Program, b: Program, *, extensional: bool = True) -> str:
     return header + f'theorem omega_equivalence (x y : BitVec 16) :\n  {left} = {right} := by\n  bv_decide\n'
 
 
+# These u16 lemmas are derived directly from the upstream BitVec.Basic
+# definitions and Nat lemmas. All declarations are checked by the Lean kernel.
+# Rewriting is incomplete; the full BVDecide route remains available.
+_BITVEC_HEADER = _CORE_HEADER.replace(
+    'import Init.Data.BitVec.BasicAux\n',
+    'import Init.Data.BitVec.Basic\nimport Init.Data.Nat.Bitwise.Lemmas\nimport Init.Data.Nat.Lemmas\n',
+).replace('set_option maxHeartbeats 200000\n',
+          'set_option maxHeartbeats 200000\nset_option debug.skipKernelTC false\n') + r'''
+private theorem omega_mul_one (x : BitVec 16) : x * 1 = x := by
+  apply omega_eq_of_toNat_eq
+  change (x.toNat * 1) % 65536 = x.toNat
+  rw [Nat.mul_one, Nat.mod_eq_of_lt x.isLt]
+private theorem omega_mul_zero (x : BitVec 16) : x * 0 = 0 := by
+  apply omega_eq_of_toNat_eq
+  change (x.toNat * 0) % 65536 = 0
+  rw [Nat.mul_zero, Nat.zero_mod]
+private theorem omega_mul_comm (x y : BitVec 16) : x * y = y * x := by
+  apply omega_eq_of_toNat_eq
+  change (x.toNat * y.toNat) % 65536 = (y.toNat * x.toNat) % 65536
+  rw [Nat.mul_comm]
+private theorem omega_xor_self (x : BitVec 16) : x ^^^ x = 0 := by
+  apply omega_eq_of_toNat_eq
+  change x.toNat ^^^ x.toNat = 0
+  exact Nat.xor_self _
+private theorem omega_and_self (x : BitVec 16) : x &&& x = x := by
+  apply omega_eq_of_toNat_eq
+  change x.toNat &&& x.toNat = x.toNat
+  exact Nat.and_self _
+private theorem omega_or_zero (x : BitVec 16) : x ||| 0 = x := by
+  apply omega_eq_of_toNat_eq
+  change x.toNat ||| 0 = x.toNat
+  exact Nat.or_zero _
+private theorem omega_mul_add (x y z : BitVec 16) : x * (y + z) = x*y + x*z := by
+  apply omega_eq_of_toNat_eq
+  change (x.toNat * ((y.toNat + z.toNat) % 65536)) % 65536 = ((x.toNat * y.toNat) % 65536 + (x.toNat * z.toNat) % 65536) % 65536
+  rw [Nat.mul_mod_mod, Nat.mul_add, Nat.mod_add_mod, Nat.add_mod_mod]
+private theorem omega_one_mul (x : BitVec 16) : 1 * x = x := by
+  rw [omega_mul_comm, omega_mul_one]
+private theorem omega_zero_mul (x : BitVec 16) : 0 * x = 0 := by
+  rw [omega_mul_comm, omega_mul_zero]
+private theorem omega_xor_zero (x : BitVec 16) : x ^^^ 0 = x := by
+  apply omega_eq_of_toNat_eq
+  change x.toNat ^^^ 0 = x.toNat
+  exact Nat.xor_zero _
+private theorem omega_and_zero (x : BitVec 16) : x &&& 0 = 0 := by
+  apply omega_eq_of_toNat_eq
+  change x.toNat &&& 0 = 0
+  exact Nat.and_zero _
+private theorem omega_or_self (x : BitVec 16) : x ||| x = x := by
+  apply omega_eq_of_toNat_eq
+  change x.toNat ||| x.toNat = x.toNat
+  exact Nat.or_self _
+'''
+
+_BITVEC_SIMPS = (
+    'cancel', 'add_zero', 'zero_add', 'sub_zero', 'sub_self',
+    'mul_one', 'one_mul', 'mul_zero', 'zero_mul', 'mul_comm', 'mul_add',
+    'and_self', 'or_self', 'xor_self', 'and_zero', 'or_zero', 'xor_zero',
+)
+
+
+def lean_bitvec_source(a: Program, b: Program, *, extensional: bool = True) -> str:
+    """Fixed theorem using all six upstream BitVec operations and lemmas."""
+    _validate(a, b)
+    if type(extensional) is not bool:
+        raise ValueError('Lean mode')
+    operators = {'add': '+', 'sub': '-', 'mul': '*', 'xor': '^^^', 'and': '&&&', 'or': '|||'}
+    left, right = (_expression(p.tree, operators) for p in (a, b))
+    header = _BITVEC_HEADER
+    if extensional:
+        statement = ('theorem omega_extensional_equivalence :\n'
+                     f'  (fun (x y : BitVec 16) => {left}) =\n'
+                     f'  (fun (x y : BitVec 16) => {right}) := by\n  funext x y\n')
+    else:
+        statement = f'theorem omega_equivalence (x y : BitVec 16) :\n  {left} = {right} := by\n'
+    return header + statement + '  first\n  | rfl\n  | simp only [' + ', '.join('omega_' + n for n in _BITVEC_SIMPS) + ']\n'
+
+
 def _report(source: str, strategy: str) -> dict:
     return {'backend': 'lean', 'strategy': strategy,
             'source_sha256': hashlib.sha256(source.encode('utf-8')).hexdigest(), 'proved': False}
@@ -165,4 +244,8 @@ def check_lean(a: Program, b: Program, *, timeout: int = 30,
         result = _run(binary, core, 'core-addsub', version, deadline - time.monotonic())
         if result['proved'] or core_only:
             return result
+    lemmas = lean_bitvec_source(a, b, extensional=extensional)
+    result = _run(binary, lemmas, 'bitvec-lemmas', version, deadline - time.monotonic())
+    if result['proved']:
+        return result
     return _run(binary, full, 'bv-decide', version, deadline - time.monotonic())

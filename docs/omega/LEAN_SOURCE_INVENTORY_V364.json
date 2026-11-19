@@ -1,0 +1,62 @@
+[
+  {
+    "filename": "lean4-master.zip",
+    "size": 103197953,
+    "sha256": "f076a3e688719e67414d5e7df1327ca4f4fbf3849b59e329716ee8d965e6093a",
+    "source_commit": "e35bfaf8dab2405124cb486c80a7c12d3cccb951",
+    "lean_files": 8138,
+    "olean_files": 0,
+    "lean_toolchain": "build/release/stage1",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "NavierStokesAndEuler-main.zip",
+    "size": 8457100,
+    "sha256": "cbe257ace7ab6d1fe8635bfca208a677b1e36863b2f54068f44be33a3b038103",
+    "source_commit": "f9e8bc5b38b6e212696e8a30e3e91517af887bbd",
+    "lean_files": 2659,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.34.0-rc2",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "mathematics_in_lean-master.zip",
+    "size": 9438299,
+    "sha256": "81a8184a6fcfc378ac41d34f7158046786e38e36232fc95ae4c777c36409ec25",
+    "source_commit": "cff01285931648054c4fe6817baed0ccd45c0372",
+    "lean_files": 89,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.34.0",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "iris-lean-master.zip",
+    "size": 1090407,
+    "sha256": "fcd8e13de922b663992b94ce2169dc8daa99fb37ad9fd34c87f39c3e45682a8b",
+    "source_commit": "fb21a8af4727bd42190072a5ed2836cbe9fb844e",
+    "lean_files": 320,
+    "olean_files": 0,
+    "lean_toolchain": null,
+    "crc_bad_member": null
+  },
+  {
+    "filename": "batteries-main.zip",
+    "size": 520891,
+    "sha256": "4185cf10805f6ce6dbb531c4d7126a2ac66bb95564d695aff206f5726133c48c",
+    "source_commit": "6d971e7e6b3f7d0a501c5418815aa9022edd3499",
+    "lean_files": 275,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.36.0-rc2",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "mathlib4-master.zip",
+    "size": 30691121,
+    "sha256": "9b2e65757dc81967c498c4f4ae52934ef9f62a4e95a83a2ae7444fce53da74f5",
+    "source_commit": "d0207795ac79006da92d98544e1ce915ae386160",
+    "lean_files": 9274,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.36.0-rc2",
+    "crc_bad_member": null
+  }
+]

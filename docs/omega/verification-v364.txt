@@ -1,0 +1,151 @@
+BASE main e6c7b0679854b04963b6ede311474748ef9a61af
+Linux x86_64
+Python 3.13.5
+=== RED ===
+F
+=================================== FAILURES ===================================
+________________ test_bitvec_source_all_operators[left0-right0] ________________
+
+left = ('mul', ('x',), ('lit', 1)), right = ('x',)
+
+    @pytest.mark.parametrize('left,right',CASES)
+    def test_bitvec_source_all_operators(left,right):
+>       src=lean_native.lean_bitvec_source(Program(left),Program(right))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'omega_x_evolution.lean_native' has no attribute 'lean_bitvec_source'. Did you mean: 'lean_core_source'?
+
+tests/test_omega_native_bitvec.py:23: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_omega_native_bitvec.py::test_bitvec_source_all_operators[left0-right0] - AttributeError: module 'omega_x_evolution.lean_native' has no attribute 'lean_bitvec_source'. Did you mean: 'lean_core_source'?
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.14s
+=== Build: python /tmp/lean-build-bitvec.py ===
+dependency closure 1 remaining to scan 20
+dependency closure 21 remaining to scan 41
+dependency closure 62 remaining to scan 44
+dependency closure 106 remaining to scan 28
+dependency closure 134 remaining to scan 16
+dependency closure 150 remaining to scan 9
+dependency closure 159 remaining to scan 5
+dependency closure 164 remaining to scan 7
+dependency closure 171 remaining to scan 2
+dependency closure 173 remaining to scan 0
+DAG: 173 modules
+compiled 25 / 173 last Init/SimpLemmas.lean elapsed 7.3
+compiled 50 / 173 last Init/Data/Format/Basic.lean elapsed 7.3
+compiled 75 / 173 last Init/PropLemmas.lean elapsed 7.4
+compiled 100 / 173 last Init/Control/StateRef.lean elapsed 7.4
+compiled 125 / 173 last Init/Data/Nat/Bitwise/Lemmas.lean elapsed 49.1
+compiled 150 / 173 last Init/Data/List/MinMax.lean elapsed 123.7
+compiled 173 / 173 last Init/Data/BitVec/Lemmas.lean elapsed 435.3
+PASS 173 olean modules
+exit=0
+=== Native source and gate tests, stage0 ===
+................................                                         [100%]
+32 passed in 22.94s
+=== Independent runtime full core: OMEGA_LEAN_CORE_NATIVE=1 OMEGA_LEAN_BITVEC_NATIVE=1 python -m pytest -q tests/test_omega*.py ===
+........................................................................ [ 19%]
+........................................................................ [ 38%]
+........................................................................ [ 57%]
+........................................................................ [ 76%]
+........................................................................ [ 95%]
+................                                                         [100%]
+376 passed in 160.32s (0:02:40)
+exit=0
+=== Native hardening ===
+......................................                                   [100%]
+38 passed in 3.77s
+exit=0
+=== Source inventory ===
+[
+  {
+    "filename": "lean4-master.zip",
+    "size": 103197953,
+    "sha256": "f076a3e688719e67414d5e7df1327ca4f4fbf3849b59e329716ee8d965e6093a",
+    "source_commit": "e35bfaf8dab2405124cb486c80a7c12d3cccb951",
+    "lean_files": 8138,
+    "olean_files": 0,
+    "lean_toolchain": "build/release/stage1",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "NavierStokesAndEuler-main.zip",
+    "size": 8457100,
+    "sha256": "cbe257ace7ab6d1fe8635bfca208a677b1e36863b2f54068f44be33a3b038103",
+    "source_commit": "f9e8bc5b38b6e212696e8a30e3e91517af887bbd",
+    "lean_files": 2659,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.34.0-rc2",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "mathematics_in_lean-master.zip",
+    "size": 9438299,
+    "sha256": "81a8184a6fcfc378ac41d34f7158046786e38e36232fc95ae4c777c36409ec25",
+    "source_commit": "cff01285931648054c4fe6817baed0ccd45c0372",
+    "lean_files": 89,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.34.0",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "iris-lean-master.zip",
+    "size": 1090407,
+    "sha256": "fcd8e13de922b663992b94ce2169dc8daa99fb37ad9fd34c87f39c3e45682a8b",
+    "source_commit": "fb21a8af4727bd42190072a5ed2836cbe9fb844e",
+    "lean_files": 320,
+    "olean_files": 0,
+    "lean_toolchain": null,
+    "crc_bad_member": null
+  },
+  {
+    "filename": "batteries-main.zip",
+    "size": 520891,
+    "sha256": "4185cf10805f6ce6dbb531c4d7126a2ac66bb95564d695aff206f5726133c48c",
+    "source_commit": "6d971e7e6b3f7d0a501c5418815aa9022edd3499",
+    "lean_files": 275,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.36.0-rc2",
+    "crc_bad_member": null
+  },
+  {
+    "filename": "mathlib4-master.zip",
+    "size": 30691121,
+    "sha256": "9b2e65757dc81967c498c4f4ae52934ef9f62a4e95a83a2ae7444fce53da74f5",
+    "source_commit": "d0207795ac79006da92d98544e1ce915ae386160",
+    "lean_files": 9274,
+    "olean_files": 0,
+    "lean_toolchain": "leanprover/lean4:v4.36.0-rc2",
+    "crc_bad_member": null
+  }
+]
+=== Upstream lemma smoke source, final checked with explicit literals ===
+prelude
+import Init.Data.BitVec.Lemmas
+import Init.TacticsExtra
+set_option debug.skipKernelTC false
+set_option linter.unusedVariables false
+theorem omega_upstream_arithmetic (x y : BitVec 16) : x * (y + 1#16) = x * y + x := by
+  rw [BitVec.mul_add, BitVec.mul_one]
+theorem omega_upstream_bitwise (x : BitVec 16) : (x &&& x) ^^^ (x ||| 0#16) = 0#16 := by
+  rw [BitVec.and_self, BitVec.or_zero, BitVec.xor_self]
+First smoke failed to rewrite implicit numeral notation; final explicit #16 literals passed exit=0.
+=== Native runtime and cache ===
+8a0c1d462699cd5a51d9486664eb82768c5b77f3f5ce6ab6404ee373c2c3d925  OMEGA-Lean-BitVec-4.36.0-pre-linux-x86_64.tar.zst
+c5e8362d308aa049b5dd09bd42577f82fd781c7c7d4832ef22b9e34a4df2d0fc  OMEGA-Lean-Stage0-Checkpoint-4.36.0-pre.tar.zst
+Independent runtime and cache smoke both exit 0; internal SHA256SUMS validated
+=== Wheel build ===
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /tmp/omega-v364/OMEGA-X-Evolution
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: omega-x-evolution
+  Building wheel for omega-x-evolution (pyproject.toml): started
+  Building wheel for omega-x-evolution (pyproject.toml): finished with status 'done'
+  Created wheel for omega-x-evolution: filename=omega_x_evolution-0.36.4.dev1-py3-none-any.whl size=4134610 sha256=2778434b3934dcc1e8a29d426e434afd0eb6e1f2c6e1581d05e676f3a1650c87
+  Stored in directory: /tmp/pip-ephem-wheel-cache-6vpzqiz8/wheels/78/84/cc/5c8b2224f077db85fb9462eb3471e99eb3b1745565c6c04116
+Successfully built omega-x-evolution
+=== Source hashes ===
+0b2df17d98cbf59f2f515b50589fbe7f31e086e32d4db4cb9a586d1589e34fb0  omega_x_evolution/lean_native.py
+dcbfe078d29b6d4ad070213ac1f69de70d3032698f379181a2fef893d8dd09a9  omega_x_evolution/__init__.py
+b1b2217b15877136ec25b8f1cad7e6806e2f0f2090fa0204ce34f6ac0fad50d8  tests/test_omega_native_bitvec.py
