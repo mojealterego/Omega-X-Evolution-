@@ -1,0 +1,44 @@
+{
+  "schema": "omega-u16-v1",
+  "dataset_sha256": "931291aec4268d248a7c9587db588e6104e90c6424e4dcbfb5dd33149f922a94",
+  "seed": 42,
+  "program": [
+    "xor",
+    [
+      "add",
+      [
+        "x"
+      ],
+      [
+        "y"
+      ]
+    ],
+    [
+      "y"
+    ]
+  ],
+  "attempts": 1024,
+  "unique_attempts": 1001,
+  "nodes": 5,
+  "training_matches": 32,
+  "training_bit_errors": 0,
+  "training_samples": 32,
+  "holdout_matches": 32,
+  "holdout_samples": 32,
+  "source": {
+    "python": "def candidate(x, y):\n    return ((((x + y) & 65535) ^ y) & 65535)\n",
+    "c": "#include <stdint.h>\nuint32_t candidate(uint32_t x, uint32_t y) { return ((((x + y) & UINT32_C(65535)) ^ y) & UINT32_C(65535)); }\n",
+    "cpp": "#include <stdint.h>\nuint32_t candidate(uint32_t x, uint32_t y) { return ((((x + y) & UINT32_C(65535)) ^ y) & UINT32_C(65535)); }\n",
+    "javascript": "function candidate(x, y) { return ((((x + y) & 65535) ^ y) & 65535); }\n",
+    "go": "package main\n\nfunc lit(v uint32) uint32 { return v }\nfunc candidate(x, y uint32) uint32 { return ((((x + y) & 65535) ^ y) & 65535) }\n",
+    "java": "public class Candidate {\n    public static int candidate(int x, int y) { return ((((x + y) & 65535) ^ y) & 65535); }\n}\n"
+  },
+  "backends": {
+    "python": "pass",
+    "c": "pass",
+    "cpp": "pass",
+    "javascript": "pass",
+    "go": "pass",
+    "java": "pass"
+  }
+}

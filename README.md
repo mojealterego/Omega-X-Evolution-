@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v12%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v15%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v12
+## Current implementation — v15
 
 | Component | Capability |
 |---|---|
@@ -52,8 +52,11 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Recursive improvement | Fresh validation gates, bounded policy iteration and outer checkpoint |
 | Benchmarking | Equal proposal-budget paired comparisons |
 | Discovery | Bounded symbolic regression and reproducible evidence |
+| Polyglot evolution | Validated u16 IR and six native/interpreted language backends |
+| Neuro-symbolic | Certified symbolic expression plus trained residual MLP |
+| Neural architecture search | Bounded evolution of hidden layers, activation, learning rate and optimizer; real CPU training |
 
-**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, unrestricted agent self-rewriting, formal verification of arbitrary programs and end-to-end neural model training remain out of scope.
+**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, unrestricted agent self-rewriting, formal verification of arbitrary programs and large-model training remain out of scope. Small MLPs now train end-to-end on CPU in explicit research modes.
 
 ## Roadmap
 
@@ -69,6 +72,14 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v10 | Recursive self-improvement with fixed promotion gates | Bounded policy iteration with authenticated outer checkpoints |
 | v11 | Comparative benchmarks | Paired offline strategy comparisons; external reproduction open |
 | v12 | Scientific Discovery Engine | Two-variable symbolic regression from observations |
+| v13 | Polyglot program evolution | Pure u16 IR; Python, C, C++, JavaScript, Go, Java; arbitrary programs open |
+| v14 | Neuro-Symbolic Evolution Engine | Verified symbolic regression + learned residual; bounded two-variable domain |
+| v15 | Algorithm and neural architecture evolution | Real MLP training, architecture and optimizer search; large models open |
+| v16 | Heterogeneous CPU/GPU/NPU orchestration | Open |
+| v17 | Durable GraphRAG evolutionary memory | Open |
+| v18 | Automatic experiment construction | Open |
+| v19 | Multi-domain Scientific Discovery Engine | Open |
+| v20 | Integrated autonomous research runtime | Open |
 
 No stage is promoted solely on generated logs or self-reported improvements.
 
@@ -86,7 +97,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.12.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.15.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -118,6 +129,16 @@ omega-x-discovery --task squares --seed 2026 --budget 128
 
 See [bounded implementation and remaining gaps](docs/omega/EVOLUTION_V10_V12.md).
 
+## v13–v15 research commands
+
+```bash
+omega-x-polyglot --seed 42 --budget 1024 --verify
+omega-x-hybrid --seed 42 --epochs 400
+omega-x-nas --seed 42 --task xor --rounds 3 --population 4 --epochs 180
+```
+
+Neural modes require NumPy, hybrid also requires system Z3; compiler verification uses installed local toolchains. See [v13–v15 scope and evidence](docs/omega/EVOLUTION_V13_V15.md).
+
 ## Verification
 
 ```bash
@@ -126,10 +147,11 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, neural model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v12.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v15.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v13–v15 implementation and evidence](docs/omega/EVOLUTION_V13_V15.md)
 - [v10–v12 implementation and evidence](docs/omega/EVOLUTION_V10_V12.md)
 - [v7–v9 implementation and evidence](docs/omega/EVOLUTION_V7_V9.md)
 - [v4.1–v6 implementation, benchmarks and operating instructions](docs/omega/EVOLUTION_V41_V6.md)
