@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v36.2%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v36.3%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v36.2
+## Current implementation — v36.3
 
 | Component | Capability |
 |---|---|
@@ -111,7 +111,7 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v28 | Memory architecture synthesis | Typed retrieval composition, dataset-split promotion |
 | v29 | Swarm federation | Signed peer exchange, independent qualification, local process/TLS tests |
 | v30 | Code epigenetics | Bounded reversible runtime switches, mandatory gates immutable |
-| v31 | Neurosymbolic formal verification | Constructive u16 ring proofs, separate checker; optional Lean unverified |
+| v31 | Neurosymbolic formal verification | Constructive u16 ring proofs, native Lean core-addsub verified; full Std and Isabelle open |
 | v32 | Neuro-symbolic swarm | Signed quorum plans and independently replayed peer execution; one-shot fault model, local process tests |
 | v33 | Zero-shot axiomatic discovery | Bounded proof and counterexample search; finite algebra enumeration |
 | v34 | On-the-fly weight plasticity | Actual low-rank CPU updates on verified trajectories; no LLM weights |
@@ -136,7 +136,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.36.2.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.36.3.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -364,3 +364,5 @@ python scripts/verify_bft_lemmas.py
 See [upstream changelog](CHANGELOG.md) and [contributing](CONTRIBUTING.md) for inherited maintenance conventions.
 
 **v36.2:** [Extended round recovery, streaming synthesis and upstream recovery](docs/omega/RESIDUAL_RECOVERY_V362.md). Historical round-31 deadlock reproduced and fixed in signed deterministic execution. Streaming search crosses 8192 evaluations with a durable cursor; retained grammar limits are explicit. Upstream dependency recovery and remaining acceptance conditions are recorded separately.
+
+**v36.3:** [Native Lean bootstrap and proof acceptance](docs/omega/NATIVE_LEAN_V363.md). Actual offline Lean 4.36.0-pre compiler built from upstream sources, 50-module portable proof runtime; extensional equations over BitVec 16 × BitVec 16 verified natively for tested additive cases, false equality rejected, shared proof adapter and replay. Full Std/CaDiCaL and Isabelle remain open. GATE-09 remains partially blocked.

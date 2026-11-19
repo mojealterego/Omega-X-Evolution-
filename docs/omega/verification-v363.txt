@@ -1,0 +1,150 @@
+BASE main a88da57aec2b1bfc832f0b9c48d0515c1096b7f7
+Linux x86_64
+Python 3.13.5
+clang version 17.0.0 (https://github.com/swiftlang/llvm-project.git 10999b6d034fe318f3d56c83bddb6572593a8bb0)
+
+=== Source provenance ===
+824b0e63474848a1b5e86c80c7375b81d7d8a362e0fe426eb685324f5a733838  /mnt/data/lean4-4.36.0.zip
+Release tag/ZIP comment 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9. Official Git blob matches:
+45e63f0f3fda9e522f8d8f9137ddd59e2f9f589b src/Init/Data/BitVec/BasicAux.lean
+de984fa8bcba0e0324b6d236a54b1637f471705d src/Init/Data/Nat/Div/Basic.lean
+ee4ad6dfd4ab5a8805941d36145cf4705248a1ef src/Init/Data/Nat/Lemmas.lean
+450ede60899cd77aab2c70aa670770069952a5ca src/Init/Data/BitVec/Bootstrap.lean
+56c13920a76fb78f8096da074c9d768572470585 src/Init/Data/BitVec/Lemmas.lean
+eb4d93a03baa00c25cc250ae55a2e62b40530cf8 src/Init/TacticsExtra.lean
+
+=== Build configuration ===
+prefix=/usr
+libdir=/usr/lib/x86_64-linux-gnu
+includedir=/opt/nvm/versions/node/v22.16.0/include/node
+Name: libuv
+Description: system libuv runtime + installed Node headers
+Version: 1.48.0
+Libs: -L${libdir} -l:libuv.so.1
+Cflags: -I${includedir}
+
+PKG_CONFIG_PATH=/tmp/lean-pc cmake -S stage0/src -B /tmp/lean-build0 -DSTAGE=0 -DUSE_GITHASH=OFF -DUSE_MIMALLOC=OFF -DUSE_LAKE=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS_RELEASE="-O0 -DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE="-O0 -DNDEBUG"
+sed -i s/-O3\ -DNDEBUG/-O0\ -DNDEBUG/g /tmp/lean-build0/stdlib.make
+cmake --build /tmp/lean-build0 --target lean -j4
+[    ] Building /tmp/lean-src/lean4-4.36.0/stage0/src/../stdlib//Lake.c
+[    ] Building /tmp/lean-src/lean4-4.36.0/stage0/src/../stdlib//LakeMain.c
+[    ] Building /tmp/lean-src/lean4-4.36.0/stage0/src/../stdlib//LeanChecker.c
+[100%] Built target make_stdlib
+[    ] Building /tmp/lean-build0/lib/lean/libInit_shared.so
+[100%] Built target Init_shared
+[    ] Building /tmp/lean-build0/lib/lean/libleanshared.so
+[100%] Built target leanshared
+[    ] Building /tmp/lean-build0/bin/lean
+[100%] Built target lean
+exit=0
+Lean (version 4.36.0-pre, x86_64-unknown-linux-gnu, Release)
+Compiled C modules: 2583
+
+Full Init+BVDecide dependency attempt (not accepted):
+compiled 25 / 953 last Init/Core.lean elapsed 107.6
+compiled 50 / 953 last Init/Control/Option.lean elapsed 118.2
+compiled 75 / 953 last Init/Util.lean elapsed 147.1
+compiled 100 / 953 last Init/NotationExtra.lean elapsed 203.9
+compiled 125 / 953 last Init/Data/AC.lean elapsed 221.5
+compiled 150 / 953 last Init/Data/Iterators/ToIterator.lean elapsed 245.0
+compiled 175 / 953 last Init/Data/Int/Order.lean elapsed 277.8
+compiled 200 / 953 last Init/Control.lean elapsed 310.3
+compiled 225 / 953 last Std/Data/Iterators/Producers/Repeat.lean elapsed 332.3
+exit=124
+Compiled olean count: 242
+
+=== Independent runtime packaging ===
+closure 3 pending 9
+closure 12 pending 12
+closure 24 pending 11
+closure 35 pending 6
+closure 41 pending 2
+closure 43 pending 2
+closure 45 pending 3
+closure 48 pending 2
+closure 50 pending 0
+independent proof 0  
+PACKAGED 261 files; 50 modules; 331132903 bytes
+cb7d38b181e67443957bc657ad81bb27364dbfeb711706f329580b02247b5664  /mnt/data/OMEGA-Lean-Core-4.36.0-pre-linux-x86_64.tar.zst
+8d7430097ff35f7d0178c23af1c4748d0a2370464c4b399498844024adbbc02e  /tmp/lean-core-dist/omega-lean-core-4.36.0-pre/SHA256SUMS
+4567575047487eb2d5dd218d105913a96afb7e482b7686992c362ea4ef52ca67  /tmp/lean-build0/bin/lean
+691c7c48ffd87df9fa103b1de2522c1dd608838ebfc4539b5864bf5b2a0decc5  /tmp/lean-build0/lib/lean/libleanshared.so
+Drive archive ID 1xlGWKpg5raeu6PX2pgHEZlVJ-uTEPTkl; checksum ID 17WTZpml_ZbsCuXl8zoT6dWwtuJ4qltG6
+
+=== RED TDD ===
+F
+=================================== FAILURES ===================================
+___ test_core_source_uses_real_bitvec_and_extensional_theorem[left0-right0] ____
+
+left = ('sub', ('add', ('x',), ('y',)), ('y',)), right = ('x',)
+
+    @pytest.mark.parametrize('left,right', CASES)
+    def test_core_source_uses_real_bitvec_and_extensional_theorem(left, right):
+>       source = higher_order.lean_core_source(Program(left), Program(right))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'omega_x_evolution.higher_order' has no attribute 'lean_core_source'. Did you mean: 'lean_source'?
+
+tests/test_omega_native_lean.py:22: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_omega_native_lean.py::test_core_source_uses_real_bitvec_and_extensional_theorem[left0-right0] - AttributeError: module 'omega_x_evolution.higher_order' has no attribute 'lean_core_source'. Did you mean: 'lean_source'?
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.11s
+
+=== First native GREEN ===
+...........                                                              [100%]
+11 passed in 7.92s
+
+=== Regression-discovered source envelope incompatibility (subsequently fixed) ===
+
+omega_x_evolution/simulation_contracts.py:38: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_omega_simulation_acceptance.py::test_proof_source_roundtrip_and_solver[lean] - ValueError: unexpected theorem envelope
+1 failed, 354 passed in 141.11s (0:02:21)
+
+=== Final native and source-contract verification ===
+....................                                                     [100%]
+20 passed in 25.23s
+
+=== Native acceptance: python scripts/verify_native_lean.py ===
+{"expected": true, "id": "LEAN-CORE-01", "pass": true, "report": {"backend": "lean", "proved": true, "source_sha256": "94e9f44b1657c01f1481645c6e9d9e2654bdedd64d521d40c9896d998c7ace50", "status": "checked", "strategy": "core-addsub", "version": "Lean (version 4.36.0-pre, x86_64-unknown-linux-gnu, Release)"}}
+{"expected": true, "id": "LEAN-CORE-02", "pass": true, "report": {"backend": "lean", "proved": true, "source_sha256": "7ec835fda2316c5035e9213e9af6bc319730de728ceff0e5f5cef2fbc12eb26e", "status": "checked", "strategy": "core-addsub", "version": "Lean (version 4.36.0-pre, x86_64-unknown-linux-gnu, Release)"}}
+{"expected": true, "id": "LEAN-CORE-03", "pass": true, "report": {"backend": "lean", "proved": true, "source_sha256": "a55f0c6c3f453bbf6c81081d14e2bfca5d68c9397530df6c6162927c745f48a3", "status": "checked", "strategy": "core-addsub", "version": "Lean (version 4.36.0-pre, x86_64-unknown-linux-gnu, Release)"}}
+{"expected": true, "id": "LEAN-CORE-04", "pass": true, "report": {"backend": "lean", "proved": true, "source_sha256": "3ec6335ef7937291f57c94326a95e68ab34047603c4fd419b85f48defca18825", "status": "checked", "strategy": "core-addsub", "version": "Lean (version 4.36.0-pre, x86_64-unknown-linux-gnu, Release)"}}
+{"expected": false, "id": "LEAN-CORE-05", "pass": true, "report": {"backend": "lean", "proved": false, "source_sha256": "5b4c9478dbcad600dd4f3351663cb440b0af3a0c51ff520c8f2b72747b631b34", "status": "rejected", "strategy": "core-addsub", "version": "Lean (version 4.36.0-pre, x86_64-unknown-linux-gnu, Release)"}}
+exit=0
+
+=== Core regression: OMEGA_LEAN_CORE_NATIVE=1 python -m pytest -q tests/test_omega*.py ===
+........................................................................ [ 20%]
+........................................................................ [ 40%]
+........................................................................ [ 60%]
+........................................................................ [ 80%]
+....................................................................     [100%]
+356 passed in 147.59s (0:02:27)
+exit=0
+
+=== Final hardening ===
+......................................                                   [100%]
+38 passed in 3.77s
+
+=== Package build ===
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /tmp/omega-v363/OMEGA-X-Evolution
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: omega-x-evolution
+  Building wheel for omega-x-evolution (pyproject.toml): started
+  Building wheel for omega-x-evolution (pyproject.toml): finished with status 'done'
+  Created wheel for omega-x-evolution: filename=omega_x_evolution-0.36.3.dev1-py3-none-any.whl size=4133667 sha256=abbdb2d127f6eb4c9b54629c4e19a794527e9ddf67b66b2799644dcd0ce23c45
+  Stored in directory: /tmp/pip-ephem-wheel-cache-_mon4xld/wheels/43/d4/13/fbac14e6c23aaf2ff3ef70ac34a48250dd27a585d7f798c5d2
+Successfully built omega-x-evolution
+
+=== Source hashes ===
+bf2107e569ed546dd0b5351bc96417beb9a7436ad594b6bd36dc0a7e138bd1a5  omega_x_evolution/lean_native.py
+a6282564da01e84263d2e63eb5fb75eed9f5d516a82b4c0ebe3cc920d8a3a162  omega_x_evolution/higher_order.py
+66e79db6d5f5213a3be2e1695076863a9cf72fc04483870cff17e880f10ccf84  omega_x_evolution/proof_kernel.py
+5c66eff78573fda22c20e94d28ef4b0118c214d67843631a028918673fcdbe56  omega_x_evolution/simulation_contracts.py
+f8827e6776a4917f8476878ebee1511870f875c5b7540bc1609a9a9743e0823b  omega_x_evolution/__init__.py
+483840bfc406a5d607300b357d006fceffd514a4473deb78bdd700d56f389882  tests/test_omega_native_lean.py
+3592aab713c786ade36263ded5980e55be4364bdda74ba0756650c2ad8b69d7c  scripts/verify_native_lean.py
+
+Remaining: full native Std BVDecide and Isabelle, dependency metadata, large pretrained model, general liveness and novel primitive synthesis. No new full upstream run claimed.

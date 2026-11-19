@@ -14,7 +14,7 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v28 | Autonomous synthesis of new architectural paradigms | 13 | Implemented typed retrieval DAG composition and separate validation promotion; arbitrary architecture design open |
 | v29 | Swarm Federation | 13 | PASS for authenticated exchange, recertification and replay (HYBRID); physical WAN performance not required |
 | v30 | Code epigenetics | 13 | Implemented bounded reversible functional activation in swarm; real host telemetry and scripted stress/recovery; mandatory gates always active |
-| v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | PASS for bounded u16 proof/source contract (DETERMINISTIC-SIMULATION + native SMT); actual external language/kernel compatibility remains unestablished |
+| v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | PASS for bounded u16 proof/source contract and tested native Lean additive equations (HYBRID); full Std BVDecide and native Isabelle compatibility remain open |
 | v32 | Neuro-Symbolic Swarm | 13 | PASS in finite authenticated fault/recovery schedules (HYBRID); terminal Byzantine leader and general liveness remain algorithmic gaps |
 | v33 | Zero-Shot Axiomatic Discovery | 13 | Implemented grammar conjectures, checked modular identities, counterexamples, exhaustive finite algebra tables; general axiomatic discovery open |
 | v34 | On-the-Fly Weight Plasticity | 13 | PASS for actual small-decoder LoRA and modeled distributed update/rollback (HYBRID); large pretrained model loader/generalization remains unverified |
@@ -36,3 +36,5 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 **v36.1 — deterministic engineering acceptance:** [modeled contracts, evidence and residual gates](SIMULATION_ACCEPTANCE_V361.md). OMEGA v2.3 §5: successful deterministic simulation closes the corresponding engineering property without a mandatory physical rerun. Native and production claims are separate. Earlier infrastructure-only blocker statements are superseded; no mathematical, compatibility or dependency failure is concealed.
 
 **v36.2:** [Extended round recovery, streaming synthesis and upstream recovery](RESIDUAL_RECOVERY_V362.md). Historical round-31 deadlock reproduced and fixed in signed deterministic execution. Streaming search crosses 8192 evaluations with a durable cursor; retained grammar limits are explicit. Upstream dependency recovery and remaining acceptance conditions are recorded separately.
+
+**v36.3:** [Native Lean bootstrap and proof acceptance](NATIVE_LEAN_V363.md). Actual offline Lean 4.36.0-pre compiler built from upstream sources, 50-module portable proof runtime; extensional equations over BitVec 16 × BitVec 16 verified natively for tested additive cases, false equality rejected, shared proof adapter and replay. Full Std/CaDiCaL and Isabelle remain open. GATE-09 remains partially blocked.

@@ -13,33 +13,7 @@ from .polyglot import Program, ATOMS
 from . import proof_kernel, bitproof
 
 
-def lean_source(a,b):
-    if not isinstance(a,Program) or not isinstance(b,Program):raise ValueError('pure typed programs required')
-    def emit(t):
-        if t[0] in ('x','y'):return t[0]
-        if t[0]=='lit':return f'({t[1]} : BitVec 16)'
-        op={'add':'+','sub':'-','mul':'*','xor':'^^^','and':'&&&','or':'|||'}[t[0]]
-        return f'({emit(t[1])} {op} {emit(t[2])})'
-    return ('import Std.Tactic.BVDecide\nset_option maxHeartbeats 200000\n'
-            'theorem omega_extensional_equivalence :\n'
-            f'  (fun (x y : BitVec 16) => {emit(a.tree)}) =\n'
-            f'  (fun (x y : BitVec 16) => {emit(b.tree)}) := by\n'
-            '  funext x y\n  bv_decide\n')
-
-
-def check_lean(a,b,*,timeout=30):
-    if type(timeout) is not int or not 1<=timeout<=60:raise ValueError('Lean timeout')
-    src=lean_source(a,b);result={'backend':'lean','source_sha256':hashlib.sha256(src.encode()).hexdigest(),'proved':False}
-    binary=shutil.which('lean')
-    if not binary:return {**result,'status':'unavailable'}
-    with tempfile.TemporaryDirectory(prefix='omega-hol-') as temp:
-        p=Path(temp)/'Proof.lean';p.write_text(src,encoding='ascii')
-        try:
-            v=subprocess.run([binary,'--version'],capture_output=True,timeout=5,check=True)
-            r=subprocess.run([binary,str(p)],cwd=temp,capture_output=True,timeout=timeout)
-        except (OSError,subprocess.SubprocessError):return {**result,'status':'failed-or-timeout'}
-        ok=r.returncode==0 and not r.stdout.strip() and not r.stderr.strip()
-        return {**result,'status':'checked' if ok else 'rejected','proved':ok,'version':v.stdout.decode(errors='replace')[:256].strip()}
+from .lean_native import lean_source, lean_core_source, check_lean
 
 
 def isabelle_source(a,b):

@@ -92,26 +92,14 @@ def verify_certificate(a,b,proof):
     except (TypeError,ValueError,ArithmeticError,IndexError):return False
 
 def lean_source(a,b):
-    if not isinstance(a,Program) or not isinstance(b,Program):raise ValueError('validated IR required')
-    def emit(t):
-        if t[0] in ('x','y'):return t[0]
-        if t[0]=='lit':return f'({t[1]} : BitVec 16)'
-        op={'add':'+','sub':'-','mul':'*','xor':'^^^','and':'&&&','or':'|||'}[t[0]]
-        return f'({emit(t[1])} {op} {emit(t[2])})'
-    return 'import Std.Tactic.BVDecide\nset_option maxHeartbeats 200000\ntheorem omega_equivalence (x y : BitVec 16) :\n  '+emit(a.tree)+' = '+emit(b.tree)+' := by\n  bv_decide\n'
+    from .lean_native import lean_source as source
+    return source(a,b,extensional=False)
+
 
 def check_lean(a,b,*,timeout=30):
-    if type(timeout) is not int or not 1<=timeout<=60:raise ValueError('Lean timeout')
-    src=lean_source(a,b);report={'backend':'lean','source_sha256':hashlib.sha256(src.encode()).hexdigest(),'proved':False}
-    executable=shutil.which('lean')
-    if not executable:return {**report,'status':'unavailable'}
-    with tempfile.TemporaryDirectory(prefix='omega-lean-') as d:
-        path=Path(d)/'Proof.lean';path.write_text(src,encoding='ascii')
-        try:r=subprocess.run([executable,str(path)],cwd=d,capture_output=True,timeout=timeout)
-        except (OSError,subprocess.TimeoutExpired):return {**report,'status':'failed-or-timeout'}
-        # Reject warnings (including any unexpected admitted axiom).
-        ok=r.returncode==0 and not r.stdout.strip() and not r.stderr.strip()
-        return {**report,'proved':ok,'status':'checked' if ok else 'rejected'}
+    from .lean_native import check_lean as native_check
+    return native_check(a,b,timeout=timeout,extensional=False)
+
 
 def optimize(reference,*,require_lean=False):
     """Generate smaller subtrees, prove before empirical check/admission."""

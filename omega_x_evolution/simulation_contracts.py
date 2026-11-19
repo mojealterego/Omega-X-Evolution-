@@ -22,7 +22,10 @@ def check_source(backend: str, source: str, left: Program, right: Program) -> di
     if not isinstance(left, Program) or not isinstance(right, Program) or type(source) is not str or len(source)>16384:
         raise ValueError('proof model bounds')
     if backend=='lean':
-        prefix='import Std.Tactic.BVDecide\nset_option maxHeartbeats 200000\ntheorem omega_extensional_equivalence :\n  (fun (x y : BitVec 16) => '
+        head='import Std.Tactic.BVDecide\nset_option maxHeartbeats 200000\n'
+        theorem='theorem omega_extensional_equivalence :\n  (fun (x y : BitVec 16) => '
+        hardened=head+'set_option linter.unusedVariables false\nset_option debug.skipKernelTC false\n'+theorem
+        prefix=hardened if source.startswith(hardened) else head+theorem
         separator=') =\n  (fun (x y : BitVec 16) => '
         suffix=') := by\n  funext x y\n  bv_decide\n'
         literal=' : BitVec 16)'
