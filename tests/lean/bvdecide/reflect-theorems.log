@@ -1,0 +1,6 @@
+'add_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, add_unsat._native.native_decide.ax_1_1]
+'sub_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, sub_unsat._native.native_decide.ax_1_1]
+'mul_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, mul_unsat._native.native_decide.ax_1_1]
+'xor_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, xor_unsat._native.native_decide.ax_1_1]
+'and_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, and_unsat._native.native_decide.ax_1_1]
+'or_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, or_unsat._native.native_decide.ax_1_1]

@@ -1,0 +1,19 @@
+PASS Lean bitblast -> native DIMACS for 7 formulas
+PASS add independent Isabelle-exported LRAT checker
+PASS sub independent Isabelle-exported LRAT checker
+PASS mul independent Isabelle-exported LRAT checker
+PASS xor independent Isabelle-exported LRAT checker
+PASS and independent Isabelle-exported LRAT checker
+PASS or independent Isabelle-exported LRAT checker
+PASS add: valid proof accepted, malformed/wrong formula rejected
+PASS sub: valid proof accepted, malformed/wrong formula rejected
+PASS mul: valid proof accepted, malformed/wrong formula rejected
+PASS xor: valid proof accepted, malformed/wrong formula rejected
+PASS and: valid proof accepted, malformed/wrong formula rejected
+PASS or: valid proof accepted, malformed/wrong formula rejected
+'add_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, add_unsat._native.native_decide.ax_1_1]
+'sub_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, sub_unsat._native.native_decide.ax_1_1]
+'mul_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, mul_unsat._native.native_decide.ax_1_1]
+'xor_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, xor_unsat._native.native_decide.ax_1_1]
+'and_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, and_unsat._native.native_decide.ax_1_1]
+'or_unsat' depends on axioms: [propext, Classical.choice, Quot.sound, or_unsat._native.native_decide.ax_1_1]

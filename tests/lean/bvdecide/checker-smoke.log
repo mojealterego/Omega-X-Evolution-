@@ -1,0 +1,5 @@
+'contradiction_unsat' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ contradiction_unsat._native.native_decide.ax_1_1]
+PASS LRAT checker: text, binary, wrong CNF, incomplete hints, invalid ID, empty proof
