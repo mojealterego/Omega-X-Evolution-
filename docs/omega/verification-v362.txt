@@ -1,0 +1,347 @@
+BASE main b6200c56ec0edb951a4b6dee3ed9876d3da02e56
+Environment: Linux-6.18.57-x86_64-with-glibc2.41 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]
+Core thread limits: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
+Offline final: PYTHONPATH=/tmp/omega-v362-sdk-compatible SHINKA_MODELS_DEV_MODE=offline
+Core source SHA-256:
+216db11d2f2775f2dcff96d654d5e8aa5b466c34f5243d4e67b58ada684b6804  omega_x_evolution/bft.py
+650d6784483d3263e1c2c8591476ffac55796270a1298d378c702cc38514525d  omega_x_evolution/pacemaker.py
+b3796befe91b5887f0a5cfc0ea22463c2d44221a2ea83b6fa835a08d07a2bfa0  omega_x_evolution/streaming_synthesis.py
+7e364b7a7b465ce437be58f40c4b4ca8a1a36044c263dc036d8b0956d483dda5  omega_x_evolution/__init__.py
+931b7195fbd0192ef83b46fb2d440481215176e56bee7b69022419a6ba4852f6  tests/test_omega_extended_consensus.py
+a4b70a25fb6d38b035b0a640ff0851c2de5a27e99b4c0f1a21a36eba88bb8a14  tests/test_omega_streaming_synthesis.py
+ec20b8b96dcf24faa8c7e8b7b17d9e5fe1d2d15f40ffef4eec3fb6bbb9bb4f9b  tests/test_omega_final_gates.py
+d6e7fceef3fe85872c62c8f2dabd9e94be4d4b361d714c21813c75c34c3384a7  tests/test_ci_workflows.py
+df14b7ff0da86d491a3c3a98aac69a8bc952f770bff6ea5c84ed87098db346a8  tests/test_packaging_release.py
+
+=== RED BFT ===
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_________ test_default_protocol_replaces_faulty_legacy_terminal_leader _________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-28/test_default_protocol_replaces0')
+
+    def test_default_protocol_replaces_faulty_legacy_terminal_leader(tmp_path):
+        ids = [Identity(bytes([i])*32) for i in range(1,5)]
+        members = tuple(sorted(i.public for i in ids))
+        g = Genesis('e'*64,members,members,1,16,2)
+        nodes = {i.public:Replica(tmp_path/f'{n}.db',b'k'*32,g,i,create=True) for n,i in enumerate(ids)}
+        s=nodes[members[0]].inspect()['state']
+        faulty=leader(s,MAX_ROUND-1)
+        honest=tuple(k for k in members if k!=faulty)
+        # A long outage legitimately exhausted the historical 32-round horizon.
+        for r in range(MAX_ROUND-1):
+            qc=timeout_quorum(s,[nodes[k].timeout_vote() for k in honest],r)
+            for k in honest:nodes[k].advance_certified(qc)
+        def call(peer,op,args):
+            if peer==faulty:raise OSError('Byzantine withholding')
+            return _dispatch(nodes[peer],op,args)
+        clock=[0.]
+        drivers={k:Pacemaker(nodes[k],call,clock=lambda:clock[0],base_timeout=1.,max_timeout=1.) for k in honest}
+        clock[0]=2.
+        events=[]
+        for _ in range(8):
+            for k in honest:events.append(drivers[k].tick())
+            if all(nodes[k].inspect()['state']['height']>=2 for k in honest):break
+        print('fault schedule:',[(e['height'],e['round'],e['status']) for e in events])
+>       assert all(nodes[k].inspect()['state']['height']>=2 for k in honest)
+E       assert False
+E        +  where False = all(<generator object test_default_protocol_replaces_faulty_legacy_terminal_leader.<locals>.<genexpr> at 0x7fafb5438930>)
+
+tests/test_omega_extended_consensus.py:32: AssertionError
+----------------------------- Captured stdout call -----------------------------
+fault schedule: [(1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit'), (1, 31, 'round-limit')]
+_____ test_extended_round_history_is_bounded_and_restart_non_equivocation ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-28/test_extended_round_history_is0')
+
+    def test_extended_round_history_is_bounded_and_restart_non_equivocation(tmp_path):
+        ids=[Identity(bytes([i])*32) for i in range(1,5)]
+        members=tuple(sorted(i.public for i in ids));g=Genesis('f'*64,members,members,1,8)
+        nodes=[Replica(tmp_path/f'{n}.db',b'k'*32,g,i,create=True) for n,i in enumerate(ids)]
+        s=nodes[0].inspect()['state']
+        for r in range(MAX_ROUND+5):
+>           qc=timeout_quorum(s,[n.timeout_vote() for n in nodes[:3]],r)
+                                 ^^^^^^^^^^^^^^^^
+
+tests/test_omega_extended_consensus.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <omega_x_evolution.bft.Replica object at 0x7fafc41616e0>
+
+    def timeout_vote(self):
+        with _lock(self.path):
+            rev,d=self._load();self._active(d);r=d['round'];s=d['state']
+>           if r>=MAX_ROUND-1:raise ValueError('round budget exhausted')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           ValueError: round budget exhausted
+
+omega_x_evolution/bft.py:203: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_omega_extended_consensus.py::test_default_protocol_replaces_faulty_legacy_terminal_leader - assert False
+ +  where False = all(<generator object test_default_protocol_replaces_faulty_legacy_terminal_leader.<locals>.<genexpr> at 0x7fafb5438930>)
+FAILED tests/test_omega_extended_consensus.py::test_extended_round_history_is_bounded_and_restart_non_equivocation - ValueError: round budget exhausted
+2 failed in 1.83s
+
+
+=== GREEN BFT ===
+fault schedule: [(1, 31, 'waiting-timeout-quorum'), (1, 31, 'waiting-timeout-quorum'), (1, 31, 'advanced'), (1, 31, 'advanced'), (1, 31, 'advanced'), (1, 32, 'waiting-leader'), (1, 32, 'committed'), (2, 0, 'committed'), (3, 0, 'committed')]
+..
+2 passed in 1.21s
+
+
+=== BFT targeted regression ===
+............................                                             [100%]
+28 passed in 15.03s
+
+
+=== RED streaming ===
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_streaming_synthesis_crosses_old_budget_with_small_durable_cursor _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-31/test_streaming_synthesis_cross0')
+
+    def test_streaming_synthesis_crosses_old_budget_with_small_durable_cursor(tmp_path):
+>       from omega_x_evolution.streaming_synthesis import StreamingSearch, tree_at, tree_count
+E       ModuleNotFoundError: No module named 'omega_x_evolution.streaming_synthesis'
+
+tests/test_omega_streaming_synthesis.py:8: ModuleNotFoundError
+________ test_streaming_chunking_replays_with_same_cursor_and_incumbent ________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-31/test_streaming_chunking_replay0')
+
+    def test_streaming_chunking_replays_with_same_cursor_and_incumbent(tmp_path):
+>       from omega_x_evolution.streaming_synthesis import StreamingSearch
+E       ModuleNotFoundError: No module named 'omega_x_evolution.streaming_synthesis'
+
+tests/test_omega_streaming_synthesis.py:35: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_omega_streaming_synthesis.py::test_streaming_synthesis_crosses_old_budget_with_small_durable_cursor - ModuleNotFoundError: No module named 'omega_x_evolution.streaming_synthesis'
+FAILED tests/test_omega_streaming_synthesis.py::test_streaming_chunking_replays_with_same_cursor_and_incumbent - ModuleNotFoundError: No module named 'omega_x_evolution.streaming_synthesis'
+2 failed in 0.09s
+
+
+=== GREEN streaming initial ===
+..                                                                       [100%]
+2 passed in 0.82s
+
+
+=== Core suite: python -m pytest -q tests/test_omega*.py ===
+........................................................................ [ 20%]
+........................................................................ [ 41%]
+........................................................................ [ 62%]
+........................................................................ [ 83%]
+........................................................                 [100%]
+344 passed in 133.00s (0:02:13)
+
+exit=0
+
+=== Recovered Anthropic dependency cases ===
+..............................................                           [100%]
+46 passed in 9.29s
+
+exit=0
+
+=== Recovered Instructor dependency cases ===
+.........................                                                [100%]
+=============================== warnings summary ===============================
+tests/test_llm_client_cache.py::test_forked_child_does_not_reuse_parent_client
+  /usr/lib/python3.13/multiprocessing/popen_fork.py:67: DeprecationWarning: This process (pid=42024) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+25 passed, 1 warning in 2.30s
+
+exit=0
+
+=== Collection: python -m pytest --collect-only -q ===
+tests/test_wandb_logging.py::test_wandb_logger_dry_run_and_resume_use_fake_wandb
+tests/test_wandb_logging.py::test_wandb_online_logging_with_authenticated_sdk
+tests/test_wandb_metrics.py::test_program_payload_logs_one_compact_event_per_individual
+tests/test_wandb_metrics.py::test_program_payload_skips_bulky_values_and_duplicate_timing
+tests/test_wandb_metrics.py::test_population_progress_counts_copies_but_excludes_their_costs[_is_island_copy]
+tests/test_wandb_metrics.py::test_population_progress_counts_copies_but_excludes_their_costs[_spawned_island]
+tests/test_wandb_metrics.py::test_actual_headless_unknown_pricing_suppresses_only_api_cost
+tests/test_wandb_metrics.py::test_stale_headless_prompt_path_does_not_suppress_api_cost
+tests/test_wandb_metrics.py::test_program_payload_bounds_public_metrics_and_omits_private_metrics
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[apiKey]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[accessToken]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[clientSecret]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[AuthorizationHeader]
+tests/test_wandb_metrics.py::test_run_summary_uses_correct_programs_for_best_score
+tests/test_wandb_metrics.py::test_run_summary_preserves_legacy_api_cost_and_prefers_explicit_total
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_run_once_parses_bridge_output
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_scores_correct_candidate
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_rejects_wrong_answer
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_records_empty_output_as_failure
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_matches_sequential
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_worker_error_surfaces
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_keeps_default_save_output
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_verbose_false_suppresses_framework_stdout
+tests/test_wrap_eval_parallel.py::test_parallel_mode_rejects_early_stop
+tests/test_wrap_eval_parallel.py::test_invalid_worker_configuration_raises
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_loads_dataclass_with_postponed_annotations
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_returns_program_defined_types
+
+1556 tests collected in 3.61s
+exit=0
+
+=== Initial full offline run ===
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_ci_workflows.py::test_public_ci_excludes_secret_backed_tests - FileNotFoundError: [Errno 2] No such file or directory: '/tmp/omega-v362/OMEGA-X-Evolution/.github/workflows/ci.yml'
+FAILED tests/test_ci_workflows.py::test_public_ci_installs_stable_rustfmt - FileNotFoundError: [Errno 2] No such file or directory: '/tmp/omega-v362/OMEGA-X-Evolution/.github/workflows/ci.yml'
+FAILED tests/test_ci_workflows.py::test_integration_workflow_exists_for_secret_backed_tests - FileNotFoundError: [Errno 2] No such file or directory: '/tmp/omega-v362/OMEGA-X-Evolution/.github/workflows/integration.yml'
+FAILED tests/test_complexity.py::test_python_complexity_metrics_contract - ModuleNotFoundError: No module named 'radon'
+FAILED tests/test_complexity.py::test_invalid_python_preserves_cpp_fallback_metrics - ModuleNotFoundError: No module named 'radon'
+FAILED tests/test_complexity.py::test_python_complexity_parses_ast_once - ModuleNotFoundError: No module named 'radon'
+FAILED tests/test_embedding_client_backends.py::test_get_client_embed_dynamic_openrouter - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_embedding_client_backends.py::test_get_async_client_embed_dynamic_openrouter - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_embedding_client_backends.py::test_get_client_embed_local_openai_inline_url - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_embedding_client_backends.py::test_get_async_client_embed_local_openai_inline_url - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_embedding_client_backends.py::test_get_client_embed_azure_v1_endpoint_uses_resource_root - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_client_llm_dynamic_openrouter - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_client_llm_local_openai_inline_url - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_async_client_llm_local_openai_inline_url - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com] - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com/] - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com/openai/v1] - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com/openai/v1/] - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_client_backends.py::test_get_async_client_llm_azure_uses_v1_base_url - ModuleNotFoundError: No module named 'httpcore2'
+FAILED tests/test_llm_stall_timeout.py::test_stalled_local_openai_query_respects_configured_retry_bounds - subprocess.CalledProcessError: Command '['/opt/pyvenv/bin/python', '-c', '\nfrom __future__ import annotations\n\nimport asyncio\nimport http.server\nimport json\nimport socketserver\nimport threading\nimport time\n\n\nclass StallingHandler(http.server.BaseHTTPRequestHandler):\n    protocol_version = "HTTP/1.1"\n\n    def _stall(self) -> None:\n        self.server.request_count += 1\n        length = int(self.headers.get("Content-Length", 0) or 0)\n        if length:\n            self.rfile.read(length)\n        while not getattr(self.server, "_shutting_down", False):\n            time.sleep(0.05)\n\n    do_GET = _stall\n    do_POST = _stall\n\n    def log_message(self, *_args) -> None:\n        pass\n\n\nclass StallingServer(socketserver.ThreadingTCPServer):\n    allow_reuse_address = True\n    daemon_threads = True\n    request_count = 0\n\n\nserver = StallingServer(("127.0.0.1", 0), StallingHandler)\nport = server.server_address[1]\nthreading.Thread(target=server.serve_forever, daemon=True).start()\n\nfrom shinka.llm.client import get_async_client_llm\nfrom shinka.llm.constants import (\n    BACKOFF_MAX_TIME,\n    BACKOFF_MAX_TRIES,\n    MAX_RETRIES,\n    OPENAI_MAX_RETRIES,\n    TIMEOUT,\n)\nfrom shinka.llm.providers.local_openai import query_local_openai_async\n\n\nasync def main() -> None:\n    client, model, provider = get_async_client_llm(\n        f"local/stalled@http://127.0.0.1:{port}/v1?api_key_env=CUSTOM_LOCAL_KEY"\n    )\n    started = time.monotonic()\n    try:\n        await query_local_openai_async(\n            client,\n            model,\n            "hello",\n            "system",\n            [],\n            None,\n            max_tokens=1,\n        )\n        exception = None\n    except Exception as exc:\n        exception = type(exc).__name__\n    elapsed = time.monotonic() - started\n    server._shutting_down = True\n    server.shutdown()\n    print(\n        json.dumps(\n            {\n                "provider": provider,\n                "elapsed": elapsed,\n                "exception": exception,\n                "request_count": server.request_count,\n                "timeout": TIMEOUT,\n                "max_retries": MAX_RETRIES,\n                "openai_max_retries": OPENAI_MAX_RETRIES,\n                "backoff_max_tries": BACKOFF_MAX_TRIES,\n                "backoff_max_time": BACKOFF_MAX_TIME,\n            },\n            sort_keys=True,\n        )\n    )\n\n\nasyncio.run(main())\n']' returned non-zero exit status 1.
+FAILED tests/test_packaging_release.py::test_project_metadata_targets_pypi_release - AssertionError: assert 'omega-x-evolution' == 'shinka-evolve'
+  
+  - shinka-evolve
+  + omega-x-evolution
+FAILED tests/test_packaging_release.py::test_readme_documents_package_install - AssertionError: assert 'pip install shinka-evolve' in '# OMEGA-X Evolution Ω\n\n![OMEGA-X emblem](docs/media/omega-x.svg)\n\n**Autonomous Evolutionary Intelligence & Scient...structure-only blocker statements are superseded; no mathematical, compatibility or dependency failure is concealed.\n'
+22 failed, 1525 passed, 7 skipped, 2 deselected, 8 warnings in 161.97s (0:02:41)
+exit=1
+
+=== Targeted regression after source/dependency recovery and identity migration ===
+...................................................                      [100%]
+51 passed in 5.31s
+
+
+=== Final: python -m pytest -q -rs -m 'not requires_secrets and not models_dev_live' ===
+............................sssssss..................................... [  4%]
+........................................................................ [  9%]
+........................................................................ [ 13%]
+........................................................................ [ 18%]
+........................................................................ [ 23%]
+........................................................................ [ 27%]
+........................................................................ [ 32%]
+........................................................................ [ 37%]
+........................................................................ [ 41%]
+........................................................................ [ 46%]
+........................................................................ [ 50%]
+........................................................................ [ 55%]
+........................................................................ [ 60%]
+........................................................................ [ 64%]
+........................................................................ [ 69%]
+........................................................................ [ 74%]
+........................................................................ [ 78%]
+........................................................................ [ 83%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 97%]
+..........................................                               [100%]
+=============================== warnings summary ===============================
+tests/test_llm_client_cache.py::test_forked_child_does_not_reuse_parent_client
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_matches_sequential
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_matches_sequential
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_matches_sequential
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_worker_error_surfaces
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_worker_error_surfaces
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_returns_program_defined_types
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_returns_program_defined_types
+  /usr/lib/python3.13/multiprocessing/popen_fork.py:67: DeprecationWarning: This process (pid=45085) is multi-threaded, use of fork() may lead to deadlocks in the child.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_async_apply.py:277: rustfmt is not installed
+SKIPPED [1] tests/test_async_apply.py:305: rustfmt is not installed
+SKIPPED [1] tests/test_async_apply.py:332: rustfmt is not installed
+SKIPPED [1] tests/test_async_apply.py:350: rustfmt is not installed
+SKIPPED [1] tests/test_async_apply.py:368: rustfmt is not installed
+SKIPPED [1] tests/test_async_apply.py:389: rustfmt is not installed
+SKIPPED [1] tests/test_async_apply.py:408: rustfmt is not installed
+1547 passed, 7 skipped, 2 deselected, 8 warnings in 173.34s (0:02:53)
+
+exit=0
+
+=== Native hardening: python scripts/verify_hardening.py ===
+......................................                                   [100%]
+38 passed in 3.64s
+
+
+=== Wheel build: python -m pip wheel . --no-deps --no-build-isolation ===
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /tmp/omega-v362/OMEGA-X-Evolution
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: omega-x-evolution
+  Building wheel for omega-x-evolution (pyproject.toml): started
+  Building wheel for omega-x-evolution (pyproject.toml): finished with status 'done'
+  Created wheel for omega-x-evolution: filename=omega_x_evolution-0.36.2.dev1-py3-none-any.whl size=4131478 sha256=51985c46631458ada3d4a220f0c9c9a801501da6f057f2bed8c83fe4660adbac
+  Stored in directory: /tmp/pip-ephem-wheel-cache-3eenjrjg/wheels/b8/0f/45/b9020a8967af1be45c7afef9477149c57d28e121acb3e96013
+Successfully built omega-x-evolution
+
+
+=== pip check (expected unresolved transitive metadata) ===
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+radon 6.0.1 requires colorama, which is not installed.
+radon 6.0.1 requires mando, which is not installed.
+transformers 5.23.0 requires tokenizers, which is not installed.
+google-auth 2.62.2 requires pyasn1-modules, which is not installed.
+instructor 1.18.0 has requirement aiohttp<4.0.0,>=3.14.5, but you have aiohttp 3.13.3.
+instructor 1.18.0 has requirement click>=8.3.3, but you have click 8.1.8.
+instructor 1.18.0 has requirement requests<3.0.0,>=2.34.2, but you have requests 2.32.5.
+instructor 1.18.0 has requirement urllib3<3.0.0,>=2.8.0, but you have urllib3 2.7.0.
+google-genai 3.6.1 has requirement tenacity<9.2.0,>=8.2.3, but you have tenacity 9.2.1.
+transformers 5.23.0 has requirement huggingface-hub<3.0,>=1.31.0, but you have huggingface-hub 1.16.1.
+transformers 5.23.0 has requirement safetensors>=0.8.0, but you have safetensors 0.7.0.
+httpx2 2.16.2 has requirement idna>=3.18, but you have idna 3.17.
+moviepy 2.2.1 has requirement pillow<12.0,>=9.2.0, but you have pillow 12.3.0.
+
+
+Official artifacts (downloaded read-only; SHA-256 checked against GitHub artifact metadata):
+pydantic/jiter run 42235517191 SHA ffaf768d349a16b9323d69db038ca4df802c8285 artifact 13512930043
+pydantic/jiter run 39961498908 SHA fc2da0bd1fb699a6c4e9641e9e1c06fa6d5d93e8 artifact 12505131806 (selected v0.18.0)
+567-labs/instructor run 43838058916 SHA 1e85ddf38807084182aeefb5bb67f4deee821163 artifact 14211996071
+pydantic/httpx2 run 43846078970 SHA 781ea16caf2a5ade6e18b7504b3fe62fe902c4fa artifact 14215675806
+Radon v6.0.1 source tree 5061d86a649223bdc5490c5dcc113743cc5b47f5; verified 18 blobs; original setup.py
+Truststore v0.10.1 restored pip vendor files to official blob bytes, local setuptools wheel. LICENSE SHA 7ec568c1136eb8ec86aa05cf7abacfb54c3e5ead.
+d1a9d8e40c92c4b9eefc4a0610f05745fb30c7c3d5ef470becd745c416f484ba  httpx2-official-ci.zip
+c6fd68fca885484c1a3c5588f42a75e3cb220af9a793a5938a518937d6365abe  instructor-official-ci.zip
+ec190f56bbc42d8c79830f775227ef7a88d51c15ff2d524c0e6e299ed952548c  jiter-018-official-ci-cp313-linux.zip
+f8854cede71553c52ac44af439e0fdb45c47dfc6284ad78c272df50af8b59537  jiter-official-ci-cp313-linux.zip
+16051ae2a42f776007543f32de9349a317b23d2cbb4e1456b4bac0e88b87419a  httpcore2-2.16.2-py3-none-any.whl
+132cd87e791bff167eb0ccdd98dd4955de9e4c0e779dc151c5fbfae986e77559  instructor-1.18.0-py3-none-any.whl
+6e3350b7431f7b8315b925d9ca0f29a44e8fb6ed45c1fe552392cb6297966bb9  jiter-0.18.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+3b27d6bec319dc17cdced13e495f90ce066676ca296fc56f2dd2128f6a7599ed  jiter-0.19.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+c89e6277700d967c3ab687455c13962acdc7c499bb64ed3e2797eacad70de4b1  radon-6.0.1-py2.py3-none-any.whl
+955c535032fbd1483305ff91e6d95c8d6936ff1c0e6ded0a635e7e26db8fad60  truststore-0.10.1-py3-none-any.whl
+51985c46631458ada3d4a220f0c9c9a801501da6f057f2bed8c83fe4660adbac  omega_x_evolution-0.36.2.dev1-py3-none-any.whl
+e48beaeac86284068168931045ddac28da5b0790  radon-source/radon/__init__.py
+4963f2fa04d9c0835f237a374c046c9d9e5bb3f7  radon-source/radon/__main__.py
+3af5138dae4eac59ed3a5e48f991026a108e806c  radon-source/radon/cli/__init__.py
+b1c6e4eb4212a8151c121ab73f54edbaf3a42e05  radon-source/radon/cli/colors.py
+ff8c87f1171249b812da40495772765fd4f50e66  radon-source/radon/cli/harvest.py
+2c3b28f10a34c1a288d4f2fca2996c425f55363a  radon-source/radon/cli/tools.py
+8cf3ff12c1d80a221d6e4353706ea52fca85749f  radon-source/radon/complexity.py
+e69de29bb2d1d6434b8b29ae775ad8c2e48c5391  radon-source/radon/contrib/__init__.py
+2376f4d2edf2edfe6582971bf0f87b0cc71f160e  radon-source/radon/contrib/flake8.py
+7c6ec635cedf258ef2843a95e68d1a5f487591dc  radon-source/radon/metrics.py
+1ac2bc13f5de993673a655b76c521e54d50fe143  radon-source/radon/raw.py
+66f913ad929b59fcee720d4f56e077a1186aa52a  radon-source/radon/visitors.py
+cdff8143febe66827f390399654b44701db496ae  truststore-source/__init__.py
+47b7a63aba8940392f414150a197c6e3fb8047ec  truststore-source/_api.py
+345030772441102eda1be73661469a5f726d668a  truststore-source/_macos.py
+9951cf75c404b94c13a0a7b49c011b686aa1ccde  truststore-source/_openssl.py
+b1ee7a3cb13a8a3482f2cb8cadef097087e3780b  truststore-source/_ssl_constants.py
+a9bf9abdfc8ed065a2253af17daa07cce4009022  truststore-source/_windows.py
+e69de29bb2d1d6434b8b29ae775ad8c2e48c5391  truststore-source/py.typed
+
+Limits: seven native rustfmt tests skipped by existing marker/availability check, two live tests deselected by historical offline profile. 1547 passed; 0 failures. Dependency metadata not clean. Full GATE-09 not asserted.

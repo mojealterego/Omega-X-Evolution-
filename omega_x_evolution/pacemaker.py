@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 import time
 from concurrent.futures import ThreadPoolExecutor
-from .bft import Replica, MAX_ROUND, MAX_HEIGHT, leader, make_block, quorum, recover_ops, timeout_quorum, _header, _vote_body, _valid
+from .bft import Replica, MAX_HEIGHT, round_limit, leader, make_block, quorum, recover_ops, timeout_quorum, _header, _vote_body, _valid
 from .bft_transport import _dispatch, _rpc
 from .federation import digest,verify
 from .mesh import Endpoint,_transport
@@ -29,7 +29,7 @@ class Pacemaker:
         now=self.clock()
         if not math.isfinite(now):raise ValueError('clock')
         if marker!=self.marker:
-            self.marker=marker;self.deadline=now+min(self.maximum,self.base*2**d['round'])
+            self.marker=marker;self.deadline=now+min(self.maximum,self.base*2**min(d['round'],32))
         return d
     def _gather(self,peers,op,args):
         me=self.replica.identity.public;out={}
@@ -55,7 +55,7 @@ class Pacemaker:
                         self._reset();return report('caught-up')
             except _ERRORS:continue
         if me not in s['members']:return report('observer')
-        if r<MAX_ROUND-1:
+        if r<round_limit(s)-1:
             # Advanced peers retain the signed certificate; lagging peers can
             # catch up without trusting a remote clock or claimed round index.
             certificates=[]
@@ -64,14 +64,14 @@ class Pacemaker:
                 for field in ('latest_timeout_certificate','timeout_certificate'):
                     cert=v.get(field)
                     if (type(cert) is dict and type(cert.get('round')) is int and
-                            r<=cert['round']<MAX_ROUND-1):
+                            r<=cert['round']<round_limit(s)-1):
                         certificates.append(cert)
             for cert in sorted(certificates,key=lambda c:c['round'],reverse=True):
                 try:
                     self.replica.catch_up_round(cert);self._reset();return report('advanced')
                 except _ERRORS:continue
         expired=self.clock()>=self.deadline or f'{r}:timeout' in d['votes']
-        terminal_expired=expired and r==MAX_ROUND-1
+        terminal_expired=expired and r==round_limit(s)-1
         if expired and not terminal_expired:
             own=self.replica.timeout_vote();votes={me:own}
             for who,v in views.items():

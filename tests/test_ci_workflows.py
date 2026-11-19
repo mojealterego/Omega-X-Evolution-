@@ -8,13 +8,15 @@ def _read(path: str) -> str:
 
 
 def test_public_ci_excludes_secret_backed_tests() -> None:
-    workflow = _read(".github/workflows/ci.yml")
+    workflow = _read("docs/upstream-workflows/ci.yml")
 
     assert 'pytest -q -m "not requires_secrets and not models_dev_live"' in workflow
+    assert not list((ROOT / ".github/workflows").glob("*.yml"))
+    assert not list((ROOT / ".github/workflows").glob("*.yaml"))
 
 
 def test_public_ci_installs_stable_rustfmt() -> None:
-    workflow = _read(".github/workflows/ci.yml")
+    workflow = _read("docs/upstream-workflows/ci.yml")
 
     assert (
         "rustup toolchain install stable --profile minimal --component rustfmt"
@@ -25,7 +27,7 @@ def test_public_ci_installs_stable_rustfmt() -> None:
 
 
 def test_integration_workflow_exists_for_secret_backed_tests() -> None:
-    workflow = _read(".github/workflows/integration.yml")
+    workflow = _read("docs/upstream-workflows/integration.yml")
 
     assert "workflow_dispatch:" in workflow
     assert "schedule:" in workflow

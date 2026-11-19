@@ -20,11 +20,12 @@ assert not any(x in sys.modules for x in ('anthropic','openai','hydra','google.g
 
 
 def replicas(tmp_path):
-    from omega_x_evolution.bft import Genesis, Replica
+    from omega_x_evolution.bft import Genesis, Replica, MAX_ROUND
     from omega_x_evolution.federation import Identity
     ids = [Identity(bytes([i])*32) for i in range(1,5)]
     pubs = tuple(sorted(i.public for i in ids))
-    g = Genesis('d'*64,pubs,pubs,1,16,2)
+    # This fixture explicitly exercises the historical finite-horizon contract.
+    g = Genesis('d'*64,pubs,pubs,1,16,2,round_limit=MAX_ROUND)
     return {i.public:Replica(tmp_path/f'{n}.db', b'k'*32,g,i,create=True) for n,i in enumerate(ids)}
 
 

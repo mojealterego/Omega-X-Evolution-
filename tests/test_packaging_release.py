@@ -44,19 +44,23 @@ def _make_whl(archive_path: Path, members: dict[str, str]) -> None:
             archive.writestr(relpath, content)
 
 
-def test_project_metadata_targets_pypi_release():
+def test_project_metadata_targets_omega_distribution():
     pyproject = _read_pyproject()
     project = pyproject["project"]
 
-    assert project["name"] == "shinka-evolve"
+    assert project["name"] == "omega-x-evolution"
     assert project["readme"] == "README.md"
     assert project["license"] == "Apache-2.0"
-    assert project["scripts"] == {
+    expected_scripts = {
+        "omega-x-evolution": "omega_x_evolution.__main__:main",
+        "omega-x-green": "omega_x_evolution.green:main",
         "shinka_launch": "shinka.cli.launch:main",
         "shinka_models": "shinka.cli.models:main",
         "shinka_run": "shinka.cli.run:main",
         "shinka_visualize": "shinka.webui.visualization:main",
     }
+
+    assert all(project["scripts"].get(k) == v for k, v in expected_scripts.items())
 
     setuptools_cfg = pyproject["tool"]["setuptools"]
     assert "script-files" not in setuptools_cfg
@@ -91,8 +95,9 @@ def test_google_genai_dependency_supports_thinking_levels() -> None:
 def test_readme_documents_package_install():
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
 
-    assert "pip install shinka-evolve" in readme
-    assert "uv pip install shinka-evolve" in readme
+    assert "python -m pip install -e ." in readme
+    assert "README.upstream.md" in readme
+    assert "separate virtual environment" in readme
     assert "CHANGELOG.md" in readme
     assert "CONTRIBUTING.md" in readme
     assert "release_notes.md" not in readme

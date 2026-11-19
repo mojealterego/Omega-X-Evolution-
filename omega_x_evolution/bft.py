@@ -19,7 +19,8 @@ from .annealed import propose as mutate
 from .safety_synthesis import prove
 
 MAX_HEIGHT=128
-MAX_ROUND=32
+MAX_ROUND=32  # historical fixed-horizon configuration
+MAX_ROUND_NUMBER=2**31  # exclusive wire integer bound, not a timeout budget
 MAX_TASKS=64
 MAX_OPS=16
 MAX_WIRE=2*1024*1024
@@ -45,8 +46,10 @@ class Genesis:
     faults:int
     budget:int
     lease_heights:int=3
+    round_limit:int=MAX_ROUND_NUMBER
     def __post_init__(self):
         _membership(self.members,self.faults)
+        if type(self.round_limit) is not int or not 2<=self.round_limit<=MAX_ROUND_NUMBER:raise ValueError('round limit')
         if not _hex(self.campaign) or type(self.eligible) is not tuple or len(self.eligible)>32 or tuple(sorted(set(self.eligible)))!=self.eligible or any(not _hex(x) for x in self.eligible) or not set(self.members)<=set(self.eligible) or type(self.budget) is not int or not 1<=self.budget<=256 or type(self.lease_heights) is not int or not 2<=self.lease_heights<=16:raise ValueError('genesis bounds')
     @property
     def id(self):
@@ -55,11 +58,18 @@ class Genesis:
 
 
 def initial(g):
-    return {'campaign':g.id,'height':1,'parent':g.id,'members':list(g.members),'eligible':list(g.eligible),'faults':g.faults,'budget':g.budget,'lease_heights':g.lease_heights,'spent':0,'tasks':{}}
+    return {'campaign':g.id,'height':1,'parent':g.id,'members':list(g.members),'eligible':list(g.eligible),'faults':g.faults,'budget':g.budget,'lease_heights':g.lease_heights,'round_limit':g.round_limit,'spent':0,'tasks':{}}
+
+
+def round_limit(s):
+    # Synthetic legacy state used by the finite rotation checker retains 32.
+    limit=s.get('round_limit',MAX_ROUND)
+    if type(limit) is not int or not 2<=limit<=MAX_ROUND_NUMBER:raise ValueError('round limit')
+    return limit
 
 
 def leader(s,round):
-    if type(round) is not int or not 0<=round<MAX_ROUND:raise ValueError('round bound')
+    if type(round) is not int or not 0<=round<round_limit(s):raise ValueError('round bound')
     return s['members'][(s['height']-1+round)%len(s['members'])]
 
 
@@ -129,7 +139,7 @@ def recover_ops(s,available):
 
 
 def _vote_body(s,round,phase,value,signer):
-    if type(round) is not int or not 0<=round<MAX_ROUND or phase not in ('prevote','precommit') or not _hex(value) or signer not in s['members']:raise ValueError('vote bounds')
+    if type(round) is not int or not 0<=round<round_limit(s) or phase not in ('prevote','precommit') or not _hex(value) or signer not in s['members']:raise ValueError('vote bounds')
     return {**_header(s),'round':round,'phase':phase,'value':value,'voter':signer}
 
 
@@ -161,7 +171,7 @@ def _valid(s,v,round):
 
 def timeout_quorum(s, votes, round):
     """A timeout is not a vote for a block; quorum authorizes only round change."""
-    if type(round) is not int or not 0 <= round < MAX_ROUND-1 or type(votes) not in (list,tuple) or not len(s['members'])-s['faults'] <= len(votes) <= len(s['members']):
+    if type(round) is not int or not 0 <= round < round_limit(s)-1 or type(votes) not in (list,tuple) or not len(s['members'])-s['faults'] <= len(votes) <= len(s['members']):
         raise ValueError('timeout quorum unavailable')
     seen=set()
     for raw in votes:
@@ -191,16 +201,29 @@ class Replica:
         # eligible as a next-round justification.
         if v is not None and v['qc']['round']>=d['round']:v=None
         return _signed(self.identity,{**_header(s),'round':d['round'],'voter':self.identity.public,'valid':v})
+    @staticmethod
+    def _move_round(d, target, cert=None):
+        """Monotone round transition; obsolete votes cannot be issued again.
+
+        Retain the lock (including its QC) and latest timeout certificate; no
+        historical vote is needed to sign a strictly greater round. The
+        authenticated checkpoint assumes no whole-database rollback.
+        """
+        if target<=d['round']:raise ValueError('nonmonotone round')
+        if cert is not None:d['timeouts']={str(cert['round']):cert}
+        d['round']=target
+        d['votes']={}
+
     def advance(self):
         with _lock(self.path):
             rev,d=self._load();self._active(d)
-            if d['round']+1>=MAX_ROUND:raise ValueError('round budget exhausted')
-            d['round']+=1;self.store.save(rev+1,d)
+            if d['round']+1>=round_limit(d['state']):raise ValueError('round budget exhausted')
+            self._move_round(d,d['round']+1);self.store.save(rev+1,d)
         return self.status()
     def timeout_vote(self):
         with _lock(self.path):
             rev,d=self._load();self._active(d);r=d['round'];s=d['state']
-            if r>=MAX_ROUND-1:raise ValueError('round budget exhausted')
+            if r>=round_limit(s)-1:raise ValueError('round budget exhausted')
             key=f'{r}:timeout';old=d['votes'].get(key)
             if old is not None:return old
             raw=_signed(self.identity,{**_header(s),'round':r,'phase':'timeout','voter':self.identity.public})
@@ -209,7 +232,7 @@ class Replica:
         with _lock(self.path):
             rev,d=self._load();self._active(d);r=d['round']
             if type(cert) is not dict or set(cert)!={'round','votes'} or cert['round']!=r or cert!=timeout_quorum(d['state'],cert['votes'],r):raise ValueError('invalid timeout certificate')
-            d['timeouts'][str(r)]=cert;d['round']+=1;self.store.save(rev+1,d)
+            self._move_round(d,r+1,cert);self.store.save(rev+1,d)
         return self.status()
     def catch_up_round(self,cert):
         """Advance directly from a locally authenticated quorum timeout.
@@ -221,14 +244,14 @@ class Replica:
         with _lock(self.path):
             rev,d=self._load();self._active(d);r=d['round']
             if (type(cert) is not dict or set(cert)!={'round','votes'} or
-                    type(cert['round']) is not int or not r<=cert['round']<MAX_ROUND-1 or
+                    type(cert['round']) is not int or not r<=cert['round']<round_limit(d['state'])-1 or
                     cert!=timeout_quorum(d['state'],cert['votes'],cert['round'])):
                 raise ValueError('invalid or stale timeout certificate')
-            d['timeouts'][str(cert['round'])]=cert;d['round']=cert['round']+1
+            self._move_round(d,cert['round']+1,cert)
             self.store.save(rev+1,d)
         return self.status()
     def view(self,height,round):
-        if type(height) is not int or not 1<=height<=MAX_HEIGHT or type(round) is not int or not 0<=round<MAX_ROUND:raise ValueError('view bounds')
+        if type(height) is not int or not 1<=height<=MAX_HEIGHT or type(round) is not int or not 0<=round<self.g.round_limit:raise ValueError('view bounds')
         d=self.inspect();s=d['state']
         if height<s['height']:return {'commit':d['log'][height-1],'timeout_vote':None,'timeout_certificate':None,'latest_timeout_certificate':None}
         if height>s['height']:return {'commit':None,'timeout_vote':None,'timeout_certificate':None,'latest_timeout_certificate':None}
