@@ -55,9 +55,24 @@ class Program:
         return count(self.tree)
 
 
+def _validated_tree(program: Program) -> tuple:
+    # The frozen dataclass is not a security boundary: direct mutation and
+    # subclass constructors can bypass its original validation. Snapshot the
+    # immutable, recursively checked tree before consuming or emitting it.
+    if type(program) is not Program:
+        raise ValueError('validated Program required')
+    tree = program.tree
+    Program(tree)
+    return tree
+
+
 def evaluate(program: Program, x: int, y: int) -> int:
-    if not isinstance(program, Program): raise ValueError('validated Program required')
+    tree = _validated_tree(program)
     _u16(x); _u16(y)
+    return _evaluate_tree(tree, x, y)
+
+
+def _evaluate_tree(tree: tuple, x: int, y: int) -> int:
     def walk(t):
         op = t[0]
         if op == 'x': return x
@@ -66,7 +81,7 @@ def evaluate(program: Program, x: int, y: int) -> int:
         a, b = walk(t[1]), walk(t[2])
         return {'add': lambda: a+b, 'sub': lambda: a-b, 'mul': lambda: a*b,
                 'xor': lambda: a^b, 'and': lambda: a&b, 'or': lambda: a|b}[op]() & MASK
-    return walk(program.tree)
+    return walk(tree)
 
 
 def _expression(tree, language):
@@ -85,9 +100,9 @@ def _expression(tree, language):
 
 
 def emit(program: Program, language: str) -> str:
-    if not isinstance(program, Program) or language not in LANGUAGES:
+    if language not in LANGUAGES:
         raise ValueError('invalid backend or IR')
-    expr = _expression(program.tree, language)
+    expr = _expression(_validated_tree(program), language)
     if language == 'python': return f'def candidate(x, y):\n    return {expr}\n'
     if language == 'javascript': return f'function candidate(x, y) {{ return {expr}; }}\n'
     if language == 'java': return f'public class Candidate {{\n    public static int candidate(int x, int y) {{ return {expr}; }}\n}}\n'
@@ -117,9 +132,9 @@ def evolve(train, holdout, *, budget=256, seed=42):
     pairs=grammar[5:29]
     grammar=list(dict.fromkeys(grammar+[(op,a,b) for a,b,op in itertools.chain(itertools.product(pairs,ATOMS[:2],OPS),itertools.product(ATOMS[:2],pairs,OPS))]))
     seen = set(); elite = []
-    def matches(p, data): return sum(evaluate(p,x,y)==z for x,y,z in data)
+    def matches(p, data): return sum(_evaluate_tree(p.tree,x,y)==z for x,y,z in data)
     def fitness(p):
-        errors=[evaluate(p,x,y)^z for x,y,z in train]
+        errors=[_evaluate_tree(p.tree,x,y)^z for x,y,z in train]
         return sum(v.bit_count() for v in errors), -sum(v==0 for v in errors)
     for i in range(budget):
         if i < 29: tree = grammar[i]
@@ -144,8 +159,9 @@ def verify_backends(program: Program, points):
     Trusted locally installed toolchains required. No arbitrary compiler flags,
     paths or source supplied by candidates. Not an OS sandbox for toolchains.
     """
+    program = Program(_validated_tree(program))
     points = _points(points, 2)
-    expected = ''.join(f'{evaluate(program,x,y)}\n' for x,y in points)
+    expected = ''.join(f'{_evaluate_tree(program.tree,x,y)}\n' for x,y in points)
     result = {}
     for lang in LANGUAGES:
         compiler = {'python':sys.executable,'c':shutil.which('gcc'),'cpp':shutil.which('g++'),
