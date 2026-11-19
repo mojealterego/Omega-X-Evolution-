@@ -1,16 +1,15 @@
-site_name: ShinkaEvolve
-site_description: Open-ended, sample-efficient program evolution with LLMs
-site_url: https://sakanaai.github.io/ShinkaEvolve/
-repo_url: https://github.com/SakanaAI/ShinkaEvolve
-repo_name: SakanaAI/ShinkaEvolve
-edit_uri: edit/docs/
+site_name: OMEGA-X Evolution
+site_description: Autonomous evolutionary intelligence and scientific discovery
+repo_url: https://github.com/mojealterego/Omega-X-Evolution-
+repo_name: mojealterego/Omega-X-Evolution-
+edit_uri: edit/main/docs/
 docs_dir: docs
 site_dir: site
 
 theme:
   name: material
-  logo: media/favicon.png
-  favicon: media/favicon.png
+  logo: media/omega-x.svg
+  favicon: media/omega-x.svg
   icon:
     repo: fontawesome/brands/github
   font:
@@ -34,7 +33,7 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/SakanaAI/ShinkaEvolve
+      link: https://github.com/mojealterego/Omega-X-Evolution-
     - icon: fontawesome/solid/newspaper
       link: https://sakana.ai/shinka-evolve/
 
@@ -86,6 +85,12 @@ extra_javascript:
 
 nav:
   - Home: index.md
+  - OMEGA-X:
+      - Identity Migration: omega/IDENTITY_MIGRATION.md
+      - Coevolution: OMEGA_COEVOLUTION.md
+      - Runtime Hardening: OMEGA_HARDENING.md
+      - Research Traceability: omega/RESEARCH_TRACEABILITY_v4.md
+  - Upstream Foundation: upstream_index.md
   - Getting Started: getting_started.md
   - Core Concepts:
       - UCB1 Bandit LLM Selection: bandit_selection.md

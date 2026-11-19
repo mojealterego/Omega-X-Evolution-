@@ -1,5 +1,7 @@
 # OMEGA-X Evolution Ω
 
+![OMEGA-X emblem](docs/media/omega-x.svg)
+
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
@@ -70,23 +72,25 @@ cd Omega-X-Evolution-
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
-python -m shinka.omega --seed 5 --generations 5 --evaluation-processes 2
+omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
+# Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The existing Python namespace and command-line entry points remain compatible with the imported foundation.
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.4.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Verification
 
 ```bash
 python -m pip install pytest
-python -m pytest -q tests/test_omega_workers.py tests/test_omega_checkpoint.py tests/test_omega_coevolution.py
+python -m pytest -q tests/test_omega_workers.py tests/test_omega_checkpoint.py tests/test_omega_coevolution.py tests/test_omega_identity.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, model training or production attestation is claimed. These are historical results, not a new execution report.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, model training or production attestation is claimed. These are historical results. The namespace migration has a separate [49-test verification record](docs/omega/verification-identity.txt).
 
 ## Documentation & evidence
 
+- [Namespace and packaging migration](docs/omega/IDENTITY_MIGRATION.md)
 - [OMEGA-X coevolution architecture](docs/OMEGA_COEVOLUTION.md)
 - [Runtime hardening](docs/OMEGA_HARDENING.md)
 - [Research traceability v4](docs/omega/RESEARCH_TRACEABILITY_v4.md)

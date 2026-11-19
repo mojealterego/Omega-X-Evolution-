@@ -1,147 +1,26 @@
----
-title: ShinkaEvolve
-hide:
-  - toc
----
+# OMEGA-X Evolution Ω
 
-<div class="hero">
-  <div class="hero-copy">
-    <p class="hero-kicker">Open-ended program evolution</p>
-    <div class="hero-title">
-      <img src="media/favicon.png" alt="ShinkaEvolve logo" class="hero-logo">
-      <h1>ShinkaEvolve</h1>
-    </div>
-    <p class="hero-lead">
-      Evolve scientific code with LLM-guided mutation, archive-based search,
-      async proposal pipelines, and local or cluster-backed evaluation.
-    </p>
-    <div class="hero-actions">
-      <a class="md-button md-button--primary" href="getting_started/">GET STARTED</a>
-      <a class="md-button" href="reference/">API REFERENCE</a>
-      <a class="md-button" href="https://sakana.ai/shinka-evolve/" target="_blank" rel="noopener">BLOG</a>
-      <a class="md-button" href="https://arxiv.org/abs/2509.19349" target="_blank" rel="noopener">PAPER</a>
-    </div>
-  </div>
-</div>
+![OMEGA-X emblem](media/omega-x.svg)
 
----
+**Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
-## Why ShinkaEvolve
+OMEGA-X is a separately maintained evolutionary research system, built upon the open-source ShinkaEvolve foundation and informed by AlphaEvolve and the Darwin Gödel Machine. Its current offline engine explores bounded numerical expressions using fixed validation, Pareto island archives, authenticated checkpoints and local multiprocessing. It does not execute unrestricted candidate Python.
 
-ShinkaEvolve combines LLM mutation operators with an evolutionary archive,
-parallel evaluation, and a reproducible task contract. The repository gives you
-both the framework primitives and runnable examples — start from a simple
-`evaluate.py` + `initial.py` task and scale up to async runs or cluster
-workflows.
+## OMEGA-X documentation
 
-<div class="feature-grid">
-  <div class="feature-card">
-    <h3>Runtime</h3>
-    <p>
-      <code>ShinkaEvolveRunner</code> handles async evolution, proposal/eval
-      concurrency, prompt co-evolution, and resumable runs.
-    </p>
-  </div>
-  <div class="feature-card">
-    <h3>Config</h3>
-    <p>
-      Runtime dataclasses, Hydra presets, and agent-oriented
-      <code>shinka_run</code> overrides. Compose at any level.
-    </p>
-  </div>
-  <div class="feature-card">
-    <h3>Execution</h3>
-    <p>
-      Run locally, source a project env per job, or launch on SLURM with
-      Conda or Docker-backed workers.
-    </p>
-  </div>
-  <div class="feature-card">
-    <h3>Inspection</h3>
-    <p>
-      Lineages, metrics, diffs, throughput, and prompt evolution artifacts
-      in the built-in WebUI.
-    </p>
-  </div>
-</div>
+- [Identity and packaging migration](omega/IDENTITY_MIGRATION.md)
+- [Evolution engine and experimental limits](OMEGA_COEVOLUTION.md)
+- [Runtime hardening](OMEGA_HARDENING.md)
+- [Research traceability](omega/RESEARCH_TRACEABILITY_v4.md)
 
----
+Start a local source-checkout experiment:
 
-## Quickstart
-
-```bash
-pip install shinka-evolve
-shinka_launch variant=circle_packing_example
+```sh
+python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-The distribution name is `shinka-evolve`; the import path is `import shinka`.
-For source installs and a full first-run walkthrough, see
-[Getting Started](getting_started.md).
+Remote execution is not implemented by the identity migration. The next engineering increment is the multi-host evaluation protocol and lease fencing.
 
----
+## Imported foundation
 
-## Three Entry Paths
-
-### Hydra Launcher
-
-Shared Hydra presets, compact override syntax, config-composed workflow:
-
-```bash
-shinka_launch \
-  task=circle_packing \
-  database=island_large \
-  evolution=small_budget \
-  cluster=local \
-  evo_config.num_generations=20
-```
-
-### Agent-Friendly CLI
-
-Task directory as the interface — explicit flags, no Hydra group files:
-
-```bash
-shinka_run \
-  --task-dir examples/circle_packing \
-  --results_dir results/circle_agent_run \
-  --num_generations 20 \
-  --set db.num_islands=2
-```
-
-### Minimal Python API
-
-Direct runner construction when you want programmatic control:
-
-```python
-from shinka.core import ShinkaEvolveRunner, EvolutionConfig
-from shinka.database import DatabaseConfig
-from shinka.launch import LocalJobConfig
-
-runner = ShinkaEvolveRunner(
-    evo_config=EvolutionConfig(
-        init_program_path="examples/circle_packing/initial.py",
-        num_generations=20,
-    ),
-    db_config=DatabaseConfig(),
-    job_config=LocalJobConfig(
-        eval_program_path="examples/circle_packing/evaluate.py",
-    ),
-    max_evaluation_jobs=1,
-    max_proposal_jobs=1,
-)
-runner.run()
-```
-
-The CLI split and precedence rules are documented in [CLI Usage](cli_usage.md).
-For a fuller API walkthrough, see [Getting Started](getting_started.md).
-
----
-
-## What To Read Next
-
-| Page | Content |
-|------|---------|
-| [Getting Started](getting_started.md) | Install, first run, API usage, troubleshooting |
-| [Core Concepts](core_concepts.md) | Task contract, async loop, archives, islands |
-| [Configuration](configuration.md) | Runtime dataclasses, presets, override grammar |
-| [API Reference](reference/index.md) | Curated reference for runtime modules |
-| [Examples](examples.md) | Runnable tasks and recommended entry points |
+The upstream authors' documentation is preserved in the [ShinkaEvolve guide](upstream_index.md). Its APIs and examples describe the imported runtime, not the canonical OMEGA-X interface. No upstream authorship, license or citations have been removed.

@@ -3,12 +3,13 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "shinka-evolve"
+name = "omega-x-evolution"
 dynamic = ["version"]
-description = "Automated Scientific Evolution"
+description = "OMEGA-X Evolution: evolutionary intelligence and scientific discovery"
 authors = [
     {name = "Sakana AI", email = "robert@sakana.ai"}
 ]
+maintainers = [{name = "OMEGA-X Evolution"}]
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"
@@ -20,7 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-urls = {Homepage = "https://sakana.ai/shinka-evolve/", Documentation = "https://sakanaai.github.io/ShinkaEvolve/", Repository = "https://github.com/SakanaAI/ShinkaEvolve", Issues = "https://github.com/SakanaAI/ShinkaEvolve/issues"}
+urls = {Homepage = "https://github.com/mojealterego/Omega-X-Evolution-", Documentation = "https://github.com/mojealterego/Omega-X-Evolution-/tree/main/docs", Repository = "https://github.com/mojealterego/Omega-X-Evolution-", Issues = "https://github.com/mojealterego/Omega-X-Evolution-/issues", Upstream = "https://github.com/SakanaAI/ShinkaEvolve"}
 dependencies = [
     "openai",
     "numpy",
@@ -54,6 +55,7 @@ dependencies = [
 wandb = ["wandb>=0.19"]
 
 [project.scripts]
+omega-x-evolution = "omega_x_evolution.__main__:main"
 shinka_omega = "shinka.omega.__main__:main"
 shinka_launch = "shinka.cli.launch:main"
 shinka_models = "shinka.cli.models:main"
@@ -64,11 +66,11 @@ shinka_visualize = "shinka.webui.visualization:main"
 include-package-data = false
 
 [tool.setuptools.dynamic]
-version = {attr = "shinka.__version__"}
+version = {attr = "omega_x_evolution.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["shinka*"]
+include = ["omega_x_evolution*", "shinka*"]
 
 [tool.setuptools.package-data]
 shinka = [

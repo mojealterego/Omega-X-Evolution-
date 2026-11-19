@@ -1,0 +1,12 @@
+OMEGA-X identity migration — local verification
+Base commit: 67b15b2cd710f6343cabe782a54e92512b148f59
+Environment: Python 3.13, reconstructed source subset, original Git blob hashes verified.
+RED: python -m pytest -q tests/test_omega_identity.py — 7 failed (canonical package absent).
+GREEN: python -m pytest -q tests/test_omega_identity.py — 7 passed.
+REGRESSION: python -m pytest -q tests/test_omega*.py — 49 passed in 15.47s, exit 0.
+Includes 42 unchanged v4 targeted tests and 7 new identity tests.
+Pre-migration checkpoint: created with original v4 CLI, resumed with relocated engine; cmp with uninterrupted canonical run returned 0.
+Metadata: TOML parsed; canonical project name, version attribute and both OMEGA entry point callables verified.
+Compile: python -m compileall -q omega_x_evolution shinka/omega tests — exit 0.
+Full upstream suite, full wheel build and MkDocs build not executed: full checkout not locally available.
+No live LLM calls, remote deployment, or external benchmark claims.

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">OMEGA-X Evolution emblem</title>
+  <rect x="2" y="2" width="124" height="124" rx="24" fill="#101622" stroke="#b7a5ff" stroke-width="4"/>
+  <path d="M33 96 H50 V82 A36 36 0 1 1 78 82 V96 H95" fill="none" stroke="#b7a5ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M53 47 L75 69 M75 47 L53 69" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+</svg>

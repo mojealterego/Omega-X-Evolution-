@@ -1,1 +1,1 @@
-"""Opt-in, bounded coevolution engine for numerical expressions."""
+"""Compatibility namespace; implementation lives in omega_x_evolution."""
