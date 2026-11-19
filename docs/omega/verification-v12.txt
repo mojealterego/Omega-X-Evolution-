@@ -1,0 +1,14 @@
+OMEGA-X Evolution 0.12.0.dev1 — v10/v11/v12 verification
+Base: 917779ca24f1134195a459d1e0e71aa393f13da3
+Linux Python 3.13.5. Base ZIP SHA-256 verified; all 404 tracked blob hashes matched the v9 manifest.
+RED: pytest tests/test_omega_v10.py tests/test_omega_v11.py tests/test_omega_v12.py — 3 collection errors (new modules absent).
+GREEN: first 10 tests passed in 3.16s after balanced grammar fix for squares; 3 additional regression/security/data tests added.
+REGRESSION: python -m pytest -q tests/test_omega*.py — 113 passed in 21.33s, exit 0 (13 new tests).
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.49s, exit 0 (isolated dependency shim).
+COMPILE: python -m compileall -q omega_x_evolution tests — exit 0.
+METADATA: TOML parsed; version 0.12.0.dev1, all 10 canonical CLI callables verified.
+RECURSIVE: 4 rounds, 54/56 runs, 1 promotion, 3 rejections; resume equality, tampered state rejected, failed formal gate prevents checkpoint creation; separate validation seeds.
+BENCHMARK: 60 runs, 256 proposals/run; enumeration 16/20, random 9/20, evolution 16/20 empirical matches; evolution loses to enumeration on 2 matched pairs. No external comparisons.
+DISCOVERY: squares example first exact attempt 47, training/holdout RMSE 0; custom JSON observations and altered report rejection tested; no scientific novelty claim.
+FULL UPSTREAM: python -m pytest -q — exit 2, 72 collection errors (external dependencies). Wheel/MkDocs not built.
+No physical cluster, neural training, production deployment, external comparative benchmark or automatic self-modification of code. GitHub Actions not enabled.

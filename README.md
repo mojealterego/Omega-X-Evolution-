@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v9%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v12%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v9
+## Current implementation — v12
 
 | Component | Capability |
 |---|---|
@@ -49,8 +49,11 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Formal verification | Nine Z3-checked binary64 rewrite families and independent IR verification |
 | Knowledge distillation | Offline categorical teacher/student operator model plus SFT/DPO export |
 | Multilevel coevolution | Role-specific workflows, migrating team demes, fixed validation promotion |
+| Recursive improvement | Fresh validation gates, bounded policy iteration and outer checkpoint |
+| Benchmarking | Equal proposal-budget paired comparisons |
+| Discovery | Bounded symbolic regression and reproducible evidence |
 
-**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, general agent self-rewriting, formal verification of arbitrary programs and end-to-end neural model training remain out of scope.
+**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, unrestricted agent self-rewriting, formal verification of arbitrary programs and end-to-end neural model training remain out of scope.
 
 ## Roadmap
 
@@ -63,9 +66,9 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v7 | Formal verification | Bounded rewrite rule proofs and IR checker implemented |
 | v8 | Knowledge distillation | Categorical operator student fitted and evaluated offline |
 | v9 | Multilevel coevolution | Three-level bounded team evolution implemented and evaluated |
-| v10 | Recursive self-improvement with fixed promotion gates | Open |
-| v11 | Comparative benchmarks | Open |
-| v12 | Scientific Discovery Engine | Open |
+| v10 | Recursive self-improvement with fixed promotion gates | Bounded policy iteration with authenticated outer checkpoints |
+| v11 | Comparative benchmarks | Paired offline strategy comparisons; external reproduction open |
+| v12 | Scientific Discovery Engine | Two-variable symbolic regression from observations |
 
 No stage is promoted solely on generated logs or self-reported improvements.
 
@@ -83,7 +86,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.6.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.12.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -105,6 +108,16 @@ omega-x-multilevel --rounds 3 --demes 3 --population 4 --generations 2
 
 Certified optimization requires a system Z3 shared library. See the [scope and instructions](docs/omega/EVOLUTION_V7_V9.md).
 
+## v10–v12 research commands
+
+```bash
+omega-x-recursive --rounds 4 --population 5 --generations 2
+omega-x-benchmarks --budget 256
+omega-x-discovery --task squares --seed 2026 --budget 128
+```
+
+See [bounded implementation and remaining gaps](docs/omega/EVOLUTION_V10_V12.md).
+
 ## Verification
 
 ```bash
@@ -113,10 +126,11 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, neural model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v9.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, neural model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v12.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v10–v12 implementation and evidence](docs/omega/EVOLUTION_V10_V12.md)
 - [v7–v9 implementation and evidence](docs/omega/EVOLUTION_V7_V9.md)
 - [v4.1–v6 implementation, benchmarks and operating instructions](docs/omega/EVOLUTION_V41_V6.md)
 - [Namespace and packaging migration](docs/omega/IDENTITY_MIGRATION.md)

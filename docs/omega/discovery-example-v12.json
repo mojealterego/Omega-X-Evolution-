@@ -1,0 +1,17 @@
+{
+  "schema": "omega-discovery-v1",
+  "dataset_sha256": "8e82ff8dd0da82710687c6dc090387f5bd58613c63f2bc97e2f19220a7705fbb",
+  "seed": 2026,
+  "strategy": "evolution",
+  "attempts": 128,
+  "unique_attempts": 124,
+  "valid_candidates": 121,
+  "first_exact_attempt": 47,
+  "expression": "((x*x)+(y*y))",
+  "operations": 3,
+  "nodes": 7,
+  "training_rmse": 0.0,
+  "holdout_rmse": 0.0,
+  "holdout_evaluations": 1,
+  "empirical_match": true
+}

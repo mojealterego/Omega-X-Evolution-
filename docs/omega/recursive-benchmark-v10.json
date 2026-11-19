@@ -1,0 +1,866 @@
+{
+  "history": [
+    {
+      "round": 1,
+      "train_seeds": [
+        3265204987,
+        3876175516
+      ],
+      "validation_seeds": [
+        3375397868,
+        2457197700
+      ],
+      "incumbent": null,
+      "challenger": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "active": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.8540535343290669,
+              0.8162168688009606,
+              46
+            ],
+            [
+              0.7995011425625916,
+              0.8269867532803664,
+              46
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9306245991724194,
+              0.9958852772110108,
+              38
+            ],
+            [
+              0.931722831655103,
+              0.9991187092437038,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 4
+            }
+          },
+          "metrics": [
+            [
+              0.8540535343290669,
+              0.8162168688009606,
+              42
+            ],
+            [
+              0.8306620287473413,
+              0.8931184375656372,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 2
+            }
+          },
+          "metrics": [
+            [
+              0.9115329542616509,
+              0.9743894686422641,
+              46
+            ],
+            [
+              0.7864024517067378,
+              0.7856746986017067,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 3
+            }
+          },
+          "metrics": [
+            [
+              0.8540535343290669,
+              0.8162168688009606,
+              46
+            ],
+            [
+              0.7931302099011952,
+              0.8509773031824944,
+              46
+            ]
+          ]
+        }
+      ],
+      "validation_incumbent": [
+        [
+          0.821884156175143,
+          0.8547020289511306,
+          42
+        ],
+        [
+          0.8209190502176635,
+          0.8333647926635286,
+          46
+        ]
+      ],
+      "validation_challenger": [
+        [
+          0.9302150221321572,
+          0.9969569390972116,
+          46
+        ],
+        [
+          0.9294919973379048,
+          0.9955885394388653,
+          46
+        ]
+      ],
+      "promoted": true
+    },
+    {
+      "round": 2,
+      "train_seeds": [
+        217857473,
+        3960700517
+      ],
+      "validation_seeds": [
+        3978678680,
+        3769827967
+      ],
+      "incumbent": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "challenger": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "active": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9307654342301825,
+              0.9969306815624529,
+              42
+            ],
+            [
+              0.9294024911527905,
+              0.9955782253968575,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio",
+                "symmetry"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9299780249432155,
+              0.9954786482862488,
+              42
+            ],
+            [
+              0.9294024911527905,
+              0.9955782253968575,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 3
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.93178907756051,
+              0.9987322803254919,
+              42
+            ],
+            [
+              0.9262987737148825,
+              0.9911052589851628,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 2
+            }
+          },
+          "metrics": [
+            [
+              0.9299780249432155,
+              0.9954786482862488,
+              42
+            ],
+            [
+              0.9294024911527905,
+              0.9955782253968575,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "sample"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9299780249432155,
+              0.9954786482862488,
+              42
+            ],
+            [
+              0.9294024911527905,
+              0.9955782253968575,
+              42
+            ]
+          ]
+        }
+      ],
+      "validation_incumbent": [
+        [
+          0.9308724275253026,
+          0.9982926909663734,
+          34
+        ],
+        [
+          0.9290025422495454,
+          0.9953096660380771,
+          50
+        ]
+      ],
+      "validation_challenger": [
+        [
+          0.9308724275253026,
+          0.9982926909663734,
+          34
+        ],
+        [
+          0.9290025422495454,
+          0.9953096660380771,
+          50
+        ]
+      ],
+      "promoted": false
+    },
+    {
+      "round": 3,
+      "train_seeds": [
+        556535786,
+        1090047490
+      ],
+      "validation_seeds": [
+        1683686154,
+        1316888489
+      ],
+      "incumbent": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "challenger": {
+        "fast": {
+          "operators": [
+            "simplify"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "active": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9312126422235989,
+              0.9969260507991451,
+              34
+            ],
+            [
+              0.9298984799556298,
+              0.9971881274877936,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "simplify"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9319349151600516,
+              0.9986289360966727,
+              46
+            ],
+            [
+              0.9298984799556298,
+              0.9971881274877936,
+              50
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio",
+                "refine"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9312126422235989,
+              0.9969260507991451,
+              34
+            ],
+            [
+              0.926973323942393,
+              0.9938655402698748,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "symmetry",
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9312126422235989,
+              0.9969260507991451,
+              34
+            ],
+            [
+              0.9298984799556298,
+              0.9971881274877936,
+              42
+            ]
+          ]
+        }
+      ],
+      "validation_incumbent": [
+        [
+          0.9296810327475529,
+          0.9971512968302688,
+          34
+        ],
+        [
+          0.9322208474685922,
+          0.9996988120983965,
+          38
+        ]
+      ],
+      "validation_challenger": [
+        [
+          0.9296810327475529,
+          0.9971512968302688,
+          50
+        ],
+        [
+          0.9322208474685922,
+          0.9996988120983965,
+          62
+        ]
+      ],
+      "promoted": false
+    },
+    {
+      "round": 4,
+      "train_seeds": [
+        713582842,
+        152394320
+      ],
+      "validation_seeds": [
+        3751259287,
+        2610452793
+      ],
+      "incumbent": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "challenger": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 4
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "active": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.932275840642872,
+              0.9996015782576021,
+              46
+            ],
+            [
+              0.9199010078285945,
+              0.9794055297099117,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 4
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.932275840642872,
+              0.9996015782576021,
+              46
+            ],
+            [
+              0.9313651585870049,
+              0.9981390666183806,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 3
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.932275840642872,
+              0.9996015782576021,
+              46
+            ],
+            [
+              0.9313651585870049,
+              0.9981390666183806,
+              42
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "symmetry"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.9304347319890789,
+              0.9963139275413933,
+              62
+            ],
+            [
+              0.9322218612107906,
+              0.99954435819399,
+              54
+            ]
+          ]
+        },
+        {
+          "team": {
+            "fast": {
+              "operators": [
+                "refine",
+                "ratio"
+              ],
+              "attempts": 1
+            },
+            "deep": {
+              "operators": [
+                "ratio"
+              ],
+              "attempts": 1
+            }
+          },
+          "metrics": [
+            [
+              0.932275840642872,
+              0.9996015782576021,
+              46
+            ],
+            [
+              0.9298116077158378,
+              0.995601523742149,
+              42
+            ]
+          ]
+        }
+      ],
+      "validation_incumbent": [
+        [
+          0.9307767245013787,
+          0.9972055868113364,
+          42
+        ],
+        [
+          0.9320068494337606,
+          0.9989430278887607,
+          46
+        ]
+      ],
+      "validation_challenger": [
+        [
+          0.9307767245013787,
+          0.9972055868113364,
+          42
+        ],
+        [
+          0.9320068494337606,
+          0.9989430278887607,
+          46
+        ]
+      ],
+      "promoted": false
+    }
+  ],
+  "active": {
+    "fast": {
+      "operators": [
+        "ratio"
+      ],
+      "attempts": 1
+    },
+    "deep": {
+      "operators": [
+        "ratio"
+      ],
+      "attempts": 1
+    }
+  },
+  "runs": 54,
+  "run_bound": 56,
+  "credit_bound": 56000,
+  "rounds_completed": 4,
+  "rounds_planned": 4
+}
