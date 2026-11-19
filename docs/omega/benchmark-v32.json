@@ -1,0 +1,708 @@
+{
+  "epigenetic_trace": [
+    {
+      "revision": 1,
+      "enabled": [],
+      "mandatory": [
+        "ast",
+        "formal",
+        "cascade",
+        "audit",
+        "budget",
+        "quorum"
+      ],
+      "recovery_streak": 0
+    },
+    {
+      "revision": 2,
+      "enabled": [],
+      "mandatory": [
+        "ast",
+        "formal",
+        "cascade",
+        "audit",
+        "budget",
+        "quorum"
+      ],
+      "recovery_streak": 0
+    },
+    {
+      "revision": 3,
+      "enabled": [],
+      "mandatory": [
+        "ast",
+        "formal",
+        "cascade",
+        "audit",
+        "budget",
+        "quorum"
+      ],
+      "recovery_streak": 1
+    },
+    {
+      "revision": 4,
+      "enabled": [
+        "neural",
+        "associative",
+        "guided"
+      ],
+      "mandatory": [
+        "ast",
+        "formal",
+        "cascade",
+        "audit",
+        "budget",
+        "quorum"
+      ],
+      "recovery_streak": 2
+    },
+    {
+      "revision": 5,
+      "enabled": [],
+      "mandatory": [
+        "ast",
+        "formal",
+        "cascade",
+        "audit",
+        "budget",
+        "quorum"
+      ],
+      "recovery_streak": 0
+    }
+  ],
+  "live_telemetry": {
+    "cpu": 0,
+    "memory": 22,
+    "queue": 10
+  },
+  "formal": {
+    "cases": [
+      {
+        "left": [
+          "sub",
+          [
+            "add",
+            [
+              "x"
+            ],
+            [
+              "y"
+            ]
+          ],
+          [
+            "y"
+          ]
+        ],
+        "right": [
+          "x"
+        ],
+        "nodes": [
+          5,
+          1
+        ],
+        "proved": true,
+        "certificate_bytes": 395,
+        "local_seconds": 0.00017388399999163084,
+        "smt": {
+          "status": "unsat",
+          "proved": true,
+          "domain_size": 4294967296,
+          "query_sha256": "7617fef2d7754d45dc98ea58721dfd688d74fd431be4a5ede0c0effb84fa47bc",
+          "semantics": "pure modular u16 IR, not compiler equivalence"
+        },
+        "optimization": {
+          "selected": [
+            "x"
+          ],
+          "selected_nodes": 1,
+          "reference_nodes": 5,
+          "attempts": 3,
+          "proved_candidates": 1,
+          "promoted": true,
+          "proof": {
+            "schema": "omega-u16-ring-proof-v1",
+            "left_sha256": "4dec2f595c645478fe7aaf406f16d721d851dc3c28c56109bb9fb3a2615b11e9",
+            "right_sha256": "cd65ea2c2ad99e94a85b1b6df72efef9cb2ed0ae933a60c32ce16317f7d7d6aa",
+            "proved": true,
+            "left": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "right": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "domain_size": 4294967296,
+            "reason": "equal modular polynomial"
+          },
+          "lean": null,
+          "empirical_points": 35
+        }
+      },
+      {
+        "left": [
+          "mul",
+          [
+            "x"
+          ],
+          [
+            "add",
+            [
+              "y"
+            ],
+            [
+              "lit",
+              65535
+            ]
+          ]
+        ],
+        "right": [
+          "sub",
+          [
+            "mul",
+            [
+              "x"
+            ],
+            [
+              "y"
+            ]
+          ],
+          [
+            "x"
+          ]
+        ],
+        "nodes": [
+          5,
+          5
+        ],
+        "proved": true,
+        "certificate_bytes": 485,
+        "local_seconds": 0.0001499530000046434,
+        "smt": {
+          "status": "unsat",
+          "proved": true,
+          "domain_size": 4294967296,
+          "query_sha256": "a860eed6175c71e3c32ef8c3e05da6bb867cc637c27b4af31c2365013775ed4f",
+          "semantics": "pure modular u16 IR, not compiler equivalence"
+        },
+        "optimization": {
+          "selected": [
+            "mul",
+            [
+              "x"
+            ],
+            [
+              "add",
+              [
+                "y"
+              ],
+              [
+                "lit",
+                65535
+              ]
+            ]
+          ],
+          "selected_nodes": 5,
+          "reference_nodes": 5,
+          "attempts": 6,
+          "proved_candidates": 0,
+          "promoted": false,
+          "proof": {
+            "schema": "omega-u16-ring-proof-v1",
+            "left_sha256": "1e1d0af98fb1e7bf3c29dc3f060f4db10f975a291dbaf8777eb430df97312cb5",
+            "right_sha256": "1e1d0af98fb1e7bf3c29dc3f060f4db10f975a291dbaf8777eb430df97312cb5",
+            "proved": true,
+            "left": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  0,
+                  65535
+                ]
+              ],
+              [
+                [
+                  0,
+                  0,
+                  65535
+                ],
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  1,
+                  0,
+                  65535
+                ],
+                [
+                  1,
+                  1,
+                  1
+                ]
+              ]
+            ],
+            "right": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  0,
+                  65535
+                ]
+              ],
+              [
+                [
+                  0,
+                  0,
+                  65535
+                ],
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  1,
+                  0,
+                  65535
+                ],
+                [
+                  1,
+                  1,
+                  1
+                ]
+              ]
+            ],
+            "domain_size": 4294967296,
+            "reason": "equal modular polynomial"
+          },
+          "lean": null,
+          "empirical_points": 0
+        }
+      },
+      {
+        "left": [
+          "add",
+          [
+            "mul",
+            [
+              "x"
+            ],
+            [
+              "lit",
+              1
+            ]
+          ],
+          [
+            "lit",
+            0
+          ]
+        ],
+        "right": [
+          "x"
+        ],
+        "nodes": [
+          5,
+          1
+        ],
+        "proved": true,
+        "certificate_bytes": 375,
+        "local_seconds": 7.148300005610508e-05,
+        "smt": {
+          "status": "unsat",
+          "proved": true,
+          "domain_size": 4294967296,
+          "query_sha256": "5f3409f9918854fd4f400cfef3c75faf00a8ada6792b22456f3f188ea00868bc",
+          "semantics": "pure modular u16 IR, not compiler equivalence"
+        },
+        "optimization": {
+          "selected": [
+            "x"
+          ],
+          "selected_nodes": 1,
+          "reference_nodes": 5,
+          "attempts": 3,
+          "proved_candidates": 1,
+          "promoted": true,
+          "proof": {
+            "schema": "omega-u16-ring-proof-v1",
+            "left_sha256": "62ba123fe2c6164cf3253d1ef0ae0b1a8f97964fcbd84c0fcf587f0f72572c06",
+            "right_sha256": "cd65ea2c2ad99e94a85b1b6df72efef9cb2ed0ae933a60c32ce16317f7d7d6aa",
+            "proved": true,
+            "left": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [],
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "right": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "domain_size": 4294967296,
+            "reason": "equal modular polynomial"
+          },
+          "lean": null,
+          "empirical_points": 35
+        }
+      },
+      {
+        "left": [
+          "mul",
+          [
+            "sub",
+            [
+              "x"
+            ],
+            [
+              "x"
+            ]
+          ],
+          [
+            "y"
+          ]
+        ],
+        "right": [
+          "lit",
+          0
+        ],
+        "nodes": [
+          5,
+          1
+        ],
+        "proved": true,
+        "certificate_bytes": 357,
+        "local_seconds": 4.5404999923448486e-05,
+        "smt": {
+          "status": "unsat",
+          "proved": true,
+          "domain_size": 4294967296,
+          "query_sha256": "7b2465c2b13546f6364b28539fd67c4881fc3b3feb7a093f0d1c22abfd8a6ce4",
+          "semantics": "pure modular u16 IR, not compiler equivalence"
+        },
+        "optimization": {
+          "selected": [
+            "lit",
+            0
+          ],
+          "selected_nodes": 1,
+          "reference_nodes": 5,
+          "attempts": 1,
+          "proved_candidates": 1,
+          "promoted": true,
+          "proof": {
+            "schema": "omega-u16-ring-proof-v1",
+            "left_sha256": "4552f247353f8d376f23595be816d3179fe9dc4904c048a016414cb42b9a824b",
+            "right_sha256": "9c371ba9f05418b7c5953efd044d5563be243998fa2f536f61e3e14ddc6ecaca",
+            "proved": true,
+            "left": [
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  1,
+                  0,
+                  1
+                ]
+              ],
+              [],
+              [
+                [
+                  0,
+                  1,
+                  1
+                ]
+              ],
+              []
+            ],
+            "right": [
+              []
+            ],
+            "domain_size": 4294967296,
+            "reason": "equal modular polynomial"
+          },
+          "lean": null,
+          "empirical_points": 35
+        }
+      }
+    ],
+    "negative": {
+      "schema": "omega-u16-ring-proof-v1",
+      "left_sha256": "cd65ea2c2ad99e94a85b1b6df72efef9cb2ed0ae933a60c32ce16317f7d7d6aa",
+      "right_sha256": "8fbad084cb7586060f8faea565abbc60c8eb4d41a099571552a6f17c0383d4f4",
+      "proved": false,
+      "left": [
+        [
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      ],
+      "right": [
+        [
+          [
+            0,
+            1,
+            1
+          ]
+        ]
+      ],
+      "domain_size": 4294967296,
+      "reason": "unknown: different normal forms"
+    },
+    "lean": {
+      "backend": "lean",
+      "source_sha256": "7decdc56ecb2a9f9f70757dbb933c0909fe5cc7945364760dcafe2726f23bfbe",
+      "proved": false,
+      "status": "unavailable"
+    }
+  },
+  "swarm": {
+    "membership": 4,
+    "f": 1,
+    "quorum": 3,
+    "vote_server_processes": 4,
+    "work_processes": 3,
+    "epochs": [
+      {
+        "epoch": 1,
+        "planned_slots": 64,
+        "executed_slots": 48,
+        "missing_slots": [
+          1,
+          5,
+          9,
+          13,
+          17,
+          21,
+          25,
+          29,
+          33,
+          37,
+          41,
+          45,
+          49,
+          53,
+          57,
+          61
+        ],
+        "accepted": 48,
+        "champion": {
+          "slot": 60,
+          "mode": "neural",
+          "mask": {
+            "revision": 16,
+            "enabled": [
+              "neural",
+              "associative",
+              "guided"
+            ],
+            "mandatory": [
+              "ast",
+              "formal",
+              "cascade",
+              "audit",
+              "budget",
+              "quorum"
+            ],
+            "recovery_streak": 2
+          },
+          "code": "-(x+y+2.544*abs(x-y)+1.856)",
+          "accepted": true,
+          "metrics": [
+            0.8505563322688257,
+            0.8108108108108107,
+            0.87,
+            1.0
+          ],
+          "proof": {
+            "boxes": 1,
+            "digest": "2477769e734e775d9b0879e7297a768b39cefc5e16aebf52a518e9449d73ff08",
+            "obligations": 13,
+            "policy": "omega-binary64-totality-v1",
+            "proved": true,
+            "reason": "proved totality and intermediate bounds",
+            "source_sha256": "7bbe7e4549b4cfbb73b5fe04106f3c033b1130223e64a5b5dd98f4e945db44e2"
+          }
+        },
+        "modes": {
+          "uniform": 6,
+          "neural": 19,
+          "associative": 8,
+          "guided": 15
+        },
+        "votes": 3,
+        "durable_replay": true
+      },
+      {
+        "epoch": 2,
+        "planned_slots": 64,
+        "executed_slots": 64,
+        "missing_slots": [],
+        "accepted": 64,
+        "champion": {
+          "slot": 39,
+          "mode": "neural",
+          "mask": {
+            "revision": 10,
+            "enabled": [
+              "neural",
+              "associative",
+              "guided"
+            ],
+            "mandatory": [
+              "ast",
+              "formal",
+              "cascade",
+              "audit",
+              "budget",
+              "quorum"
+            ],
+            "recovery_streak": 2
+          },
+          "code": "-(x+y+1.535*(x-y)*(x-y)/(0.0279+x*y)+2.134)",
+          "accepted": true,
+          "metrics": [
+            0.9173622279293641,
+            0.7317073170731707,
+            0.78,
+            1.0
+          ],
+          "proof": {
+            "boxes": 1,
+            "digest": "768757cc74dfba6f76a6db0ee0003e7642d207261ed69d5371005767c6b9a456",
+            "obligations": 23,
+            "policy": "omega-binary64-totality-v1",
+            "proved": true,
+            "reason": "proved totality and intermediate bounds",
+            "source_sha256": "cabf0d1f6bc58bf638bc4963f5dab018e21952cb7f2724128ec3c650d6b6df74"
+          }
+        },
+        "modes": {
+          "uniform": 8,
+          "neural": 24,
+          "associative": 13,
+          "guided": 19
+        },
+        "votes": 4,
+        "durable_replay": true
+      }
+    ],
+    "conflicting_votes_refused": 3,
+    "federated_artifacts": 4,
+    "replay_suppressed": true
+  }
+}

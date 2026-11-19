@@ -13,9 +13,9 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v27 | Quantum-Assisted Annealing | 12 | Implemented bounded QUBO selection and classical benchmark, optional authorized Ocean adapter; real QPU/cost acceptance open |
 | v28 | Autonomous synthesis of new architectural paradigms | 13 | Implemented typed retrieval DAG composition and separate validation promotion; arbitrary architecture design open |
 | v29 | Swarm Federation | 13 | Implemented Ed25519 exchange, signed durable receipt/inbox, local recertification, real process + mTLS loopback; multi-host open |
-| v30 | Code epigenetics | 13 | Open; policy-bound reversible functional activation, safety invariants always active |
-| v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | Open; checked proof objects for a defined formal specification, fail closed on unknown, no universal correctness claim |
-| v32 | Neuro-Symbolic Swarm | 13 | Open; peer coordination with a defined fault model; separate from v29 exchange protocol |
+| v30 | Code epigenetics | 13 | Implemented bounded reversible functional activation in swarm; real host telemetry and scripted stress/recovery; mandatory gates always active |
+| v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | Implemented constructive modular u16 certificates and separate checker, optional generated Lean theorem adapter; physical Lean/Isabelle verification open |
+| v32 | Neuro-Symbolic Swarm | 13 | Implemented signed one-shot n-f quorum partition, durable vote/execution locks and local-process peer negotiation; external multi-host and consensus liveness open |
 | v33 | Zero-Shot Axiomatic Discovery | 13 | Open; conjecture generation, counterexample search, consistency constraints and bounded proof; no claim of discovering real physical laws without experiments |
 | v34 | On-the-Fly Weight Plasticity | 13 | Open; finite authorized LoRA/training budget, isolated evaluation and rollback |
 | v35 | Autonomous Infrastructure Orchestration | 13 | Open; allowlisted, budget-capped resource lifecycle, explicit authorization for external resource allocation, stop and recovery; no uncontrolled propagation or infinite resource consumption |

@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v29%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v32%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v29
+## Current implementation — v32
 
 | Component | Capability |
 |---|---|
@@ -69,6 +69,9 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Hybrid QUBO selection | Cardinality-constrained MAP-Elites representative selection; classical and optional QPU |
 | Memory architecture synthesis | Typed retrieval DAG search and validation promotion |
 | Swarm federation | Ed25519 peer packets, durable inboxes, independent proof/evaluation, P2P transport |
+| Code epigenetics | Runtime hysteretic activation of optional proposal blocks under host pressure |
+| Proof kernel | Modular u16 constructive certificates with separate checker and optional Lean adapter |
+| Neuro-symbolic swarm | Signed quorum-certified search partitions, durable peer locks, trainable proposal router and deterministic result replay |
 | Backlog extensions | Durable team populations, whole-domain u16 SMT, isolated Torch training, latent-semantic graph retrieval and optional local LLM quote selection, Qualcomm HTP adapter |
 
 **Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, unrestricted agent self-rewriting, formal verification of arbitrary programs and large-model training remain out of scope. Small MLPs now train end-to-end on CPU in explicit research modes.
@@ -104,8 +107,11 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v27 | Quantum-assisted annealing | Bounded QUBO and classical reference; optional QPU unverified |
 | v28 | Memory architecture synthesis | Typed retrieval composition, dataset-split promotion |
 | v29 | Swarm federation | Signed peer exchange, independent qualification, local process/TLS tests |
+| v30 | Code epigenetics | Bounded reversible runtime switches, mandatory gates immutable |
+| v31 | Neurosymbolic formal verification | Constructive u16 ring proofs, separate checker; optional Lean unverified |
+| v32 | Neuro-symbolic swarm | Signed quorum plans and independently replayed peer execution; one-shot fault model, local process tests |
 
-See [extended maintainer roadmap v30–v36](docs/omega/MAINTAINER_ROADMAP.md).
+See [extended maintainer roadmap v33–v36](docs/omega/MAINTAINER_ROADMAP.md).
 
 No stage is promoted solely on generated logs or self-reported improvements.
 
@@ -123,7 +129,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.29.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.32.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -234,6 +240,16 @@ python -m omega_x_evolution.federation --help
 
 See [scope, deployment and evidence](docs/omega/EVOLUTION_V27_V29.md). Physical QPU and multi-host peer acceptance are open; explicit external authorization required.
 
+## v30–v32 epigenetics, proof kernel and swarm
+
+```sh
+python -m omega_x_evolution.epigenetics
+python -m omega_x_evolution.proof_kernel
+python -m omega_x_evolution.swarm --help
+```
+
+See [scope and evidence](docs/omega/EVOLUTION_V30_V32.md). Swarm execution operates in an independent research namespace and uses the fixed numerical safety and evaluation gates; it does not bypass a live campaign.
+
 ## Verification
 
 ```bash
@@ -242,10 +258,11 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v29.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v32.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v30–v32 epigenetics, proof kernel and swarm](docs/omega/EVOLUTION_V30_V32.md)
 - [v27–v29 QUBO, architectures and federation](docs/omega/EVOLUTION_V27_V29.md)
 - [v24–v26 tensor policies, memory and safety](docs/omega/EVOLUTION_V24_V26.md)
 - [v23 adaptive topological archive](docs/omega/EVOLUTION_V23.md)

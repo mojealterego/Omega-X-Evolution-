@@ -22,3 +22,5 @@ All twenty stages contain local executable implementations in the agreed bounded
 V24–v26 implement classical tensor-train mutation routing, bounded associative trajectory transfer and candidate-specific binary64 safety obligations. See [v24–v26](EVOLUTION_V24_V26.md). No generalized speed/quality advantage, physical Ray, live LLM policy or arbitrary theorem proving is claimed. Pending v30–v36 remain in the maintainer roadmap.
 
 V27–v29 extend the system with bounded QUBO selection, typed retrieval architecture search and authenticated independent peers; physical QPU, external federated infrastructure, arbitrary architecture synthesis and consensus remain open. See [v27–v29](EVOLUTION_V27_V29.md).
+
+V30–v32 implement reversible optional-block switches, constructive u16 certificate checking and one-shot signed quorum partitioning with durable execution records. See [v30–v32](EVOLUTION_V30_V32.md). Lean/Isabelle installation and actual kernel verification remain open; one-shot quorum safety is not a live Byzantine consensus protocol. Pending v33–v36.
