@@ -93,6 +93,7 @@ nav:
       - v13–v15: omega/EVOLUTION_V13_V15.md
       - v16–v18: omega/EVOLUTION_V16_V18.md
       - v19–v20: omega/EVOLUTION_V19_V20.md
+      - v21: omega/EVOLUTION_V21.md
       - Acceptance Gates: omega/CLOSURE_REGISTER.md
       - Coevolution: OMEGA_COEVOLUTION.md
       - Runtime Hardening: OMEGA_HARDENING.md

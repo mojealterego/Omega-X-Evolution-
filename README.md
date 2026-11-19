@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v20%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v21%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v20
+## Current implementation — v21
 
 | Component | Capability |
 |---|---|
@@ -60,6 +60,7 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Experiment planner | Budget-driven symbolic/neural/hybrid comparison with final test isolation |
 | Multi-domain discovery | Unit-constrained sparse regression over up to eight inputs; custom data |
 | Research runtime | Checkpointed campaigns with fixed typed dispatch, budgets, graph recording and replay |
+| Stage 3 latency regression | Opt-in paired p50/p95/p99 gate against accepted parent and cell elite/global champion; authenticated history |
 | Backlog extensions | Durable team populations, whole-domain u16 SMT, isolated Torch training, latent-semantic graph retrieval and optional local LLM quote selection, Qualcomm HTP adapter |
 
 **Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, unrestricted agent self-rewriting, formal verification of arbitrary programs and large-model training remain out of scope. Small MLPs now train end-to-end on CPU in explicit research modes.
@@ -86,6 +87,7 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v18 | Automatic experiment construction | Typed budgeted comparative plans, validation selection and graph recording |
 | v19 | Multi-domain Scientific Discovery Engine | Unit-constrained sparse equation discovery; four synthetic physical domains and custom data |
 | v20 | Integrated autonomous research runtime | Bounded seven-domain campaigns, durable recovery, graph evidence, replay and device policy |
+| v21 | Performance regression testing | Implemented Stage 3b; measured latency, correctness tradeoff, durable evidence |
 
 No stage is promoted solely on generated logs or self-reported improvements.
 
@@ -103,7 +105,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.20.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.21.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -165,7 +167,15 @@ omega-x-bitproof --left '["sub",["add",["x"],["y"]],["y"]]' --right '["x"]'
 omega-x-compute --qnn --demo
 ```
 
-See [v19–v20 implementation and evidence](docs/omega/EVOLUTION_V19_V20.md) and the [remaining acceptance gates](docs/omega/CLOSURE_REGISTER.md). All original 20 stages now have bounded local implementations; hardware, external validation and unrestricted-domain objectives are not declared closed. No v21+ stages are assigned pending the maintainer's new roadmap.
+See [v19–v20 implementation and evidence](docs/omega/EVOLUTION_V19_V20.md) and the [remaining acceptance gates](docs/omega/CLOSURE_REGISTER.md). All original 20 stages now have bounded local implementations; hardware, external validation and unrestricted-domain objectives are not declared closed. Stage v21 implements the first new maintainer requirement; v22–v27 remain unassigned.
+
+## v21 performance regression gate
+
+```bash
+omega-x-evolution --seed 5 --generations 3 --islands 2 --workers 2 --performance-regression
+```
+
+The measured gate is automatically applied to every Stage 3-qualified candidate in this explicit mode, before archive admission, including local process pools and remote evaluation. Default deterministic mode retains the historical operation proxy. Measured decisions are not repeatable bit-for-bit across new runs. See [policy, durable history and compatibility](docs/omega/EVOLUTION_V21.md).
 
 ## Verification
 
@@ -175,10 +185,11 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v20.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v21.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v21 Stage 3 performance regression gate](docs/omega/EVOLUTION_V21.md)
 - [v19–v20 implementation and evidence](docs/omega/EVOLUTION_V19_V20.md)
 - [Unresolved and closed acceptance gates](docs/omega/CLOSURE_REGISTER.md)
 

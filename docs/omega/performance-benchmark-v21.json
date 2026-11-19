@@ -1,0 +1,914 @@
+{
+  "mode": "offline-simulation",
+  "benchmark": "scheduler-ratio-v1",
+  "baseline_score": 0.562628300015853,
+  "champion_score": 0.562628300015853,
+  "champion": "-(x+y)",
+  "champion_metrics": [
+    0.3971475714512185,
+    0.9375,
+    0.96,
+    1.0
+  ],
+  "champion_genome": {
+    "sharpness": 10.0,
+    "threshold": 0.5,
+    "novelty": 1.0,
+    "weights": [
+      0.7,
+      0.15,
+      0.15,
+      0.0
+    ]
+  },
+  "holdout_quality": 0.3886837270148368,
+  "baseline_holdout_quality": 0.3886837270148368,
+  "attempts": 12,
+  "rejections": 12,
+  "spent": 44,
+  "budget_unit": "synthetic proposal credits (not USD)",
+  "lineage_size": 4,
+  "occupied_cells": 2,
+  "model_pulls": {
+    "fast": 4,
+    "deep": 8
+  },
+  "sft": [],
+  "dpo": [],
+  "performance_regression": {
+    "context": {
+      "schema": "omega-stage3-latency-v1",
+      "policy": {
+        "threshold": 0.05,
+        "min_correctness_gain": 0.02,
+        "gain_per_slowdown": 0.4,
+        "hard_cap": 0.25
+      },
+      "workload_sha256": "3cdf848469374465811bdfeebea7ecee0dea6b52f79e8c4969483ab1390d331b",
+      "implementation_sha256": "42a441386fe9b323296b9904ec986d4613e128ef3fb168e0039fb602538434bf",
+      "engine_sha256": "c46f458383ec037a62d7b445fc754dc139461f42691bd487a1b1effc205c2910",
+      "rounds": 3,
+      "passes": 2,
+      "python": [
+        3,
+        13,
+        5
+      ],
+      "platform": "Linux",
+      "machine": "x86_64",
+      "cpu": "AMD EPYC 9V74 80-Core Processor",
+      "affinity": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "clock_resolution_ns": 1.0
+    },
+    "records": [
+      {
+        "candidate_id": "g1-0-0",
+        "candidate_sha256": "67aa5274edf035b353ba49114342dc0ee33b04beb3fc0fbe142e43aded667af4",
+        "correctness": 0.8162057259286182,
+        "performance_proxy": 0.8108108108108107,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-0",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.8162057259286182,
+            "baseline": [
+              {
+                "p50_ns": 1453.0,
+                "p95_ns": 1642.0,
+                "p99_ns": 17535.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1442.0,
+                "p95_ns": 1592.0,
+                "p99_ns": 8673.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1422.5,
+                "p95_ns": 1802.0,
+                "p99_ns": 19719.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3860.5,
+                "p95_ns": 4186.0,
+                "p99_ns": 21051.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3785.0,
+                "p95_ns": 4376.0,
+                "p99_ns": 8472.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3726.0,
+                "p95_ns": 4186.0,
+                "p99_ns": 55592.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001442,
+            "candidate_latency_ms": 0.003785,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.6248266296809986,
+                "p95_ns": 1.5493300852618757,
+                "p99_ns": 0.20051325919589402
+              },
+              "correctness_gain": 0.4190581544773997,
+              "required_gain": 0.6499306518723995
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g1-0-1",
+        "candidate_sha256": "bf458f40cf7c6749d5f9d998ffadbcdada087f3d78cd556580e039ebfbffc2c8",
+        "correctness": 0.6644776444108234,
+        "performance_proxy": 0.7894736842105263,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-0",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.6644776444108234,
+            "baseline": [
+              {
+                "p50_ns": 1452.0,
+                "p95_ns": 1523.0,
+                "p99_ns": 1813.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1462.0,
+                "p95_ns": 1563.0,
+                "p99_ns": 1732.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1472.0,
+                "p95_ns": 1583.0,
+                "p99_ns": 11928.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3996.0,
+                "p95_ns": 4126.0,
+                "p99_ns": 4296.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3990.5,
+                "p95_ns": 4146.0,
+                "p99_ns": 4407.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3986.0,
+                "p95_ns": 4167.0,
+                "p99_ns": 18217.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001462,
+            "candidate_latency_ms": 0.0039905,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.7294801641586868,
+                "p95_ns": 1.6525911708253358,
+                "p99_ns": 1.369553226696084
+              },
+              "correctness_gain": 0.26733007295960487,
+              "required_gain": 0.6917920656634747
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g1-1-0",
+        "candidate_sha256": "07b952c4eec8d63a7a1f2baa9cbc499e3f1ab4dd8f788f49e232f279ba45599c",
+        "correctness": 0.7076537515775985,
+        "performance_proxy": 0.8108108108108107,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-1",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.7076537515775985,
+            "baseline": [
+              {
+                "p50_ns": 1392.0,
+                "p95_ns": 1482.0,
+                "p99_ns": 1542.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1513.0,
+                "p99_ns": 8783.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1522.0,
+                "p99_ns": 1652.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3685.0,
+                "p95_ns": 3866.0,
+                "p99_ns": 23915.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3635.5,
+                "p95_ns": 3806.0,
+                "p99_ns": 22042.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3685.0,
+                "p95_ns": 3846.0,
+                "p99_ns": 4587.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001402,
+            "candidate_latency_ms": 0.003685,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.6283880171184024,
+                "p95_ns": 1.5269382391590014,
+                "p99_ns": 1.776634382566586
+              },
+              "correctness_gain": 0.31050618012638,
+              "required_gain": 0.7106537530266345
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g1-1-1",
+        "candidate_sha256": "4430d099805c54dd6927f5d239f73e9b93f73a41c52d0511b9a7cf0469458fff",
+        "correctness": 0.47675673992604717,
+        "performance_proxy": 0.7894736842105263,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-1",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.47675673992604717,
+            "baseline": [
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1502.0,
+                "p99_ns": 4967.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1392.5,
+                "p95_ns": 1493.0,
+                "p99_ns": 26068.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1572.0,
+                "p99_ns": 3015.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3895.0,
+                "p95_ns": 4056.0,
+                "p99_ns": 4277.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3886.0,
+                "p95_ns": 4076.0,
+                "p99_ns": 5488.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3916.0,
+                "p95_ns": 4136.0,
+                "p99_ns": 6229.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001402,
+            "candidate_latency_ms": 0.003895,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.790664272890485,
+                "p95_ns": 1.700399467376831,
+                "p99_ns": -0.1389168512180391
+              },
+              "correctness_gain": 0.07960916847482868,
+              "required_gain": 0.716265709156194
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g2-0-0",
+        "candidate_sha256": "b2a250e8dbaf8caf05cd03b90787f1aa6f98a2757c9ebe23460f9d3a7ba84310",
+        "correctness": 0.6702638612025662,
+        "performance_proxy": 0.7894736842105263,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-0",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.6702638612025662,
+            "baseline": [
+              {
+                "p50_ns": 1422.0,
+                "p95_ns": 1533.0,
+                "p99_ns": 1802.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1482.0,
+                "p99_ns": 1563.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1422.0,
+                "p95_ns": 1563.0,
+                "p99_ns": 2513.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3946.0,
+                "p95_ns": 4246.0,
+                "p99_ns": 25687.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3926.0,
+                "p95_ns": 4076.0,
+                "p99_ns": 18447.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3956.0,
+                "p95_ns": 4196.0,
+                "p99_ns": 64495.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001422,
+            "candidate_latency_ms": 0.003946,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.7804532577903682,
+                "p95_ns": 1.7503373819163293,
+                "p99_ns": 13.254716981132075
+              },
+              "correctness_gain": 0.2731162897513477,
+              "required_gain": 5.30188679245283
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g2-0-1",
+        "candidate_sha256": "6353d4c2db61da34ed1c1e2bc351f7856f5329838304520da35e4d5c6bc9fc63",
+        "correctness": 0.624628630703348,
+        "performance_proxy": 0.75,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-0",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.624628630703348,
+            "baseline": [
+              {
+                "p50_ns": 1462.0,
+                "p95_ns": 1523.0,
+                "p99_ns": 1662.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1472.0,
+                "p95_ns": 1582.0,
+                "p99_ns": 5658.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1462.0,
+                "p95_ns": 1562.0,
+                "p99_ns": 1913.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 4977.0,
+                "p95_ns": 5157.0,
+                "p99_ns": 5298.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 4947.0,
+                "p95_ns": 5168.0,
+                "p99_ns": 20821.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 4977.0,
+                "p95_ns": 5197.0,
+                "p99_ns": 21191.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001462,
+            "candidate_latency_ms": 0.004977,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 2.4042407660738716,
+                "p95_ns": 2.327144686299616,
+                "p99_ns": 2.6799222340049487
+              },
+              "correctness_gain": 0.22748105925212947,
+              "required_gain": 1.0719688936019796
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g2-1-0",
+        "candidate_sha256": "6b17e2deacb2c1d7b182010bbdfb89c9919ad8f1d530cda602f22b5ea79de2c1",
+        "correctness": 0.8779674356876095,
+        "performance_proxy": 0.7317073170731707,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-1",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.8779674356876095,
+            "baseline": [
+              {
+                "p50_ns": 1432.0,
+                "p95_ns": 1522.0,
+                "p99_ns": 1663.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1432.0,
+                "p95_ns": 1503.0,
+                "p99_ns": 2063.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1432.0,
+                "p95_ns": 1543.0,
+                "p99_ns": 2013.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 5689.0,
+                "p95_ns": 5838.0,
+                "p99_ns": 6379.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 5658.0,
+                "p95_ns": 5858.0,
+                "p99_ns": 30945.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 5658.0,
+                "p95_ns": 5859.0,
+                "p99_ns": 6350.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001432,
+            "candidate_latency_ms": 0.005658,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 2.951117318435754,
+                "p95_ns": 2.835742444152431,
+                "p99_ns": 2.835838845460012
+              },
+              "correctness_gain": 0.480819864236391,
+              "required_gain": 1.1804469273743017
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g2-1-1",
+        "candidate_sha256": "2e8b2d5dd070068049c89643ae30cc32e32bd270d93b603026a27a0b2b228b0d",
+        "correctness": 0.7827652012477102,
+        "performance_proxy": 0.75,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "seed-1",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.7827652012477102,
+            "baseline": [
+              {
+                "p50_ns": 1432.0,
+                "p95_ns": 1532.0,
+                "p99_ns": 1602.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1493.0,
+                "p99_ns": 1572.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1492.0,
+                "p99_ns": 1623.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 5017.0,
+                "p95_ns": 5218.0,
+                "p99_ns": 18528.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 4967.0,
+                "p95_ns": 5538.0,
+                "p99_ns": 28562.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 4977.0,
+                "p95_ns": 5158.0,
+                "p99_ns": 23415.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001412,
+            "candidate_latency_ms": 0.004977,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 2.5177053824362607,
+                "p95_ns": 2.4571045576407506,
+                "p99_ns": 13.426987060998151
+              },
+              "correctness_gain": 0.3856176297964917,
+              "required_gain": 5.370794824399261
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g3-0-0",
+        "candidate_sha256": "0f2348f838a8fd0e1acc18eade040535def9434565239b5dbe9742f49d462b67",
+        "correctness": 0.7199482969337685,
+        "performance_proxy": 0.7317073170731707,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "m2-1",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.7199482969337685,
+            "baseline": [
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1512.0,
+                "p99_ns": 1873.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1503.0,
+                "p99_ns": 1633.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1522.0,
+                "p99_ns": 1653.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 5227.5,
+                "p95_ns": 5398.0,
+                "p99_ns": 6390.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 5208.0,
+                "p95_ns": 5458.0,
+                "p99_ns": 17435.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 5208.0,
+                "p95_ns": 5348.0,
+                "p99_ns": 6680.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001412,
+            "candidate_latency_ms": 0.005208,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 2.7021954674220963,
+                "p95_ns": 2.57010582010582,
+                "p99_ns": 3.0411373260738053
+              },
+              "correctness_gain": 0.32280072548255,
+              "required_gain": 1.2164549304295222
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g3-0-1",
+        "candidate_sha256": "67741064af0f9d99edb38b9e61a3b7ba041a79767ce5f012c265e203bbc8f629",
+        "correctness": 0.6306869938131907,
+        "performance_proxy": 0.7894736842105263,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "m2-1",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.6306869938131907,
+            "baseline": [
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1483.0,
+                "p99_ns": 1642.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1502.0,
+                "p99_ns": 1632.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1482.0,
+                "p99_ns": 1663.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3946.0,
+                "p95_ns": 4116.0,
+                "p99_ns": 21732.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3935.0,
+                "p95_ns": 4086.0,
+                "p99_ns": 18086.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3946.0,
+                "p95_ns": 4076.0,
+                "p99_ns": 4447.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001412,
+            "candidate_latency_ms": 0.003946,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.7946175637393766,
+                "p95_ns": 1.7503373819163293,
+                "p99_ns": 10.082107843137255
+              },
+              "correctness_gain": 0.23353942236197223,
+              "required_gain": 4.032843137254902
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g3-1-0",
+        "candidate_sha256": "9ae34c55b2f03c6efae89fb4e6d88059bd7a9d910195aa3b9649f5362e36981e",
+        "correctness": 0.6901144802950546,
+        "performance_proxy": 0.7317073170731707,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "m2-0",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.6901144802950546,
+            "baseline": [
+              {
+                "p50_ns": 1407.5,
+                "p95_ns": 1653.0,
+                "p99_ns": 60218.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1522.0,
+                "p99_ns": 1592.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1412.0,
+                "p95_ns": 1512.0,
+                "p99_ns": 1782.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 5152.5,
+                "p95_ns": 5588.0,
+                "p99_ns": 8623.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 5177.0,
+                "p95_ns": 5368.0,
+                "p99_ns": 28291.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 5167.0,
+                "p95_ns": 5308.0,
+                "p99_ns": 20420.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001412,
+            "candidate_latency_ms": 0.005167,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 2.660746003552398,
+                "p95_ns": 2.5105820105820107,
+                "p99_ns": 10.459034792368126
+              },
+              "correctness_gain": 0.29296690884383614,
+              "required_gain": 4.183613916947251
+            }
+          }
+        ],
+        "accepted": false
+      },
+      {
+        "candidate_id": "g3-1-1",
+        "candidate_sha256": "63ecdc13c2d7147cc816f4bf789f6947e86b7af61cf517582f0ed10ccd988284",
+        "correctness": 0.7497961732454802,
+        "performance_proxy": 0.8108108108108107,
+        "comparisons": [
+          {
+            "role": "parent",
+            "baseline_id": "m2-0",
+            "baseline_quality": 0.3971475714512185,
+            "candidate_quality": 0.7497961732454802,
+            "baseline": [
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1503.0,
+                "p99_ns": 1793.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.0,
+                "p95_ns": 1472.0,
+                "p99_ns": 1582.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 1402.5,
+                "p95_ns": 1983.0,
+                "p99_ns": 2754.0,
+                "samples": 192
+              }
+            ],
+            "candidate": [
+              {
+                "p50_ns": 3695.0,
+                "p95_ns": 3896.0,
+                "p99_ns": 8643.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3666.0,
+                "p95_ns": 3815.0,
+                "p99_ns": 18648.0,
+                "samples": 192
+              },
+              {
+                "p50_ns": 3675.5,
+                "p95_ns": 5398.0,
+                "p99_ns": 28161.0,
+                "samples": 192
+              }
+            ],
+            "baseline_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138",
+            "parent_performance": 0.9375,
+            "parent_latency_ms": 0.001402,
+            "candidate_latency_ms": 0.0036755,
+            "decision": {
+              "accepted": false,
+              "reason": "hard latency cap",
+              "relative_slowdown": {
+                "p50_ns": 1.6206773618538324,
+                "p95_ns": 1.5921490352628078,
+                "p99_ns": 9.22549019607843
+              },
+              "correctness_gain": 0.3526486017942617,
+              "required_gain": 3.6901960784313723
+            }
+          }
+        ],
+        "accepted": false
+      }
+    ],
+    "profiled": 12,
+    "rejected": 12
+  }
+}

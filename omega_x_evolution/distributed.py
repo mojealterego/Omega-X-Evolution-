@@ -239,11 +239,11 @@ class RemoteExecutor(ThreadPoolExecutor):
         return super().submit(wait)
 
 
-async def run_remote(cfg, queue, *, timeout=60., checkpoint=None, resume=False):
+async def run_remote(cfg, queue, *, timeout=60., checkpoint=None, resume=False, performance_policy=None):
     from .engine import _run, simulated_proposal
     if not math.isfinite(timeout) or not 0<timeout<=3600: raise ValueError('invalid timeout')
     with RemoteExecutor(queue,timeout,min(32,cfg.workers*cfg.islands)) as executor:
-        return await _run(cfg,simulated_proposal,checkpoint=checkpoint,resume=resume,executor=executor)
+        return await _run(cfg,simulated_proposal,checkpoint=checkpoint,resume=resume,executor=executor,performance_policy=performance_policy)
 
 
 def main():
@@ -251,6 +251,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     sub=p.add_subparsers(dest='mode',required=True)
     s=sub.add_parser('controller'); s.add_argument('--db',required=True); s.add_argument('--keys',required=True,type=Path); s.add_argument('--host',default='127.0.0.1'); s.add_argument('--port',type=int,default=8787); s.add_argument('--cert'); s.add_argument('--tls-key'); s.add_argument('--seed',type=int,default=5); s.add_argument('--generations',type=int,default=5)
+    s.add_argument('--performance-regression',action='store_true')
     w=sub.add_parser('worker'); w.add_argument('--url',required=True); w.add_argument('--name',required=True); w.add_argument('--key-file',required=True,type=Path); w.add_argument('--ca'); w.add_argument('--idle-limit',type=int,default=100)
     a=p.parse_args()
     if a.mode=='controller':
@@ -258,9 +259,10 @@ def main():
         tls=None
         if a.cert:
             tls=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER); tls.minimum_version=ssl.TLSVersion.TLSv1_2; tls.load_cert_chain(a.cert,a.tls_key)
+        from .performance import Policy
         q=Queue(a.db)
         with serve(q,json.loads(a.keys.read_text()),a.host,a.port,tls=tls):
-            print(json.dumps(asyncio.run(run_remote(Config(seed=a.seed,generations=a.generations),q)),allow_nan=False))
+            print(json.dumps(asyncio.run(run_remote(Config(seed=a.seed,generations=a.generations),q,performance_policy=Policy() if a.performance_regression else None)),allow_nan=False))
     else:
         key=a.key_file.read_text().strip(); ctx=ssl.create_default_context(cafile=a.ca); idle=0
         if not 1<=a.idle_limit<=10000: p.error('invalid idle limit')

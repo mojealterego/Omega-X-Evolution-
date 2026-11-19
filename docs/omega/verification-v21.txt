@@ -1,0 +1,12 @@
+OMEGA-X Evolution 0.21.0.dev1 — Stage 3 performance regression gate
+Base: c7d55fb411d02fac18e962c322b171d441470fd0
+Base ZIP SHA-256 5b29f578287649ce63518bfe0641a5acab19d04995765d0246325c662d1cc39a; 449/449 tracked Git blob hashes matched.
+RED: new module import missing (1 collection error). Added JSON normalization failure test before fix: 1 failed, 15 passed.
+GREEN: python -m pytest -q tests/test_omega_v21.py — 19 passed in 2.09s.
+REGRESSION: python -m pytest -q tests/test_omega*.py — 174 passed in 36.20s, exit 0 (19 new tests versus v20).
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.91s, exit 0 (isolated dependency shim).
+COMPILE: python -m compileall -q omega_x_evolution tests — exit 0.
+METADATA: TOML parsed; 0.21.0.dev1 and 22 canonical CLI callables verified.
+FULL UPSTREAM: python -m pytest -q — 72 errors during collection, 4.09s, exit 2. Historical missing dependencies remain; no skips added.
+MEASURED: python -m omega_x_evolution --seed 5 --generations 3 --islands 2 --workers 2 --performance-regression — actual CPU perf_counter_ns, 12/12 profiled, all rejected; same baseline/champion score 0.562628300015853. First candidate median p50 baseline 1442 ns, candidate 3785 ns; median paired p50 slowdown 162.48266296809986%; correctness gain 0.4190581544773997. All observations retained in performance-benchmark-v21.json. No throughput/speedup or general hardware claim.
+POLICY: simulated profile tests exercise +5% boundary, +10% tradeoff, insufficient correctness, p95/p99 regressions, single noisy round, hard cap, failure, invalid AST, two references, durable resume, local process pool and actual loopback remote transport with simulated timings. Real timing test checks sample size/percentile order, not deterministic speed. Default deterministic mode unchanged; new source hashes invalidate old checkpoints by design. No physical cluster, CI or paid API.

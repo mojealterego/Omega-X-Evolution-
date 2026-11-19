@@ -359,35 +359,49 @@ def _restore(state, contract, rng, cascade, archive, router, buf):
         raise CheckpointError('invalid checkpoint state') from exc
 
 
-async def run(cfg: Config, proposal: Proposal=simulated_proposal, *, checkpoint: CheckpointStore | None = None, resume: bool = False, evaluation_processes: int = 1):
+async def run(cfg: Config, proposal: Proposal=simulated_proposal, *, checkpoint: CheckpointStore | None = None, resume: bool = False, evaluation_processes: int = 1, performance_policy=None):
     if type(evaluation_processes) is not int or not 1 <= evaluation_processes <= 32:
         raise ValueError('evaluation_processes must be between 1 and 32')
     if evaluation_processes == 1:
-        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=None)
+        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=None, performance_policy=performance_policy)
     with ProcessPoolExecutor(max_workers=evaluation_processes, mp_context=get_context('spawn')) as executor:
-        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=executor)
+        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=executor, performance_policy=performance_policy)
 
 
-async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore | None, resume: bool, executor):
+async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore | None, resume: bool, executor, performance_policy=None):
     if resume and checkpoint is None:
         raise ValueError('resume requires checkpoint')
     if checkpoint is not None and proposal is not simulated_proposal:
         raise ValueError('checkpoint replay currently supports offline proposals only')
+    from . import performance
+    if performance_policy is not None and (not isinstance(performance_policy,performance.Policy) or min(cfg.generations*cfg.islands*cfg.workers,cfg.budget)>performance.MAX_ATTEMPTS):
+        raise ValueError('invalid performance policy or profiling attempt cap')
     rng=random.Random(cfg.seed); cascade=Cascade(cfg.seed); archive=Archive(cfg.islands)
+    perf_context=performance.context(cascade.grid,performance_policy) if performance_policy is not None else None
+    perf_records=[]
     audit=Audit(secrets.token_bytes(32),VERSION,Path(__file__)); router=Router([Arm('fast','fast',1),Arm('deep','deep',5)],cfg.budget); buf=Distillation()
     baseline=cascade.evaluate(BASELINE).metrics
     rejects=attempts=0; best=score(baseline); stagnation=0; sem=asyncio.Semaphore(cfg.concurrency)
     completed=0; stopped=False
     contract=_checkpoint_contract(cfg) if checkpoint is not None else None
+    if contract is not None and perf_context is not None: contract['performance_regression']=perf_context
+    def snapshot():
+        state=_snapshot(contract,rng,cascade,archive,router,buf,attempts,rejects,best,stagnation,stopped)
+        if perf_context is not None: state['performance_records']=perf_records
+        return state
     if resume:
         completed,state=checkpoint.load()
         if completed>cfg.generations:
             raise CheckpointError('requested target predates checkpoint')
         attempts,rejects,best,stagnation,stopped=_restore(state,contract,rng,cascade,archive,router,buf)
+        if perf_context is not None:
+            perf_records=state.get('performance_records')
+            if type(perf_records) is not list or len(perf_records)>attempts or len(perf_records)>performance.MAX_ATTEMPTS:
+                raise CheckpointError('invalid performance history')
     else:
         for i in range(cfg.islands):archive.add(Artifact(f'seed-{i}',None,i,0,BASELINE,Genome(),baseline))
         if checkpoint is not None:
-            checkpoint.initialize(_snapshot(contract,rng,cascade,archive,router,buf,attempts,rejects,best,stagnation,stopped))
+            checkpoint.initialize(snapshot())
     async def request(arm,prompt,seed):
         async with sem:
             try:return await asyncio.wait_for(proposal(arm.id,prompt,seed),cfg.proposal_timeout)
@@ -421,6 +435,11 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
                 for point in output.failed_points:
                     cascade.failures[point]+=1
             accepted=result.stage==3 and result.metrics[3]==1.
+            if accepted and performance_policy is not None:
+                record=performance.check_candidate(ident,code,result.metrics[0],result.metrics[1],p,archive,cascade.grid,performance_policy)
+                perf_records.append(record)
+                accepted=record['accepted']
+                if not accepted: result=replace(result,reason='Stage 3 performance regression or profiling failure')
             if accepted:
                 token=audit.issue(ident,code,result.metrics)
                 accepted=audit.verify(token,ident,code,result.metrics)
@@ -435,7 +454,11 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
         cascade.advance(cfg.seed+gen)
         stopped=not jobs
         if checkpoint is not None:
-            checkpoint.save(gen,_snapshot(contract,rng,cascade,archive,router,buf,attempts,rejects,best,stagnation,stopped))
+            checkpoint.save(gen,snapshot())
         if stopped:break
     champion=archive.best()
-    return {'mode':'offline-simulation' if proposal is simulated_proposal else 'external-proposal-adapter','benchmark':VERSION,'baseline_score':score(baseline),'champion_score':score(champion.metrics),'champion':champion.code,'champion_metrics':champion.metrics,'champion_genome':champion.genome.__dict__,'holdout_quality':cascade.heldout(champion.code),'baseline_holdout_quality':cascade.heldout(BASELINE),'attempts':attempts,'rejections':rejects,'spent':router.spent,'budget_unit':'synthetic proposal credits (not USD)','lineage_size':len(archive.lineage),'occupied_cells':sum(len(c) for c in archive.cells),'model_pulls':{a.id:a.pulls for a in router.arms},'sft':[{'prompt':t.prompt,'completion':t.patch} for t in buf.sft],'dpo':buf.pairs()}
+    report={'mode':'offline-simulation' if proposal is simulated_proposal else 'external-proposal-adapter','benchmark':VERSION,'baseline_score':score(baseline),'champion_score':score(champion.metrics),'champion':champion.code,'champion_metrics':champion.metrics,'champion_genome':champion.genome.__dict__,'holdout_quality':cascade.heldout(champion.code),'baseline_holdout_quality':cascade.heldout(BASELINE),'attempts':attempts,'rejections':rejects,'spent':router.spent,'budget_unit':'synthetic proposal credits (not USD)','lineage_size':len(archive.lineage),'occupied_cells':sum(len(c) for c in archive.cells),'model_pulls':{a.id:a.pulls for a in router.arms},'sft':[{'prompt':t.prompt,'completion':t.patch} for t in buf.sft],'dpo':buf.pairs()}
+
+    if perf_context is not None:
+        report['performance_regression']={'context':perf_context,'records':perf_records,'profiled':len(perf_records),'rejected':sum(not r['accepted'] for r in perf_records)}
+    return report
