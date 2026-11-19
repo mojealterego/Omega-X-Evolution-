@@ -9,8 +9,8 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
-from .polyglot import Program, ATOMS
-from . import proof_kernel, bitproof
+from .polyglot import Program, ATOMS, _validated_tree
+from . import proof_kernel, bitproof, lrat
 
 
 from .lean_native import lean_source, lean_core_source, check_lean
@@ -18,7 +18,7 @@ from .lean_native import lean_source, lean_core_source, check_lean
 
 def isabelle_source(a,b):
     """Generate a closed HOL function equality; never accept supplied theory text."""
-    if not isinstance(a,Program) or not isinstance(b,Program):raise ValueError('pure typed programs required')
+    a,b=Program(_validated_tree(a)),Program(_validated_tree(b))
     def emit(t):
         if t[0] in ('x','y'):return t[0]
         if t[0]=='lit':return f'({t[1]} :: 16 word)'
@@ -60,8 +60,9 @@ def check_isabelle(a,b,*,timeout=120):
         except (OSError,subprocess.SubprocessError):return {**result,'status':'failed-or-timeout'}
 
 
-def prove(a,b,*,require_lean=False,require_isabelle=False):
-    if not isinstance(a,Program) or not isinstance(b,Program) or type(require_lean) is not bool or type(require_isabelle) is not bool:raise ValueError('proof input')
+def prove(a,b,*,require_lean=False,require_isabelle=False,require_lrat=False):
+    if any(type(flag) is not bool for flag in (require_lean,require_isabelle,require_lrat)):raise ValueError('proof input')
+    a,b=Program(_validated_tree(a)),Program(_validated_tree(b))
     ring=proof_kernel.certify(a,b);checked=proof_kernel.verify_certificate(a,b,ring)
     try:solver=bitproof.prove(a,b)
     except (OSError,RuntimeError,subprocess.SubprocessError):solver={'status':'unavailable-or-timeout','proved':False}
@@ -74,11 +75,15 @@ def prove(a,b,*,require_lean=False,require_isabelle=False):
             'ring_certificate':ring if checked else None,'solver':solver,'lean':lean,'require_lean':require_lean,
             'domain_size':2**32,'definition':'pure function equality over BitVec 16 × BitVec 16'}
     if require_isabelle:result.update(isabelle=isa,require_isabelle=True)
+    if require_lrat:
+        certificate=lrat.prove(a,b)
+        result.update(lrat=certificate,require_lrat=True,proved=result['proved'] and certificate['proved'])
     return result
 
 
-def optimize(reference,*,budget=16,require_lean=False,require_isabelle=False):
-    if not isinstance(reference,Program) or type(budget) is not int or not 1<=budget<=32 or type(require_lean) is not bool or type(require_isabelle) is not bool:raise ValueError('proof search bounds')
+def optimize(reference,*,budget=16,require_lean=False,require_isabelle=False,require_lrat=False):
+    if not isinstance(reference,Program) or type(budget) is not int or not 1<=budget<=32 or type(require_lean) is not bool or type(require_isabelle) is not bool or type(require_lrat) is not bool:raise ValueError('proof search bounds')
+    reference=Program(_validated_tree(reference))
     def trees(t):
         yield t
         if len(t)==3:
@@ -87,16 +92,22 @@ def optimize(reference,*,budget=16,require_lean=False,require_isabelle=False):
     candidates=sorted((Program(t) for t in pool),key=lambda p:(p.size,repr(p.tree))); attempts=0
     for p in candidates:
         if p.size>=reference.size or attempts>=budget:break
-        attempts+=1;proof=prove(reference,p,require_lean=require_lean,require_isabelle=require_isabelle)
+        attempts+=1;proof=prove(reference,p,require_lean=require_lean,require_isabelle=require_isabelle,require_lrat=require_lrat)
         if proof['proved']:
             return {'promoted':True,'selected':json.loads(json.dumps(p.tree)),'attempts':attempts,'proof':proof}
     return {'promoted':False,'selected':json.loads(json.dumps(reference.tree)),'attempts':attempts,'proof':None}
 
 
-def verify(report):
-    """Reconstruct a positive decision; arbitrary supplied evidence is not trusted."""
+def verify(report, *, require_lrat=False):
+    """Replay evidence; external policy can require a native LRAT certificate."""
+    if type(require_lrat) is not bool:raise ValueError('proof policy')
     try:
-        if report.get('proved') is not True:return False
-        fresh=prove(bitproof._program(report['left']),bitproof._program(report['right']),require_lean=report['require_lean'],require_isabelle=report.get('require_isabelle',False))
+        if type(report) is not dict or report.get('proved') is not True:return False
+        if require_lrat and report.get('require_lrat') is not True:return False
+        a,b=bitproof._program(report['left']),bitproof._program(report['right'])
+        fresh=prove(a,b,require_lean=report['require_lean'],require_isabelle=report.get('require_isabelle',False))
+        if 'require_lrat' in report or 'lrat' in report:
+            if report.get('require_lrat') is not True or not fresh['proved'] or not lrat.verify(a,b,report['lrat']):return False
+            fresh.update(require_lrat=True,lrat=report['lrat'])
         return fresh==report
     except (ValueError,TypeError,KeyError,IndexError):return False
