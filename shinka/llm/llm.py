@@ -5,7 +5,6 @@ import asyncio
 from pydantic import BaseModel
 import time
 from .text import extract_between
-from .query import query, query_async
 from .kwargs import sample_model_kwargs
 from .providers import QueryResult
 from .providers.errors import NonRetryableLLMError, StructuredOutputNotSupportedError
@@ -13,6 +12,18 @@ from .providers.model_resolver import resolve_model_backend
 from .constants import MAX_RETRIES
 
 logger = logging.getLogger(__name__)
+
+
+def query(*args, **kwargs):
+    """Load the provider gateway only when an actual request is made."""
+    from .query import query as execute
+    return execute(*args, **kwargs)
+
+
+async def query_async(*args, **kwargs):
+    """Load the async provider gateway at the execution boundary."""
+    from .query import query_async as execute
+    return await execute(*args, **kwargs)
 
 
 def _validate_structured_output_models(

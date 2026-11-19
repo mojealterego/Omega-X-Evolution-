@@ -1,10 +1,24 @@
+from __future__ import annotations
+
 import logging
 import os
 import socket
 import threading
-from typing import Any
+from typing import Any, TYPE_CHECKING
+from importlib import import_module
 
-from google import genai
+if TYPE_CHECKING:
+    from google import genai
+
+
+def __getattr__(name):
+    if name == "genai":
+        return import_module("google.genai")
+    raise AttributeError(name)
+
+
+def _genai():
+    return globals().get("genai") or import_module("google.genai")
 
 
 logger = logging.getLogger(__name__)
@@ -226,9 +240,8 @@ def build_google_genai_client(
     location: str | None = None,
 ) -> genai.Client:
     """Build a Google GenAI client for either direct Gemini API or Vertex AI."""
-    kwargs: dict[str, Any] = {}
-    if timeout_ms is not None:
-        kwargs["http_options"] = genai.types.HttpOptions(timeout=timeout_ms)
+    def options(sdk):
+        return {"http_options": sdk.types.HttpOptions(timeout=timeout_ms)} if timeout_ms is not None else {}
 
     resolved_auth_mode = auth_mode or google_genai_auth_mode()
     if resolved_auth_mode == "vertexai":
@@ -250,8 +263,10 @@ def build_google_genai_client(
             raise ValueError(
                 "GOOGLE_CLOUD_LOCATION is required when GOOGLE_GENAI_USE_VERTEXAI is enabled."
             )
+        sdk = _genai()
+        kwargs = options(sdk)
         configure_google_genai_network()
-        return genai.Client(
+        return sdk.Client(
             vertexai=True,
             project=project,
             location=location,
@@ -269,5 +284,7 @@ def build_google_genai_client(
             "GOOGLE_GENAI_USE_VERTEXAI, GOOGLE_CLOUD_PROJECT, and "
             "GOOGLE_CLOUD_LOCATION for Vertex AI mode."
         )
+    sdk = _genai()
+    kwargs = options(sdk)
     configure_google_genai_network()
-    return genai.Client(api_key=api_key, **kwargs)
+    return sdk.Client(api_key=api_key, **kwargs)

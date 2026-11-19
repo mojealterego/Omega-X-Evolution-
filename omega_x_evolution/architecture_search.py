@@ -36,7 +36,7 @@ class Search:
         if type(create) is not bool:raise ValueError('create mode')
         self.path=Path(path);self.store=CheckpointStore(path,key);self.index=index;self.train=train;self.validation=validation;self.test=test;self.budget=budget;self.work_cap=work_cap
         root=Path(__file__).parent;self.contract=_hash([index.structure_sha256,[[asdict(c) for c in g] for g in (train,validation,test)],budget,work_cap,list(sys.version_info[:3]),np.__version__,*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('architecture.py','architecture_synthesis.py','architecture_search.py')]])
-        if create:self.store.initialize({'contract':self.contract,'evaluations':0,'work':0,'queue':[_wire(t) for t in LEAVES],'seen':[], 'best':None,'final':None})
+        if create:self.store.initialize({'contract':self.contract,'evaluations':0,'work':0,'queue':[_wire(t) for t in LEAVES],'seen':[], 'recent':None, 'best':None,'final':None})
         self.inspect()
     def _load(self):
         rev,s=self.store.load()
@@ -70,6 +70,20 @@ class Search:
                 children=[('prop',tree),('square',tree)]
                 for leaf in LEAVES:
                     children.extend((op,tree,leaf) for op in ('add','mul','max'))
+                # Periodic crossover joins two previously evaluated non-leaf
+                # trees. Insert a bounded number near the head without starving
+                # ordinary breadth expansion. Persist the parent across restarts.
+                previous=s['recent']
+                if len(tree)>1:
+                    s['recent']=raw
+                    if previous is not None and s['evaluations']%8==0:
+                        other=Plan.from_json(previous).tree
+                        for op in ('add','mul','max'):
+                            try:p=Plan((op,tree,other))
+                            except ValueError:continue
+                            v=_wire(p.tree);h=_hash(v)
+                            if len(s['queue'])<8192 and h not in seen and h not in queued:
+                                s['queue'].insert(min(16,len(s['queue'])),v);queued.add(h)
                 for child in children:
                     if len(s['queue'])>=8192:break
                     try:p=Plan(child)

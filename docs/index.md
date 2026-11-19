@@ -30,3 +30,5 @@ The v35.1 patch closes the bounded formal-safety acceptance requirements 1–4, 
 The v35.2 corrective patch extends the existing review requirements 5–12; see [implemented contracts and outstanding acceptance](omega/REMAINING_REQUIREMENTS_CLOSURE.md). No new roadmap stage.
 
 The v35.3 corrective release extends [residual acceptance gates](omega/RESIDUAL_ACCEPTANCE.md). No new roadmap stage.
+
+**v35.4:** [Residual recovery and acceptance evidence](omega/RESIDUAL_RECOVERY_V354.md): 320 OMEGA tests pass, 38 hardening tests pass; 1336 collected with 12 upstream collection errors. Bounded BFT recovery and composite architecture synthesis extended. External proof kernels, large pretrained training, general liveness, unrestricted synthesis and physical infrastructure remain open. v36 remains open.

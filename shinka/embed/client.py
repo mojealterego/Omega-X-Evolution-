@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import os
 from typing import Any, Optional, Tuple
 
-import openai
+from importlib import import_module
 
 from shinka.azure_openai_config import (
     azure_api_version,
@@ -81,15 +81,27 @@ def resolve_embedding_backend(model_name: str) -> ResolvedEmbeddingModel:
     )
 
 
+def __getattr__(name):
+    # Preserve the historical module attribute without loading SDKs for pure
+    # identifier resolution. Import errors propagate at the execution boundary.
+    if name == "openai":
+        return import_module("openai")
+    raise AttributeError(name)
+
+
+def _openai():
+    return globals().get("openai") or import_module("openai")
+
+
 def get_client_embed(model_name: str) -> Tuple[Any, str]:
     """Get the client and model for the given embedding model name."""
     resolved = resolve_embedding_backend(model_name)
     provider = resolved.provider
 
     if provider == "openai":
-        client = openai.OpenAI(timeout=TIMEOUT)
+        client = _openai().OpenAI(timeout=TIMEOUT)
     elif provider == "azure":
-        client = openai.AzureOpenAI(
+        client = _openai().AzureOpenAI(
             api_key=azure_openai_api_key(),
             api_version=azure_api_version(),
             azure_endpoint=azure_resource_endpoint(),
@@ -98,13 +110,13 @@ def get_client_embed(model_name: str) -> Tuple[Any, str]:
     elif provider == "google":
         client = build_google_genai_client(timeout_ms=_google_genai_timeout_ms(TIMEOUT))
     elif provider == "openrouter":
-        client = openai.OpenAI(
+        client = _openai().OpenAI(
             api_key=os.environ["OPENROUTER_API_KEY"],
             base_url="https://openrouter.ai/api/v1",
             timeout=TIMEOUT,
         )
     elif provider == "local_openai":
-        client = openai.OpenAI(
+        client = _openai().OpenAI(
             api_key=resolve_local_openai_api_key(resolved.api_key_env_name),
             base_url=resolved.base_url,
             timeout=TIMEOUT,
@@ -121,9 +133,9 @@ def get_async_client_embed(model_name: str) -> Tuple[Any, str]:
     provider = resolved.provider
 
     if provider == "openai":
-        client = openai.AsyncOpenAI()
+        client = _openai().AsyncOpenAI()
     elif provider == "azure":
-        client = openai.AsyncAzureOpenAI(
+        client = _openai().AsyncAzureOpenAI(
             api_key=azure_openai_api_key(),
             api_version=azure_api_version(),
             azure_endpoint=azure_resource_endpoint(),
@@ -132,13 +144,13 @@ def get_async_client_embed(model_name: str) -> Tuple[Any, str]:
         # Gemini doesn't have async client yet, will use thread pool in embedding.py
         client = build_google_genai_client(timeout_ms=_google_genai_timeout_ms(TIMEOUT))
     elif provider == "openrouter":
-        client = openai.AsyncOpenAI(
+        client = _openai().AsyncOpenAI(
             api_key=os.environ["OPENROUTER_API_KEY"],
             base_url="https://openrouter.ai/api/v1",
             timeout=TIMEOUT,
         )
     elif provider == "local_openai":
-        client = openai.AsyncOpenAI(
+        client = _openai().AsyncOpenAI(
             api_key=resolve_local_openai_api_key(resolved.api_key_env_name),
             base_url=resolved.base_url,
             timeout=TIMEOUT,

@@ -1,0 +1,728 @@
+BASE main 960b9f50404b2fa4e8047db2bc0a47fe0ab7c563
+3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]
+Linux-6.18.57-x86_64-with-glibc2.41
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 for OMEGA and native targeted suites.
+
+=== RED initial ===
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+___________ test_terminal_round_keeps_polling_for_certified_catchup ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_terminal_round_keeps_poll0')
+
+    def test_terminal_round_keeps_polling_for_certified_catchup(tmp_path):
+        from omega_x_evolution.bft import MAX_ROUND, leader, make_block, quorum
+        from omega_x_evolution.bft_transport import _dispatch
+        from omega_x_evolution.pacemaker import Pacemaker
+    
+        nodes = replicas(tmp_path)
+        members = sorted(nodes)
+        laggard = nodes[members[-1]]
+        active = [nodes[k] for k in members[:-1]]
+        state = laggard.inspect()['state']
+        for _ in range(MAX_ROUND - 1):
+            laggard.advance()
+        clock = [0.0]
+        network_available = [False]
+    
+        def call(peer, op, args):
+            if not network_available[0]:
+                raise OSError('partition')
+            return _dispatch(nodes[peer], op, args)
+    
+        driver = Pacemaker(laggard, call, clock=lambda: clock[0], base_timeout=1., max_timeout=1.)
+        clock[0] = 2.
+        assert driver.tick()['status'] == 'round-limit'
+    
+        class Stop:
+            polls = 0
+    
+            def is_set(self):
+                return False
+    
+            def wait(self, _poll):
+                self.polls += 1
+                if self.polls == 1:
+                    # Honest quorum makes progress while laggard is partitioned.
+                    p = nodes[leader(state, 0)].propose(make_block(state, []), [n.status() for n in active])
+                    block = p['body']['block']
+                    pv = quorum(state, [n.prevote(p) for n in active], phase='prevote')
+                    pc = quorum(state, [n.precommit(block, pv) for n in active], phase='precommit')
+                    for n in active:
+                        n.commit(block, pv, pc)
+                    network_available[0] = True
+                return self.polls == 2
+    
+        stop = Stop()
+        report = driver.run(stop, max_ticks=3)
+>       assert report['status'] == 'caught-up'
+E       AssertionError: assert 'round-limit' == 'caught-up'
+E         
+E         - caught-up
+E         + round-limit
+
+tests/test_omega_residual_recovery.py:53: AssertionError
+____________ test_offline_legacy_llm_module_and_embedding_resolver _____________
+
+    def test_offline_legacy_llm_module_and_embedding_resolver():
+        script = '''
+    import sys
+    from shinka.llm.llm import extract_between, LLMClient
+    from shinka.embed.client import resolve_embedding_backend
+    assert extract_between('```cpp\\nx\\n```', '```cpp', '```', False) == 'x'
+    assert LLMClient().model_names
+    assert resolve_embedding_backend('local/text@http://localhost:8080/v1').provider == 'local_openai'
+    assert not any(x in sys.modules for x in ('anthropic', 'openai', 'google.genai', 'instructor'))
+    '''
+        result = subprocess.run([sys.executable, '-c', script], capture_output=True, text=True, timeout=20)
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 3, in <module>
+E             from shinka.llm.llm import extract_between, LLMClient
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/llm.py", line 8, in <module>
+E             from .query import query, query_async
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/query.py", line 3, in <module>
+E             from .client import get_client_llm, get_async_client_llm
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/client.py", line 16, in <module>
+E             import anthropic
+E         ModuleNotFoundError: No module named 'anthropic'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport sys\nfrom shinka.llm.llm import extract_between, LLMC...inka/llm/client.py", line 16, in <module>\n    import anthropic\nModuleNotFoundError: No module named \'anthropic\'\n').returncode
+
+tests/test_omega_residual_recovery.py:69: AssertionError
+___________________ test_search_combines_two_novel_subtrees ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_search_combines_two_novel0')
+
+    def test_search_combines_two_novel_subtrees(tmp_path):
+        from omega_x_evolution.architecture import Case
+        from omega_x_evolution.architecture_search import Search
+        from omega_x_evolution.architecture_synthesis import SynthesizedIndex, Plan
+        from omega_x_evolution.graph_memory import GraphMemory
+    
+        memory = GraphMemory(tmp_path/'graph.db', b'm'*32, 'a')
+        a = memory.add('artifact', 'alpha bridge catalyst', {})
+        b = memory.add('artifact', 'beta bridge evidence', {})
+        memory.link(a, 'supports', b)
+        memory.add('artifact', 'temperature gamma unrelated', {})
+        index = SynthesizedIndex(memory)
+        splits = ((Case('alpha catalyst', b),), (Case('alpha bridge', b),), (Case('beta evidence', b),))
+        search = Search(tmp_path/'search.db', b's'*32, index, *splits, budget=256, create=True)
+        evaluated = []
+        orig = search._evaluate
+    
+        def capture(plan, group):
+            evaluated.append(plan.tree)
+            return orig(plan, group)
+    
+        search._evaluate = capture
+        search.step(256)
+>       assert any(len(t) == 3 and len(t[1]) > 1 and len(t[2]) > 1 for t in evaluated)
+E       assert False
+E        +  where False = any(<generator object test_search_combines_two_novel_subtrees.<locals>.<genexpr> at 0x7f445a927300>)
+
+tests/test_omega_residual_recovery.py:95: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_residual_recovery.py::test_terminal_round_keeps_polling_for_certified_catchup - AssertionError: assert 'round-limit' == 'caught-up'
+  
+  - caught-up
+  + round-limit
+FAILED tests/test_omega_residual_recovery.py::test_offline_legacy_llm_module_and_embedding_resolver - AssertionError: Traceback (most recent call last):
+    File "<string>", line 3, in <module>
+      from shinka.llm.llm import extract_between, LLMClient
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/llm.py", line 8, in <module>
+      from .query import query, query_async
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/query.py", line 3, in <module>
+      from .client import get_client_llm, get_async_client_llm
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/client.py", line 16, in <module>
+      import anthropic
+  ModuleNotFoundError: No module named 'anthropic'
+  
+assert 1 == 0
+ +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport sys\nfrom shinka.llm.llm import extract_between, LLMC...inka/llm/client.py", line 16, in <module>\n    import anthropic\nModuleNotFoundError: No module named \'anthropic\'\n').returncode
+FAILED tests/test_omega_residual_recovery.py::test_search_combines_two_novel_subtrees - assert False
+ +  where False = any(<generator object test_search_combines_two_novel_subtrees.<locals>.<genexpr> at 0x7f445a927300>)
+3 failed in 1.24s
+
+
+=== RED Google ===
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________________ test_google_auth_configuration_without_sdk __________________
+
+    def test_google_auth_configuration_without_sdk():
+        script = '''
+    import os, sys
+    os.environ.pop('GOOGLE_GENAI_USE_VERTEXAI', None)
+    os.environ.pop('GEMINI_API_KEY', None)
+    from shinka.google_genai import google_genai_auth_mode, build_google_genai_client
+    assert google_genai_auth_mode() == 'api_key'
+    try:
+        build_google_genai_client(auth_mode='api_key', api_key='')
+    except ValueError as exc:
+        assert 'GEMINI_API_KEY' in str(exc)
+    else:
+        raise AssertionError('credential check bypassed')
+    assert 'google.genai' not in sys.modules
+    '''
+        result = subprocess.run([sys.executable, '-c', script], capture_output=True, text=True, timeout=20)
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 5, in <module>
+E             from shinka.google_genai import google_genai_auth_mode, build_google_genai_client
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/google_genai.py", line 7, in <module>
+E             from google import genai
+E         ImportError: cannot import name 'genai' from 'google' (unknown location)
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport os, sys\nos.environ.pop('GOOGLE_GENAI_USE_VERTEXAI', ...module>\n    from google import genai\nImportError: cannot import name \'genai\' from \'google\' (unknown location)\n').returncode
+
+tests/test_omega_residual_recovery.py:114: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_residual_recovery.py::test_google_auth_configuration_without_sdk - AssertionError: Traceback (most recent call last):
+    File "<string>", line 5, in <module>
+      from shinka.google_genai import google_genai_auth_mode, build_google_genai_client
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/google_genai.py", line 7, in <module>
+      from google import genai
+  ImportError: cannot import name 'genai' from 'google' (unknown location)
+  
+assert 1 == 0
+ +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport os, sys\nos.environ.pop('GOOGLE_GENAI_USE_VERTEXAI', ...module>\n    from google import genai\nImportError: cannot import name \'genai\' from \'google\' (unknown location)\n').returncode
+1 failed, 3 deselected in 1.06s
+
+
+=== RED diff ===
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_upstream_runner_import_does_not_load_diff_parser _____________
+
+    def test_upstream_runner_import_does_not_load_diff_parser():
+        script = '''
+    import sys
+    from shinka.edit import summarize_diff
+    assert callable(summarize_diff)
+    assert 'unidiff' not in sys.modules
+    '''
+        result = subprocess.run([sys.executable, '-c', script], capture_output=True, text=True, timeout=20)
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 3, in <module>
+E             from shinka.edit import summarize_diff
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/edit/__init__.py", line 12, in __getattr__
+E             value = getattr(import_module(module, __name__), attr)
+E                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+E           File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+E             return _bootstrap._gcd_import(name[level:], package, level)
+E                    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/edit/summary.py", line 1, in <module>
+E             from unidiff import PatchSet
+E         ModuleNotFoundError: No module named 'unidiff'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport sys\nfrom shinka.edit import summarize_diff\nassert c...ummary.py", line 1, in <module>\n    from unidiff import PatchSet\nModuleNotFoundError: No module named \'unidiff\'\n').returncode
+
+tests/test_omega_residual_recovery.py:125: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_residual_recovery.py::test_upstream_runner_import_does_not_load_diff_parser - AssertionError: Traceback (most recent call last):
+    File "<string>", line 3, in <module>
+      from shinka.edit import summarize_diff
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/edit/__init__.py", line 12, in __getattr__
+      value = getattr(import_module(module, __name__), attr)
+                      ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+    File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+      return _bootstrap._gcd_import(name[level:], package, level)
+             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/edit/summary.py", line 1, in <module>
+      from unidiff import PatchSet
+  ModuleNotFoundError: No module named 'unidiff'
+  
+assert 1 == 0
+ +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport sys\nfrom shinka.edit import summarize_diff\nassert c...ummary.py", line 1, in <module>\n    from unidiff import PatchSet\nModuleNotFoundError: No module named \'unidiff\'\n').returncode
+1 failed, 4 deselected in 0.96s
+
+
+=== RED headless ===
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_headless_provider_gateway_is_independent_of_cloud_sdks __________
+
+    def test_headless_provider_gateway_is_independent_of_cloud_sdks():
+        script = '''
+    import sys
+    from shinka.llm.client import get_client_llm, get_async_client_llm
+    from shinka.llm.query import query, query_async
+    for get in (get_client_llm, get_async_client_llm):
+        client, name, provider = get('headless/claude')
+        assert client is None and name == 'headless/claude' and provider == 'headless'
+    assert callable(query) and callable(query_async)
+    assert not any(x in sys.modules for x in ('anthropic','openai','instructor','google.genai'))
+    '''
+        result = subprocess.run([sys.executable, '-c', script], capture_output=True, text=True, timeout=20)
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 3, in <module>
+E             from shinka.llm.client import get_client_llm, get_async_client_llm
+E           File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/client.py", line 16, in <module>
+E             import anthropic
+E         ModuleNotFoundError: No module named 'anthropic'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport sys\nfrom shinka.llm.client import get_client_llm, ge...inka/llm/client.py", line 16, in <module>\n    import anthropic\nModuleNotFoundError: No module named \'anthropic\'\n').returncode
+
+tests/test_omega_residual_recovery.py:140: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_residual_recovery.py::test_headless_provider_gateway_is_independent_of_cloud_sdks - AssertionError: Traceback (most recent call last):
+    File "<string>", line 3, in <module>
+      from shinka.llm.client import get_client_llm, get_async_client_llm
+    File "/tmp/omega/OMEGA-X-Evolution/shinka/llm/client.py", line 16, in <module>
+      import anthropic
+  ModuleNotFoundError: No module named 'anthropic'
+  
+assert 1 == 0
+ +  where 1 = CompletedProcess(args=['/opt/pyvenv/bin/python', '-c', "\nimport sys\nfrom shinka.llm.client import get_client_llm, ge...inka/llm/client.py", line 16, in <module>\n    import anthropic\nModuleNotFoundError: No module named \'anthropic\'\n').returncode
+1 failed, 5 deselected in 1.02s
+
+
+=== Full OMEGA: python -m pytest -q tests/test_omega*.py ===
+........................................................................ [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 67%]
+........................................................................ [ 90%]
+................................                                         [100%]
+320 passed in 115.99s (0:01:55)
+
+
+=== New regression tests: python -m pytest -q tests/test_omega_residual_recovery.py ===
+..........                                                               [100%]
+10 passed in 4.64s
+
+
+=== Hardening: python -m pytest -q tests/test_local_process_lifecycle.py tests/test_slurm_shell_safety.py tests/test_result_file_integrity.py tests/test_scheduler_env_activation.py ===
+......................................                                   [100%]
+38 passed in 3.84s
+
+
+=== Upstream collection: python -m pytest -q --collect-only ===
+s/test_wandb_database.py::test_wandb_sdk_operations_share_one_nonblocking_worker
+tests/test_wandb_database.py::test_wandb_candidate_queue_is_bounded_compact_and_rate_limited
+tests/test_wandb_database.py::test_wandb_population_queries_are_time_throttled_and_final_skips_delay
+tests/test_wandb_database.py::test_in_memory_population_query_failure_is_non_fatal
+tests/test_wandb_logging.py::test_wandb_logging_is_opt_in_and_does_not_configure_webui
+tests/test_wandb_logging.py::test_wandb_run_id_is_reused_and_can_be_overridden
+tests/test_wandb_logging.py::test_invalid_wandb_config_is_non_fatal
+tests/test_wandb_logging.py::test_wandb_history_failure_is_non_fatal_and_retryable
+tests/test_wandb_logging.py::test_wandb_history_skips_administrative_copies[_is_island_copy]
+tests/test_wandb_logging.py::test_wandb_history_skips_administrative_copies[_spawned_island]
+tests/test_wandb_logging.py::test_final_history_failure_does_not_suppress_summary_or_table
+tests/test_wandb_logging.py::test_final_summary_failure_does_not_suppress_table
+tests/test_wandb_logging.py::test_final_table_construction_failure_keeps_history_and_summary
+tests/test_wandb_logging.py::test_final_table_log_failure_is_non_fatal
+tests/test_wandb_logging.py::test_wandb_logger_dry_run_and_resume_use_fake_wandb
+tests/test_wandb_logging.py::test_wandb_online_logging_with_authenticated_sdk
+tests/test_wandb_metrics.py::test_program_payload_logs_one_compact_event_per_individual
+tests/test_wandb_metrics.py::test_program_payload_skips_bulky_values_and_duplicate_timing
+tests/test_wandb_metrics.py::test_population_progress_counts_copies_but_excludes_their_costs[_is_island_copy]
+tests/test_wandb_metrics.py::test_population_progress_counts_copies_but_excludes_their_costs[_spawned_island]
+tests/test_wandb_metrics.py::test_actual_headless_unknown_pricing_suppresses_only_api_cost
+tests/test_wandb_metrics.py::test_stale_headless_prompt_path_does_not_suppress_api_cost
+tests/test_wandb_metrics.py::test_program_payload_bounds_public_metrics_and_omits_private_metrics
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[apiKey]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[accessToken]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[clientSecret]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[AuthorizationHeader]
+tests/test_wandb_metrics.py::test_run_summary_uses_correct_programs_for_best_score
+tests/test_wandb_metrics.py::test_run_summary_preserves_legacy_api_cost_and_prefers_explicit_total
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_run_once_parses_bridge_output
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_scores_correct_candidate
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_rejects_wrong_answer
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_records_empty_output_as_failure
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_matches_sequential
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_worker_error_surfaces
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_keeps_default_save_output
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_verbose_false_suppresses_framework_stdout
+tests/test_wrap_eval_parallel.py::test_parallel_mode_rejects_early_stop
+tests/test_wrap_eval_parallel.py::test_invalid_worker_configuration_raises
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_loads_dataclass_with_postponed_annotations
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_returns_program_defined_types
+
+==================================== ERRORS ====================================
+_____________ ERROR collecting tests/test_anthropic_accounting.py ______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_anthropic_accounting.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_anthropic_accounting.py:8: in <module>
+    import shinka.llm.providers.anthropic as anthropic_provider
+shinka/llm/providers/anthropic.py:1: in <module>
+    import backoff
+E   ModuleNotFoundError: No module named 'backoff'
+____________ ERROR collecting tests/test_current_claude_requests.py ____________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_current_claude_requests.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_current_claude_requests.py:6: in <module>
+    import anthropic
+E   ModuleNotFoundError: No module named 'anthropic'
+______________ ERROR collecting tests/test_deepseek_accounting.py ______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_deepseek_accounting.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_deepseek_accounting.py:6: in <module>
+    import shinka.llm.providers.deepseek as deepseek_provider
+shinka/llm/providers/deepseek.py:1: in <module>
+    import backoff
+E   ModuleNotFoundError: No module named 'backoff'
+___________ ERROR collecting tests/test_embedding_client_backends.py ___________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_embedding_client_backends.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_embedding_client_backends.py:4: in <module>
+    import openai
+E   ModuleNotFoundError: No module named 'openai'
+_______________ ERROR collecting tests/test_endpoint_failures.py _______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_endpoint_failures.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_endpoint_failures.py:10: in <module>
+    import openai
+E   ModuleNotFoundError: No module named 'openai'
+________________ ERROR collecting tests/test_gemini_provider.py ________________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_gemini_provider.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_gemini_provider.py:6: in <module>
+    from google.genai import types
+E   ModuleNotFoundError: No module named 'google.genai'
+______________ ERROR collecting tests/test_gemini_retry_policy.py ______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_gemini_retry_policy.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_gemini_retry_policy.py:6: in <module>
+    from google.genai import types
+E   ModuleNotFoundError: No module named 'google.genai'
+______________ ERROR collecting tests/test_launch_hydra_async.py _______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_launch_hydra_async.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_launch_hydra_async.py:3: in <module>
+    from hydra import compose, initialize_config_dir
+E   ModuleNotFoundError: No module named 'hydra'
+_______________ ERROR collecting tests/test_llm_client_cache.py ________________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_llm_client_cache.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_llm_client_cache.py:14: in <module>
+    import instructor
+E   ModuleNotFoundError: No module named 'instructor'
+______________ ERROR collecting tests/test_llm_retry_constants.py ______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_llm_retry_constants.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_llm_retry_constants.py:15: in <module>
+    from shinka.llm.providers.anthropic import MAX_TIME as ANTHROPIC_MAX_TIME
+shinka/llm/providers/anthropic.py:1: in <module>
+    import backoff
+E   ModuleNotFoundError: No module named 'backoff'
+________________ ERROR collecting tests/test_openai_provider.py ________________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_openai_provider.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_openai_provider.py:5: in <module>
+    from shinka.llm.providers.openai import (
+shinka/llm/providers/openai.py:1: in <module>
+    import backoff
+E   ModuleNotFoundError: No module named 'backoff'
+_______________ ERROR collecting tests/test_packaging_release.py _______________
+ImportError while importing test module '/tmp/omega/OMEGA-X-Evolution/tests/test_packaging_release.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_packaging_release.py:13: in <module>
+    from shinka.cli import launch as cli_launch
+shinka/cli/launch.py:5: in <module>
+    from shinka import launch_hydra
+shinka/launch_hydra.py:2: in <module>
+    import hydra
+E   ModuleNotFoundError: No module named 'hydra'
+=========================== short test summary info ============================
+ERROR tests/test_anthropic_accounting.py
+ERROR tests/test_current_claude_requests.py
+ERROR tests/test_deepseek_accounting.py
+ERROR tests/test_embedding_client_backends.py
+ERROR tests/test_endpoint_failures.py
+ERROR tests/test_gemini_provider.py
+ERROR tests/test_gemini_retry_policy.py
+ERROR tests/test_launch_hydra_async.py
+ERROR tests/test_llm_client_cache.py
+ERROR tests/test_llm_retry_constants.py
+ERROR tests/test_openai_provider.py
+ERROR tests/test_packaging_release.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 12 errors during collection !!!!!!!!!!!!!!!!!!!
+1336 tests collected, 12 errors in 1.56s
+
+
+=== Earlier upstream targeted tests ===
+........................................................................ [ 37%]
+........................................................................ [ 75%]
+...............F..........................FF...                          [100%]
+=================================== FAILURES ===================================
+_____________________ test_summarize_diff_reads_utf8_patch _____________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f64fb77b1c0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-4/test_summarize_diff_reads_utf80')
+
+    def test_summarize_diff_reads_utf8_patch(monkeypatch, tmp_path: Path) -> None:
+        diff_path = tmp_path / "candidate.patch"
+        diff_path.write_text(
+            """--- a/original.py
+    +++ b/original.py
+    @@ -1 +1 @@
+    -print("plain")
+    +print("smart quote ”")
+    """,
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(summary_module, "open", _open_with_cp1252_default, raising=False)
+    
+>       summary = summary_module.summarize_diff(str(diff_path))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_unicode_io.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+diff_file_path = '/tmp/pytest-of-root/pytest-4/test_summarize_diff_reads_utf80/candidate.patch'
+
+    def summarize_diff(diff_file_path: str) -> dict:
+        # Missing dependency is an explicit execution-time error, never an empty summary.
+>       from unidiff import PatchSet
+E       ModuleNotFoundError: No module named 'unidiff'
+
+shinka/edit/summary.py:8: ModuleNotFoundError
+_________________ test_build_google_genai_client_uses_api_key __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f64fb778980>
+
+    def test_build_google_genai_client_uses_api_key(monkeypatch: pytest.MonkeyPatch):
+        captured_kwargs = {}
+        fake_client = object()
+        configured_policies = []
+    
+        class _FakeHttpOptions:
+            def __init__(self, **kwargs):
+                self.timeout = kwargs["timeout"]
+    
+        def _fake_client(**kwargs):
+            captured_kwargs.update(kwargs)
+            return fake_client
+    
+        def _fake_configure_google_genai_network():
+            configured_policies.append("system")
+            return "system"
+    
+        monkeypatch.delenv("GOOGLE_GENAI_USE_VERTEXAI", raising=False)
+        monkeypatch.setenv("GEMINI_API_KEY", "test-gemini-key")
+>       monkeypatch.setattr(google_genai_module.genai.types, "HttpOptions", _FakeHttpOptions)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_google_genai.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shinka/google_genai.py:16: in __getattr__
+    return import_module("google.genai")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'google.genai', import_ = <function _gcd_import at 0x7f6519b904a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'google.genai'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_________________ test_build_google_genai_client_uses_vertexai _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f64f8483770>
+
+    def test_build_google_genai_client_uses_vertexai(monkeypatch: pytest.MonkeyPatch):
+        captured_kwargs = {}
+        fake_client = object()
+    
+        class _FakeHttpOptions:
+            def __init__(self, **kwargs):
+                self.timeout = kwargs["timeout"]
+    
+        def _fake_client(**kwargs):
+            captured_kwargs.update(kwargs)
+            return fake_client
+    
+        monkeypatch.setenv("GOOGLE_GENAI_USE_VERTEXAI", "1")
+        monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "test-project")
+        monkeypatch.setenv("GOOGLE_CLOUD_LOCATION", "us-central1")
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+>       monkeypatch.setattr(google_genai_module.genai.types, "HttpOptions", _FakeHttpOptions)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_google_genai.py:202: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shinka/google_genai.py:16: in __getattr__
+    return import_module("google.genai")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'google.genai', import_ = <function _gcd_import at 0x7f6519b904a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'google.genai'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_unicode_io.py::test_summarize_diff_reads_utf8_patch - ModuleNotFoundError: No module named 'unidiff'
+FAILED tests/test_google_genai.py::test_build_google_genai_client_uses_api_key - ModuleNotFoundError: No module named 'google.genai'
+FAILED tests/test_google_genai.py::test_build_google_genai_client_uses_vertexai - ModuleNotFoundError: No module named 'google.genai'
+3 failed, 188 passed in 1.64s
+
+
+=== Headless/routing tests ===
+.................F                                                       [100%]
+=================================== FAILURES ===================================
+_____________ test_shinka_run_full_headless_cli_mutation_succeeds ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-5/test_shinka_run_full_headless_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3005425f40>
+
+    @pytest.mark.integration
+    def test_shinka_run_full_headless_cli_mutation_succeeds(tmp_path, monkeypatch):
+        fake_headless = _make_fake_headless(tmp_path)
+        task_dir = _make_task_dir(tmp_path)
+        results_dir = tmp_path / "results"
+        monkeypatch.setenv("SHINKA_HEADLESS_COMMAND", _fake_headless_command(fake_headless))
+        monkeypatch.setenv("SHINKA_HEADLESS_TIMEOUT", "10")
+    
+        exit_code = cli_run.main(
+            [
+                "--task-dir",
+                str(task_dir),
+                "--results_dir",
+                str(results_dir),
+                "--num_generations",
+                "2",
+                "--max-evaluation-jobs",
+                "1",
+                "--max-proposal-jobs",
+                "1",
+                "--max-db-workers",
+                "1",
+                "--no-verbose",
+                "--set",
+                'evo.llm_models=["headless/codex@test-model?effort=low"]',
+                "--set",
+                "evo.llm_dynamic_selection=null",
+                "--set",
+                "evo.embedding_model=null",
+                "--set",
+                'evo.patch_types=["full"]',
+                "--set",
+                "evo.patch_type_probs=[1.0]",
+                "--set",
+                "evo.max_patch_resamples=1",
+                "--set",
+                "evo.max_novelty_attempts=1",
+                "--set",
+                "evo.max_patch_attempts=1",
+                "--set",
+                "db.num_islands=1",
+                "--set",
+                "db.archive_size=4",
+            ]
+        )
+    
+>       assert exit_code == 0
+E       assert 1 == 0
+
+tests/test_headless_provider.py:354: AssertionError
+----------------------------- Captured stdout call -----------------------------
+
+░██████╗██╗░░██╗██╗███╗░░██╗██╗░░██╗░█████╗░   ░█████╗░██╗░░░░░██╗
+██╔════╝██║░░██║██║████╗░██║██║░██╔╝██╔══██╗   ██╔══██╗██║░░░░░██║
+╚█████╗░███████║██║██╔██╗██║█████═╝░███████║   ██║░░╚═╝██║░░░░░██║
+░╚═══██╗██╔══██║██║██║╚████║██╔═██╗░██╔══██║   ██║░░██╗██║░░░░░██║
+██████╔╝██║░░██║██║██║░╚███║██║░╚██╗██║░░██║   ╚█████╔╝███████╗██║
+╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░╚═╝   ░╚════╝░╚══════╝╚═╝
+
+              Parent & Context Sampling Summary - Gen 1 | Total Cost: $0.00 (Nov
+┏━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Role        ┃ Gen  ┃ Island  ┃  ✓/✗  ┃    Score ┃ Patch Name                  
+┡━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+│ PARENT      │  0   │   I-0   │   ✓   │    0.000 │ initial_program             
+└─────────────┴──────┴─────────┴───────┴──────────┴─────────────────────────────
+------------------------------ Captured log call -------------------------------
+WARNING  shinka.pricing.catalog:catalog.py:287 models.dev pricing refresh failed; using fallback: [Errno -3] Temporary failure in name resolution
+WARNING  shinka.database.async_dbase:async_dbase.py:427 Could not calculate complexity for program d8401ffb-7713-41f0-8228-bb0d5a777392: No module named 'radon'
+WARNING  shinka.database.dbase:dbase.py:834 Program d8401ffb-7713-41f0-8228-bb0d5a777392 embedding is not a list, defaulting to empty list.
+ERROR    shinka.core.async_runner:async_runner.py:3899 Error in async patch generation: No module named 'unidiff'
+WARNING  shinka.core.async_runner:async_runner.py:3053 Failed to generate proposal for generation 1 after all attempts
+WARNING  shinka.core.async_runner:async_runner.py:2464 Generation budget exhausted before reaching target completed generations: completed=1, target=2, next_generation=2, missing_generations=[1]. Stopping without oversampling additional generations.
+ERROR    shinka.core.async_runner:async_runner.py:5961 ASYNC EVOLUTION FAILED: no evolved program was produced; seed programs do not count as evolution success
+=========================== short test summary info ============================
+FAILED tests/test_headless_provider.py::test_shinka_run_full_headless_cli_mutation_succeeds - assert 1 == 0
+1 failed, 17 passed in 15.37s
+
+
+=== SHA256 changed runtime and regression source ===
+4b9425b8119f3aa83e621bd9992c1ba6d5ebb8f17eb1f04aa33a1a6ba52f21d1  omega_x_evolution/__init__.py
+5f38f98cb9b0219c77aff19602a8ce10e9327331e64a92a5af9e148b57afffb4  omega_x_evolution/architecture_search.py
+f1b97bce34a1547c9bd919b3e3c590c2edd37d011fca1351a5d91e2b784c6958  omega_x_evolution/pacemaker.py
+12ab9a19b412077d016f4ec4dc0b60dda96b7fed9c46b58beed43b005dcc6ee7  shinka/edit/summary.py
+1000fee7e1fe5f66871823562273f0afbc36671992104500d4c2bc69e0fe7d9a  shinka/embed/client.py
+b7ed9fc770f52bac11eea332f1d52c1351448cd99ccb25f566454c4f39ae7aa8  shinka/google_genai.py
+35facbddacc1b56c8334f15be6ac07bee130ebf9a56b01c5307ba02f06166228  shinka/llm/client.py
+46f4b4a476dd77cf06f0d8e3adb3a2e57d6610ee8153f9206b0affbcd7e6990c  shinka/llm/llm.py
+10e04186147a2e2b5e5950a02755e5c8d3d1d368b7658296dafb60fa71ad5906  shinka/llm/query.py
+f8b9e48e9b60775da476f96c1748bb06ccb458b3272f500b96cc956c924ecf8f  tests/test_omega_residual_recovery.py

@@ -109,7 +109,8 @@ class Pacemaker:
         for _ in range(max_ticks):
             if stop.is_set():break
             last=self.tick()
-            if last['status'] in ('height-limit','round-limit'):break
+            # Round exhaustion limits local voting, not certified catch-up.
+            if last['status']=='height-limit':break
             if stop.wait(poll):break
         return last
 

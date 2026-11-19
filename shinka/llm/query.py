@@ -1,25 +1,40 @@
 from typing import List, Optional, Dict
 from pydantic import BaseModel
 from .client import get_client_llm, get_async_client_llm
-from .providers import (
-    query_anthropic,
-    query_openai,
-    query_deepseek,
-    query_gemini,
-    query_headless,
-    query_local_openai,
-    query_anthropic_async,
-    query_openai_async,
-    query_deepseek_async,
-    query_gemini_async,
-    query_headless_async,
-    query_local_openai_async,
-    QueryResult,
-)
+from .providers.result import QueryResult
+from . import providers
 import logging
 
 logger = logging.getLogger(__name__)
 
+
+
+def _lazy_sync(name):
+    def invoke(*args, **kwargs):
+        return getattr(providers, name)(*args, **kwargs)
+    return invoke
+
+
+def _lazy_async(name):
+    async def invoke(*args, **kwargs):
+        return await getattr(providers, name)(*args, **kwargs)
+    return invoke
+
+
+# Keep the historical patchable routing symbols, but import only the selected
+# provider when a real request crosses the provider boundary.
+query_anthropic = _lazy_sync("query_anthropic")
+query_anthropic_async = _lazy_async("query_anthropic_async")
+query_openai = _lazy_sync("query_openai")
+query_openai_async = _lazy_async("query_openai_async")
+query_deepseek = _lazy_sync("query_deepseek")
+query_deepseek_async = _lazy_async("query_deepseek_async")
+query_gemini = _lazy_sync("query_gemini")
+query_gemini_async = _lazy_async("query_gemini_async")
+query_headless = _lazy_sync("query_headless")
+query_headless_async = _lazy_async("query_headless_async")
+query_local_openai = _lazy_sync("query_local_openai")
+query_local_openai_async = _lazy_async("query_local_openai_async")
 
 def query(
     model_name: str,

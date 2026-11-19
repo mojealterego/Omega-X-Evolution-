@@ -1,11 +1,12 @@
-from unidiff import PatchSet
-from unidiff.errors import UnidiffParseError
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 def summarize_diff(diff_file_path: str) -> dict:
+    # Missing dependency is an explicit execution-time error, never an empty summary.
+    from unidiff import PatchSet
+    from unidiff.errors import UnidiffParseError
     summary = {}
     try:
         with open(diff_file_path, "r", encoding="utf-8") as f:

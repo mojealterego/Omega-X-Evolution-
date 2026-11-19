@@ -13,9 +13,8 @@ import threading
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
-import anthropic
-import instructor
-import openai
+import sys
+from importlib import import_module
 
 from shinka.azure_openai_config import azure_openai_api_key, azure_v1_base_url
 from shinka.env import load_shinka_dotenv
@@ -120,30 +119,45 @@ def _identity_digest(spec: _ClientSpec) -> str:
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
-def _sync_constructors() -> dict[str, Any]:
-    return {
-        "anthropic": anthropic.Anthropic,
-        "bedrock": anthropic.AnthropicBedrock,
-        "openai": openai.OpenAI,
-        "azure_openai": openai.OpenAI,
-        "deepseek": openai.OpenAI,
-        "openrouter": openai.OpenAI,
-        "local_openai": openai.OpenAI,
-        "google": build_google_genai_client,
-    }
+def __getattr__(name):
+    if name in {"anthropic", "instructor", "openai"}:
+        return import_module(name)
+    raise AttributeError(name)
 
 
-def _async_constructors() -> dict[str, Any]:
-    return {
-        "anthropic": anthropic.AsyncAnthropic,
-        "bedrock": anthropic.AsyncAnthropicBedrock,
-        "openai": openai.AsyncOpenAI,
-        "azure_openai": openai.AsyncOpenAI,
-        "deepseek": openai.AsyncOpenAI,
-        "openrouter": openai.AsyncOpenAI,
-        "local_openai": openai.AsyncOpenAI,
-        "google": build_google_genai_client,
-    }
+def _sdk(name):
+    return globals().get(name) or import_module(name)
+
+
+_CONSTRUCTOR_NAMES = {
+    "anthropic": ("anthropic", "Anthropic"),
+    "bedrock": ("anthropic", "AnthropicBedrock"),
+    **{provider: ("openai", "OpenAI") for provider in (
+        "openai", "azure_openai", "deepseek", "openrouter", "local_openai"
+    )},
+}
+
+
+def _constructors(provider=None, *, asynchronous=False):
+    # Loading a provider never requires an unrelated SDK. The no-argument
+    # compatibility helper intentionally exposes all installed constructors.
+    names = tuple(_CONSTRUCTOR_NAMES) + ("google",) if provider is None else (provider,)
+    result = {}
+    for name in names:
+        if name == "google":
+            result[name] = build_google_genai_client
+        elif name in _CONSTRUCTOR_NAMES:
+            sdk, constructor = _CONSTRUCTOR_NAMES[name]
+            result[name] = getattr(_sdk(sdk), ("Async" if asynchronous else "") + constructor)
+    return result
+
+
+def _sync_constructors(provider=None) -> dict[str, Any]:
+    return _constructors(provider)
+
+
+def _async_constructors(provider=None) -> dict[str, Any]:
+    return _constructors(provider, asynchronous=True)
 
 
 def _resolve_client_spec(
@@ -322,6 +336,8 @@ def _build_client(spec: _ClientSpec) -> Any:
 
 
 def _wrap_structured_client(provider: str, client: Any) -> Any:
+    if provider in {"anthropic", "bedrock", "openai", "azure_openai", "deepseek", "openrouter"}:
+        instructor = _sdk("instructor")
     if provider in {"anthropic", "bedrock"}:
         return instructor.from_anthropic(
             client, mode=instructor.mode.Mode.ANTHROPIC_JSON
@@ -344,7 +360,7 @@ def get_client_llm(
     """Return a process-local synchronous client and resolved model metadata."""
     resolved = resolve_model_backend(model_name)
     spec = _resolve_client_spec(
-        resolved.provider, structured_output, resolved, _sync_constructors()
+        resolved.provider, structured_output, resolved, _sync_constructors(resolved.provider)
     )
     cache_key = _client_cache_key(spec, _build_sync_client)
     if cache_key is None:
@@ -370,7 +386,7 @@ def get_async_client_llm(
     """Return an event-loop-local asynchronous client and model metadata."""
     resolved = resolve_model_backend(model_name)
     spec = _resolve_client_spec(
-        resolved.provider, structured_output, resolved, _async_constructors()
+        resolved.provider, structured_output, resolved, _async_constructors(resolved.provider)
     )
     cache_key = _client_cache_key(spec, _build_async_client)
     try:
@@ -397,7 +413,8 @@ def get_async_client_llm(
 
 
 def _underlying_transport(client: Any) -> Any:
-    if isinstance(client, (instructor.Instructor, instructor.AsyncInstructor)):
+    instructor = globals().get("instructor") or sys.modules.get("instructor")
+    if instructor is not None and isinstance(client, (instructor.Instructor, instructor.AsyncInstructor)):
         return client.client
     return client
 

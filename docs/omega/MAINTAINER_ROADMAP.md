@@ -26,3 +26,5 @@ These are distinct acceptance gates, not promises of physical validation, consci
 The maintainer requires sequential closure of the review list before proceeding. Requirements 1–4 map to v26/v33; see [formal safety closure](FORMAL_SAFETY_CLOSURE.md). The v35.1 patch did not address points 5–12 or v36. The v35.2 corrective release extends points 5–12; see [requirement-by-requirement evidence and residual gates](REMAINING_REQUIREMENTS_CLOSURE.md). v36 remains open.
 
 The v35.3 corrective release addresses residual acceptance without adding a stage: [scope, tests and remaining blockers](RESIDUAL_ACCEPTANCE.md). v36 remains open.
+
+**v35.4:** [Residual recovery and acceptance evidence](RESIDUAL_RECOVERY_V354.md): 320 OMEGA tests pass, 38 hardening tests pass; 1336 collected with 12 upstream collection errors. Bounded BFT recovery and composite architecture synthesis extended. External proof kernels, large pretrained training, general liveness, unrestricted synthesis and physical infrastructure remain open. v36 remains open.
