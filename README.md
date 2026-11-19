@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v6%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v9%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v6
+## Current implementation — v9
 
 | Component | Capability |
 |---|---|
@@ -46,9 +46,11 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Parallelism | Local process pool and authenticated network worker protocol, durable leases, deterministic commits |
 | Meta-agent | Bounded mutation of operator workflows with independent seed promotion |
 | AST/IR | Binary64-preserving source rewrites and common-subexpression elimination |
-| Knowledge export | SFT and DPO records, without automatic training |
+| Formal verification | Nine Z3-checked binary64 rewrite families and independent IR verification |
+| Knowledge distillation | Offline categorical teacher/student operator model plus SFT/DPO export |
+| Multilevel coevolution | Role-specific workflows, migrating team demes, fixed validation promotion |
 
-**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, general agent self-rewriting, formal proofs and end-to-end model training remain out of scope.
+**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, general agent self-rewriting, formal verification of arbitrary programs and end-to-end neural model training remain out of scope.
 
 ## Roadmap
 
@@ -58,9 +60,9 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v4.1 | Distributed evaluation | Implemented within bounded protocol; local network/process/TLS verification |
 | v5 | Meta-agent evolution | Bounded operator workflow evolution implemented and verified |
 | v6 | AST/IR superoptimization | Bounded binary64 rewrite + DAG IR implemented and verified |
-| v7 | Formal verification | Open |
-| v8 | Knowledge distillation | Open |
-| v9 | Multilevel coevolution | Open |
+| v7 | Formal verification | Bounded rewrite rule proofs and IR checker implemented |
+| v8 | Knowledge distillation | Categorical operator student fitted and evaluated offline |
+| v9 | Multilevel coevolution | Three-level bounded team evolution implemented and evaluated |
 | v10 | Recursive self-improvement with fixed promotion gates | Open |
 | v11 | Comparative benchmarks | Open |
 | v12 | Scientific Discovery Engine | Open |
@@ -93,6 +95,16 @@ python -m omega_x_evolution.superopt '(-(-(x*1))/1)+(x+y)*(x+y)'
 
 See [v4.1–v6 deployment and acceptance scope](docs/omega/EVOLUTION_V41_V6.md) before enabling network endpoints. The canonical offline engine requires only the standard library; legacy upstream components retain their dependencies.
 
+## v7–v9 research commands
+
+```bash
+omega-x-formal --rules
+omega-x-knowledge --records-per-seed 12
+omega-x-multilevel --rounds 3 --demes 3 --population 4 --generations 2
+```
+
+Certified optimization requires a system Z3 shared library. See the [scope and instructions](docs/omega/EVOLUTION_V7_V9.md).
+
 ## Verification
 
 ```bash
@@ -101,10 +113,11 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v6.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, neural model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v9.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v7–v9 implementation and evidence](docs/omega/EVOLUTION_V7_V9.md)
 - [v4.1–v6 implementation, benchmarks and operating instructions](docs/omega/EVOLUTION_V41_V6.md)
 - [Namespace and packaging migration](docs/omega/IDENTITY_MIGRATION.md)
 - [OMEGA-X coevolution architecture](docs/OMEGA_COEVOLUTION.md)

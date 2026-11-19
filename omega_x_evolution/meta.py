@@ -34,7 +34,7 @@ class Workflow:
         return Workflow(tuple(ops),self.attempts)
 
 
-def proposal_for(workflow):
+def proposal_for(workflow, *, require_proof=False):
     async def propose(role,prompt,seed):
         parent=json.loads(prompt)['parent']; rng=random.Random(seed)
         Expression(parent)
@@ -54,7 +54,10 @@ def proposal_for(workflow):
                     swapped=candidate.translate(str.maketrans('xy','yx'))
                     candidate=f'(({candidate})+({swapped}))/2'
                 elif op=='simplify':
-                    from .superopt import optimize
+                    if require_proof:
+                        from .formal import verified_optimize as optimize
+                    else:
+                        from .superopt import optimize
                     candidate=optimize(candidate).source
                 try: Expression(candidate)
                 except ValueError: candidate=parent

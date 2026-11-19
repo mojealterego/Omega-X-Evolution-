@@ -19,7 +19,7 @@ Start a local source-checkout experiment:
 python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-The v6 development snapshot now includes authenticated remote evaluation, durable leases, bounded workflow evolution and AST/IR optimization. See [v4.1–v6 operations and evidence](omega/EVOLUTION_V41_V6.md). The next roadmap milestone is v7 formal verification.
+The v6 development snapshot now includes authenticated remote evaluation, durable leases, bounded workflow evolution and AST/IR optimization. See [v4.1–v6 operations and evidence](omega/EVOLUTION_V41_V6.md). The v9 snapshot adds bounded [formal verification, knowledge distillation and multilevel coevolution](omega/EVOLUTION_V7_V9.md). The next milestone is v10 controlled recursive self-improvement.
 
 ## Imported foundation
 

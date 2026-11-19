@@ -1,0 +1,927 @@
+{
+  "training_seeds": [
+    41,
+    42
+  ],
+  "validation_seeds": [
+    51,
+    52
+  ],
+  "student_digest": "774c153e39e1dde6ea5adb2acc0ba5f6f061c4840a0154356dc032e301872abf",
+  "prior": {
+    "fast": {
+      "operators": [
+        "ratio"
+      ],
+      "attempts": 1
+    },
+    "deep": {
+      "operators": [
+        "ratio"
+      ],
+      "attempts": 1
+    }
+  },
+  "history": [
+    {
+      "round": 0,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9303150037139918,
+          0.9947175433831064,
+          38
+        ],
+        [
+          0.9292929365948066,
+          0.993458513780811,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          38
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "simplify",
+            "sample",
+            "simplify"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "sample"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.876865569422272,
+          0.9054253288837864,
+          38
+        ],
+        [
+          0.842080136661012,
+          0.8460131631730556,
+          46
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "refine",
+            "simplify",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.637934555653685,
+          0.5534947537889436,
+          30
+        ],
+        [
+          0.6363487840032263,
+          0.5847433830765332,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "simplify",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "symmetry"
+          ],
+          "attempts": 2
+        }
+      },
+      "training": [
+        [
+          0.9303150037139918,
+          0.9947175433831064,
+          30
+        ],
+        [
+          0.9285928324668813,
+          0.9920629098376756,
+          38
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "refine",
+            "refine"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "sample"
+          ],
+          "attempts": 2
+        }
+      },
+      "training": [
+        [
+          0.887393326206726,
+          0.9289099748180638,
+          38
+        ],
+        [
+          0.8409562632428206,
+          0.871961075066849,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9324999999999999,
+          1.0,
+          34
+        ],
+        [
+          0.9283675869405208,
+          0.9912096615944376,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "simplify"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "simplify",
+            "ratio",
+            "simplify"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9151580725675996,
+          0.9634074681945599,
+          38
+        ],
+        [
+          0.9279060951996088,
+          0.9907050798286408,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "refine"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.8188876585279733,
+          0.8064242753949753,
+          38
+        ],
+        [
+          0.8158257396024031,
+          0.8418130038049042,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 0,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio",
+            "symmetry"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        }
+      },
+      "training": [
+        [
+          0.9274958170966257,
+          0.9886131753708491,
+          38
+        ],
+        [
+          0.931480918355716,
+          0.9978947864002926,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "simplify",
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          38
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 4
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9317159637756087,
+          0.9981293024661154,
+          38
+        ],
+        [
+          0.9304914471423282,
+          0.9958744810870424,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          34
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 3
+        }
+      },
+      "training": [
+        [
+          0.9324999999999999,
+          1.0,
+          38
+        ],
+        [
+          0.9283675869405208,
+          0.9912096615944376,
+          46
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.7907144415839985,
+          0.8094282443126817,
+          34
+        ],
+        [
+          0.6270384574638745,
+          0.5708223981645912,
+          46
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 3
+        }
+      },
+      "training": [
+        [
+          0.9324999999999999,
+          1.0,
+          38
+        ],
+        [
+          0.9283675869405208,
+          0.9912096615944376,
+          50
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "simplify",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          34
+        ],
+        [
+          0.9283675869405208,
+          0.9912096615944376,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "deme": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 2
+        }
+      },
+      "training": [
+        [
+          0.9324999999999999,
+          1.0,
+          38
+        ],
+        [
+          0.9283675869405208,
+          0.9912096615944376,
+          46
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "refine",
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          34
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "deme": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "refine",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          30
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          38
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "simplify",
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          34
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          42
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "deme": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      },
+      "training": [
+        [
+          0.9321094513224175,
+          0.999071472792405,
+          34
+        ],
+        [
+          0.9319866097717009,
+          0.9989363355591887,
+          38
+        ]
+      ]
+    }
+  ],
+  "migrations": [
+    {
+      "round": 0,
+      "from": 2,
+      "to": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "round": 0,
+      "from": 0,
+      "to": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "round": 0,
+      "from": 1,
+      "to": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "round": 1,
+      "from": 2,
+      "to": 0,
+      "team": {
+        "fast": {
+          "operators": [
+            "ratio"
+          ],
+          "attempts": 2
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "round": 1,
+      "from": 0,
+      "to": 1,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "refine"
+          ],
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "round": 1,
+      "from": 1,
+      "to": 2,
+      "team": {
+        "fast": {
+          "operators": [
+            "sample",
+            "sample",
+            "ratio"
+          ],
+          "attempts": 1
+        },
+        "deep": {
+          "operators": [
+            "ratio",
+            "sample",
+            "symmetry"
+          ],
+          "attempts": 1
+        }
+      }
+    }
+  ],
+  "challenger": {
+    "fast": {
+      "operators": [
+        "sample",
+        "sample",
+        "ratio"
+      ],
+      "attempts": 1
+    },
+    "deep": {
+      "operators": [
+        "refine",
+        "symmetry"
+      ],
+      "attempts": 1
+    }
+  },
+  "validation_baseline": [
+    [
+      0.8063478807691251,
+      0.8448109879725936,
+      50
+    ],
+    [
+      0.8405677540577827,
+      0.8071838215535929,
+      38
+    ]
+  ],
+  "validation_candidate": [
+    [
+      0.9187970046747134,
+      0.9859387693473587,
+      34
+    ],
+    [
+      0.9199903256558373,
+      0.9767864922617736,
+      26
+    ]
+  ],
+  "promoted": true,
+  "selected": {
+    "fast": {
+      "operators": [
+        "sample",
+        "sample",
+        "ratio"
+      ],
+      "attempts": 1
+    },
+    "deep": {
+      "operators": [
+        "refine",
+        "symmetry"
+      ],
+      "attempts": 1
+    }
+  },
+  "runs": 48,
+  "run_bound": 76,
+  "teacher_evaluations": 80,
+  "proposal_credit_bound": 76000
+}

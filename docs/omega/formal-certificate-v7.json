@@ -1,0 +1,8 @@
+{
+  "proved": true,
+  "source_sha256": "6bb70acfa1e86a5c8508ecb71beeb9d92eca60f1d1baff5a20640d868b2fa697",
+  "target_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+  "rule_digest": "e76e5d315f8b75c79da27476d3098d09bb92e2d1d3caf6a1a06cd576d3a1e52a",
+  "reason": "same proved normal form",
+  "ir_verified": true
+}

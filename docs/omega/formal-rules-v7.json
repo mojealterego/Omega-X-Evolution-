@@ -1,0 +1,11 @@
+{
+  "positive": "unsat",
+  "double_negative": "unsat",
+  "multiply_one": "unsat",
+  "divide_one": "unsat",
+  "multiply_negative_one": "unsat",
+  "divide_negative_one": "unsat",
+  "absolute_idempotent": "unsat",
+  "absolute_negative": "unsat",
+  "identical_min_max": "unsat"
+}

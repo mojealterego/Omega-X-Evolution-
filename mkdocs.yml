@@ -88,6 +88,7 @@ nav:
   - OMEGA-X:
       - Identity Migration: omega/IDENTITY_MIGRATION.md
       - v4.1–v6: omega/EVOLUTION_V41_V6.md
+      - v7–v9: omega/EVOLUTION_V7_V9.md
       - Coevolution: OMEGA_COEVOLUTION.md
       - Runtime Hardening: OMEGA_HARDENING.md
       - Research Traceability: omega/RESEARCH_TRACEABILITY_v4.md
