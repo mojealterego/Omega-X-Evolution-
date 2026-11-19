@@ -65,8 +65,8 @@ class Pacemaker:
                         self.replica.advance_certified(cert);self._reset();return report('advanced')
                 except _ERRORS:continue
         expired=self.clock()>=self.deadline or f'{r}:timeout' in d['votes']
-        if expired:
-            if r>=MAX_ROUND-1:return report('round-limit')
+        terminal_expired=expired and r==MAX_ROUND-1
+        if expired and not terminal_expired:
             own=self.replica.timeout_vote();votes={me:own}
             for who,v in views.items():
                 try:
@@ -76,7 +76,10 @@ class Pacemaker:
                 except _ERRORS:continue
             try:cert=timeout_quorum(s,list(votes.values()),r);self.replica.advance_certified(cert);self._reset();return report('advanced')
             except ValueError:return report('waiting-timeout-quorum')
-        if me!=leader(s,r):return report('waiting-leader')
+        # The last round cannot issue a timeout vote or advance. Its leader
+        # must remain able to retry the same durable proposal after quorum
+        # restoration. No vote or round limits are relaxed.
+        if me!=leader(s,r):return report('round-limit' if terminal_expired else 'waiting-leader')
         status=self._gather(tuple(s['members']),'status',[]);usable={}
         for who,raw in status.items():
             try:
@@ -85,7 +88,7 @@ class Pacemaker:
                 verify(who,b,raw['signature']);_valid(s,b['valid'],r);usable[who]=raw
             except _ERRORS:continue
         try:
-            if len(usable)<len(s['members'])-s['faults']:return report('waiting-status-quorum')
+            if len(usable)<len(s['members'])-s['faults']:return report('round-limit' if terminal_expired else 'waiting-status-quorum')
             # Retry the same persisted proposal, never emit a new signed value.
             p=self.replica.inspect()['votes'].get(f'{r}:proposal')
             if p is None:p=self.replica.propose(make_block(s,recover_ops(s,tuple(usable)) if ops is None else ops),list(usable.values()))
@@ -102,7 +105,7 @@ class Pacemaker:
             self.replica.commit(b,pv,pc)
             self._gather(tuple(x for x in s['members'] if x!=me),'commit',[b,pv,pc]);self._reset();return report('committed')
         except _ERRORS:
-            return report('waiting-votes')
+            return report('round-limit' if terminal_expired else 'waiting-votes')
     def run(self,stop,*,poll=.25,max_ticks=1024):
         if type(max_ticks) is not int or not 1<=max_ticks<=100000 or not .01<=poll<=60 or not callable(getattr(stop,'wait',None)):raise ValueError('driver bounds')
         last=None

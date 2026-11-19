@@ -1,0 +1,336 @@
+BASE main b772e93e1b0231c4eacea44a42da72388c6b8740
+Python 3.13.5
+Linux x86_64
+cgroup memory.max
+4294967296
+source SHA256
+25e6744550e8f9076c1935523c0f0b08795963c24cdedcdd92bcccbff800a049  omega_x_evolution/pacemaker.py
+1af37245e16cfe52b487b4e091d63db53a68d0a529bc2d712b1dcc07067ee6fd  omega_x_evolution/architecture_search.py
+8418db4bf3d3cf0b0fe6432fd5ae44039958d90f15e217adb5eb5e187a23a15e  omega_x_evolution/__init__.py
+a72ac071fb66b35fb2c36a4a1b38f57ad4245b469707f4f9be033b8b878758db  tests/test_omega_terminal_recovery.py
+uploaded Lean
+824b0e63474848a1b5e86c80c7375b81d7d8a362e0fe426eb685324f5a733838  /mnt/data/lean4-4.36.0.zip
+
+=== RED BFT / exit 1 ===
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_terminal_round_leader_retries_after_quorum_restored ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-9/test_terminal_round_leader_ret0')
+
+    def test_terminal_round_leader_retries_after_quorum_restored(tmp_path):
+        nodes = replicas(tmp_path)
+        members = sorted(nodes)
+        state = nodes[members[0]].inspect()['state']
+        for r in range(MAX_ROUND - 1):
+            certificate = timeout_quorum(state, [node.timeout_vote() for node in nodes.values()], r)
+            for node in nodes.values():
+                node.advance_certified(certificate)
+        coordinator = leader(state, MAX_ROUND - 1)
+        live = {coordinator}
+        clock = [0.0]
+    
+        def call(peer, op, args):
+            if peer not in live:
+                raise OSError('partition')
+            return _dispatch(nodes[peer], op, args)
+    
+        driver = Pacemaker(nodes[coordinator], call, clock=lambda: clock[0], base_timeout=1., max_timeout=1.)
+        clock[0] = 2.
+        assert driver.tick()['status'] == 'round-limit'
+        assert all(node.inspect()['state']['height'] == 1 for node in nodes.values())
+        live.update(members[:2])
+>       assert driver.tick()['status'] == 'committed'
+E       AssertionError: assert 'round-limit' == 'committed'
+E         
+E         - committed
+E         + round-limit
+
+tests/test_omega_terminal_recovery.py:30: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_terminal_recovery.py::test_terminal_round_leader_retries_after_quorum_restored - AssertionError: assert 'round-limit' == 'committed'
+  
+  - committed
+  + round-limit
+1 failed in 1.19s
+=== RED synthesis / exit 1 ===
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_synthesis_budget_can_be_extended_without_restarting ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-13/test_synthesis_budget_can_be_e0')
+
+    def test_synthesis_budget_can_be_extended_without_restarting(tmp_path):
+        import pytest
+        from omega_x_evolution.architecture import Case
+        from omega_x_evolution.architecture_search import Search
+        from omega_x_evolution.architecture_synthesis import SynthesizedIndex
+        from omega_x_evolution.graph_memory import GraphMemory
+    
+        memory = GraphMemory(tmp_path/'graph.db', b'm'*32, 'a')
+        a = memory.add('artifact', 'alpha bridge catalyst', {})
+        b = memory.add('artifact', 'beta bridge evidence', {})
+        memory.link(a, 'supports', b)
+        idx = SynthesizedIndex(memory)
+        splits = ((Case('alpha catalyst', b),), (Case('alpha bridge', b),), (Case('beta evidence', b),))
+        path = tmp_path/'search.db'
+        search = Search(path, b's'*32, idx, *splits, budget=8, create=True)
+        assert search.step(16)['evaluations'] == 8
+        before = search.inspect()
+>       search.extend_budget(32)
+        ^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Search' object has no attribute 'extend_budget'
+
+tests/test_omega_terminal_recovery.py:58: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_omega_terminal_recovery.py::test_synthesis_budget_can_be_extended_without_restarting - AttributeError: 'Search' object has no attribute 'extend_budget'
+1 failed in 0.14s
+=== GREEN BFT / exit 0 ===
+.......................                                                  [100%]
+23 passed in 15.81s
+=== GREEN synthesis/resume / exit 0 ===
+....                                                                     [100%]
+4 passed in 1.80s
+=== Native core: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q tests/test_omega*.py ===
+0
+........................................................................ [ 22%]
+........................................................................ [ 44%]
+........................................................................ [ 67%]
+........................................................................ [ 89%]
+..................................                                       [100%]
+322 passed in 119.88s (0:01:59)
+=== Native hardening: python scripts/verify_hardening.py ===
+0
+......................................                                   [100%]
+38 passed in 3.87s
+=== Overlay install: python -m pip install --no-index --no-deps --target /tmp/omega-v355-sdk /mnt/data/*-py3-none-any.whl ===
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /mnt/data/accelerate-1.16.0-py3-none-any.whl
+Processing /mnt/data/anthropic-2.10.0-py3-none-any.whl
+Processing /mnt/data/backoff-2.2.1-py3-none-any.whl
+Processing /mnt/data/distro-1.9.0-py3-none-any.whl
+Processing /mnt/data/docstring_parser-0.18.0-py3-none-any.whl
+Processing /mnt/data/google_auth-2.62.2-py3-none-any.whl
+Processing /mnt/data/google_genai-3.6.1-py3-none-any.whl
+Processing /mnt/data/httpx2-2.16.2-py3-none-any.whl
+Processing /mnt/data/hydra_core-1.3.2-py3-none-any.whl
+Processing /mnt/data/openai-3.55.1-py3-none-any.whl
+Processing /mnt/data/peft-0.21.3-py3-none-any.whl
+Processing /mnt/data/sniffio-1.3.1-py3-none-any.whl
+Processing /mnt/data/tenacity-9.2.1-py3-none-any.whl
+Processing /mnt/data/transformers-5.23.0-py3-none-any.whl
+Processing /mnt/data/unidiff-1.0.1-py3-none-any.whl
+Installing collected packages: hydra-core, unidiff, transformers, tenacity, sniffio, peft, openai, httpx2, google-genai, google-auth, docstring-parser, distro, backoff, anthropic, accelerate
+
+Successfully installed accelerate-1.16.0 anthropic-2.10.0 backoff-2.2.1 distro-1.9.0 docstring-parser-0.18.0 google-auth-2.62.2 google-genai-3.6.1 httpx2-2.16.2 hydra-core-1.3.2 openai-3.55.1 peft-0.21.3 sniffio-1.3.1 tenacity-9.2.1 transformers-5.23.0 unidiff-1.0.1
+=== Wheel CRC, platform tags, SHA256, actual imports, direct requirement checks (PYTHONPATH=/tmp/omega-v355-sdk) ===
+3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]
+Linux-6.18.57-x86_64-with-glibc2.41
+WHEEL accelerate-1.16.0-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=180885b6d7b05a19dc2dd6f722c5ce930f615e81e9e5f79d3ca910ddb9e6859e
+WHEEL anthropic-2.10.0-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=1b91b2b4aa2bab44db8712e8a9053454bcff6daa3e6f5f11d85dc38b37d0a2a3
+WHEEL backoff-2.2.1-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=63579f9a0628e06278f7e47b7d7d5b6ce20dc65c5e96a6f3ca99a6adca0396e8
+WHEEL distro-1.9.0-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2
+WHEEL docstring_parser-0.18.0-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=b3fcbed555c47d8479be0796ef7e19c2670d428d72e96da63f3a40122860374b
+WHEEL google_auth-2.62.2-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=e9bcdb0679b6a4369ac327c5c59f06d92f7b4cd2624e7100294c14632f55a36b
+WHEEL google_genai-3.6.1-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=4b35064da644f61d7e5f6c0e9406bf63b945e7e96b4af18cadb3371cbc3acf74
+WHEEL httpx2-2.16.2-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=f05c13aade4c45dbf1c9060647a1058f0acad62398fad96e741269edb33d46f5
+WHEEL hydra_core-1.3.2-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=fa0238a9e31df3373b35b0bfb672c34cc92718d21f81311d8996a16de1141d8b
+WHEEL jiter-0.19.0-graalpy313-graalpy253_313_native-manylinux2014_x86_64.manylinux_2_17_x86_64.whl CRC=PASS TAG_COMPATIBLE=False sha256=2c82005ee84b348cee72a8df6672b5d6c9fe9db4b81c98b84a28155d447d2348
+WHEEL openai-3.55.1-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=9136b1a760401aa150d084b0a673a4eca5b434917f3afe0378321cf544d5bdc2
+WHEEL peft-0.21.3-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=b3a578733e2e94b00b50a20c107ed2a10a045b922711f078bfa925bc6e64ea2e
+WHEEL safetensors-0.8.0-cp310-abi3-macosx_10_12_x86_64.whl CRC=PASS TAG_COMPATIBLE=False sha256=c554f85858e05226d3c2828e32395e677434685d6d94594a41643361c5e837f0
+WHEEL safetensors-0.8.0-cp310-abi3-macosx_11_0_arm64.whl CRC=PASS TAG_COMPATIBLE=False sha256=c80201d22cbf405b80647a60ada77bba06c8fba2da2743ba1e89cdcc39a81f25
+WHEEL safetensors-0.8.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl CRC=PASS TAG_COMPATIBLE=False sha256=7a46e5ff292c356d6991e60942ba7f79817682d3a2cef0702136448cb9c4d235
+WHEEL safetensors-0.8.0-cp310-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl CRC=PASS TAG_COMPATIBLE=False sha256=4124502b78f03534117c848f87a39b8f31e577b15eff423bf8bfb95f2a8c30d0
+WHEEL sniffio-1.3.1-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2
+WHEEL tenacity-9.2.1-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=9e56f17539296baab7beabb08b92f6ee3d7be92d8be72d763360677c2ad6580e
+WHEEL transformers-5.23.0-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=018e82fd07490ad5bb58414f65e31576033dc7f36bed10c574843f69b90991bf
+WHEEL unidiff-1.0.1-py3-none-any.whl CRC=PASS TAG_COMPATIBLE=True sha256=5e2ca461eda8a4c761ad0922e3e8a65742f359dc60301a3a055b70fd7c158680
+IMPORT PASS accelerate
+IMPORT PASS backoff
+IMPORT PASS hydra
+IMPORT PASS unidiff
+IMPORT PASS openai
+IMPORT FAIL anthropic ModuleNotFoundError No module named 'jiter'
+IMPORT PASS google.genai
+IMPORT FAIL transformers ImportError cannot import name 'ResolvedRevision' from 'huggingface_hub' (/opt/pyvenv/lib/python3.13/site-packages/huggingface_hub/__init__.py)
+IMPORT FAIL peft ImportError cannot import name 'ResolvedRevision' from 'huggingface_hub' (/opt/pyvenv/lib/python3.13/site-packages/huggingface_hub/__init__.py)
+IMPORT PASS httpx2
+IMPORT PASS google.auth
+IMPORT PASS docstring_parser
+IMPORT PASS distro
+IMPORT PASS sniffio
+IMPORT PASS tenacity
+IMPORT PASS safetensors
+MISSING openai jiter<1,>=0.16.0
+MISSING anthropic jiter<1,>=0.4.0
+INCOMPATIBLE google-genai tenacity<9.2.0,>=8.2.3 9.2.1
+INCOMPATIBLE transformers huggingface-hub<3.0,>=1.31.0 1.16.1
+MISSING transformers tokenizers<0.24.0,>=0.23.1
+INCOMPATIBLE transformers safetensors>=0.8.0 0.7.0
+MISSING httpx2 httpcore2==2.16.2; sys_platform != "emscripten"
+INCOMPATIBLE httpx2 idna>=3.18 3.17
+MISSING httpx2 truststore>=0.10; sys_platform != "emscripten"
+MISSING google-auth pyasn1-modules>=0.2.1
+=== Selected upstream: PYTHONPATH=/tmp/omega-v355-sdk OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m pytest -q tests/test_headless_provider.py tests/test_google_genai.py tests/test_launch_hydra_async.py tests/test_embedding_model_resolver.py tests/test_llm_query_routing.py ===
+0
+....................................                                     [100%]
+36 passed in 9.34s
+=== Full collection: PYTHONPATH=/tmp/omega-v355-sdk OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m pytest --collect-only -q ===
+2
+==================================== ERRORS ====================================
+_____________ ERROR collecting tests/test_anthropic_accounting.py ______________
+ImportError while importing test module '/tmp/omega-v355/OMEGA-X-Evolution/tests/test_anthropic_accounting.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_anthropic_accounting.py:8: in <module>
+    import shinka.llm.providers.anthropic as anthropic_provider
+shinka/llm/providers/anthropic.py:2: in <module>
+    import anthropic
+/tmp/omega-v355-sdk/anthropic/__init__.py:186: in <module>
+    from .lib.tools import beta_tool, beta_async_tool
+/tmp/omega-v355-sdk/anthropic/lib/tools/__init__.py:1: in <module>
+    from ._beta_runner import BetaToolRunner, BetaAsyncToolRunner, BetaStreamingToolRunner, BetaAsyncStreamingToolRunner
+/tmp/omega-v355-sdk/anthropic/lib/tools/_beta_runner.py:46: in <module>
+    from ..streaming import BetaMessageStream, BetaAsyncMessageStream, ParsedBetaMessageStreamEvent
+/tmp/omega-v355-sdk/anthropic/lib/streaming/__init__.py:3: in <module>
+    from ._types import (
+/tmp/omega-v355-sdk/anthropic/lib/streaming/_types.py:4: in <module>
+    import jiter
+E   ModuleNotFoundError: No module named 'jiter'
+____________ ERROR collecting tests/test_current_claude_requests.py ____________
+ImportError while importing test module '/tmp/omega-v355/OMEGA-X-Evolution/tests/test_current_claude_requests.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_current_claude_requests.py:6: in <module>
+    import anthropic
+/tmp/omega-v355-sdk/anthropic/__init__.py:186: in <module>
+    from .lib.tools import beta_tool, beta_async_tool
+/tmp/omega-v355-sdk/anthropic/lib/tools/__init__.py:1: in <module>
+    from ._beta_runner import BetaToolRunner, BetaAsyncToolRunner, BetaStreamingToolRunner, BetaAsyncStreamingToolRunner
+/tmp/omega-v355-sdk/anthropic/lib/tools/_beta_runner.py:46: in <module>
+    from ..streaming import BetaMessageStream, BetaAsyncMessageStream, ParsedBetaMessageStreamEvent
+/tmp/omega-v355-sdk/anthropic/lib/streaming/__init__.py:3: in <module>
+    from ._types import (
+/tmp/omega-v355-sdk/anthropic/lib/streaming/_types.py:4: in <module>
+    import jiter
+E   ModuleNotFoundError: No module named 'jiter'
+_______________ ERROR collecting tests/test_llm_client_cache.py ________________
+ImportError while importing test module '/tmp/omega-v355/OMEGA-X-Evolution/tests/test_llm_client_cache.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_llm_client_cache.py:14: in <module>
+    import instructor
+E   ModuleNotFoundError: No module named 'instructor'
+______________ ERROR collecting tests/test_llm_retry_constants.py ______________
+ImportError while importing test module '/tmp/omega-v355/OMEGA-X-Evolution/tests/test_llm_retry_constants.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_llm_retry_constants.py:15: in <module>
+    from shinka.llm.providers.anthropic import MAX_TIME as ANTHROPIC_MAX_TIME
+shinka/llm/providers/anthropic.py:2: in <module>
+    import anthropic
+/tmp/omega-v355-sdk/anthropic/__init__.py:186: in <module>
+    from .lib.tools import beta_tool, beta_async_tool
+/tmp/omega-v355-sdk/anthropic/lib/tools/__init__.py:1: in <module>
+    from ._beta_runner import BetaToolRunner, BetaAsyncToolRunner, BetaStreamingToolRunner, BetaAsyncStreamingToolRunner
+/tmp/omega-v355-sdk/anthropic/lib/tools/_beta_runner.py:46: in <module>
+    from ..streaming import BetaMessageStream, BetaAsyncMessageStream, ParsedBetaMessageStreamEvent
+/tmp/omega-v355-sdk/anthropic/lib/streaming/__init__.py:3: in <module>
+    from ._types import (
+/tmp/omega-v355-sdk/anthropic/lib/streaming/_types.py:4: in <module>
+    import jiter
+E   ModuleNotFoundError: No module named 'jiter'
+=========================== short test summary info ============================
+ERROR tests/test_anthropic_accounting.py
+ERROR tests/test_current_claude_requests.py
+ERROR tests/test_llm_client_cache.py
+ERROR tests/test_llm_retry_constants.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!!
+1463 tests collected, 4 errors in 4.11s
+=== Top-level Lean CMake: cmake -S . -B /tmp/omega-lean/build -G Unix\ Makefiles -DUSE_MIMALLOC=OFF / exit 1 ===
+-- The CXX compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Error at CMakeLists.txt:141 (message):
+  Failed to download leantar: "Could not resolve hostname"
+
+
+-- Configuring incomplete, errors occurred!
+=== Stage0 configuration: cmake -S stage0/src -B /tmp/omega-lean/stage0-build -DSTAGE=0 -DUSE_GITHASH=OFF -DUSE_MIMALLOC=OFF -DUSE_GMP=OFF -DINSTALL_LEANTAR=OFF -DINSTALL_CADICAL=OFF / exit 1 ===
+-- The CXX compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+cc: error: unrecognized command-line option '--print-target-triple'
+cc: fatal error: no input files
+compilation terminated.
+-- No build type selected, default to Release
+-- 64-bit machine detected
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+-- Checking for one of the modules 'libuv'
+CMake Error at /usr/share/cmake-3.31/Modules/FindPkgConfig.cmake:938 (message):
+  None of the required 'libuv' found
+Call Stack (most recent call first):
+  cmake/Modules/FindLibUV.cmake:7 (pkg_search_module)
+  CMakeLists.txt:402 (find_package)
+
+
+-- LIBUV_LDFLAGS: 
+-- LIBUV_INCLUDE_DIRS: 
+CMake Error at /usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
+  Could NOT find LibUV: (Required is at least version "1.0.0") (found FALSE)
+Call Stack (most recent call first):
+  /usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:601 (_FPHSA_FAILURE_MESSAGE)
+  cmake/Modules/FindLibUV.cmake:12 (find_package_handle_standard_args)
+  CMakeLists.txt:402 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+=== Native extensional proof: prove((x+y)-y,x), require_lean, require_isabelle ===
+{"definition": "pure function equality over BitVec 16 \u00d7 BitVec 16", "domain_size": 4294967296, "lean": null, "left": ["sub", ["add", ["x"], ["y"]], ["y"]], "proved": true, "require_lean": false, "right": ["x"], "ring_certificate": {"domain_size": 4294967296, "left": [[[1, 0, 1]], [[0, 1, 1]], [[0, 1, 1], [1, 0, 1]], [[0, 1, 1]], [[1, 0, 1]]], "left_sha256": "4dec2f595c645478fe7aaf406f16d721d851dc3c28c56109bb9fb3a2615b11e9", "proved": true, "reason": "equal modular polynomial", "right": [[[1, 0, 1]]], "right_sha256": "cd65ea2c2ad99e94a85b1b6df72efef9cb2ed0ae933a60c32ce16317f7d7d6aa", "schema": "omega-u16-ring-proof-v1"}, "schema": "omega-extensional-proof-v1", "solver": {"domain_size": 4294967296, "proved": true, "query_sha256": "7617fef2d7754d45dc98ea58721dfd688d74fd431be4a5ede0c0effb84fa47bc", "semantics": "pure modular u16 IR, not compiler equivalence", "status": "unsat"}}
+{"definition": "pure function equality over BitVec 16 \u00d7 BitVec 16", "domain_size": 4294967296, "lean": {"backend": "lean", "proved": false, "source_sha256": "604a68845a8a5a229243771ca35aff3df5ee5d5ae21471b063181a9c66107ce7", "status": "unavailable"}, "left": ["sub", ["add", ["x"], ["y"]], ["y"]], "proved": false, "require_lean": true, "right": ["x"], "ring_certificate": {"domain_size": 4294967296, "left": [[[1, 0, 1]], [[0, 1, 1]], [[0, 1, 1], [1, 0, 1]], [[0, 1, 1]], [[1, 0, 1]]], "left_sha256": "4dec2f595c645478fe7aaf406f16d721d851dc3c28c56109bb9fb3a2615b11e9", "proved": true, "reason": "equal modular polynomial", "right": [[[1, 0, 1]]], "right_sha256": "cd65ea2c2ad99e94a85b1b6df72efef9cb2ed0ae933a60c32ce16317f7d7d6aa", "schema": "omega-u16-ring-proof-v1"}, "schema": "omega-extensional-proof-v1", "solver": {"domain_size": 4294967296, "proved": true, "query_sha256": "7617fef2d7754d45dc98ea58721dfd688d74fd431be4a5ede0c0effb84fa47bc", "semantics": "pure modular u16 IR, not compiler equivalence", "status": "unsat"}}
+{"definition": "pure function equality over BitVec 16 \u00d7 BitVec 16", "domain_size": 4294967296, "isabelle": {"backend": "isabelle", "proved": false, "source_sha256": "de108fa968fd4090bab0dac7431283dc0072c187b962439ff87aab2287c5ba70", "status": "unavailable"}, "lean": null, "left": ["sub", ["add", ["x"], ["y"]], ["y"]], "proved": false, "require_isabelle": true, "require_lean": false, "right": ["x"], "ring_certificate": {"domain_size": 4294967296, "left": [[[1, 0, 1]], [[0, 1, 1]], [[0, 1, 1], [1, 0, 1]], [[0, 1, 1]], [[1, 0, 1]]], "left_sha256": "4dec2f595c645478fe7aaf406f16d721d851dc3c28c56109bb9fb3a2615b11e9", "proved": true, "reason": "equal modular polynomial", "right": [[[1, 0, 1]]], "right_sha256": "cd65ea2c2ad99e94a85b1b6df72efef9cb2ed0ae933a60c32ce16317f7d7d6aa", "schema": "omega-u16-ring-proof-v1"}, "schema": "omega-extensional-proof-v1", "solver": {"domain_size": 4294967296, "proved": true, "query_sha256": "7617fef2d7754d45dc98ea58721dfd688d74fd431be4a5ede0c0effb84fa47bc", "semantics": "pure modular u16 IR, not compiler equivalence", "status": "unsat"}}
+=== compileall / exit 0 ===
+python -m compileall -q omega_x_evolution shinka tests/test_omega_terminal_recovery.py
+=== Wheel build: python -m pip wheel . --no-deps --no-build-isolation -w /tmp/omega-v355-wheel / exit 0 ===
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /tmp/omega-v355/OMEGA-X-Evolution
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: omega-x-evolution
+  Building wheel for omega-x-evolution (pyproject.toml): started
+  Building wheel for omega-x-evolution (pyproject.toml): finished with status 'done'
+  Created wheel for omega-x-evolution: filename=omega_x_evolution-0.35.5.dev1-py3-none-any.whl size=4120076 sha256=97093b92670bbb14e5e89ac86437ec233a26a7c76e95fc0c7222fa1528add6a5
+  Stored in directory: /tmp/pip-ephem-wheel-cache-xb2gi4ae/wheels/51/96/bc/f628633c54af1350aead0682f12215df75b469ddcdee003c90
+Successfully built omega-x-evolution
+97093b92670bbb14e5e89ac86437ec233a26a7c76e95fc0c7222fa1528add6a5  /tmp/omega-v355-wheel/omega_x_evolution-0.35.5.dev1-py3-none-any.whl

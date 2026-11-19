@@ -28,3 +28,5 @@ The maintainer requires sequential closure of the review list before proceeding.
 The v35.3 corrective release addresses residual acceptance without adding a stage: [scope, tests and remaining blockers](RESIDUAL_ACCEPTANCE.md). v36 remains open.
 
 **v35.4:** [Residual recovery and acceptance evidence](RESIDUAL_RECOVERY_V354.md): 320 OMEGA tests pass, 38 hardening tests pass; 1336 collected with 12 upstream collection errors. Bounded BFT recovery and composite architecture synthesis extended. External proof kernels, large pretrained training, general liveness, unrestricted synthesis and physical infrastructure remain open. v36 remains open.
+
+**v35.5:** [Terminal-round recovery and dependency verification](RESIDUAL_RECOVERY_V355.md): 322 OMEGA and 38 native hardening tests pass; 36 selected upstream tests pass; 1463 collected with 4 errors in an experimental offline overlay. Certified BFT terminal-round retry and durable monotonic synthesis quotas implemented. Lean/Isabelle, general BFT liveness, unrestricted synthesis, large pretrained LLM and physical validation remain open. v36 remains open.

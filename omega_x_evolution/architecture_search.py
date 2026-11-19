@@ -36,13 +36,30 @@ class Search:
         if type(create) is not bool:raise ValueError('create mode')
         self.path=Path(path);self.store=CheckpointStore(path,key);self.index=index;self.train=train;self.validation=validation;self.test=test;self.budget=budget;self.work_cap=work_cap
         root=Path(__file__).parent;self.contract=_hash([index.structure_sha256,[[asdict(c) for c in g] for g in (train,validation,test)],budget,work_cap,list(sys.version_info[:3]),np.__version__,*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('architecture.py','architecture_synthesis.py','architecture_search.py')]])
-        if create:self.store.initialize({'contract':self.contract,'evaluations':0,'work':0,'queue':[_wire(t) for t in LEAVES],'seen':[], 'recent':None, 'best':None,'final':None})
+        if create:self.store.initialize({'contract':self.contract,'budget':budget,'work_cap':work_cap,'evaluations':0,'work':0,'queue':[_wire(t) for t in LEAVES],'seen':[], 'recent':None, 'best':None,'final':None})
         self.inspect()
     def _load(self):
         rev,s=self.store.load()
         if s['contract']!=self.contract:raise ValueError('architecture checkpoint mismatch')
+        if not self.budget<=s['budget']<=8192 or not self.work_cap<=s['work_cap']<=200_000_000:raise ValueError('architecture checkpoint limits')
         return rev,s
     def inspect(self):return self._load()[1]
+    def extend_budget(self,budget,*,work_cap=None):
+        """Authorize a monotonic quota increase before final test sealing.
+
+        The original constructor limits remain part of the source/data contract.
+        Resume with those initial limits; effective limits are authenticated in
+        the checkpoint. No evaluated candidate or holdout is reset.
+        """
+        if type(budget) is not int or not 8<=budget<=8192 or (work_cap is not None and (type(work_cap) is not int or not 1000<=work_cap<=200_000_000)):raise ValueError('synthesis limits')
+        with _lock(self.path):
+            rev,s=self._load()
+            if s['final'] is not None:raise ValueError('search sealed by test evaluation')
+            effective=s['work_cap'] if work_cap is None else work_cap
+            if budget<s['budget'] or effective<s['work_cap']:raise ValueError('architecture budget cannot decrease')
+            if budget!=s['budget'] or effective!=s['work_cap']:
+                s.update(budget=budget,work_cap=effective);self.store.save(rev+1,s)
+            return {'budget':s['budget'],'work_cap':s['work_cap']}
     def _evaluate(self,plan,group):
         work=0;rr=[]
         for c in group:
@@ -56,12 +73,12 @@ class Search:
         with _lock(self.path):
             rev,s=self._load()
             if s['final'] is not None:raise ValueError('search sealed by test evaluation')
-            seen=set(s['seen']);queued={_hash(t) for t in s['queue']};left=min(count,self.budget-s['evaluations'])
+            seen=set(s['seen']);queued={_hash(t) for t in s['queue']};left=min(count,s['budget']-s['evaluations'])
             while left and s['queue']:
                 raw=s['queue'].pop(0);ident=_hash(raw);queued.discard(ident)
                 if ident in seen:continue
                 plan=Plan.from_json(raw);measurement=self._evaluate(plan,self.train)
-                if s['work']+measurement['work']>self.work_cap:raise ValueError('architecture evaluation work exhausted')
+                if s['work']+measurement['work']>s['work_cap']:raise ValueError('architecture evaluation work exhausted')
                 s['work']+=measurement['work'];s['evaluations']+=1;left-=1;seen.add(ident);row={'plan':raw,'train':measurement}
                 if self._better(row,s['best']):s['best']=row
                 # Expand every valid candidate, not just the incumbent; derive
@@ -98,7 +115,7 @@ class Search:
             if s['best'] is None:raise ValueError('no evaluated candidates')
             baseline=Plan(('lex',));candidate=Plan.from_json(s['best']['plan']);bv=self._evaluate(baseline,self.validation);cv=self._evaluate(candidate,self.validation);promoted=(cv['mrr'],-cv['work'])>(bv['mrr'],-bv['work']);selected=candidate if promoted else baseline
             # Reserve a conservative upper bound before touching final test.
-            if s['work']+bv['work']+cv['work']+4_000_000*len(self.test)>self.work_cap:raise ValueError('insufficient final test budget')
+            if s['work']+bv['work']+cv['work']+4_000_000*len(self.test)>s['work_cap']:raise ValueError('insufficient final test budget')
             st=self._evaluate(selected,self.test);bt=self._evaluate(baseline,self.test);s['work']+=bv['work']+cv['work']+st['work']+bt['work']
             s['final']={'schema':'omega-durable-architecture-v1','contract':self.contract,'evaluations':s['evaluations'],'work':s['work'],'selected':_wire(selected.tree),'challenger':_wire(candidate.tree),'promoted':promoted,'validation':cv,'baseline_validation':bv,'test':st,'baseline_test':bt,'test_evaluations':2,'structures':[{'kind':'hypergraph','sha256':self.index.structure_sha256},{'kind':'latent','ranks':[1,2,4,8],'derived_from':self.index.digest}]}
             self.store.save(rev+1,s);return s['final']
