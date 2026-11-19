@@ -85,36 +85,50 @@ def apply_patch(source: str, patch: str) -> str:
     return m[2]
 
 
-class Audit:
+class ImmutableAuditKernel:
     def __init__(self, key: bytes, evaluator_version: str, source_path: Path | None = None):
         if len(key)<32: raise ValueError('weak key')
         self._key=key; self.version=evaluator_version; self._pending={}
         self._source_path=source_path
         self._source_mac=self._digest_source()
+        from .safety_synthesis import RuleBook
+        self.rules=RuleBook()
+        self._formal_sources={name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).digest() for name in ('engine.py','modal.py','interval_checker.py','safety_synthesis.py')}
 
     def _digest_source(self):
         return hmac.new(self._key,self._source_path.read_bytes(),hashlib.sha256).digest() if self._source_path else b""
 
     def integrity_ok(self):
-        try: return hmac.compare_digest(self._source_mac,self._digest_source())
+        try: return hmac.compare_digest(self._source_mac,self._digest_source()) and all(hmac.compare_digest(d,hashlib.sha256(Path(__file__).with_name(n).read_bytes()).digest()) for n,d in self._formal_sources.items())
         except OSError: return False
 
-    def _mac(self, session, source, metrics, nonce):
-        body=json.dumps([self.version,session,source,metrics,nonce],allow_nan=False,separators=(',',':')).encode()
+    def _mac(self, session, source, metrics, nonce, proof):
+        body=json.dumps([self.version,session,source,metrics,nonce,proof],allow_nan=False,separators=(',',':')).encode()
         return hmac.new(self._key,body,hashlib.sha256).hexdigest()
 
     def issue(self, session: str, source: str, metrics: Metrics) -> str:
         if not self.integrity_ok(): raise ValueError("evaluator integrity failure")
         if session in self._pending: raise ValueError('duplicate pending session')
-        nonce=secrets.token_hex(16); token=self._mac(session,source,metrics,nonce)
-        self._pending[session]=nonce
+        from .safety_synthesis import prove,verify
+        cert=self.rules.lookup(source) or prove(source)
+        if not verify(source,cert):raise ValueError('formal safety proof failed')
+        evidence={'certificate':cert,'derived_obligations':self.rules.matches(source)}
+        nonce=secrets.token_hex(16); token=self._mac(session,source,metrics,nonce,evidence)
+        self._pending[session]=(nonce,evidence)
         return token
 
     def verify(self, token, session, source, metrics):
-        nonce=self._pending.get(session)
-        if nonce is None or not isinstance(token,str) or not self.integrity_ok(): return False
-        if not hmac.compare_digest(token,self._mac(session,source,metrics,nonce)): return False
+        pending=self._pending.get(session)
+        if pending is None or not isinstance(token,str) or not self.integrity_ok(): return False
+        nonce,evidence=pending;cert=evidence['certificate']
+        from .safety_synthesis import verify
+        if not verify(source,cert) or not hmac.compare_digest(token,self._mac(session,source,metrics,nonce,evidence)): return False
+        self.rules.learn(source,cert)
         del self._pending[session]; return True
+
+
+# Compatibility name, not a separate or weaker audit implementation.
+Audit=ImmutableAuditKernel
 
 
 @dataclass(frozen=True)
@@ -152,9 +166,11 @@ class Cascade:
     def evaluate(self, code: str) -> Result:
         try: expr=Expression(code)
         except ValueError as e: return Result(0,reason=str(e))
-        try:
-            for p in ((.2,.4),(.5,.5),(0.,0.)): expr.evaluate(*p)
-        except (ValueError,ArithmeticError): return Result(1,reason='nonfinite or invalid smoke')
+        from .safety_synthesis import prove
+        certificate=prove(code)
+        if not certificate['proved']:return Result(1,reason='formal safety: '+certificate['reason'])
+        # The all-domain proof now discharges the old three-point numerical
+        # smoke test. Behavioral properties and fitness remain separate gates.
         valid=0
         for x,y in self.challenge:
             try:
@@ -312,7 +328,8 @@ def _checkpoint_contract(cfg: Config) -> dict:
             'python': list(sys.version_info[:3]),
             'engine_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'storage_sha256': hashlib.sha256(Path(__file__).with_name('checkpoint.py').read_bytes()).hexdigest(),
-            'workers_sha256': hashlib.sha256(Path(__file__).with_name('workers.py').read_bytes()).hexdigest()}
+            'workers_sha256': hashlib.sha256(Path(__file__).with_name('workers.py').read_bytes()).hexdigest(),
+            'formal_sha256': {n:hashlib.sha256(Path(__file__).with_name(n).read_bytes()).hexdigest() for n in ('modal.py','interval_checker.py','safety_synthesis.py')}}
 
 
 def _snapshot(contract, rng, cascade, archive, router, buf, attempts, rejects, best, stagnation, stopped):
@@ -381,12 +398,15 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
     perf_records=[]
     audit=Audit(secrets.token_bytes(32),VERSION,Path(__file__)); router=Router([Arm('fast','fast',1),Arm('deep','deep',5)],cfg.budget); buf=Distillation()
     baseline=cascade.evaluate(BASELINE).metrics
+    from .safety_synthesis import prove,RuleBook
+    audit.rules.learn(BASELINE,prove(BASELINE))
     rejects=attempts=0; best=score(baseline); stagnation=0; sem=asyncio.Semaphore(cfg.concurrency)
     completed=0; stopped=False
     contract=_checkpoint_contract(cfg) if checkpoint is not None else None
     if contract is not None and perf_context is not None: contract['performance_regression']=perf_context
     def snapshot():
         state=_snapshot(contract,rng,cascade,archive,router,buf,attempts,rejects,best,stagnation,stopped)
+        state['safety_rules']=audit.rules.snapshot()
         if perf_context is not None: state['performance_records']=perf_records
         return state
     if resume:
@@ -394,6 +414,7 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
         if completed>cfg.generations:
             raise CheckpointError('requested target predates checkpoint')
         attempts,rejects,best,stagnation,stopped=_restore(state,contract,rng,cascade,archive,router,buf)
+        audit.rules=RuleBook(state['safety_rules'])
         if perf_context is not None:
             perf_records=state.get('performance_records')
             if type(perf_records) is not list or len(perf_records)>attempts or len(perf_records)>performance.MAX_ATTEMPTS:
@@ -435,6 +456,9 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
                 for point in output.failed_points:
                     cascade.failures[point]+=1
             accepted=result.stage==3 and result.metrics[3]==1.
+            if accepted:
+                # A remote worker cannot send an unproved expression to the profiler.
+                accepted=prove(code)['proved']
             if accepted and performance_policy is not None:
                 record=performance.check_candidate(ident,code,result.metrics[0],result.metrics[1],p,archive,cascade.grid,performance_policy)
                 perf_records.append(record)
@@ -459,6 +483,7 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
     champion=archive.best()
     report={'mode':'offline-simulation' if proposal is simulated_proposal else 'external-proposal-adapter','benchmark':VERSION,'baseline_score':score(baseline),'champion_score':score(champion.metrics),'champion':champion.code,'champion_metrics':champion.metrics,'champion_genome':champion.genome.__dict__,'holdout_quality':cascade.heldout(champion.code),'baseline_holdout_quality':cascade.heldout(BASELINE),'attempts':attempts,'rejections':rejects,'spent':router.spent,'budget_unit':'synthetic proposal credits (not USD)','lineage_size':len(archive.lineage),'occupied_cells':sum(len(c) for c in archive.cells),'model_pulls':{a.id:a.pulls for a in router.arms},'sft':[{'prompt':t.prompt,'completion':t.patch} for t in buf.sft],'dpo':buf.pairs()}
 
+    report['formal_rule_count']=audit.rules.count
     if perf_context is not None:
         report['performance_regression']={'context':perf_context,'records':perf_records,'profiled':len(perf_records),'rejected':sum(not r['accepted'] for r in perf_records)}
     return report

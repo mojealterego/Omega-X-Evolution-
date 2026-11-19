@@ -92,7 +92,7 @@ def contract(cfg):
     root=Path(__file__).parent
     return {'schema':'omega-cluster-v1','config':asdict(cfg),'python':list(sys.version_info[:3]),
             'source':{n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in
-                      ('cluster.py','engine.py','workers.py','performance.py','topology.py','annealed.py','holographic.py','safety_synthesis.py')}}
+                      ('cluster.py','engine.py','workers.py','performance.py','topology.py','annealed.py','holographic.py','safety_synthesis.py','modal.py','interval_checker.py')}}
 
 
 def artifact(value):
@@ -120,6 +120,7 @@ def initial_state(cfg,i):
         'last_migrant':0,'migrations_seen':0,'migrations_accepted':0,'migrations_retained':0,
         'migration_history':[],'outgoing':None,'performance_records':[],
         'elite':asdict(a),'occupied_cells':1})
+    book=safety_synthesis.RuleBook();book.learn(BASELINE,safety_synthesis.prove(BASELINE));state['safety_rules']=book.snapshot()
     if cfg.feedback:state['trajectories']=[];state['foreign_trajectories']=[]
     if cfg.formal_safety:
         certificate=safety_synthesis.prove(BASELINE)
@@ -172,6 +173,7 @@ class IslandActor:
         r=state['round'] if final else state['round']+1
         rng=random.Random((cfg.seed<<32) ^ (i<<16) ^ r)
         audit=Audit(os.urandom(32),'omega-cluster-v1',Path(__file__).with_name('engine.py'))
+        audit.rules=safety_synthesis.RuleBook(s['safety_rules'])
         last_outcome=None
         def admit(ident,code,parent,genome,external=False):
             nonlocal last_outcome
@@ -246,6 +248,7 @@ class IslandActor:
         else:s['done']=True
         if isinstance(a,TopologicalArchive):
             a.adapt();s['topology']=a.summary()
+        s['safety_rules']=audit.rules.snapshot()
         s['lineage']=[asdict(x) for x in a.lineage.values()]
         s['challenge']=[[list(p),c.failures[p]] for p in c.challenge]
         s['elite']=asdict(a.best());s['occupied_cells']=len(a.cells[0])
@@ -360,6 +363,7 @@ def verify_transition(cfg,old,new,migrant,champion,final):
         if len(byid)!=len(profiles) or (cfg.policy is None and profiles) or len(profiles)>n+consume: raise ClusterError('profile budget mismatch')
         expected_ids={f'i{i}-g{r}-p{w}' for w in range(n)}|({mid} if consume else set())
         if set(byid)-expected_ids: raise ClusterError('unexpected profiling identity')
+        rules=safety_synthesis.RuleBook(old['safety_rules'])
         for index,item in enumerate(fresh):
             x=artifact(item)
             if x.generation!=r or x.island!=0 or x.id not in expected_ids: raise ClusterError('artifact identity mismatch')
@@ -373,9 +377,11 @@ def verify_transition(cfg,old,new,migrant,champion,final):
                 all(type(w) in (int,float) and math.isfinite(w) and 0<=w<=1 for w in g.weights) and g.weights[3]==0 and math.isclose(sum(g.weights),1.)):
                 raise ClusterError('invalid genome')
             if cfg.policy is not None: _verify_record(byid[x.id],x,a,artifact(champion),cfg.policy,grid)
+            rules.learn(x.code,safety_synthesis.prove(x.code))
             if not a.add(x):raise ClusterError('duplicate admitted artifact')
             if x.id==mid and m['retained']!=any(z.id==mid for cell in a.cells[0].values() for z in cell):
                 raise ClusterError('migration retention mismatch')
+        if new['safety_rules']!=rules.snapshot():raise ClusterError('invalid learned safety rule registry')
         if mcount and mid not in a.lineage:raise ClusterError('missing migrant')
         _verify_feedback(cfg,old,new,migrant,consume,mid,n,r,grid,challenge,byid)
         if isinstance(a,TopologicalArchive):

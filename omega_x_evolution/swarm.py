@@ -58,7 +58,7 @@ class Campaign:
     @property
     def id(self):
         root=Path(__file__).parent
-        contract=[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('swarm.py','epigenetics.py','engine.py','safety_synthesis.py','federation.py','annealed.py','holographic.py')]
+        contract=[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('swarm.py','epigenetics.py','engine.py','safety_synthesis.py','federation.py','annealed.py','holographic.py','modal.py','interval_checker.py')]
         return digest(['omega-swarm-v1',asdict(self),list(sys.version_info[:3]),contract])
 
 

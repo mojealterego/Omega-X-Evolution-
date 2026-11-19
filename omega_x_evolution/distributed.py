@@ -82,7 +82,7 @@ class Queue:
         self.path, self.lease_seconds, self.max_attempts, self.clock = Path(path), lease_seconds, max_attempts, clock
         try: os.close(os.open(self.path, os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600))
         except FileExistsError: pass
-        self.contract = hashlib.sha256(encode(["omega-remote-v1",list(sys.version_info[:3]), *(hashlib.sha256(Path(__file__).with_name(p).read_bytes()).hexdigest() for p in ("engine.py","workers.py"))])).digest()
+        self.contract = hashlib.sha256(encode(["omega-remote-v1",list(sys.version_info[:3]), *(hashlib.sha256(Path(__file__).with_name(p).read_bytes()).hexdigest() for p in ("engine.py","workers.py","safety_synthesis.py","modal.py","interval_checker.py"))])).digest()
         with self.tx() as db:
             db.execute('CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY, payload BLOB NOT NULL, owner TEXT, token TEXT, expiry REAL, attempts INTEGER NOT NULL DEFAULT 0, output BLOB)')
 

@@ -1,0 +1,225 @@
+{
+  "formal": {
+    "cases": [
+      {
+        "source": "-(x+y)",
+        "proved": true,
+        "verified": true,
+        "reason": "proved totality and intermediate bounds",
+        "boxes": 1,
+        "obligations": 4,
+        "independent": {
+          "boxes": 1,
+          "method": "exact-rational-endpoints",
+          "proved": true
+        },
+        "modal_worlds": 9,
+        "tableau_nodes": 12,
+        "prior_rule_matches": [],
+        "stage": 3,
+        "seconds": 0.0010161919999518432
+      },
+      {
+        "source": "-(x+y+abs(x-y)/(.01+x*y))",
+        "proved": true,
+        "verified": true,
+        "reason": "proved totality and intermediate bounds",
+        "boxes": 1,
+        "obligations": 16,
+        "independent": {
+          "boxes": 1,
+          "method": "exact-rational-endpoints",
+          "proved": true
+        },
+        "modal_worlds": 21,
+        "tableau_nodes": 36,
+        "prior_rule_matches": [],
+        "stage": 3,
+        "seconds": 0.002003412999329157
+      },
+      {
+        "source": "min(abs(x-y),1)",
+        "proved": true,
+        "verified": true,
+        "reason": "proved totality and intermediate bounds",
+        "boxes": 1,
+        "obligations": 6,
+        "independent": {
+          "boxes": 1,
+          "method": "exact-rational-endpoints",
+          "proved": true
+        },
+        "modal_worlds": 11,
+        "tableau_nodes": 16,
+        "prior_rule_matches": [],
+        "stage": 2,
+        "seconds": 0.0009963590000552358
+      },
+      {
+        "source": "1/(.25+x)",
+        "proved": true,
+        "verified": true,
+        "reason": "proved totality and intermediate bounds",
+        "boxes": 1,
+        "obligations": 6,
+        "independent": {
+          "boxes": 1,
+          "method": "exact-rational-endpoints",
+          "proved": true
+        },
+        "modal_worlds": 11,
+        "tableau_nodes": 16,
+        "prior_rule_matches": [],
+        "stage": 2,
+        "seconds": 0.0007431220001308247
+      },
+      {
+        "source": "2/(.25+x)",
+        "proved": true,
+        "verified": true,
+        "reason": "proved totality and intermediate bounds",
+        "boxes": 1,
+        "obligations": 6,
+        "independent": {
+          "boxes": 1,
+          "method": "exact-rational-endpoints",
+          "proved": true
+        },
+        "modal_worlds": 11,
+        "tableau_nodes": 16,
+        "prior_rule_matches": [
+          {
+            "path": "root",
+            "kind": "nonzero",
+            "rule": "f211d24c91448217fe903ae576264acdddfb923a1ea7296d43b8358e8903ce30"
+          }
+        ],
+        "stage": 2,
+        "seconds": 0.0009180380002362654
+      },
+      {
+        "source": "1/(x-.123456)",
+        "proved": false,
+        "verified": false,
+        "reason": "denominator may contain zero",
+        "boxes": 1,
+        "obligations": 6,
+        "independent": null,
+        "modal_worlds": null,
+        "tableau_nodes": null,
+        "prior_rule_matches": [],
+        "stage": 1,
+        "seconds": 0.00020294400019338354
+      },
+      {
+        "source": "1e6*1e6*1e6",
+        "proved": false,
+        "verified": false,
+        "reason": "intermediate bound unproved",
+        "boxes": 0,
+        "obligations": 0,
+        "independent": null,
+        "modal_worlds": null,
+        "tableau_nodes": null,
+        "prior_rule_matches": [],
+        "stage": 1,
+        "seconds": 0.00012111900014133425
+      },
+      {
+        "source": "__import__(\"os\")",
+        "proved": false,
+        "verified": false,
+        "reason": "invalid AST",
+        "boxes": 0,
+        "obligations": 0,
+        "independent": null,
+        "modal_worlds": null,
+        "tableau_nodes": null,
+        "prior_rule_matches": [],
+        "stage": 0,
+        "seconds": 2.521599981264444e-05
+      }
+    ],
+    "learned_rules": 7,
+    "general_k": {
+      "status": "valid",
+      "proved": true,
+      "tableau_nodes": 4,
+      "digest": "b75ad315cfc87aa382058a1cf4765a2914698c17a1fa5011df3adc71ffb9a72a",
+      "countermodel": null
+    },
+    "invalid_k": {
+      "status": "countermodel",
+      "proved": false,
+      "tableau_nodes": 1,
+      "digest": "844f5a0954e69f850bde83d2baa27363e7a0eddaa042cd7be7cd3e17e4e1b56b",
+      "countermodel": {
+        "root": 0,
+        "worlds": [
+          {
+            "atoms": [],
+            "successors": []
+          }
+        ]
+      }
+    },
+    "bounded_unknown": {
+      "status": "unknown",
+      "proved": false,
+      "tableau_nodes": 1,
+      "digest": "9c0e384dfaa6f660f91a942b9df7b4b1309ed8975837675e640cac4eee344b0f",
+      "countermodel": null
+    }
+  },
+  "campaign": {
+    "first_commit_count": 3,
+    "complete": {
+      "schema": "omega-async-cluster-v1",
+      "complete": true,
+      "islands": 4,
+      "commits": 12,
+      "attempts": 32,
+      "rejections": 4,
+      "budget": 32,
+      "occupied_cells": 17,
+      "lineage_size": 39,
+      "migrations_seen": 7,
+      "migrations_accepted": 7,
+      "migrations_retained": 6,
+      "performance_profiled": 0,
+      "performance_rejections": 0,
+      "baseline_score": 0.5591341064073991,
+      "champion_score": 0.844623689039482,
+      "champion": "-(x+y+2.289*abs(x-y)/(x+y+0.0187)+1.926)",
+      "holdout_quality": 0.8649559873724094,
+      "island_rounds": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "trajectory_count": 32,
+      "foreign_trajectories": 0,
+      "formal_checks": 39,
+      "formal_rejections": 4,
+      "action_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        32
+      ]
+    },
+    "durable_replay": true,
+    "retained_rule_counts": [
+      14,
+      15,
+      12,
+      13
+    ],
+    "certificate_records": 39,
+    "checked_numeric_obligations": 566
+  }
+}

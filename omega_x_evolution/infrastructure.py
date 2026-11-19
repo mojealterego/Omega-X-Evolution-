@@ -94,7 +94,7 @@ class Orchestrator:
         self.path=Path(path).absolute();self.limits=limits;self._key=key;self.store=CheckpointStore(self.path,key)
         self.stop_path=Path(str(self.path)+'.stop')
         root=Path(__file__).parent
-        self.contract=_digest([asdict(limits),list(sys.version_info[:3]),*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('infrastructure.py','axioms.py','plasticity.py','engine.py','proof_kernel.py','holographic.py','swarm.py')]])
+        self.contract=_digest([asdict(limits),list(sys.version_info[:3]),*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('infrastructure.py','axioms.py','plasticity.py','engine.py','proof_kernel.py','holographic.py','swarm.py','safety_synthesis.py','modal.py','interval_checker.py')]])
         if create:self.store.initialize({'contract':self.contract,'reserved_cpu_seconds':0,'jobs':{}})
         self.inspect()
     def _load(self):

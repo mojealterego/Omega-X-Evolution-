@@ -184,7 +184,7 @@ class Plasticity:
         if not isinstance(policy,Policy):raise ValueError('policy required')
         self.path=Path(path);self.store=CheckpointStore(path,key);self.policy=policy
         root=Path(__file__).parent
-        self.contract=_digest([asdict(policy),policy.base_digest,np.__version__,*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('plasticity.py','swarm.py','engine.py','annealed.py','holographic.py','safety_synthesis.py','checkpoint.py')]])
+        self.contract=_digest([asdict(policy),policy.base_digest,np.__version__,*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('plasticity.py','swarm.py','engine.py','annealed.py','holographic.py','safety_synthesis.py','modal.py','interval_checker.py','checkpoint.py')]])
         if create:self.store.initialize({'contract':self.contract,'initial':policy.initial(),'active':policy.initial(),'used_steps':0,'updates':{},'rollbacks':0})
         self.inspect()
     def _load(self):

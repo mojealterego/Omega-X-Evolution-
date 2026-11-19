@@ -9,7 +9,7 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v23 | Topological State-Space Evolution | 5–6 | Implemented SPD metric, adaptive partition, graph distances and cluster integration |
 | v24 | Quantum-Inspired Annealed Policy Search | 6–7 | Implemented bounded classical TT-SVD policy and paired cost/quality benchmark; no advantage established, live LLM open |
 | v25 | Holographic Memory Compression | 7–12 | Implemented stable int8 contextual keys, Hopfield-style retrieval and verified ring transfer; global Ray validation open |
-| v26 | Autonomous Formal Verification Synthesis | 12 | Implemented candidate-specific interval safety obligations, finite modal check and fail-closed cluster integration; general modal/Lean proof open |
+| v26 | Autonomous Formal Verification Synthesis | 12 | Closure v35.1: mandatory AST specification, independent exact-rational interval checker, finite CTL and bounded modal K theorem proving, durable derived-rule registry. Unrestricted program semantics and higher-order proof still outside accepted domain |
 | v27 | Quantum-Assisted Annealing | 12 | Implemented bounded QUBO selection and classical benchmark, optional authorized Ocean adapter; real QPU/cost acceptance open |
 | v28 | Autonomous synthesis of new architectural paradigms | 13 | Implemented typed retrieval DAG composition and separate validation promotion; arbitrary architecture design open |
 | v29 | Swarm Federation | 13 | Implemented Ed25519 exchange, signed durable receipt/inbox, local recertification, real process + mTLS loopback; multi-host open |
@@ -22,3 +22,5 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v36 | Green Computing (energy/carbon metrics) | 1 | Open; measured or clearly estimated energy, uncertainty and hardware/intensity provenance, correct units and comparable workload profiles |
 
 These are distinct acceptance gates, not promises of physical validation, consciousness, mathematical completeness or exponential speedup. No automatic changes to evaluator authorization, safety policy, external infrastructure or financial limits. The existing closure register retains infrastructure and upstream dependency blockers.
+
+The maintainer requires sequential closure of the review list before proceeding. Requirements 1–4 map to v26/v33; see [formal safety closure](FORMAL_SAFETY_CLOSURE.md). No work on points 5–12 or v36 is included in this patch.

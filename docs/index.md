@@ -24,3 +24,5 @@ The v6 development snapshot now includes authenticated remote evaluation, durabl
 ## Imported foundation
 
 The upstream authors' documentation is preserved in the [ShinkaEvolve guide](upstream_index.md). Its APIs and examples describe the imported runtime, not the canonical OMEGA-X interface. No upstream authorship, license or citations have been removed.
+
+The v35.1 patch closes the bounded formal-safety acceptance requirements 1–4, without adding a roadmap stage. See [formal safety closure](omega/FORMAL_SAFETY_CLOSURE.md).

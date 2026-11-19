@@ -1,0 +1,25 @@
+OMEGA-X Evolution 0.35.1.dev1 — closure of requirements 1–4 (no new roadmap stage)
+BASE: d258ec65f34ec308da60021ef20c9405f09a3320; tree 9a58356777aec8914d32d73e514810a384e35229; 498/498 base Git blob hashes matched, source ZIP SHA256 5b106f288205319954d4e970cd5409d496e3f26d20ff0e6d3694098ca4244d5e; ZIP CRC OK.
+RED: python -m pytest -q tests/test_omega_formal_closure.py — collection failed on missing omega_x_evolution.modal (exit 2).
+FINAL REGRESSION: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q tests/test_omega*.py — 274 passed in 74.10s (0:01:14), exit 0. 14 new tests.
+HARDENING: python scripts/verify_hardening.py — 38 passed in 4.11s, exit 0 (existing isolated dependency shim).
+UPSTREAM: python -m pytest -q --collect-only — 72 collection errors (exit 2), unresolved external dependencies. No false full suite pass.
+COMPILE: python -m compileall -q omega_x_evolution tests scripts/benchmark_formal_closure.py — exit 0; TOML parsed, 33 canonical entry points callable. Modal CLI valid theorem exit 0 and invalid theorem countermodel exit 1.
+BENCHMARK: PYTHONPATH=. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python scripts/benchmark_formal_closure.py — exit 0; four islands, two process slots, 32 mutations, 7 accepted migrations, 39 formal records (4 rejected), 566 numeric obligations counted, retained rule counts 14+15+12+13=54 (per-island sum, not global unique); 12 durable commits, stop at 3 and resume, repeat report identical, all admitted source certificates verified. See JSON.
+TESTS: invalid AST, hidden pole, overflow, exact-rational cross-check, falsified narrowed theorem, missing/forged rules, K countermodel and budget unknown, CTL total model and temporal operators, corrupted worker trying to reach profiler, process and core checkpoint restart, replay, learned bound substitution in distinct candidate, capped registry, old numerical smoke removed.
+ACCEPTANCE: PASS of requirements 1–4 within canonical restricted binary64 AST. No general arbitrary-host-code/HOL proof, no claim of all behavioral properties or hard real-time. Retention capacity 32 sources per archive; beyond cap derive proof freshly. No new roadmap stage, no other review point advanced. Previous source-bound checkpoint/wire contracts incompatible. Upstream dependency and physical deployment blockers open. No external resource activation.
+ENV: 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0] Linux-6.18.57-x86_64-with-glibc2.41
+SHA256 22ed650a449ee83ccc00e19eacf45e1f4bb29f6d5ee5a6ebefb89db3e13adf1e docs/omega/benchmark-formal-closure.json
+SHA256 b6ca9a1e87788a4341e63f4bb52f51753bbc334fab75262e74fa74b23ecb5cf6 omega_x_evolution/__init__.py
+SHA256 d069d423bab9fbf2b3ae9c947b399cf14cd6c6cb68ce3f02f51f03537c3d5e65 omega_x_evolution/cluster.py
+SHA256 d9f53662651cf974167576c155da72cfb077ddf2bcf93d8b0ead6967b91f2085 omega_x_evolution/distributed.py
+SHA256 f6b87df0b7c2ef8df06ff8dfddd37a245e7747860c0a4aef661fc659420f7014 omega_x_evolution/engine.py
+SHA256 2530525c857de6288ef5c85b1fd0395dfc0a64beaa5a070184e71be7481fe326 omega_x_evolution/federation.py
+SHA256 d1d82dc59a873d63b759996f5c052b5a7d601b6424b93439e0f7db089555728a omega_x_evolution/infrastructure.py
+SHA256 8aa0d2a6a012bfcc38da880608be705f8a6d31bc89c5a4210f2e0dc125730f56 omega_x_evolution/interval_checker.py
+SHA256 9a9254cd407ca187baadad9ddf75da2974716afb13345ac596870aaa50f76ea2 omega_x_evolution/modal.py
+SHA256 ef2615cfd25d84a4a7b3398fb8ca38f8606449ec747271577e3b3cc863c67cf4 omega_x_evolution/plasticity.py
+SHA256 f03b3a9791edc0e283a7db5e3ed9a602f3714892c1c6c23e243c3eae423c3f93 omega_x_evolution/safety_synthesis.py
+SHA256 f54f47384667b7c4b6ed174309974fd2264eaf14298ffb56833b0d8785050f6d omega_x_evolution/swarm.py
+SHA256 111613992e5bcf1671fab5b3a9eb98245e9f3b4f89d5a1237d8ee809b9a18f2a scripts/benchmark_formal_closure.py
+SHA256 6428d572b462130b51a9c6df735414bfecef7df4dd5caca4eb6e2e91739b4502 tests/test_omega_formal_closure.py

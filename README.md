@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v35%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v35.1%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v35
+## Current implementation — v35.1
 
 | Component | Capability |
 |---|---|
@@ -65,7 +65,7 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Adaptive phenotype geometry | Entropy-driven SPD metric, graph shortest paths, adaptive quadtree and guided mutation |
 | Annealed tensor policy | Actual TT-SVD contextual reward approximation and Gibbs selection |
 | Associative trajectory memory | Stable int8 keys, Hopfield-style read, verified cross-island records |
-| Formal safety synthesis | Candidate-specific binary64 interval obligations, fail-closed proof and driver reconstruction |
+| Formal safety synthesis | Mandatory AST-generated whole-domain binary64 obligations, independent rational checker, CTL and modal K, durable derived-rule registry |
 | Hybrid QUBO selection | Cardinality-constrained MAP-Elites representative selection; classical and optional QPU |
 | Memory architecture synthesis | Typed retrieval DAG search and validation promotion |
 | Swarm federation | Ed25519 peer packets, durable inboxes, independent proof/evaluation, P2P transport |
@@ -106,7 +106,7 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v23 | Topological State-Space Evolution | Adaptive quadtree, finite Riemannian graph metric and cluster integration; bounded local verification |
 | v24 | Quantum-inspired policy search | Classical rank-bounded tensor train; paired cost/quality benchmark |
 | v25 | Holographic memory compression | Bounded associative trajectory retrieval and ring transfer |
-| v26 | Formal verification synthesis | Interval obligations + finite modal model, opt-in pre-evaluation gate |
+| v26 | Formal verification synthesis | Mandatory pre-evaluation gate, independent interval check, general CTL/K, learned safety theorems; closure patch v35.1 |
 | v27 | Quantum-assisted annealing | Bounded QUBO and classical reference; optional QPU unverified |
 | v28 | Memory architecture synthesis | Typed retrieval composition, dataset-split promotion |
 | v29 | Swarm federation | Signed peer exchange, independent qualification, local process/TLS tests |
@@ -135,7 +135,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.35.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.35.1.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -266,6 +266,17 @@ python -m omega_x_evolution.infrastructure --help
 
 See [scope and evidence](docs/omega/EVOLUTION_V33_V35.md). Training and process execution are explicitly authorized and bounded; no automatic cloud allocation.
 
+## Mandatory formal safety closure (requirements 1–4)
+
+The v35.1 closure patch does not add a roadmap stage. All scheduler candidate evaluations now require whole-domain numerical safety proof from the validated AST. The former optional `--formal-safety` switch controls detailed cluster evidence retention; it no longer enables/disables the gate. `ImmutableAuditKernel` binds the certificate and matched proved rules to admission. See [formal safety acceptance and residual scope](docs/omega/FORMAL_SAFETY_CLOSURE.md).
+
+```sh
+python -m omega_x_evolution.safety_synthesis -- '1/(.25+x)'
+python -m omega_x_evolution.modal --formula '["implies",["box",["atom","p"]],["atom","p"]]'
+```
+
+The second command intentionally produces a countermodel in logic K and a nonzero exit code. Numerical smoke tests are replaced by proof; functional properties, benchmark, latency policy and audit remain mandatory. The original unrestricted Shinka path does not inherit these guarantees.
+
 ## Verification
 
 ```bash
@@ -274,7 +285,7 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v35.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-formal-closure.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 

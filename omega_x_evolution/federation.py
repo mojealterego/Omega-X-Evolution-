@@ -56,7 +56,7 @@ def digest(value):return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 def _contract():
     root=Path(__file__).parent
-    return digest(['omega-federation-v1',SEED,list(sys.version_info[:3]),*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('engine.py','safety_synthesis.py','federation.py')]])
+    return digest(['omega-federation-v1',SEED,list(sys.version_info[:3]),*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('engine.py','safety_synthesis.py','modal.py','interval_checker.py','federation.py')]])
 
 
 def packet(identity,recipient,sequence,codes):
