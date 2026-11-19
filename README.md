@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v23%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v26%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v23
+## Current implementation — v26
 
 | Component | Capability |
 |---|---|
@@ -63,6 +63,9 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Stage 3 latency regression | Opt-in paired p50/p95/p99 gate against accepted parent and cell elite/global champion; authenticated history |
 | Asynchronous island cluster | Per-island CAS snapshots, bounded asynchronous ring, Ray adapter and local process transport |
 | Adaptive phenotype geometry | Entropy-driven SPD metric, graph shortest paths, adaptive quadtree and guided mutation |
+| Annealed tensor policy | Actual TT-SVD contextual reward approximation and Gibbs selection |
+| Associative trajectory memory | Stable int8 keys, Hopfield-style read, verified cross-island records |
+| Formal safety synthesis | Candidate-specific binary64 interval obligations, fail-closed proof and driver reconstruction |
 | Backlog extensions | Durable team populations, whole-domain u16 SMT, isolated Torch training, latent-semantic graph retrieval and optional local LLM quote selection, Qualcomm HTP adapter |
 
 **Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, unrestricted agent self-rewriting, formal verification of arbitrary programs and large-model training remain out of scope. Small MLPs now train end-to-end on CPU in explicit research modes.
@@ -92,8 +95,11 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | v21 | Performance regression testing | Implemented Stage 3b; measured latency, correctness tradeoff, durable evidence |
 | v22 | Asynchronous cluster archipelago | Implemented bounded 512-island API, durable per-island state and Ray transport; real local process tests, Ray deployment open |
 | v23 | Topological State-Space Evolution | Adaptive quadtree, finite Riemannian graph metric and cluster integration; bounded local verification |
+| v24 | Quantum-inspired policy search | Classical rank-bounded tensor train; paired cost/quality benchmark |
+| v25 | Holographic memory compression | Bounded associative trajectory retrieval and ring transfer |
+| v26 | Formal verification synthesis | Interval obligations + finite modal model, opt-in pre-evaluation gate |
 
-See [extended maintainer roadmap v24–v36](docs/omega/MAINTAINER_ROADMAP.md).
+See [extended maintainer roadmap v27–v36](docs/omega/MAINTAINER_ROADMAP.md).
 
 No stage is promoted solely on generated logs or self-reported improvements.
 
@@ -111,7 +117,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.23.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.26.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -173,7 +179,7 @@ omega-x-bitproof --left '["sub",["add",["x"],["y"]],["y"]]' --right '["x"]'
 omega-x-compute --qnn --demo
 ```
 
-See [v19–v20 implementation and evidence](docs/omega/EVOLUTION_V19_V20.md) and the [remaining acceptance gates](docs/omega/CLOSURE_REGISTER.md). All original 20 stages now have bounded local implementations; hardware, external validation and unrestricted-domain objectives are not declared closed. Stages v21 and v22 implement the first two new maintainer requirements; v23 adds adaptive phenotype geometry; see [the extended maintainer roadmap](docs/omega/MAINTAINER_ROADMAP.md) for all remaining source requirements.
+See [v19–v20 implementation and evidence](docs/omega/EVOLUTION_V19_V20.md) and the [remaining acceptance gates](docs/omega/CLOSURE_REGISTER.md). All original 20 stages now have bounded local implementations; hardware, external validation and unrestricted-domain objectives are not declared closed. Stages v21 and v22 implement the first two new maintainer requirements; v23 adds adaptive phenotype geometry; v24–v26 add tensor policies, associative trajectories and generated numeric safety obligations; see [the extended maintainer roadmap](docs/omega/MAINTAINER_ROADMAP.md) for all remaining source requirements.
 
 ## v21 performance regression gate
 
@@ -203,6 +209,15 @@ python -m omega_x_evolution.cluster --backend process --islands 16 --rounds 3 --
 
 See [geometry, evidence and limits](docs/omega/EVOLUTION_V23.md).
 
+## v24–v26 tensor policy, memory and safety proof
+
+```bash
+python -m omega_x_evolution.cluster --backend process --islands 8 --rounds 4 --batch 4 --budget 128 --parallelism 4 --migration-interval 1 --topology --annealed --holographic --formal-safety --db v26.db --key-file cluster.key
+python -m omega_x_evolution.safety_synthesis -- '-(x+y+(x-y)*(x-y)/(.01+x*y)+2)'
+```
+
+See [v24–v26 scope and evidence](docs/omega/EVOLUTION_V24_V26.md). All modes opt-in, proof precedes empirical tests; no live LLM/quantum speedup claim.
+
 ## Verification
 
 ```bash
@@ -211,10 +226,11 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v23.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v26.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v24–v26 tensor policies, memory and safety](docs/omega/EVOLUTION_V24_V26.md)
 - [v23 adaptive topological archive](docs/omega/EVOLUTION_V23.md)
 - [Extended maintainer roadmap](docs/omega/MAINTAINER_ROADMAP.md)
 - [v22 asynchronous MAP-Elites](docs/omega/EVOLUTION_V22.md)

@@ -1,0 +1,14 @@
+OMEGA-X Evolution 0.26.0.dev1 — v24–v26
+Base: a18668d4f33007e40fa907591df2ec169bed1be3; tree 9ebf7418bd6589a94aa8401a936c2464d953d833
+Base ZIP SHA-256 17bb9bf8bbd1c2adf53c26921be313568ac65ea156e660edaa93b791f6dc0911; 466/466 tracked Git blob hashes independently matched.
+RED: pytest tests/test_omega_v26.py failed collection on missing annealed module before implementation.
+GREEN: targeted v26 17 passed in 3.52s (12 initial tests then 5 extra tests).
+REGRESSION: python -m pytest -q tests/test_omega*.py — 215 passed in 54.37s, exit 0.
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.81s, exit 0 (existing isolated dependency shim).
+COMPILE: python -m compileall -q omega_x_evolution tests scripts/benchmark_v26.py — exit 0.
+METADATA: 0.26.0.dev1, TOML parsed, 24 canonical CLI entry points callable.
+FULL UPSTREAM: python -m pytest -q — 72 collection errors, exit 2, 3.72s. Missing dependencies remain. No suppression or new skips.
+PAIRED: 4 seeds x 2 strategies x 64 proposals, identical proposal parameters per seed and parent schedule. Average champion both .8671139178928662; holdout both .9038176524453166; TT and uniform tied all four paired outcomes. Total measured wall time .7601747010 vs .6879154840 seconds on shared host (not SLA or rigorous timing comparison). Rank-one fixture: 96 dense vs 14 TT numbers; max absolute error 9.947598300641403e-14. No advantage established. Full results benchmark-v26.json.
+INTEGRATION: 8 logical islands, real 4 spawned workers after restart, 128 proposals, 40 durable commits, stopped after 11 then resumed and completed report readback matched. 28 migrations, 64 foreign records at completion, 156 candidate/migrant formal checks, 5052 verified obligations, zero formal rejections in this normal run. Score .5591341064073991 -> .8500093646677812; holdout .9290830396676802. Separate CLI process smoke: 2 islands, 2 processes, 8 proposals, 6 commits, 8 foreign records and 10 formal checks, exit 0. Formal CLI valid expression exit 0 with -- separator. No timing gate in main integration benchmark; separate test mocks measured regression to verify gate remains mandatory.
+NEGATIVE CONTROLS: hidden denominator singularity, intermediate bound overflow, forbidden AST, model bypass transition, malformed proof digest, altered trajectory reward, forged outgoing and incoming foreign records, mismatched proposal seed; unknown proof before empirical evaluation; stable 128-byte feature keys cross-process; v21 gate with test doubles.
+SCOPE: classical TT-SVD and one-pass associative read; no quantum hardware or speedup, no live ensemble LLM, no arbitrary program proof or general modal theorem prover, no DPO export from this new cluster mode. Existing stage/I/O/authorization gates unchanged; old cluster source contracts incompatible. No physical Ray, no external hardware or cloud resources, no active CI or paid API. Original engine.py/workers.py/performance.py/checkpoint.py unchanged.

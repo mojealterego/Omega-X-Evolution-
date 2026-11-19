@@ -1,0 +1,307 @@
+{
+  "paired": [
+    {
+      "seed": 81,
+      "strategy": "uniform",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        10,
+        13,
+        12,
+        9,
+        7,
+        13
+      ],
+      "champion": 0.8616711374245742,
+      "holdout": 0.8713699370551585,
+      "wall_seconds": 0.19491495700094674
+    },
+    {
+      "seed": 81,
+      "strategy": "tt",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        9,
+        12,
+        14,
+        9,
+        8,
+        12
+      ],
+      "champion": 0.8616711374245742,
+      "holdout": 0.8713699370551585,
+      "wall_seconds": 0.17308406099982676
+    },
+    {
+      "seed": 82,
+      "strategy": "uniform",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        13,
+        8,
+        15,
+        7,
+        8,
+        13
+      ],
+      "champion": 0.8711005813607462,
+      "holdout": 0.911887170404116,
+      "wall_seconds": 0.1770033949997014
+    },
+    {
+      "seed": 82,
+      "strategy": "tt",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        14,
+        13,
+        10,
+        7,
+        7,
+        13
+      ],
+      "champion": 0.8711005813607462,
+      "holdout": 0.911887170404116,
+      "wall_seconds": 0.17030453000006673
+    },
+    {
+      "seed": 83,
+      "strategy": "uniform",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        9,
+        15,
+        10,
+        14,
+        7,
+        9
+      ],
+      "champion": 0.865791443333122,
+      "holdout": 0.9084702320817836,
+      "wall_seconds": 0.1289484650005761
+    },
+    {
+      "seed": 83,
+      "strategy": "tt",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        7,
+        11,
+        14,
+        11,
+        11,
+        10
+      ],
+      "champion": 0.865791443333122,
+      "holdout": 0.9084702320817836,
+      "wall_seconds": 0.2201592609999352
+    },
+    {
+      "seed": 84,
+      "strategy": "uniform",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        13,
+        10,
+        8,
+        11,
+        11,
+        11
+      ],
+      "champion": 0.8698925094530222,
+      "holdout": 0.9235432702402085,
+      "wall_seconds": 0.18704866700136336
+    },
+    {
+      "seed": 84,
+      "strategy": "tt",
+      "proposals": 64,
+      "accepted": 64,
+      "action_counts": [
+        12,
+        9,
+        5,
+        12,
+        14,
+        12
+      ],
+      "champion": 0.8698925094530222,
+      "holdout": 0.9235432702402085,
+      "wall_seconds": 0.1966268489995855
+    }
+  ],
+  "rank_one_fixture": {
+    "dense_parameters": 96,
+    "tt_parameters": 14,
+    "max_absolute_error": 9.947598300641403e-14
+  },
+  "cluster": {
+    "schema": "omega-async-cluster-v1",
+    "complete": true,
+    "islands": 8,
+    "commits": 40,
+    "attempts": 128,
+    "rejections": 0,
+    "budget": 128,
+    "occupied_cells": 66,
+    "lineage_size": 164,
+    "migrations_seen": 28,
+    "migrations_accepted": 28,
+    "migrations_retained": 16,
+    "performance_profiled": 0,
+    "performance_rejections": 0,
+    "baseline_score": 0.5591341064073991,
+    "champion_score": 0.8500093646677812,
+    "champion": "(0.708*(-(x+y+1.899*(x-y)*(x-y)/(0.0104+min(x,y))+2.637))+0.292*(-(x+y)))",
+    "holdout_quality": 0.9290830396676802,
+    "island_rounds": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "trajectory_count": 128,
+    "foreign_trajectories": 64,
+    "formal_checks": 156,
+    "formal_rejections": 0,
+    "action_counts": [
+      13,
+      10,
+      8,
+      9,
+      12,
+      12,
+      64
+    ],
+    "topology": {
+      "leaf_count": 173,
+      "islands": [
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -69.1936668976888,
+          "entropy_max": 0.601483690664761,
+          "geometry_sha256": "475b2b5a0fae11b48f68a225b4dcb278550d7f779ab3b4b1cf3f8eb3af064e84",
+          "leaf_count": 10,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.129500022930448
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -84.65099465617641,
+          "entropy_max": 0.6024257666259404,
+          "geometry_sha256": "3c40dcd4f42d9399f07e5cccc49eb1852177105e5d8c41c3afeb77d0df9d58aa",
+          "leaf_count": 25,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.135153715289928
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -84.65099465617641,
+          "entropy_max": 0.6028362498805313,
+          "geometry_sha256": "c571b831facde56bc184618ad25b8b2e304d130382bc29c456c6f1c3178675e5",
+          "leaf_count": 22,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.137701157672721
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -70.05456029963409,
+          "entropy_max": 0.5975720096921274,
+          "geometry_sha256": "477ba3c15c51c0856c8bd493656e985870a86fb2f2dde830569509e8dcba01b7",
+          "leaf_count": 10,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.104472652303485
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -84.65099465617641,
+          "entropy_max": 0.6016050598159934,
+          "geometry_sha256": "5c3e5d099b6f7f57e5104cb90844b029307a0b76b2363d4a5672b99bd1f56137",
+          "leaf_count": 22,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.1284801663958515
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -84.65099465617641,
+          "entropy_max": 0.5976428816067773,
+          "geometry_sha256": "028dbf11c2f9145d1e71ee8516cba865177c291529fc967c767608fd34909219",
+          "leaf_count": 28,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.103446967518204
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -84.65099465617641,
+          "entropy_max": 0.596028169953364,
+          "geometry_sha256": "3c0da28f4b915e5e413c5a9a310ea7534fec749c34e647a50cbe20dc704e6fd7",
+          "leaf_count": 22,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.092220064056722
+        },
+        {
+          "curvature_max": 75.0305594399894,
+          "curvature_min": -84.65099465617641,
+          "entropy_max": 0.6012640495296838,
+          "geometry_sha256": "c89b4dd6fce3a6d67314df35cf642e083e4d14e16378790dbcae36039990e97e",
+          "leaf_count": 34,
+          "mesh_vertices": 256,
+          "metric_trace_max": 5.120940623974667
+        }
+      ]
+    },
+    "worker_processes": 4,
+    "checkpoint_commits_before_restart": 11,
+    "replay_identical": true,
+    "proof_obligations": 5052
+  },
+  "safety_examples": {
+    "-(x+y)": {
+      "boxes": 1,
+      "digest": "93867ec7ce715f4ea9fe9872f0aa31f38fe8dee7fa1e956a0aeb4126c2bb91ca",
+      "obligations": 4,
+      "policy": "omega-binary64-totality-v1",
+      "proved": true,
+      "reason": "proved totality and intermediate bounds",
+      "source_sha256": "180808deb12caa3ee54822f2b72f7aca688d73b61881b10be71b23d47d69e138"
+    },
+    "-(x+y+(x-y)*(x-y)/(.01+x*y)+2)": {
+      "boxes": 1,
+      "digest": "e62740f186c61844d16f55ebe95f95355cd7e5f9e497dba2259e6991075fd51b",
+      "obligations": 21,
+      "policy": "omega-binary64-totality-v1",
+      "proved": true,
+      "reason": "proved totality and intermediate bounds",
+      "source_sha256": "2fd2b75d496f504a10ab8bd0eb1dd16e03cc6f9d730c7dae4aec85f8fd5476da"
+    },
+    "1/(x-.123456)": {
+      "boxes": 1,
+      "digest": "",
+      "obligations": 6,
+      "policy": "omega-binary64-totality-v1",
+      "proved": false,
+      "reason": "denominator may contain zero",
+      "source_sha256": "6f0a93f5df8d33d6ffc152f5814630d2e44b90f676d47bb70c22414a8dcf648e"
+    },
+    "1e6*1e6*1e6": {
+      "boxes": 0,
+      "digest": "",
+      "obligations": 0,
+      "policy": "omega-binary64-totality-v1",
+      "proved": false,
+      "reason": "intermediate bound unproved",
+      "source_sha256": "0c707e1429d7388625d870fb77375b5988b5d270f65186dcc7745481f1edcfb3"
+    }
+  }
+}

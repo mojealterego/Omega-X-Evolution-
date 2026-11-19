@@ -25,7 +25,7 @@ from multiprocessing import get_context
 
 from .engine import (Archive, Artifact, Audit, BASELINE, Cascade, Expression,
                      Genome, apply_patch, score, simulated_proposal)
-from . import performance
+from . import performance, annealed, holographic, safety_synthesis
 from .topology import TopologicalArchive, TopologyPolicy
 from .workers import EvaluationInput, evaluate_one
 
@@ -58,6 +58,13 @@ class ClusterConfig:
     timeout: int = 120
     policy: performance.Policy | None = None
     topology: TopologyPolicy | None = None
+    annealed: bool = False
+    holographic: bool = False
+    formal_safety: bool = False
+
+    @property
+    def feedback(self):
+        return self.annealed or self.holographic or self.formal_safety
 
     def __post_init__(self):
         fields = (self.islands,self.rounds,self.batch,self.budget,self.parallelism,
@@ -69,6 +76,8 @@ class ClusterConfig:
             0 <= self.seed < 2**32 and 1 <= self.timeout <= 3600 and
             self.islands * (self.rounds*(self.batch+1)+1) <= MAX_WORK):
             raise ValueError('cluster resource bounds')
+        if any(type(x) is not bool for x in (self.annealed,self.holographic,self.formal_safety)) or (self.feedback and min(self.budget,self.islands*self.rounds*self.batch)+self.islands*(self.rounds+1)>8192):
+            raise ValueError('adaptive feedback/proof work bounds')
         if self.topology is not None and not isinstance(self.topology,TopologyPolicy):
             raise ValueError('invalid topology policy')
         if self.policy is not None and (not isinstance(self.policy,performance.Policy) or
@@ -83,7 +92,7 @@ def contract(cfg):
     root=Path(__file__).parent
     return {'schema':'omega-cluster-v1','config':asdict(cfg),'python':list(sys.version_info[:3]),
             'source':{n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in
-                      ('cluster.py','engine.py','workers.py','performance.py','topology.py')}}
+                      ('cluster.py','engine.py','workers.py','performance.py','topology.py','annealed.py','holographic.py','safety_synthesis.py')}}
 
 
 def artifact(value):
@@ -111,6 +120,11 @@ def initial_state(cfg,i):
         'last_migrant':0,'migrations_seen':0,'migrations_accepted':0,'migrations_retained':0,
         'migration_history':[],'outgoing':None,'performance_records':[],
         'elite':asdict(a),'occupied_cells':1})
+    if cfg.feedback:state['trajectories']=[];state['foreign_trajectories']=[]
+    if cfg.formal_safety:
+        certificate=safety_synthesis.prove(BASELINE)
+        if not certificate['proved']:raise ClusterError('baseline formal proof failed')
+        state['formal_seed']=certificate;state['formal_records']=[]
     if cfg.topology is not None:
         archive=TopologicalArchive(cfg.topology);archive.add(a);archive.adapt();state['topology']=archive.summary()
     return state
@@ -158,8 +172,15 @@ class IslandActor:
         r=state['round'] if final else state['round']+1
         rng=random.Random((cfg.seed<<32) ^ (i<<16) ^ r)
         audit=Audit(os.urandom(32),'omega-cluster-v1',Path(__file__).with_name('engine.py'))
+        last_outcome=None
         def admit(ident,code,parent,genome,external=False):
-            result=c.evaluate(code)
+            nonlocal last_outcome
+            if cfg.formal_safety:
+                certificate=safety_synthesis.prove(code)
+                s['formal_records'].append({'id':ident,'certificate':certificate})
+                if not certificate['proved']:
+                    last_outcome=0;return False
+            result=c.evaluate(code);last_outcome=result.stage
             accepted=result.stage==3 and result.metrics[3]==1.
             if accepted and cfg.policy is not None:
                 record=performance.check_candidate(ident,code,result.metrics[0],result.metrics[1],parent,
@@ -179,6 +200,10 @@ class IslandActor:
                 not incoming.id.startswith(f'i{origin}-') or incoming.generation>rev):
                 raise ValueError('invalid ring migration')
             if rev>s['last_migrant']:
+                if cfg.holographic:
+                    records=migrant.get('trajectories',[])
+                    if len(records)>holographic.TRANSFER or any(holographic.validate(t)['island']!=origin for t in records):raise ValueError('invalid foreign trajectories')
+                    s['foreign_trajectories']=records
                 ident=f'i{i}-m{origin}-{rev}';s['last_migrant']=rev;s['migrations_seen']+=1
                 passed=admit(ident,incoming.code,a.best(),incoming.genome,True)
                 retained=passed and any(x.id==ident for cell in a.cells[0].values() for x in cell)
@@ -191,16 +216,31 @@ class IslandActor:
                     parent=a.sample(0,rng);model='deep' if w==0 else 'fast'
                     prompt=wire({'parent':parent.code,'inspiration':a.best().code,
                         'contract':'Return one exact SEARCH/REPLACE expression patch over x,y in [0,1].'})
-                    patch=None
+                    patch=None;action=6;proposal_seed=None
+                    records=holographic.bounded_records(s.get('trajectories',[]),s.get('foreign_trajectories',[]))
+                    hits=holographic.Memory(records).retrieve(parent.code,3) if cfg.holographic else []
                     if isinstance(a,TopologicalArchive) and (r+w)%2==0:
                         patch=a.guided_patch(parent,rng)
+                    if patch is None and cfg.annealed:
+                        temperature=max(.1,1-r/max(1,cfg.rounds))
+                        probabilities=annealed.policy(parent.code,records,temperature=temperature,associations=hits)
+                        action=rng.choices(range(annealed.ACTIONS),probabilities)[0]
+                        proposal_seed=rng.randrange(2**32);patch=annealed.propose(parent.code,action,proposal_seed)
+                    if patch is None and cfg.holographic and not cfg.annealed:
+                        hit=next((h['record'] for h in hits if h['record']['accepted'] and h['record']['reward']>0 and h['record']['child']!=parent.code),None)
+                        if hit is not None:patch=f'<<<<<<< SEARCH\n{parent.code}\n=======\n{hit["child"]}\n>>>>>>> REPLACE'
                     if patch is None:
                         patch=await simulated_proposal(model,prompt,rng.randrange(2**32))
-                    s['attempts']+=1
+                    s['attempts']+=1;ident=f'i{i}-g{r}-p{w}'
                     try:code=apply_patch(parent.code,patch)
-                    except (ValueError,TypeError):s['rejections']+=1;continue
-                    if not admit(f'i{i}-g{r}-p{w}',code,parent,parent.genome.mutate(rng)):
-                        s['rejections']+=1
+                    except (ValueError,TypeError):
+                        if not cfg.feedback:s['rejections']+=1;continue
+                        code=''
+                    passed=admit(ident,code,parent,parent.genome.mutate(rng))
+                    if not passed:s['rejections']+=1
+                    if cfg.feedback:
+                        s['trajectories'].append(holographic.trajectory(ident,i,parent.id,parent.code,code,action,passed,
+                            score(a.lineage[ident].metrics) if passed else 0.,score(parent.metrics),last_outcome,proposal_seed))
             asyncio.run(propose())
             c.advance(cfg.seed+i*101+r);s['round']=r
         else:s['done']=True
@@ -211,6 +251,7 @@ class IslandActor:
         s['elite']=asdict(a.best());s['occupied_cells']=len(a.cells[0])
         if not final and (r%cfg.migration_interval==0 or r==cfg.rounds):
             s['outgoing']={'source':i,'revision':r,'artifact':s['elite']}
+            if cfg.holographic:s['outgoing']['trajectories']=s['trajectories'][-holographic.TRANSFER:]
         s=normalized(s)
         self._archive=a;self._state_key=wire(s);self._request_key=request;self._response=s
         return normalized(s)
@@ -238,6 +279,55 @@ def _verify_record(row,new,local,champion,policy,grid):
         d=performance.decide(cmp,policy)
         if not d.accepted or normalized(asdict(d))!=p['decision']: raise ClusterError('invalid performance decision')
 
+
+def _verify_feedback(cfg,old,new,migrant,consume,mid,n,r,grid,challenge,byid):
+    if not cfg.feedback:
+        if any(k in new for k in ('trajectories','foreign_trajectories','formal_records','formal_seed')):raise ClusterError('unexpected feedback')
+        return
+    history=new['trajectories'];prior=old['trajectories'];fresh=history[len(prior):]
+    if history[:len(prior)]!=prior or len(fresh)!=n:raise ClusterError('trajectory count or prefix mismatch')
+    foreign=migrant.get('trajectories',[]) if cfg.holographic and consume else old['foreign_trajectories']
+    if new['foreign_trajectories']!=foreign or len(foreign)>holographic.TRANSFER:raise ClusterError('foreign trajectory mismatch')
+    for t in foreign:holographic.validate(t)
+    proofs=new.get('formal_records',[]);previous=old.get('formal_records',[])
+    if cfg.formal_safety:
+        if old.get('formal_seed')!=new.get('formal_seed') or not safety_synthesis.verify(BASELINE,new.get('formal_seed')):raise ClusterError('invalid seed certificate')
+        if proofs[:len(previous)]!=previous or len(proofs)-len(previous)!=n+consume:raise ClusterError('missing formal obligations')
+        fresh_proofs=proofs[len(previous):]
+        expected_ids=([mid] if consume else [])+[f'i{old["island"]}-g{r}-p{w}' for w in range(n)]
+        if [p['id'] for p in fresh_proofs]!=expected_ids:raise ClusterError('proof order mismatch')
+        certificates={p['id']:p['certificate'] for p in fresh_proofs}
+    else:
+        if 'formal_records' in new or 'formal_seed' in new:raise ClusterError('unexpected formal record')
+        certificates={}
+    admitted={x['id']:artifact(x) for x in new['lineage'][len(old['lineage']):]}
+    available={x['id']:artifact(x) for x in old['lineage']}
+    def check(ident,code):
+        if cfg.formal_safety:
+            proof=safety_synthesis.prove(code)
+            if certificates[ident]!=proof:raise ClusterError('invalid proof certificate')
+            if not proof['proved']:
+                if ident in admitted:raise ClusterError('unproved admission')
+                return 0
+        outcome=evaluate_one(EvaluationInput(code,challenge,grid)).result
+        qualified=outcome.stage==3 and outcome.metrics[3]==1.
+        if ident in admitted:
+            if not qualified or admitted[ident].code!=code or admitted[ident].metrics!=outcome.metrics:raise ClusterError('invalid feedback admission')
+        elif qualified and not (cfg.policy is not None and ident in byid and byid[ident]['accepted'] is False):
+            raise ClusterError('unexplained rejected feedback')
+        return outcome.stage
+    if consume:
+        check(mid,migrant['artifact']['code'])
+        if mid in admitted:available[mid]=admitted[mid]
+    for w,t in enumerate(fresh):
+        t=holographic.validate(t);ident=f'i{old["island"]}-g{r}-p{w}'
+        parent=available.get(t['parent_id'])
+        if t['id']!=ident or t['island']!=old['island'] or parent is None or t['parent']!=parent.code or t['baseline']!=score(parent.metrics):raise ClusterError('trajectory provenance mismatch')
+        if (t['action']<annealed.ACTIONS and (not cfg.annealed or t['proposal_seed'] is None)) or (t['action']==6 and t['proposal_seed'] is not None):raise ClusterError('unverified operator identity')
+        result=check(ident,t['child']);accepted=ident in admitted
+        if t['accepted']!=accepted or t['stage']!=result or (accepted and (t['quality']!=score(admitted[ident].metrics) or admitted[ident].parent!=parent.id)):
+            raise ClusterError('trajectory reward or stage mismatch')
+        if accepted:available[ident]=admitted[ident]
 
 def verify_transition(cfg,old,new,migrant,champion,final):
     """Independently recompute every newly admitted candidate's deterministic gate.
@@ -287,12 +377,14 @@ def verify_transition(cfg,old,new,migrant,champion,final):
             if x.id==mid and m['retained']!=any(z.id==mid for cell in a.cells[0].values() for z in cell):
                 raise ClusterError('migration retention mismatch')
         if mcount and mid not in a.lineage:raise ClusterError('missing migrant')
+        _verify_feedback(cfg,old,new,migrant,consume,mid,n,r,grid,challenge,byid)
         if isinstance(a,TopologicalArchive):
             a.adapt()
             if new.get('topology')!=a.summary():raise ClusterError('topology summary mismatch')
         elif 'topology' in new:raise ClusterError('unexpected topology')
         if normalized(asdict(a.best()))!=new['elite'] or len(a.cells[0])!=new['occupied_cells']: raise ClusterError('archive summary mismatch')
         outgoing={'source':i,'revision':r,'artifact':new['elite']} if not final and (r%cfg.migration_interval==0 or r==cfg.rounds) else old['outgoing']
+        if cfg.holographic and not final and (r%cfg.migration_interval==0 or r==cfg.rounds):outgoing['trajectories']=new['trajectories'][-holographic.TRANSFER:]
         if new['outgoing']!=outgoing:raise ClusterError('invalid outgoing elite')
         # Challenge points remain bounded; exact failure counts are actor-generated.
         ch=new['challenge']
@@ -485,6 +577,12 @@ async def run_cluster(store,backend,*,stop_after=None):
         'baseline_score':score(c.evaluate(BASELINE).metrics),'champion_score':score(best['metrics']),
         'champion':best['code'],'holdout_quality':c.heldout(best['code']) if all(s['done'] for s in states) else None,
         'island_rounds':[s['round'] for s in states]}
+    if cfg.feedback:
+        report['trajectory_count']=sum(len(s['trajectories']) for s in states)
+        report['foreign_trajectories']=sum(len(s['foreign_trajectories']) for s in states)
+        report['formal_checks']=sum(len(s.get('formal_records',[])) for s in states)
+        report['formal_rejections']=sum(not p['certificate']['proved'] for s in states for p in s.get('formal_records',[]))
+        report['action_counts']=[sum(t['action']==i for s in states for t in s['trajectories']) for i in range(7)]
     if cfg.topology is not None:
         report['topology']={'leaf_count':sum(s['topology']['leaf_count'] for s in states),'islands':[s['topology'] for s in states]}
     return report
@@ -497,6 +595,7 @@ def main():
     p.add_argument('--db',type=Path,required=True);p.add_argument('--key-file',type=Path,required=True)
     p.add_argument('--backend',choices=('process','ray','simulation'),default='process');p.add_argument('--ray-address');p.add_argument('--distinct-nodes',action='store_true')
     p.add_argument('--topology',action='store_true');p.add_argument('--topology-depth',type=int,default=4);p.add_argument('--topology-split-count',type=int,default=4);p.add_argument('--topology-window',type=int,default=64)
+    p.add_argument('--annealed',action='store_true');p.add_argument('--holographic',action='store_true');p.add_argument('--formal-safety',action='store_true')
     p.add_argument('--performance-regression',action='store_true');p.add_argument('--resume',action='store_true');p.add_argument('--stop-after',type=int)
     args=vars(p.parse_args());db=args.pop('db');key_file=args.pop('key_file');mode=args.pop('backend');address=args.pop('ray_address');distinct=args.pop('distinct_nodes');resume=args.pop('resume');stop=args.pop('stop_after');policy=performance.Policy() if args.pop('performance_regression') else None
     if mode=='ray' and not address or mode!='ray' and (address or distinct):p.error('Ray requires --ray-address; Ray flags cannot be used with local backend')

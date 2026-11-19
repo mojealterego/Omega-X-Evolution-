@@ -7,9 +7,9 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v21 | Performance Regression Testing | 1–2 | Implemented measured Stage 3b |
 | v22 | Asynchronous distributed MAP-Elites with Ray | 2–5 | Implemented local process + simulation; physical Ray acceptance open |
 | v23 | Topological State-Space Evolution | 5–6 | Implemented SPD metric, adaptive partition, graph distances and cluster integration |
-| v24 | Quantum-Inspired Annealed Policy Search | 6–7 | Open; tensor-train policy approximation, bounded classical search and fair cost tests; no quantum speedup assumption |
-| v25 | Holographic Memory Compression | 7–12 | Open; stable context encoding, associative retrieval, bounded cross-island trajectory transfer with verified provenance |
-| v26 | Autonomous Formal Verification Synthesis | 12 | Open; generate candidate obligations under immutable policy, reject unknown/unproved obligations, no weakening of safety or replacement of all empirical tests |
+| v24 | Quantum-Inspired Annealed Policy Search | 6–7 | Implemented bounded classical TT-SVD policy and paired cost/quality benchmark; no advantage established, live LLM open |
+| v25 | Holographic Memory Compression | 7–12 | Implemented stable int8 contextual keys, Hopfield-style retrieval and verified ring transfer; global Ray validation open |
+| v26 | Autonomous Formal Verification Synthesis | 12 | Implemented candidate-specific interval safety obligations, finite modal check and fail-closed cluster integration; general modal/Lean proof open |
 | v27 | Quantum-Assisted Annealing | 12 | Open; classical reference and optional authorized quantum backend; benchmark total costs, no assumed advantage |
 | v28 | Autonomous synthesis of new architectural paradigms | 13 | Open; typed bounded memory architecture synthesis and promotion gates |
 | v29 | Swarm Federation | 13 | Open; authenticated peer exchange, replay resistance and independent verification |
