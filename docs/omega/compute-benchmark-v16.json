@@ -1,0 +1,21 @@
+{
+  "devices": [
+    {
+      "name": "cpu",
+      "kind": "cpu",
+      "memory": 67108864,
+      "physical": true
+    }
+  ],
+  "inference": {
+    "device": "cpu",
+    "physical": true,
+    "attempts": [
+      "cpu"
+    ],
+    "failures": [],
+    "estimated_bytes": 11296,
+    "samples": 48,
+    "reference_verified": true
+  }
+}

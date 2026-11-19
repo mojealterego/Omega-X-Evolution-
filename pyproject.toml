@@ -53,6 +53,7 @@ dependencies = [
 
 [project.optional-dependencies]
 wandb = ["wandb>=0.19"]
+accelerators = ["torch"]
 
 [project.scripts]
 omega-x-evolution = "omega_x_evolution.__main__:main"
@@ -68,6 +69,9 @@ omega-x-discovery = "omega_x_evolution.discovery:main"
 omega-x-polyglot = "omega_x_evolution.polyglot:main"
 omega-x-hybrid = "omega_x_evolution.neuro_symbolic:main"
 omega-x-nas = "omega_x_evolution.neural:main"
+omega-x-compute = "omega_x_evolution.compute:main"
+omega-x-memory = "omega_x_evolution.graph_memory:main"
+omega-x-experiments = "omega_x_evolution.experiments:main"
 shinka_omega = "shinka.omega.__main__:main"
 shinka_launch = "shinka.cli.launch:main"
 shinka_models = "shinka.cli.models:main"
