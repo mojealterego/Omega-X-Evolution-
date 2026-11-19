@@ -93,6 +93,8 @@ nav:
       - v13–v15: omega/EVOLUTION_V13_V15.md
       - v16–v18: omega/EVOLUTION_V16_V18.md
       - v19–v20: omega/EVOLUTION_V19_V20.md
+      - v23: omega/EVOLUTION_V23.md
+      - Extended Maintainer Roadmap: omega/MAINTAINER_ROADMAP.md
       - v22: omega/EVOLUTION_V22.md
       - v21: omega/EVOLUTION_V21.md
       - Acceptance Gates: omega/CLOSURE_REGISTER.md

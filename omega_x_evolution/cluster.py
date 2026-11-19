@@ -26,6 +26,7 @@ from multiprocessing import get_context
 from .engine import (Archive, Artifact, Audit, BASELINE, Cascade, Expression,
                      Genome, apply_patch, score, simulated_proposal)
 from . import performance
+from .topology import TopologicalArchive, TopologyPolicy
 from .workers import EvaluationInput, evaluate_one
 
 MAX_ISLANDS = 512
@@ -56,6 +57,7 @@ class ClusterConfig:
     seed: int = 42
     timeout: int = 120
     policy: performance.Policy | None = None
+    topology: TopologyPolicy | None = None
 
     def __post_init__(self):
         fields = (self.islands,self.rounds,self.batch,self.budget,self.parallelism,
@@ -67,6 +69,8 @@ class ClusterConfig:
             0 <= self.seed < 2**32 and 1 <= self.timeout <= 3600 and
             self.islands * (self.rounds*(self.batch+1)+1) <= MAX_WORK):
             raise ValueError('cluster resource bounds')
+        if self.topology is not None and not isinstance(self.topology,TopologyPolicy):
+            raise ValueError('invalid topology policy')
         if self.policy is not None and (not isinstance(self.policy,performance.Policy) or
                 min(self.budget,self.islands*self.rounds*self.batch)+self.islands*(self.rounds+1)>performance.MAX_ATTEMPTS):
             raise ValueError('performance profiling attempt cap')
@@ -79,7 +83,7 @@ def contract(cfg):
     root=Path(__file__).parent
     return {'schema':'omega-cluster-v1','config':asdict(cfg),'python':list(sys.version_info[:3]),
             'source':{n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in
-                      ('cluster.py','engine.py','workers.py','performance.py')}}
+                      ('cluster.py','engine.py','workers.py','performance.py','topology.py')}}
 
 
 def artifact(value):
@@ -88,10 +92,13 @@ def artifact(value):
     return Artifact(genome=Genome(**g),**value)
 
 
-def restore_archive(state):
-    a=Archive(1)
+def restore_archive(state,cfg=None):
+    a=TopologicalArchive(cfg.topology) if cfg is not None and cfg.topology is not None else Archive(1)
     for item in state['lineage']:
         if not a.add(artifact(item)): raise ValueError('duplicate lineage')
+    if isinstance(a,TopologicalArchive):
+        a.adapt()
+        if a.summary()!=state.get('topology'):raise ClusterError('topology snapshot mismatch')
     return a
 
 
@@ -99,11 +106,14 @@ def initial_state(cfg,i):
     if type(i) is not int or not 0<=i<cfg.islands: raise ValueError('island index')
     c=Cascade(cfg.seed)
     a=Artifact(f'i{i}-seed',None,0,0,BASELINE,Genome(),c.evaluate(BASELINE).metrics)
-    return normalized({'island':i,'round':0,'done':False,'attempts':0,'rejections':0,
+    state=normalized({'island':i,'round':0,'done':False,'attempts':0,'rejections':0,
         'lineage':[asdict(a)],'challenge':[[list(p),0] for p in c.challenge],
         'last_migrant':0,'migrations_seen':0,'migrations_accepted':0,'migrations_retained':0,
         'migration_history':[],'outgoing':None,'performance_records':[],
         'elite':asdict(a),'occupied_cells':1})
+    if cfg.topology is not None:
+        archive=TopologicalArchive(cfg.topology);archive.add(a);archive.adapt();state['topology']=archive.summary()
+    return state
 
 
 def _cascade(state,grid):
@@ -114,7 +124,10 @@ def _cascade(state,grid):
 
 
 class _ReferenceArchive:
-    def __init__(self,local,champion): self.local=local;self.cells=local.cells;self.champion=champion
+    def __init__(self,local,champion,code=None):
+        self.local=local;self.cells=local.cells;self.champion=champion
+        if isinstance(local,TopologicalArchive) and code is not None:
+            self.cells=[{Expression(code).descriptor:local.cell_for(code)}]
     def best(self): return max((self.local.best(),self.champion),key=lambda a:(score(a.metrics),a.id))
 
 
@@ -138,7 +151,7 @@ class IslandActor:
         before=wire(state)
         request=wire([before,migrant,champion,final])
         if self._request_key==request: return normalized(self._response)
-        a=self._archive if self._state_key==before else restore_archive(state)
+        a=self._archive if self._state_key==before else restore_archive(state,cfg)
         # Invalidate cache before mutation; errors cannot leave a cached partial archive.
         self._archive=None;self._state_key=None;self._request_key=None;self._response=None
         s=normalized(state);c=_cascade(s,self.grid);g=artifact(champion)
@@ -150,7 +163,7 @@ class IslandActor:
             accepted=result.stage==3 and result.metrics[3]==1.
             if accepted and cfg.policy is not None:
                 record=performance.check_candidate(ident,code,result.metrics[0],result.metrics[1],parent,
-                                                    _ReferenceArchive(a,g),self.grid,cfg.policy)
+                                                    _ReferenceArchive(a,g,code),self.grid,cfg.policy)
                 # Each pair is measured on that actor's current host. Do not compare stored durations cross-host.
                 record['context']=performance.context(self.grid,cfg.policy)
                 s['performance_records'].append(record);accepted=record['accepted']
@@ -178,7 +191,11 @@ class IslandActor:
                     parent=a.sample(0,rng);model='deep' if w==0 else 'fast'
                     prompt=wire({'parent':parent.code,'inspiration':a.best().code,
                         'contract':'Return one exact SEARCH/REPLACE expression patch over x,y in [0,1].'})
-                    patch=await simulated_proposal(model,prompt,rng.randrange(2**32))
+                    patch=None
+                    if isinstance(a,TopologicalArchive) and (r+w)%2==0:
+                        patch=a.guided_patch(parent,rng)
+                    if patch is None:
+                        patch=await simulated_proposal(model,prompt,rng.randrange(2**32))
                     s['attempts']+=1
                     try:code=apply_patch(parent.code,patch)
                     except (ValueError,TypeError):s['rejections']+=1;continue
@@ -187,6 +204,8 @@ class IslandActor:
             asyncio.run(propose())
             c.advance(cfg.seed+i*101+r);s['round']=r
         else:s['done']=True
+        if isinstance(a,TopologicalArchive):
+            a.adapt();s['topology']=a.summary()
         s['lineage']=[asdict(x) for x in a.lineage.values()]
         s['challenge']=[[list(p),c.failures[p]] for p in c.challenge]
         s['elite']=asdict(a.best());s['occupied_cells']=len(a.cells[0])
@@ -205,7 +224,7 @@ def _verify_record(row,new,local,champion,policy,grid):
     if row['candidate_sha256']!=hashlib.sha256(new.code.encode()).hexdigest() or row['correctness']!=new.metrics[0] or row['performance_proxy']!=new.metrics[1] or row['accepted'] is not True:
         raise ClusterError('admission profile mismatch')
     parent=local.lineage[new.parent] if new.parent is not None else local.best()
-    cell=local.cells[0].get(Expression(new.code).descriptor,[])
+    cell=local.cell_for(new.code) if isinstance(local,TopologicalArchive) else local.cells[0].get(Expression(new.code).descriptor,[])
     role,ref=('cell',max(cell,key=lambda a:(score(a.metrics),a.id))) if cell else ('champion',_ReferenceArchive(local,champion).best())
     expected=[('parent',parent)]+([(role,ref)] if ref.code!=parent.code else [])
     ctx=performance.context(grid,policy)
@@ -246,7 +265,7 @@ def verify_transition(cfg,old,new,migrant,champion,final):
         mcount=int(bool(m and m['accepted']));retained=int(bool(m and m['retained']))
         if (new['last_migrant']!=(migrant['revision'] if consume else old['last_migrant']) or new['migrations_accepted']!=old['migrations_accepted']+mcount or
             new['migrations_retained']!=old['migrations_retained']+retained or len(fresh)!=n-rejected+mcount): raise ClusterError('migration/accounting mismatch')
-        grid=Cascade(cfg.seed).grid;challenge=tuple(tuple(p) for p,_ in old['challenge']);a=restore_archive(old)
+        grid=Cascade(cfg.seed).grid;challenge=tuple(tuple(p) for p,_ in old['challenge']);a=restore_archive(old,cfg)
         profiles=new['performance_records'][len(old['performance_records']):];byid={p['candidate_id']:p for p in profiles}
         if len(byid)!=len(profiles) or (cfg.policy is None and profiles) or len(profiles)>n+consume: raise ClusterError('profile budget mismatch')
         expected_ids={f'i{i}-g{r}-p{w}' for w in range(n)}|({mid} if consume else set())
@@ -268,6 +287,10 @@ def verify_transition(cfg,old,new,migrant,champion,final):
             if x.id==mid and m['retained']!=any(z.id==mid for cell in a.cells[0].values() for z in cell):
                 raise ClusterError('migration retention mismatch')
         if mcount and mid not in a.lineage:raise ClusterError('missing migrant')
+        if isinstance(a,TopologicalArchive):
+            a.adapt()
+            if new.get('topology')!=a.summary():raise ClusterError('topology summary mismatch')
+        elif 'topology' in new:raise ClusterError('unexpected topology')
         if normalized(asdict(a.best()))!=new['elite'] or len(a.cells[0])!=new['occupied_cells']: raise ClusterError('archive summary mismatch')
         outgoing={'source':i,'revision':r,'artifact':new['elite']} if not final and (r%cfg.migration_interval==0 or r==cfg.rounds) else old['outgoing']
         if new['outgoing']!=outgoing:raise ClusterError('invalid outgoing elite')
@@ -451,7 +474,7 @@ async def run_cluster(store,backend,*,stop_after=None):
         for task in pending:task.cancel()
         if pending:await asyncio.gather(*pending,return_exceptions=True)
     states=[s for _,s in rows];c=Cascade(cfg.seed);best=champion()
-    return {'schema':'omega-async-cluster-v1','complete':all(s['done'] for s in states),
+    report={'schema':'omega-async-cluster-v1','complete':all(s['done'] for s in states),
         'islands':cfg.islands,'commits':sum(rev for rev,_ in rows),'attempts':sum(s['attempts'] for s in states),
         'rejections':sum(s['rejections'] for s in states),'budget':cfg.budget,
         'occupied_cells':sum(s['occupied_cells'] for s in states),'lineage_size':sum(len(s['lineage']) for s in states),
@@ -462,6 +485,9 @@ async def run_cluster(store,backend,*,stop_after=None):
         'baseline_score':score(c.evaluate(BASELINE).metrics),'champion_score':score(best['metrics']),
         'champion':best['code'],'holdout_quality':c.heldout(best['code']) if all(s['done'] for s in states) else None,
         'island_rounds':[s['round'] for s in states]}
+    if cfg.topology is not None:
+        report['topology']={'leaf_count':sum(s['topology']['leaf_count'] for s in states),'islands':[s['topology'] for s in states]}
+    return report
 
 
 def main():
@@ -470,10 +496,13 @@ def main():
         p.add_argument('--'+f.replace('_','-'),type=int,default=getattr(ClusterConfig(),f))
     p.add_argument('--db',type=Path,required=True);p.add_argument('--key-file',type=Path,required=True)
     p.add_argument('--backend',choices=('process','ray','simulation'),default='process');p.add_argument('--ray-address');p.add_argument('--distinct-nodes',action='store_true')
+    p.add_argument('--topology',action='store_true');p.add_argument('--topology-depth',type=int,default=4);p.add_argument('--topology-split-count',type=int,default=4);p.add_argument('--topology-window',type=int,default=64)
     p.add_argument('--performance-regression',action='store_true');p.add_argument('--resume',action='store_true');p.add_argument('--stop-after',type=int)
     args=vars(p.parse_args());db=args.pop('db');key_file=args.pop('key_file');mode=args.pop('backend');address=args.pop('ray_address');distinct=args.pop('distinct_nodes');resume=args.pop('resume');stop=args.pop('stop_after');policy=performance.Policy() if args.pop('performance_regression') else None
     if mode=='ray' and not address or mode!='ray' and (address or distinct):p.error('Ray requires --ray-address; Ray flags cannot be used with local backend')
-    cfg=ClusterConfig(**args,policy=policy)
+    topology=TopologyPolicy(depth=args.pop('topology_depth'),split_count=args.pop('topology_split_count'),window=args.pop('topology_window'))
+    enabled=args.pop('topology')
+    cfg=ClusterConfig(**args,policy=policy,topology=topology if enabled else None)
     with key_file.open('rb') as f:key=f.read(4097)
     store=Store(db,key,cfg)
     backend=RayBackend(cfg,address=address,distinct_nodes=distinct) if mode=='ray' else LocalBackend(cfg,processes=mode=='process')

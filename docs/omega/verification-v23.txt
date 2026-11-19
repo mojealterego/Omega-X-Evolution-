@@ -1,0 +1,16 @@
+OMEGA-X Evolution 0.23.0.dev1 — Topological State-Space Evolution
+Base: 440bff3b94b8ab7e769c64653cf97c22fd6def3d
+Base ZIP SHA-256 6ca48796afcc4e428e73a7b6d0b2e849e6cb65a66c19c146cffc2ed8da2b78d8; 460/460 tracked Git blob hashes matched.
+Source: maintainer DOCX SHA-256 46b56e6ca8087b20211205c9e0ec58c3c41188ffe1e4d3966df2efb86214d5bc. Requirements register MAINTAINER_ROADMAP.md.
+RED: missing topology module; later guided-mutation test failed before implementation; CLI test reproduced duplicate kwarg bug before fix.
+GREEN: 23 tests passed (v22+v23 before CLI test); CLI test separately passed after fix.
+FINAL REGRESSION: python -m pytest -q tests/test_omega*.py — 198 passed in 46.31s, exit 0 (10 new tests). A prior run overlapped source edits and correctly failed on actor runtime hash mismatch; final run used stable code and passed.
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.70s, exit 0 (existing isolated dependency shim).
+COMPILE: python -m compileall -q omega_x_evolution tests — exit 0.
+METADATA: 0.23.0.dev1, TOML parsed, 23 canonical CLI entry points callable.
+FULL UPSTREAM: python -m pytest -q — 72 collection errors, exit 2, 2.43s. Missing dependencies remain, no new skips.
+GEOMETRY: SPD metric everywhere, graph metric axioms, nonzero signed curvature estimate for variable conformal scale and zero for identity, deterministic adaptation, coarsening, Pareto capacity, bounded distance cache, actual guided AST mutation, tamper rejection, local process checkpoint continuation, v21 adaptive-cell regression gate with synthetic timing, CLI opt-in/default.
+PAIRED: seed42/8 islands/4 rounds/4 batch/128 proposals/parallelism1/actual spawned worker. Fixed: champion .8742485746075842; holdout .9138694622903321; 39 occupied cells; 32 common-mesh bins; 110 unique codes. Adaptive: champion .8492702945616682; holdout .8798720280376655; 67 occupied cells; 67 common-mesh bins; 116 unique codes; 206 total adaptive leaves. Common fixed descriptor coverage 39 vs 71. Native occupied-cell counts are not directly comparable; common coverages computed over accepted lineage per island. One fixture, no generalized improvement or speed claim.
+PARALLEL: 16 islands/4 real spawned worker processes/192 proposals/64 durable commits/46 migrations/115 occupied adaptive cells/361 leaves.
+SCALE: 256 logical islands/one process with threads/512 proposals/512 commits/256 migrations/840 occupied adaptive cells/1999 leaves. Aggregated scale evidence with digest in topology-benchmark-v23.json. Not physical machines.
+COMPATIBILITY: engine.py, workers.py, checkpoint.py, performance.py unchanged; v22 cluster checkpoint exact module/config hashes incompatible, use matching release. Physical Ray unavailable from previous environment; no real Ray execution claimed. v21 timing itself remains nondeterministic. No paid API, external machine provisioning, or active CI workflows.
