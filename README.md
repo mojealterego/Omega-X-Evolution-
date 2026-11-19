@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v4%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v6%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -20,7 +20,10 @@ flowchart TD
     A["Evolution controller"] --> B["Bounded meta-genome / model selection"]
     B --> C["Candidate generation"]
     C --> D["Restricted AST validation"]
-    D --> E["Local evaluation workers"]
+    D --> E["Local or authenticated remote evaluation workers"]
+    B --> J["Bounded workflow evolution"]
+    C --> K["AST/IR superoptimizer"]
+    K --> D
     E --> F["Fixed fitness and safety gates"]
     F --> G["Pareto island archive / genealogy"]
     G --> A
@@ -30,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v4
+## Current implementation — v6
 
 | Component | Capability |
 |---|---|
@@ -40,19 +43,21 @@ The diagram describes the implemented optional OMEGA-X research path. The genera
 | Candidate validation | Restricted arithmetic expression interpreter and exact patch contract |
 | Evaluation | Fixed benchmark, staged validation, holdout excluded from worker inputs |
 | Persistence | Authenticated SQLite generation snapshots and deterministic offline resume |
-| Parallelism | Trusted local process pool, deterministic result ordering |
+| Parallelism | Local process pool and authenticated network worker protocol, durable leases, deterministic commits |
+| Meta-agent | Bounded mutation of operator workflows with independent seed promotion |
+| AST/IR | Binary64-preserving source rewrites and common-subexpression elimination |
 | Knowledge export | SFT and DPO records, without automatic training |
 
-**Status:** development snapshot, not a production distributed system. Remote-worker transport, cross-host leases and fencing, arbitrary-code isolation, formal proofs, and end-to-end model training are not implemented or demonstrated by this release.
+**Status:** development snapshot, not a production distributed system. The network evaluator has been tested on loopback with actual worker processes and TLS; no external cluster, HA coordinator or throughput gain is established. Independent recomputation is mandatory. Arbitrary-code execution, general agent self-rewriting, formal proofs and end-to-end model training remain out of scope.
 
 ## Roadmap
 
 | Stage | Objective | Status |
 |---|---|---|
 | v1–v3 | Hardening, bounded coevolution, durable recovery | Implemented within documented scope |
-| v4 | Distributed evaluation | Local multiprocessing implemented; multi-host work pending |
-| v5 | Meta-agent evolution | Open |
-| v6 | AST/IR superoptimization | Open |
+| v4.1 | Distributed evaluation | Implemented within bounded protocol; local network/process/TLS verification |
+| v5 | Meta-agent evolution | Bounded operator workflow evolution implemented and verified |
+| v6 | AST/IR superoptimization | Bounded binary64 rewrite + DAG IR implemented and verified |
 | v7 | Formal verification | Open |
 | v8 | Knowledge distillation | Open |
 | v9 | Multilevel coevolution | Open |
@@ -76,20 +81,31 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.4.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.6.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+
+## Advanced modes
+
+```bash
+python -m omega_x_evolution.distributed --help
+python -m omega_x_evolution.meta --rounds 3 --population 4 --generations 3
+python -m omega_x_evolution.superopt '(-(-(x*1))/1)+(x+y)*(x+y)'
+```
+
+See [v4.1–v6 deployment and acceptance scope](docs/omega/EVOLUTION_V41_V6.md) before enabling network endpoints. The canonical offline engine requires only the standard library; legacy upstream components retain their dependencies.
 
 ## Verification
 
 ```bash
 python -m pip install pytest
-python -m pytest -q tests/test_omega_workers.py tests/test_omega_checkpoint.py tests/test_omega_coevolution.py tests/test_omega_identity.py
+python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, model training or production attestation is claimed. These are historical results. The namespace migration has a separate [49-test verification record](docs/omega/verification-identity.txt).
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-v6.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 
+- [v4.1–v6 implementation, benchmarks and operating instructions](docs/omega/EVOLUTION_V41_V6.md)
 - [Namespace and packaging migration](docs/omega/IDENTITY_MIGRATION.md)
 - [OMEGA-X coevolution architecture](docs/OMEGA_COEVOLUTION.md)
 - [Runtime hardening](docs/OMEGA_HARDENING.md)

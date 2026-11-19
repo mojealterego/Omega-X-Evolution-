@@ -19,7 +19,7 @@ Start a local source-checkout experiment:
 python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-Remote execution is not implemented by the identity migration. The next engineering increment is the multi-host evaluation protocol and lease fencing.
+The v6 development snapshot now includes authenticated remote evaluation, durable leases, bounded workflow evolution and AST/IR optimization. See [v4.1–v6 operations and evidence](omega/EVOLUTION_V41_V6.md). The next roadmap milestone is v7 formal verification.
 
 ## Imported foundation
 

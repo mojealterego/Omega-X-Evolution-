@@ -1,0 +1,9 @@
+{
+  "source": "x + (x + y) * (x + y)",
+  "original_operations": 8,
+  "optimized_operations": 4,
+  "original_nodes": 15,
+  "optimized_nodes": 9,
+  "ir_operations": 3,
+  "ir_instructions": 5
+}

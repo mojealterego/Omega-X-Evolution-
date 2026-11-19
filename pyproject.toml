@@ -56,6 +56,9 @@ wandb = ["wandb>=0.19"]
 
 [project.scripts]
 omega-x-evolution = "omega_x_evolution.__main__:main"
+omega-x-distributed = "omega_x_evolution.distributed:main"
+omega-x-meta = "omega_x_evolution.meta:main"
+omega-x-superopt = "omega_x_evolution.superopt:main"
 shinka_omega = "shinka.omega.__main__:main"
 shinka_launch = "shinka.cli.launch:main"
 shinka_models = "shinka.cli.models:main"

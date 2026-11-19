@@ -1,0 +1,16 @@
+OMEGA-X Evolution 0.6.0.dev1 — v4.1/v5/v6 verification
+Base: a07db53cf8f0683973e1011dd4272f595fbb0013
+Python 3.13.5; Linux container; full source archive plus research PDFs.
+Baseline: pytest tests/test_omega*.py — 49 passed (15.21s).
+RED: each new test module failed collection before its implementation (missing module).
+GREEN: 34 new targeted tests, included in 83-test final regression.
+REGRESSION: python -m pytest -q tests/test_omega*.py — 83 passed in 18.24s; exit 0.
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.83s; exit 0 (isolated upstream dependency shim).
+COMPILE: python -m compileall -q omega_x_evolution tests — exit 0.
+METADATA: TOML parsed, version 0.6.0.dev1, 4 canonical CLI entries verified.
+TLS: real loopback TLS with ephemeral OpenSSL certificate; untrusted CA rejected.
+Workers: actual separate worker process and concurrent client threads; controller recomputation; stale lease and replay protection; timeout, retry exhaustion and checkpoint-resume parity.
+Meta: 8 unique workflows evaluated, selected candidate promoted on both disjoint validation seeds; see meta-benchmark-v5.json.
+AST/IR: 150 generated expressions * 5 points, additional explicit signed-zero/random/domain/exception tests; 8 -> 4 AST operations -> 3 IR operations on example.
+FULL UPSTREAM: python -m pytest -q — exit 2, 72 errors during collection (missing external dependencies e.g. anthropic, radon); not a full upstream pass. Full wheel/MkDocs build not verified.
+No live paid inference, external physical cluster, production deployment, CI or formal verification performed.
