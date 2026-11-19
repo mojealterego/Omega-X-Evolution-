@@ -1,0 +1,1665 @@
+BASE main 42ac0be401ba8fca3d51483327fcfcce598c4525
+Python 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]
+Linux-6.18.57-x86_64-with-glibc2.41
+
+Source SHA-256
+bcb3697cf82d6dfc32f1a66b1faaf6fc95ec677def3594f060d7e0e10bbc1c67  omega_x_evolution/simulation_contracts.py
+c78e282d654d12e697004322fbe50bce32c5ec1d5a28d2072625557264430288  omega_x_evolution/__init__.py
+e8a1e1d939b1698dbea9800099867fa7119047b6f363da3eb2f1588d04b00970  tests/test_omega_simulation_acceptance.py
+
+
+=== RED: new model tests ===
+
+==================================== ERRORS ====================================
+__________ ERROR collecting tests/test_omega_simulation_acceptance.py __________
+ImportError while importing test module '/tmp/omega-v361/OMEGA-X-Evolution/tests/test_omega_simulation_acceptance.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_omega_simulation_acceptance.py:7: in <module>
+    from omega_x_evolution.simulation_contracts import check_source, VirtualCluster
+E   ModuleNotFoundError: No module named 'omega_x_evolution.simulation_contracts'
+=========================== short test summary info ============================
+ERROR tests/test_omega_simulation_acceptance.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.16s
+
+
+=== Initial GREEN (five tests) ===
+.....                                                                    [100%]
+5 passed in 16.34s
+
+
+=== Related contract suite (before final test extensions) ===
+exit 0
+........................................................................ [ 79%]
+...................                                                      [100%]
+91 passed in 71.73s (0:01:11)
+
+
+=== Final simulation: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -sv tests/test_omega_simulation_acceptance.py ===
+exit 0
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- /opt/pyvenv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.5', 'Platform': 'Linux-6.18.57-x86_64-with-glibc2.41', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'anyio': '4.13.0', 'ddtrace': '4.4.0', 'Faker': '40.1.2', 'asyncio': '1.3.0', 'cov': '7.0.0', 'json-report': '1.5.0', 'metadata': '3.1.1'}, 'PLATFORM': 'linux/amd64', 'CI': 'true'}
+rootdir: /tmp/omega-v361/OMEGA-X-Evolution
+configfile: pyproject.toml
+plugins: anyio-4.13.0, ddtrace-4.4.0, Faker-40.1.2, asyncio-1.3.0, cov-7.0.0, json-report-1.5.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+tests/test_omega_simulation_acceptance.py::test_proof_source_roundtrip_and_solver[lean] {"counterexample": {"domain_size": 4294967296, "mode": "DETERMINISTIC-SIMULATION", "native_kernel_verified": false, "proved": false, "query_sha256": "da2b3901450086cc4470f098aea55c5c313ed89762103776aeeb0618dcaf200f", "semantics": "pure modular u16 IR, not compiler equivalence", "source_backend": "lean", "source_sha256": "2a24ee14008c035ce6a506d0987455aadb2960f536e68284e08be12ef0b6e836", "status": "sat"}, "test": "source-roundtrip", "valid": {"domain_size": 4294967296, "mode": "DETERMINISTIC-SIMULATION", "native_kernel_verified": false, "proved": true, "query_sha256": "7617fef2d7754d45dc98ea58721dfd688d74fd431be4a5ede0c0effb84fa47bc", "semantics": "pure modular u16 IR, not compiler equivalence", "source_backend": "lean", "source_sha256": "604a68845a8a5a229243771ca35aff3df5ee5d5ae21471b063181a9c66107ce7", "status": "unsat"}}
+PASSED
+tests/test_omega_simulation_acceptance.py::test_proof_source_roundtrip_and_solver[isabelle] {"counterexample": {"domain_size": 4294967296, "mode": "DETERMINISTIC-SIMULATION", "native_kernel_verified": false, "proved": false, "query_sha256": "da2b3901450086cc4470f098aea55c5c313ed89762103776aeeb0618dcaf200f", "semantics": "pure modular u16 IR, not compiler equivalence", "source_backend": "isabelle", "source_sha256": "8c84e801e9068a63da1486944416c4bda1e4b17737397c18e64a96a20e607206", "status": "sat"}, "test": "source-roundtrip", "valid": {"domain_size": 4294967296, "mode": "DETERMINISTIC-SIMULATION", "native_kernel_verified": false, "proved": true, "query_sha256": "7617fef2d7754d45dc98ea58721dfd688d74fd431be4a5ede0c0effb84fa47bc", "semantics": "pure modular u16 IR, not compiler equivalence", "source_backend": "isabelle", "source_sha256": "de108fa968fd4090bab0dac7431283dc0072c187b962439ff87aab2287c5ba70", "status": "unsat"}}
+PASSED
+tests/test_omega_simulation_acceptance.py::test_virtual_cluster_faults_capacity_restart_and_deadline {"events": [[0, "accepted", "omega-7a9290b6d415fd6bbcecb8431c1c3be3", [["cpu", 0], ["gpu", 0], ["tpu", 0]]], [0, "scheduled", "omega-7a9290b6d415fd6bbcecb8431c1c3be3", [["cpu", 0], ["gpu", 1], ["tpu", 0]]], [0, "lost-response", "omega-7a9290b6d415fd6bbcecb8431c1c3be3", [["cpu", 0], ["gpu", 1], ["tpu", 0]]], [0, "accepted", "omega-864a51e8d5880ad48d77db0492308ac8", [["cpu", 0], ["gpu", 1], ["tpu", 0]]], [10, "Failed", "omega-7a9290b6d415fd6bbcecb8431c1c3be3", [["cpu", 0], ["gpu", 0], ["tpu", 0]]], [10, "Failed", "omega-864a51e8d5880ad48d77db0492308ac8", [["cpu", 0], ["gpu", 0], ["tpu", 0]]], [10, "accepted", "omega-3f59c40fd8e8c82278d4786bf6af27d8", [["cpu", 0], ["gpu", 0], ["tpu", 0]]], [10, "scheduled", "omega-3f59c40fd8e8c82278d4786bf6af27d8", [["cpu", 1], ["gpu", 0], ["tpu", 0]]], [11, "deleted", "omega-3f59c40fd8e8c82278d4786bf6af27d8", [["cpu", 0], ["gpu", 0], ["tpu", 0]]]], "reserved_micros": 19368, "seed": 42, "test": "virtual-cluster"}
+PASSED
+tests/test_omega_simulation_acceptance.py::test_virtual_cluster_state_replays PASSED
+tests/test_omega_simulation_acceptance.py::test_distributed_gradient_reference_and_optimizer {"frozen_base_sha": "846cc472ba3258a93aaf91c0063d5f3f083eeb9cb63f4268357a12cdc4a08c76", "report": {"events": [{"shards": [[1, 2, 5], [3, 6], [4, 0]], "step": 0}, {"shards": [[3, 4, 1], [6, 0], [2, 5]], "step": 1}, {"shards": [[3, 1, 0], [2, 5], [4, 6]], "step": 2}], "mode": "DETERMINISTIC-SIMULATION", "samples": 21, "seed": 42, "steps": 3}, "test": "distributed-training"}
+PASSED
+tests/test_omega_simulation_acceptance.py::test_virtual_cluster_success_and_uid_preconditions {"backend": "cpu", "events": [[0, "accepted", "omega-8bf73a2ea2e33622495a1e545c501e6d", [["cpu", 0], ["gpu", 0], ["tpu", 0]]], [0, "scheduled", "omega-8bf73a2ea2e33622495a1e545c501e6d", [["cpu", 1], ["gpu", 0], ["tpu", 0]]], [1, "Complete", "omega-8bf73a2ea2e33622495a1e545c501e6d", [["cpu", 0], ["gpu", 0], ["tpu", 0]]]], "seed": 42, "test": "cpu-workload"}
+PASSED
+tests/test_omega_simulation_acceptance.py::test_virtual_accelerator_real_math_and_memory[gpu] PASSED
+tests/test_omega_simulation_acceptance.py::test_virtual_accelerator_real_math_and_memory[npu] PASSED
+
+============================== 8 passed in 15.60s ==============================
+
+
+=== Full native core: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q tests/test_omega*.py ===
+exit 0
+........................................................................ [ 21%]
+........................................................................ [ 42%]
+........................................................................ [ 63%]
+........................................................................ [ 84%]
+...................................................                      [100%]
+339 passed in 130.56s (0:02:10)
+
+
+=== Hardening: python scripts/verify_hardening.py ===
+exit 0
+......................................                                   [100%]
+38 passed in 3.88s
+
+
+=== Upstream: PYTHONPATH=/tmp/omega-v355-sdk python -m pytest --collect-only -q ===
+exit 2
+tests/test_archive_inspirations.py::test_archive_inspirations_are_distinct_when_falling_back_to_global
+tests/test_archive_ranked_criteria.py::test_ranked_archive_keeps_better_program_over_newer_worse_one
+tests/test_archive_ranked_criteria.py::test_ranked_is_better_compares_the_two_programs_directly
+tests/test_async_apply.py::test_run_validation_subprocess_success
+tests/test_async_apply.py::test_run_validation_subprocess_returns_stderr
+tests/test_async_apply.py::test_run_validation_subprocess_timeout_kills_process
+tests/test_async_apply.py::test_run_validation_subprocess_cancellation_kills_process
+tests/test_async_apply.py::test_validate_code_async_python_delegates_to_helper
+tests/test_async_apply.py::test_validate_code_async_rust_delegates_to_rustfmt
+tests/test_async_apply.py::test_validate_code_async_rust_reports_missing_rustfmt
+tests/test_async_apply.py::test_validate_code_async_rust_does_not_read_host_files
+tests/test_async_apply.py::test_validate_code_async_rust_accepts_valid_program_on_real_rustfmt
+tests/test_async_apply.py::test_validate_code_async_rust_rejects_broken_program_on_real_rustfmt
+tests/test_async_apply.py::test_validate_code_async_rust_rejects_option_shaped_filename
+tests/test_async_apply.py::test_validate_code_async_rust_ignores_project_config_that_disables_parsing
+tests/test_async_apply.py::test_validate_code_async_rust_accepts_type_errors
+tests/test_async_apply.py::test_validate_code_async_rust_honors_configured_edition
+tests/test_async_apply.py::test_validate_code_async_fortran_delegates_to_gfortran
+tests/test_async_apply.py::test_validate_code_async_json_delegates_to_helper
+tests/test_async_apply.py::test_validate_code_async_go_uses_read_only_fallback
+tests/test_async_apply.py::test_validate_code_async_wolfram_uses_wolframscript_helpers
+tests/test_async_complexity_1000.py::test_single_additions_with_complexity
+tests/test_async_complexity_1000.py::test_concurrent_additions_with_complexity
+tests/test_async_runner_recovery.py::test_restore_resume_progress_uses_actual_program_count
+tests/test_async_runner_recovery.py::test_get_remaining_completed_work_accounts_for_inflight_jobs
+tests/test_async_runner_recovery.py::test_get_in_flight_work_count_includes_completed_job_processing_lock
+tests/test_async_runner_recovery.py::test_get_failure_language_infers_fortran_from_generated_filename
+tests/test_async_runner_recovery.py::test_get_failure_language_infers_go_from_generated_filename
+tests/test_async_runner_recovery.py::test_get_failure_language_infers_verilog_from_generated_filename
+tests/test_async_runner_recovery.py::test_job_monitor_stops_when_target_reached_with_no_running_jobs
+tests/test_async_runner_recovery.py::test_is_system_stuck_ignores_inflight_persistence_work
+tests/test_async_runner_recovery.py::test_is_system_stuck_ignores_retry_queue_work
+tests/test_async_runner_recovery.py::test_get_remaining_generation_slots_uses_hard_generation_budget
+tests/test_async_runner_recovery.py::test_persist_failed_generation_stores_incorrect_program
+tests/test_async_runner_recovery.py::test_generate_evolved_proposal_records_failed_node_attempt_after_pre_eval_failure
+tests/test_async_runner_recovery.py::test_persist_failed_generation_skips_maintenance_and_handles_missing_code
+tests/test_async_runner_recovery.py::test_record_terminal_failed_proposal_updates_total_api_cost_once
+tests/test_async_runner_recovery.py::test_record_terminal_failed_proposal_updates_avg_proposal_cost
+tests/test_async_runner_recovery.py::test_maybe_evolve_prompt_updates_total_api_cost
+tests/test_async_runner_recovery.py::test_process_single_job_safely_applies_side_effects_inline
+tests/test_async_runner_recovery.py::test_cleanup_proposal_task_state_releases_generation_and_slot
+tests/test_async_runner_recovery.py::test_start_proposals_does_not_assign_generation_past_target
+tests/test_async_runner_recovery.py::test_generate_evolved_proposal_returns_none_when_all_attempts_fail
+tests/test_async_runner_recovery.py::test_generate_evolved_proposal_returns_none_when_submit_fails
+tests/test_async_runner_recovery.py::test_generate_evolved_proposal_assigns_worker_ids_on_submit
+tests/test_async_runner_recovery.py::test_generation_budget_exhaustion_waits_for_completed_job_processing_to_finish
+tests/test_async_runner_recovery.py::test_retry_failed_db_jobs_refreshes_completion_progress
+tests/test_async_runner_recovery.py::test_update_prompt_fitness_only_recomputes_after_correct_programs
+tests/test_async_runner_recovery.py::test_get_missing_persisted_generations_reports_budget_gap
+tests/test_async_runner_recovery.py::test_get_generations_without_program_due_to_proposal_failure_uses_attempt_log
+tests/test_async_runner_recovery.py::test_submit_evaluation_job_acquires_slot_before_submitting
+tests/test_async_runner_recovery.py::test_generate_evolved_proposal_uses_slot_reservation_helper
+tests/test_async_runner_recovery.py::test_release_evaluation_slot_once_does_not_free_reassigned_slot
+tests/test_async_runner_recovery.py::test_get_evaluation_runtime_limit_uses_ewma_when_timeout_not_configured
+tests/test_async_runner_recovery.py::test_is_job_hung_when_runtime_exceeds_limit
+tests/test_async_runner_recovery.py::test_cancel_surplus_inflight_work_cancels_backlog_once_target_hit
+tests/test_async_runner_recovery.py::test_process_single_job_skips_persistence_for_discarded_surplus_job
+tests/test_async_runner_recovery.py::test_mark_surplus_completed_jobs_discards_batch_overflow_after_target
+tests/test_async_runner_recovery.py::test_mark_surplus_completed_jobs_discards_all_when_target_already_reached
+tests/test_async_runner_recovery.py::test_job_monitor_preserves_jobs_added_during_status_poll
+tests/test_async_runner_recovery.py::test_job_monitor_processes_completed_jobs_inline
+tests/test_async_runner_recovery.py::test_wandb_population_snapshots_are_offloaded_and_coalesced
+tests/test_async_runner_recovery.py::test_wandb_population_snapshot_uses_worker_owned_database_connection
+tests/test_bandit_decay_warnings.py::test_decay_is_silent_with_unsampled_arms[AsymmetricUCB]
+tests/test_bandit_decay_warnings.py::test_decay_is_silent_with_unsampled_arms[ThompsonSampler]
+tests/test_bandit_persistence.py::test_asymmetric_ucb_persistence
+tests/test_bandit_persistence.py::test_thompson_sampler_persistence
+tests/test_bandit_persistence.py::test_fixed_sampler_persistence
+tests/test_bandit_persistence.py::test_asymmetric_ucb_loads_state_into_more_arms
+tests/test_bandit_persistence.py::test_asymmetric_ucb_loads_state_into_fewer_arms
+tests/test_bandit_persistence.py::test_thompson_sampler_loads_state_into_more_arms
+tests/test_bandit_persistence.py::test_thompson_sampler_loads_state_into_fewer_arms
+tests/test_bandit_persistence.py::test_fixed_sampler_loads_state_into_more_arms
+tests/test_bandit_persistence.py::test_fixed_sampler_loads_state_into_fewer_arms
+tests/test_bandit_persistence.py::test_asymmetric_ucb_restores_cost_range_for_cost_aware_resume
+tests/test_bandit_persistence.py::test_named_bandit_state_aligns_when_model_order_changes
+tests/test_bandit_persistence.py::test_asymmetric_ucb_named_state_aligns_when_model_order_changes
+tests/test_bandit_persistence.py::test_fixed_sampler_named_state_aligns_when_model_order_changes
+tests/test_bandit_persistence.py::test_legacy_bandit_state_without_arm_names_uses_prefix_alignment
+tests/test_bandit_persistence.py::test_legacy_thompson_state_without_arm_names_uses_prefix_alignment
+tests/test_bandit_persistence.py::test_legacy_fixed_state_without_arm_names_uses_prefix_alignment
+tests/test_bandit_persistence.py::test_asymmetric_ucb_recomputes_observation_range_when_dropping_arms
+tests/test_bandit_persistence.py::test_thompson_sampler_recomputes_observation_range_when_dropping_arms
+tests/test_bandit_persistence.py::test_asymmetric_ucb_print_summary_preserves_local_model_name
+tests/test_bandit_persistence.py::test_asymmetric_ucb_print_summary_preserves_openrouter_prefix
+tests/test_bandit_persistence.py::test_asymmetric_ucb_print_summary_matches_standard_summary_width
+tests/test_bandit_persistence.py::test_asymmetric_ucb_print_summary_omits_div_and_log_mean_columns
+tests/test_ci_workflows.py::test_public_ci_excludes_secret_backed_tests
+tests/test_ci_workflows.py::test_public_ci_installs_stable_rustfmt
+tests/test_ci_workflows.py::test_integration_workflow_exists_for_secret_backed_tests
+tests/test_ci_workflows.py::test_pytest_markers_are_registered
+tests/test_circle_notebook_validation.py::test_rejects_invalid_radii[-1.0]
+tests/test_circle_notebook_validation.py::test_rejects_invalid_radii[-inf]
+tests/test_circle_notebook_validation.py::test_rejects_invalid_radii[inf]
+tests/test_circle_notebook_validation.py::test_rejects_invalid_radii[nan]
+tests/test_circle_notebook_validation.py::test_rejects_non_finite_centers[inf]
+tests/test_circle_notebook_validation.py::test_rejects_non_finite_centers[-inf]
+tests/test_circle_notebook_validation.py::test_rejects_non_finite_centers[nan]
+tests/test_circle_notebook_validation.py::test_accepts_finite_non_overlapping_circles_and_zero_radius
+tests/test_circle_packing_example.py::test_circle_packing_persists_validated_score[valid]
+tests/test_circle_packing_example.py::test_circle_packing_persists_validated_score[outside-square]
+tests/test_circle_packing_example.py::test_circle_packing_persists_validated_score[overlapping]
+tests/test_circle_packing_example.py::test_circle_packing_persists_validated_score[negative-radius]
+tests/test_circle_packing_example.py::test_circle_packing_persists_validated_score[wrong-shape]
+tests/test_circle_packing_example.py::test_circle_packing_persists_validated_score[non-finite]
+tests/test_circle_packing_example.py::test_circle_packing_seed_keeps_its_score
+tests/test_compare_webui.py::test_compare_best_score_only_uses_correct_programs
+tests/test_complexity.py::test_python_complexity_metrics_contract
+tests/test_complexity.py::test_invalid_python_preserves_cpp_fallback_metrics
+tests/test_complexity.py::test_python_complexity_parses_ast_once
+tests/test_complexity.py::test_go_uses_regex_complexity_analysis
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[openai-gpt-6-astra-10.0-50.0-True]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[openai-gpt-6.1-sol-2.0-10.0-True]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[openai-gpt-6.1-terra-1.0-5.0-False]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[openai-gpt-6-luna-0.1-0.5-False]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[anthropic-claude-fable-5-1-10.0-50.0-True]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[anthropic-claude-opus-5-5-4.0-20.0-True]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[anthropic-claude-sonnet-5-5-2.0-10.0-False]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[anthropic-claude-haiku-5-5-0.1-0.5-False]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[google-gemini-4-argon-2.0-10.0-False]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[google-gemini-3.8-flash-0.75-3.75-False]
+tests/test_current_model_catalog.py::test_current_models_resolve_with_bundled_prices_and_reasoning_metadata[google-gemini-3.5-flash-lite-0.3-2.5-False]
+tests/test_current_model_catalog.py::test_current_models_charge_context_tier_only_above_threshold[openai-gpt-6-astra-272000-20.0-75.0]
+tests/test_current_model_catalog.py::test_current_models_charge_context_tier_only_above_threshold[openai-gpt-6.1-sol-272000-4.0-15.0]
+tests/test_current_model_catalog.py::test_current_models_charge_context_tier_only_above_threshold[openai-gpt-6.1-terra-272000-2.0-7.5]
+tests/test_current_model_catalog.py::test_current_models_charge_context_tier_only_above_threshold[openai-gpt-6-luna-272000-0.2-0.75]
+tests/test_current_model_catalog.py::test_current_models_charge_context_tier_only_above_threshold[anthropic-claude-haiku-5-5-100000-0.5-2.5]
+tests/test_current_model_catalog.py::test_live_refresh_preserves_required_reasoning_without_pinning_prices[openai-gpt-6-astra]
+tests/test_current_model_catalog.py::test_live_refresh_preserves_required_reasoning_without_pinning_prices[openai-gpt-6.1-sol]
+tests/test_current_model_catalog.py::test_live_refresh_preserves_required_reasoning_without_pinning_prices[anthropic-claude-fable-5-1]
+tests/test_current_model_catalog.py::test_live_refresh_preserves_required_reasoning_without_pinning_prices[anthropic-claude-opus-5-5]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[openai-gpt-5.1-codex]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[openai-gpt-5.1-codex-max]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[openai-gpt-5.1-codex-mini]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[openai-gpt-5.2-codex]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[deepseek-deepseek-chat]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[deepseek-deepseek-reasoner]
+tests/test_current_model_catalog.py::test_legacy_prices_remain_reproducible_after_upstream_removes_model[google-gemini-3-pro-preview]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[high-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[high-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[high-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[high-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[xhigh-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[xhigh-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[xhigh-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[xhigh-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[max-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[max-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[max-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_preserves_supported_reasoning_levels[max-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[disabled-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[disabled-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[disabled-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[disabled-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[none-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[none-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[none-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[none-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_disabled_reasoning_respects_model_capabilities[-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[min-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[min-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[min-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[min-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[minimal-gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[minimal-gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[minimal-gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_openai_maps_minimal_effort_to_low[minimal-gpt-6-luna]
+tests/test_current_model_kwargs.py::test_azure_current_openai_uses_underlying_model_capabilities
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-fable-5-1-anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-fable-5-1-us.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-fable-5-1-global.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-opus-5-5-anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-opus-5-5-us.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-opus-5-5-global.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-sonnet-5-5-anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-sonnet-5-5-us.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-sonnet-5-5-global.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-haiku-5-5-anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-haiku-5-5-us.anthropic.]
+tests/test_current_model_kwargs.py::test_runtime_bedrock_claude_uses_same_thinking_contract[claude-haiku-5-5-global.anthropic.]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[low-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[low-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[low-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[low-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[medium-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[medium-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[medium-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[medium-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[high-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[high-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[high-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[high-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[xhigh-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[xhigh-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[xhigh-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[xhigh-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[max-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[max-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[max-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_uses_adaptive_thinking_and_output_effort[max-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[disabled-claude-fable-5-1-thinking0]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[disabled-claude-opus-5-5-thinking1]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[disabled-claude-sonnet-5-5-thinking2]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[disabled-claude-haiku-5-5-thinking3]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[none-claude-fable-5-1-thinking0]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[none-claude-opus-5-5-thinking1]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[none-claude-sonnet-5-5-thinking2]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[none-claude-haiku-5-5-thinking3]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[-claude-fable-5-1-thinking0]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[-claude-opus-5-5-thinking1]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[-claude-sonnet-5-5-thinking2]
+tests/test_current_model_kwargs.py::test_current_claude_disabled_reasoning_uses_supported_mode[-claude-haiku-5-5-thinking3]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[min-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[min-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[min-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[min-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[minimal-claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[minimal-claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[minimal-claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_maps_minimal_effort_to_low[minimal-claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_caps_output_at_documented_limit[claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_claude_caps_output_at_documented_limit[claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_caps_output_at_documented_limit[claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_claude_caps_output_at_documented_limit[claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[gpt-6-astra]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[gpt-6.1-sol]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[gpt-6.1-terra]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[gpt-6-luna]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[claude-fable-5-1]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[claude-opus-5-5]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[claude-sonnet-5-5]
+tests/test_current_model_kwargs.py::test_current_models_reject_unknown_effort_before_request[claude-haiku-5-5]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[min-gemini-4-argon]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[min-gemini-3.8-flash]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[min-gemini-3.5-flash-lite]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[minimal-gemini-4-argon]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[minimal-gemini-3.8-flash]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[minimal-gemini-3.5-flash-lite]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[medium-gemini-4-argon]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[medium-gemini-3.8-flash]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[medium-gemini-3.5-flash-lite]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[max-gemini-4-argon]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[max-gemini-3.8-flash]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[max-gemini-3.5-flash-lite]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[disabled-gemini-4-argon]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[disabled-gemini-3.8-flash]
+tests/test_current_model_kwargs.py::test_current_gemini_uses_levels_without_sampling_or_token_budgets[disabled-gemini-3.5-flash-lite]
+tests/test_current_model_kwargs.py::test_legacy_openai_max_alias_is_preserved
+tests/test_current_model_kwargs.py::test_legacy_claude_keeps_manual_thinking_budget
+tests/test_database_display.py::test_print_summary_shows_total_programs_as_stored_over_target
+tests/test_database_no_api_keys.py::test_program_database_init_without_openai_key
+tests/test_database_no_api_keys.py::test_async_db_add_without_openai_key_when_embeddings_disabled
+tests/test_database_no_api_keys.py::test_async_db_add_forwards_verbose_flag
+tests/test_database_no_api_keys.py::test_async_db_add_skips_duplicate_source_job_id
+tests/test_database_no_api_keys.py::test_async_db_source_job_id_check_treats_inflight_insert_as_existing
+tests/test_database_no_api_keys.py::test_async_db_can_fetch_program_by_source_job_id
+tests/test_database_no_api_keys.py::test_async_db_add_skips_source_job_id_while_another_insert_is_inflight
+tests/test_database_no_api_keys.py::test_async_db_can_record_attempt_events
+tests/test_database_no_api_keys.py::test_async_db_uses_fresh_writer_database_per_add
+tests/test_database_no_api_keys.py::test_async_db_can_run_multiple_writes_concurrently
+tests/test_deepseek_accounting.py::test_sync_and_async_exclude_reasoning_from_output_tokens
+tests/test_deepseek_accounting.py::test_unknown_model_preserves_tokens_and_defaults_cost_to_zero
+tests/test_deepseek_accounting.py::test_reasoning_tokens_are_separated_but_billed_as_output
+tests/test_deepseek_accounting.py::test_sync_and_async_treat_missing_reasoning_count_as_zero
+tests/test_deepseek_accounting.py::test_reasoning_tokens_are_bounded_by_billed_output
+tests/test_dotenv_loading.py::test_import_shinka_loads_dotenv_from_launch_directory
+tests/test_dotenv_loading.py::test_load_shinka_dotenv_prefers_launch_directory_over_package_env
+tests/test_dynamic_islands.py::test_stagnation_detection
+tests/test_dynamic_islands.py::test_dynamic_island_spawning
+tests/test_dynamic_islands.py::test_no_spawning_when_disabled
+tests/test_dynamic_islands.py::test_stagnation_reset_on_improvement
+tests/test_dynamic_islands.py::test_spawn_strategies
+tests/test_edit_base.py::test_edit
+tests/test_edit_base.py::test_apply_full_patch_single_evolve_block
+tests/test_edit_base.py::test_apply_full_patch_with_evolve_blocks_in_patch
+tests/test_edit_base.py::test_apply_full_patch_full_file_without_markers_extracts_block_only
+tests/test_edit_base.py::test_apply_full_patch_patch_with_start_marker_only
+tests/test_edit_base.py::test_apply_full_patch_patch_with_end_marker_only
+tests/test_edit_base.py::test_apply_full_patch_no_evolve_blocks
+tests/test_edit_base.py::test_apply_full_patch_multiple_evolve_blocks_ambiguous
+tests/test_edit_base.py::test_apply_full_patch_patch_with_single_marker_ambiguous_multiple_regions
+tests/test_edit_base.py::test_apply_full_patch_invalid_extraction
+tests/test_edit_base.py::test_apply_full_patch_with_patch_dir
+tests/test_edit_base.py::test_find_indented_match_exact_match
+tests/test_edit_base.py::test_find_indented_match_needs_indentation
+tests/test_edit_base.py::test_find_indented_match_multiline_with_relative_indentation
+tests/test_edit_base.py::test_find_indented_match_not_found
+tests/test_edit_base.py::test_find_indented_match_empty_search
+tests/test_edit_base.py::test_apply_indentation_to_replace
+tests/test_edit_base.py::test_apply_indentation_to_replace_empty_lines
+tests/test_edit_base.py::test_strip_trailing_whitespace
+tests/test_edit_base.py::test_indentation_correction_in_patch
+tests/test_edit_base.py::test_indentation_correction_multiline_patch
+tests/test_edit_base.py::test_indentation_correction_with_trailing_whitespace
+tests/test_edit_base.py::test_indentation_correction_fails_gracefully
+tests/test_edit_base.py::test_mixed_indentation_styles
+tests/test_edit_base.py::test_indentation_with_empty_lines_in_search
+tests/test_edit_base.py::test_indentation_correction_preserves_mutable_regions
+tests/test_edit_base.py::test_insertion_with_indentation
+tests/test_edit_base.py::test_insertion_keeps_end_marker_on_own_line
+tests/test_edit_base.py::test_insertion_preserves_indented_end_marker
+tests/test_edit_base.py::test_consecutive_insertions_stay_valid_python
+tests/test_edit_base.py::test_insertion_accepted_for_block_comment_language
+tests/test_edit_base.py::test_insertion_appends_after_code_on_marker_line
+tests/test_edit_base.py::test_empty_insertion_is_noop
+tests/test_edit_base.py::test_enhanced_search_not_found_error
+tests/test_edit_base.py::test_enhanced_evolve_block_violation_error
+tests/test_edit_base.py::test_enhanced_no_evolve_block_error
+tests/test_edit_base.py::test_enhanced_error_with_multiline_search
+tests/test_edit_base.py::test_find_indented_match_search_block_carries_its_own_indent
+tests/test_edit_base.py::test_find_indented_match_search_deeper_than_target
+tests/test_edit_base.py::test_apply_indentation_to_replace_rebases_existing_indent
+tests/test_edit_base.py::test_apply_diff_patch_reindents_nested_block
+tests/test_edit_base.py::test_find_indented_match_dedent_below_first_line_does_not_flatten
+tests/test_edit_base.py::test_apply_diff_patch_rejects_flattened_dedent_in_strict_mode
+tests/test_edit_base.py::test_apply_diff_patch_preserves_dedent_in_replacement
+tests/test_edit_base.py::test_apply_diff_patch_keeps_replace_relative_to_search
+tests/test_edit_circle.py::test_edit
+tests/test_edit_circle.py::test_edit_2
+tests/test_edit_cpp.py::test_extract_between_matches_cpp_fence_tags_literally[c++]
+tests/test_edit_cpp.py::test_extract_between_matches_cpp_fence_tags_literally[cpp]
+tests/test_edit_cpp.py::test_extract_between_matches_cpp_fence_tags_literally[cxx]
+tests/test_edit_cpp.py::test_extract_between_matches_cpp_fence_tags_literally[cc]
+tests/test_edit_cpp.py::test_cpp_aliases_are_all_accepted_fence_tags
+tests/test_edit_cpp.py::test_apply_full_patch_cpp_rewrite_is_not_corrupted[c++-cpp]
+tests/test_edit_cpp.py::test_apply_full_patch_cpp_rewrite_is_not_corrupted[c++-c++]
+tests/test_edit_cpp.py::test_apply_full_patch_cpp_rewrite_is_not_corrupted[cpp-c++]
+tests/test_edit_cpp.py::test_apply_full_patch_cpp_rewrite_is_not_corrupted[cpp-cxx]
+tests/test_edit_cpp.py::test_apply_full_patch_cpp_rewrite_is_not_corrupted[c++-cxx]
+tests/test_edit_fortran.py::test_apply_diff_patch_supports_fortran
+tests/test_edit_fortran.py::test_apply_full_patch_supports_fortran_and_f90_fence
+tests/test_edit_fortran.py::test_apply_full_patch_supports_fortran_fence
+tests/test_edit_fortran.py::test_language_helpers_support_fortran_aliases
+tests/test_edit_go.py::test_apply_diff_patch_supports_go
+tests/test_edit_go.py::test_apply_full_patch_supports_go_and_golang_fence
+tests/test_edit_go.py::test_language_helpers_support_go_aliases
+tests/test_edit_julia.py::test_apply_diff_patch_supports_julia
+tests/test_edit_julia.py::test_apply_full_patch_supports_julia_and_jl_fence
+tests/test_edit_julia.py::test_language_helpers_support_julia_aliases
+tests/test_edit_markdown.py::test_language_helpers_support_markdown
+tests/test_edit_markdown.py::test_language_helpers_support_md_alias
+tests/test_edit_markdown.py::test_apply_diff_patch_supports_markdown
+tests/test_edit_markdown.py::test_apply_full_patch_supports_markdown
+tests/test_edit_markdown.py::test_apply_full_patch_supports_md_fence
+tests/test_edit_markdown.py::test_clean_evolve_markers_strips_html_comments
+tests/test_edit_verilog.py::test_apply_diff_patch_supports_verilog
+tests/test_edit_verilog.py::test_apply_full_patch_supports_verilog_and_sv_fence
+tests/test_edit_verilog.py::test_language_helpers_support_verilog_aliases
+tests/test_edit_wolfram.py::test_apply_diff_patch_supports_wolfram
+tests/test_edit_wolfram.py::test_apply_full_patch_supports_wolfram_and_wl_fence
+tests/test_edit_wolfram.py::test_apply_full_patch_supports_wolfram_without_markers
+tests/test_edit_wolfram.py::test_apply_full_patch_supports_mathematica_fence
+tests/test_edit_wolfram.py::test_language_helpers_support_wolfram_aliases
+tests/test_embedding_client_backends.py::test_get_client_embed_dynamic_openrouter
+tests/test_embedding_client_backends.py::test_get_async_client_embed_dynamic_openrouter
+tests/test_embedding_client_backends.py::test_get_client_embed_local_openai_inline_url
+tests/test_embedding_client_backends.py::test_get_async_client_embed_local_openai_inline_url
+tests/test_embedding_client_backends.py::test_get_client_embed_azure_v1_endpoint_uses_resource_root
+tests/test_embedding_client_backends.py::test_get_client_embed_gemini_sets_timeout
+tests/test_embedding_client_backends.py::test_get_async_client_embed_gemini_sets_timeout
+tests/test_embedding_client_backends.py::test_sync_openrouter_embedding_unknown_price_defaults_to_zero
+tests/test_embedding_client_backends.py::test_async_openrouter_embedding_unknown_price_defaults_to_zero
+tests/test_embedding_client_backends.py::test_sync_local_embedding_unknown_price_defaults_to_zero
+tests/test_embedding_client_backends.py::test_async_local_embedding_unknown_price_defaults_to_zero
+tests/test_embedding_client_backends.py::test_get_client_embed_local_openai_uses_api_key_env_query_param
+tests/test_embedding_client_backends.py::test_get_async_client_embed_local_openai_missing_api_key_env_raises
+tests/test_embedding_model_resolver.py::test_resolve_known_embedding_model
+tests/test_embedding_model_resolver.py::test_resolve_openrouter_embedding_model
+tests/test_embedding_model_resolver.py::test_resolve_local_embedding_model_with_inline_url
+tests/test_embedding_model_resolver.py::test_resolve_local_embedding_model_with_api_key_env_query_param
+tests/test_embedding_model_resolver.py::test_invalid_local_embedding_model_format_raises
+tests/test_endpoint_failures.py::test_permanent_endpoint_error_crosses_outer_retry_without_retries[False-401]
+tests/test_endpoint_failures.py::test_permanent_endpoint_error_crosses_outer_retry_without_retries[False-403]
+tests/test_endpoint_failures.py::test_permanent_endpoint_error_crosses_outer_retry_without_retries[False-404]
+tests/test_endpoint_failures.py::test_permanent_endpoint_error_crosses_outer_retry_without_retries[True-401]
+tests/test_endpoint_failures.py::test_permanent_endpoint_error_crosses_outer_retry_without_retries[True-403]
+tests/test_endpoint_failures.py::test_permanent_endpoint_error_crosses_outer_retry_without_retries[True-404]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[2-programs0-True-True]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[2-programs0-True-False]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[1-programs1-False-True]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[1-programs1-False-False]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[2-programs2-True-True]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[2-programs2-True-False]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[3-programs3-False-True]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[3-programs3-False-False]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[2-programs4-True-True]
+tests/test_endpoint_failures.py::test_summary_marks_no_evolved_program_as_failure[2-programs4-True-False]
+tests/test_endpoint_failures.py::test_database_summary_separates_seed_copies_from_evolution[_is_island_copy]
+tests/test_endpoint_failures.py::test_database_summary_separates_seed_copies_from_evolution[_spawned_island]
+tests/test_endpoint_failures.py::test_transient_endpoint_status_still_retries[False-429]
+tests/test_endpoint_failures.py::test_transient_endpoint_status_still_retries[False-500]
+tests/test_endpoint_failures.py::test_transient_endpoint_status_still_retries[False-503]
+tests/test_endpoint_failures.py::test_transient_endpoint_status_still_retries[True-429]
+tests/test_endpoint_failures.py::test_transient_endpoint_status_still_retries[True-500]
+tests/test_endpoint_failures.py::test_transient_endpoint_status_still_retries[True-503]
+tests/test_endpoint_failures.py::test_cli_returns_evolution_outcome[False-0]
+tests/test_endpoint_failures.py::test_cli_returns_evolution_outcome[True-1]
+tests/test_endpoint_failures.py::test_endpoint_error_survives_multiprocessing_serialization[401]
+tests/test_endpoint_failures.py::test_endpoint_error_survives_multiprocessing_serialization[403]
+tests/test_endpoint_failures.py::test_endpoint_error_survives_multiprocessing_serialization[404]
+tests/test_example_model_catalog.py::test_example_model_collector_covers_all_executable_formats
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:117-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:127-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:133-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:80-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:81-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:82-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_large.yaml:83-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:117-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:127-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:133-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:80-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:81-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:82-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_medium.yaml:83-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:117-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:127-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:133-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:80-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:81-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:82-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/circle_packing/shinka_small.yaml:83-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/fortran_heat_diffusion/run_evo.py:49-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/fortran_heat_diffusion/run_evo.py:55-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:67-gemini-2.5-flash]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:68-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:69-o4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:71-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:72-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:81-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:83-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/game_2048/run_evo.py:85-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/go_collatz_steps/run_evo.py:48-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/go_collatz_steps/run_evo.py:54-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/julia_prime_counting/run_evo.py:48-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/julia_prime_counting/run_evo.py:54-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/novelty_generator/evaluate.py:22-azure-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/novelty_generator/evaluate.py:23-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/novelty_generator/evaluate.py:24-gemini-2.5-pro]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/rtllm/shinka.yaml:36-openrouter/qwen/qwen3-coder]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/rtllm/shinka.yaml:37-openrouter/qwen/qwen3-235b-a22b-2507]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/rtllm/shinka.yaml:38-openrouter/openai/gpt-oss-120b]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-21:17-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-21:19-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-27:26-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-27:28-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-9:14-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-9:4-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-9:6-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/shinka_tutorial.ipynb:cell-9:8-claude-sonnet-4-6]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/sine_approx_headless/run_evo.py:35-headless/codex@gpt-5.5?effort=high]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/sine_approx_headless/run_evo.py:36-headless/claude]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[examples/wolfram_gcd_sum/run_evo.py:55-gemini-2.5-flash-lite]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:19-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:20-gpt-4.1-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:21-gpt-4.1-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:22-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:23-o4-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:33-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/large_budget.yaml:37-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/medium_budget.yaml:19-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/medium_budget.yaml:20-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/medium_budget.yaml:21-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/medium_budget.yaml:22-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/medium_budget.yaml:33-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/small_budget.yaml:16-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/evolution/small_budget.yaml:18-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[shinka/configs/task/novelty_generator.yaml:11-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-convert/scripts/shinka.yaml:29-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-convert/scripts/shinka.yaml:29-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-convert/scripts/shinka.yaml:29-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-convert/scripts/shinka.yaml:35-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-convert/scripts/shinka.yaml:39-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-convert/scripts/shinka.yaml:41-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-setup/scripts/shinka.yaml:29-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-setup/scripts/shinka.yaml:29-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-setup/scripts/shinka.yaml:29-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-setup/scripts/shinka.yaml:35-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-setup/scripts/shinka.yaml:39-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_model_literals_are_current[skills/shinka-setup/scripts/shinka.yaml:41-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:117-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:127-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:133-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:80-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:81-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:82-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_large.yaml:83-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:117-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:127-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:133-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:80-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:81-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:82-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_medium.yaml:83-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:117-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:127-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:133-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:80-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:81-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:82-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/circle_packing/shinka_small.yaml:83-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/fortran_heat_diffusion/run_evo.py:49-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/fortran_heat_diffusion/run_evo.py:55-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:67-gemini-2.5-flash]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:68-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:69-o4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:71-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:72-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:81-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:83-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/game_2048/run_evo.py:85-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/go_collatz_steps/run_evo.py:48-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/go_collatz_steps/run_evo.py:54-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/julia_prime_counting/run_evo.py:48-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/julia_prime_counting/run_evo.py:54-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/novelty_generator/evaluate.py:22-azure-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/novelty_generator/evaluate.py:23-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/novelty_generator/evaluate.py:24-gemini-2.5-pro]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/rtllm/shinka.yaml:36-openrouter/qwen/qwen3-coder]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/rtllm/shinka.yaml:37-openrouter/qwen/qwen3-235b-a22b-2507]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/rtllm/shinka.yaml:38-openrouter/openai/gpt-oss-120b]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-21:17-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-21:19-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-27:26-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-27:28-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-9:14-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-9:4-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-9:6-gpt-5.4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/shinka_tutorial.ipynb:cell-9:8-claude-sonnet-4-6]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/sine_approx_headless/run_evo.py:35-headless/codex@gpt-5.5?effort=high]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/sine_approx_headless/run_evo.py:36-headless/claude]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[examples/wolfram_gcd_sum/run_evo.py:55-gemini-2.5-flash-lite]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:19-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:20-gpt-4.1-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:21-gpt-4.1-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:22-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:23-o4-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:33-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/large_budget.yaml:37-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/medium_budget.yaml:19-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/medium_budget.yaml:20-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/medium_budget.yaml:21-gemini-3.1-pro-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/medium_budget.yaml:22-gpt-5.4]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/medium_budget.yaml:33-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/small_budget.yaml:16-gpt-4.1]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/evolution/small_budget.yaml:18-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[shinka/configs/task/novelty_generator.yaml:11-us.anthropic.claude-sonnet-4-6-v1:0]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-convert/scripts/shinka.yaml:29-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-convert/scripts/shinka.yaml:29-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-convert/scripts/shinka.yaml:29-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-convert/scripts/shinka.yaml:35-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-convert/scripts/shinka.yaml:39-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-convert/scripts/shinka.yaml:41-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-setup/scripts/shinka.yaml:29-gemini-3-flash-preview]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-setup/scripts/shinka.yaml:29-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-setup/scripts/shinka.yaml:29-gpt-5-nano]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-setup/scripts/shinka.yaml:35-gpt-5-mini]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-setup/scripts/shinka.yaml:39-text-embedding-3-small]
+tests/test_example_model_catalog.py::test_example_models_resolve_with_finite_pricing[skills/shinka-setup/scripts/shinka.yaml:41-gpt-5-nano]
+tests/test_example_model_catalog.py::test_tutorial_contains_no_cost_pricing_preflight
+tests/test_failure_nodes_webui.py::test_webui_defines_failed_proposal_node_helpers_and_details_section
+tests/test_failure_nodes_webui.py::test_webui_program_table_includes_status_column_for_failed_nodes
+tests/test_failure_nodes_webui.py::test_webui_tree_styles_failed_proposal_nodes_distinctly
+tests/test_failure_nodes_webui.py::test_webui_tree_resizer_rerenders_graph_instead_of_reloading_data
+tests/test_fortran_heat_diffusion_example.py::test_fortran_evaluator_runs_candidate_from_tempdir
+tests/test_gemini_embedding_integration.py::test_new_gemini_embedding_model_is_registered
+tests/test_gemini_embedding_integration.py::test_get_client_embed_resolves_new_model_to_google
+tests/test_gemini_embedding_integration.py::test_sync_google_embedding_uses_token_count_for_cost
+tests/test_gemini_embedding_integration.py::test_async_google_embedding_uses_token_count_for_cost
+tests/test_gemini_embedding_integration.py::test_sync_google_embedding_falls_back_when_token_count_fails
+tests/test_gemini_provider.py::test_build_gemini_thinking_config_omits_budget_when_not_supported
+tests/test_gemini_provider.py::test_build_gemini_thinking_config_includes_budget_when_supported
+tests/test_gemini_provider.py::test_build_gemini_afc_config_sets_max_remote_calls_none
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[MINIMAL-MINIMAL]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[minimal-MINIMAL]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[LOW-LOW]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[low-LOW]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[MEDIUM-MEDIUM]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[medium-MEDIUM]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[HIGH-HIGH]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[high-HIGH]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_uses_sdk_enum[None-None]
+tests/test_gemini_provider.py::test_build_gemini_thinking_level_config_rejects_unknown_level
+tests/test_gemini_provider.py::test_latest_gemini_generation_config_omits_unsupported_fields[gemini-3.6-flash]
+tests/test_gemini_provider.py::test_latest_gemini_generation_config_omits_unsupported_fields[gemini-3.7-flash]
+tests/test_gemini_provider.py::test_latest_gemini_generation_config_omits_unsupported_fields[gemini-3.5-flash-lite]
+tests/test_gemini_provider.py::test_latest_gemini_generation_config_omits_unsupported_fields[gemini-3.8-flash]
+tests/test_gemini_provider.py::test_latest_gemini_generation_config_omits_unsupported_fields[gemini-4-argon]
+tests/test_gemini_provider.py::test_legacy_gemini_generation_config_keeps_sampling_and_budget
+tests/test_gemini_provider.py::test_sync_query_uses_shared_generation_config_builder[gemini-3.6-flash]
+tests/test_gemini_provider.py::test_sync_query_uses_shared_generation_config_builder[gemini-3.5-flash-lite]
+tests/test_gemini_provider.py::test_sync_query_uses_shared_generation_config_builder[gemini-3.8-flash]
+tests/test_gemini_provider.py::test_sync_query_uses_shared_generation_config_builder[gemini-4-argon]
+tests/test_gemini_provider.py::test_async_query_uses_shared_generation_config_builder[gemini-3.6-flash]
+tests/test_gemini_provider.py::test_async_query_uses_shared_generation_config_builder[gemini-3.5-flash-lite]
+tests/test_gemini_provider.py::test_async_query_uses_shared_generation_config_builder[gemini-3.8-flash]
+tests/test_gemini_provider.py::test_async_query_uses_shared_generation_config_builder[gemini-4-argon]
+tests/test_gemini_provider.py::test_generation_config_rejects_minimal_for_models_without_support[gemini-3.7-flash]
+tests/test_gemini_provider.py::test_generation_config_rejects_minimal_for_models_without_support[gemini-3.8-flash]
+tests/test_gemini_provider.py::test_generation_config_rejects_minimal_for_models_without_support[gemini-4-argon]
+tests/test_gemini_provider.py::test_current_gemini_config_serializes_only_supported_thinking_controls[gemini-3.5-flash-lite-MINIMAL]
+tests/test_gemini_provider.py::test_current_gemini_config_serializes_only_supported_thinking_controls[gemini-3.8-flash-None]
+tests/test_gemini_provider.py::test_current_gemini_config_serializes_only_supported_thinking_controls[gemini-4-argon-None]
+tests/test_gemini_retry_policy.py::test_default_thinking_budget_matches_across_sync_and_async
+tests/test_gemini_retry_policy.py::test_latest_gemini_thinking_level_config_is_unchanged
+tests/test_gemini_retry_policy.py::test_giveup_targets_non_retryable_errors
+tests/test_gemini_retry_policy.py::test_structured_output_error_is_not_retried[False]
+tests/test_gemini_retry_policy.py::test_structured_output_error_is_not_retried[True]
+tests/test_gemini_retry_policy.py::test_sync_llm_client_does_not_retry_structured_output_error
+tests/test_gemini_retry_policy.py::test_async_llm_client_does_not_retry_structured_output_error
+tests/test_gemini_retry_policy.py::test_public_client_rejects_structured_output_before_construction[LLMClient]
+tests/test_gemini_retry_policy.py::test_public_client_rejects_structured_output_before_construction[AsyncLLMClient]
+tests/test_gemini_retry_policy.py::test_sync_batch_helpers_do_not_retry_structured_output_error[query_fn]
+tests/test_gemini_retry_policy.py::test_sync_batch_helpers_do_not_retry_structured_output_error[sample_kwargs_query_fn]
+tests/test_gemini_retry_policy.py::test_async_batch_helpers_do_not_retry_structured_output_error[_query_async_with_retry]
+tests/test_gemini_retry_policy.py::test_async_batch_helpers_do_not_retry_structured_output_error[_sample_kwargs_query_async_with_retry]
+tests/test_gemini_retry_policy.py::test_sync_public_batch_propagates_structured_output_error[batch_query]
+tests/test_gemini_retry_policy.py::test_sync_public_batch_propagates_structured_output_error[batch_kwargs_query]
+tests/test_gemini_retry_policy.py::test_async_public_batch_propagates_structured_output_error[batch_query]
+tests/test_gemini_retry_policy.py::test_async_public_batch_propagates_structured_output_error[batch_kwargs_query]
+tests/test_gemini_retry_policy.py::test_public_batch_rejects_gemini_before_start[batch_query-LLMClient]
+tests/test_gemini_retry_policy.py::test_public_batch_rejects_gemini_before_start[batch_query-AsyncLLMClient]
+tests/test_gemini_retry_policy.py::test_public_batch_rejects_gemini_before_start[batch_kwargs_query-LLMClient]
+tests/test_gemini_retry_policy.py::test_public_batch_rejects_gemini_before_start[batch_kwargs_query-AsyncLLMClient]
+tests/test_go_collatz_steps_example.py::test_go_evaluator_runs_candidate_and_parses_output
+tests/test_go_collatz_steps_example.py::test_go_evaluator_scores_correct_candidate
+tests/test_go_collatz_steps_example.py::test_go_evaluator_reports_nonzero_exit
+tests/test_google_genai.py::test_google_api_host_detection_is_scoped
+tests/test_google_genai.py::test_configure_google_genai_network_ipv4_first_reorders_only_google_hosts
+tests/test_google_genai.py::test_configure_google_genai_network_ipv4_filters_google_hosts
+tests/test_google_genai.py::test_configure_google_genai_network_respects_explicit_family
+tests/test_google_genai.py::test_configure_google_genai_network_auto_installs_detected_policy
+tests/test_google_genai.py::test_google_genai_timeout_is_in_milliseconds
+tests/test_google_genai.py::test_google_genai_auth_mode_uses_vertexai_for_truthy_flag[1]
+tests/test_google_genai.py::test_google_genai_auth_mode_uses_vertexai_for_truthy_flag[true]
+tests/test_google_genai.py::test_google_genai_auth_mode_uses_vertexai_for_truthy_flag[yes]
+tests/test_google_genai.py::test_google_genai_auth_mode_uses_vertexai_for_truthy_flag[on]
+tests/test_google_genai.py::test_google_genai_auth_mode_uses_vertexai_for_truthy_flag[TRUE]
+tests/test_google_genai.py::test_google_genai_auth_mode_defaults_to_api_key
+tests/test_google_genai.py::test_build_google_genai_client_uses_api_key
+tests/test_google_genai.py::test_build_google_genai_client_uses_vertexai
+tests/test_google_genai.py::test_build_google_genai_client_requires_gemini_api_key
+tests/test_google_genai.py::test_build_google_genai_client_requires_vertex_project
+tests/test_google_genai.py::test_build_google_genai_client_requires_vertex_location
+tests/test_headless_provider.py::test_parse_headless_model_with_model_and_effort
+tests/test_headless_provider.py::test_resolve_headless_model_backend
+tests/test_headless_provider.py::test_get_client_allows_headless_without_api_client
+tests/test_headless_provider.py::test_headless_kwargs_skip_api_only_parameters
+tests/test_headless_provider.py::test_query_headless_invokes_command_and_parses_usage
+tests/test_headless_provider.py::test_query_headless_invokes_claude_through_shell
+tests/test_headless_provider.py::test_query_headless_accepts_nested_cost_usage
+tests/test_headless_provider.py::test_query_headless_serializes_claude_async_calls
+tests/test_headless_provider.py::test_validate_model_env_access_runs_headless_check
+tests/test_headless_provider.py::test_shinka_run_full_headless_cli_mutation_succeeds
+tests/test_index_webui.py::test_dashboard_supports_sorting_by_setting
+tests/test_index_webui.py::test_dashboard_keeps_initial_generation_results_visible
+tests/test_island_copy_costs.py::test_initial_program_copies_carry_no_cost
+tests/test_island_copy_costs.py::test_spawned_island_copies_carry_no_cost
+tests/test_island_copy_costs.py::test_island_copies_preserve_missing_cost_fields[empty]
+tests/test_island_copy_costs.py::test_island_copies_preserve_missing_cost_fields[api-only]
+tests/test_island_copy_costs.py::test_cost_plots_track_new_spend_after_island_copies[performance-api-only]
+tests/test_island_copy_costs.py::test_cost_plots_track_new_spend_after_island_copies[performance-no-meta]
+tests/test_island_copy_costs.py::test_cost_plots_track_new_spend_after_island_copies[costs-api-only]
+tests/test_island_copy_costs.py::test_cost_plots_track_new_spend_after_island_copies[costs-no-meta]
+tests/test_island_copy_costs.py::test_summary_embedding_total_matches_spend[1]
+tests/test_island_copy_costs.py::test_summary_embedding_total_matches_spend[2]
+tests/test_island_copy_costs.py::test_summary_embedding_total_matches_spend[4]
+tests/test_island_migration.py::test_migration_counts_come_from_pre_migration_populations
+tests/test_island_sampler.py::test_island_samplers
+tests/test_job_timeout_clock.py::test_timeout_clock_starts_at_evaluation_not_proposal
+tests/test_job_timeout_clock.py::test_timeout_clock_falls_back_to_submission_then_proposal
+tests/test_launch_hydra_async.py::test_launch_hydra_uses_async_runner
+tests/test_launch_hydra_async.py::test_default_launch_config_uses_neutral_shared_defaults
+tests/test_llm_batch_alignment.py::test_meta_summaries_keep_metadata_and_generation_order[sync-None]
+tests/test_llm_batch_alignment.py::test_meta_summaries_keep_metadata_and_generation_order[sync-failure1]
+tests/test_llm_batch_alignment.py::test_meta_summaries_keep_metadata_and_generation_order[sync-failure2]
+tests/test_llm_batch_alignment.py::test_meta_summaries_keep_metadata_and_generation_order[async-None]
+tests/test_llm_batch_alignment.py::test_meta_summaries_keep_metadata_and_generation_order[async-failure1]
+tests/test_llm_batch_alignment.py::test_meta_summaries_keep_metadata_and_generation_order[async-failure2]
+tests/test_llm_batch_alignment.py::test_indexed_batch_keeps_request_indices_after_failure[sync-None]
+tests/test_llm_batch_alignment.py::test_indexed_batch_keeps_request_indices_after_failure[sync-failure1]
+tests/test_llm_batch_alignment.py::test_indexed_batch_keeps_request_indices_after_failure[async-None]
+tests/test_llm_batch_alignment.py::test_indexed_batch_keeps_request_indices_after_failure[async-failure1]
+tests/test_llm_batch_alignment.py::test_compact_batch_returns_only_successful_responses[sync-None]
+tests/test_llm_batch_alignment.py::test_compact_batch_returns_only_successful_responses[sync-failure1]
+tests/test_llm_batch_alignment.py::test_compact_batch_returns_only_successful_responses[async-None]
+tests/test_llm_batch_alignment.py::test_compact_batch_returns_only_successful_responses[async-failure1]
+tests/test_llm_batch_alignment.py::test_batch_returns_no_results_when_all_requests_fail[sync-batch_kwargs_query]
+tests/test_llm_batch_alignment.py::test_batch_returns_no_results_when_all_requests_fail[sync-batch_kwargs_query_indexed]
+tests/test_llm_batch_alignment.py::test_batch_returns_no_results_when_all_requests_fail[async-batch_kwargs_query]
+tests/test_llm_batch_alignment.py::test_batch_returns_no_results_when_all_requests_fail[async-batch_kwargs_query_indexed]
+tests/test_llm_batch_alignment.py::test_batch_propagates_non_retryable_errors[sync-batch_kwargs_query]
+tests/test_llm_batch_alignment.py::test_batch_propagates_non_retryable_errors[sync-batch_kwargs_query_indexed]
+tests/test_llm_batch_alignment.py::test_batch_propagates_non_retryable_errors[async-batch_kwargs_query]
+tests/test_llm_batch_alignment.py::test_batch_propagates_non_retryable_errors[async-batch_kwargs_query_indexed]
+tests/test_llm_client_backends.py::test_google_genai_timeout_is_in_milliseconds
+tests/test_llm_client_backends.py::test_get_client_llm_dynamic_openrouter
+tests/test_llm_client_backends.py::test_get_client_llm_local_openai_inline_url
+tests/test_llm_client_backends.py::test_get_async_client_llm_local_openai_inline_url
+tests/test_llm_client_backends.py::test_get_async_client_llm_openai_sets_timeout
+tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com]
+tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com/]
+tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com/openai/v1]
+tests/test_llm_client_backends.py::test_get_client_llm_azure_uses_v1_base_url[https://example-resource.openai.azure.com/openai/v1/]
+tests/test_llm_client_backends.py::test_get_async_client_llm_azure_uses_v1_base_url
+tests/test_llm_client_backends.py::test_get_client_llm_azure_requires_azure_api_key[None]
+tests/test_llm_client_backends.py::test_get_client_llm_azure_requires_azure_api_key[   ]
+tests/test_llm_client_backends.py::test_get_client_llm_azure_responses_request_uses_v1_url
+tests/test_llm_client_backends.py::test_get_client_llm_gemini_sets_timeout
+tests/test_llm_client_backends.py::test_get_async_client_llm_gemini_sets_timeout
+tests/test_llm_client_backends.py::test_get_client_llm_local_openai_uses_api_key_env_query_param
+tests/test_llm_client_backends.py::test_get_async_client_llm_local_openai_missing_api_key_env_raises
+tests/test_llm_client_cache_safety.py::test_constructor_uses_same_credential_snapshot_as_cache_key
+tests/test_llm_client_cache_safety.py::test_bedrock_constructor_uses_snapshotted_default_endpoint
+tests/test_llm_client_cache_safety.py::test_gemini_structured_output_fails_before_client_construction[get_client_llm]
+tests/test_llm_client_cache_safety.py::test_gemini_structured_output_fails_before_client_construction[get_async_client_llm]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[HTTP_PROXY-http://proxy-one-http://proxy-two]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[HTTPS_PROXY-http://proxy-one-http://proxy-two]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[ALL_PROXY-http://proxy-one-http://proxy-two]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[NO_PROXY-one.example-two.example]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[SSL_CERT_FILE-/tmp/cert-one-/tmp/cert-two]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[SSL_CERT_DIR-/tmp/certs-one-/tmp/certs-two]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[SHINKA_GOOGLE_GENAI_IP_FAMILY-system-ipv4]
+tests/test_llm_client_cache_safety.py::test_transport_environment_rotation_separates_clients[SHINKA_GOOGLE_GENAI_IP_PROBE_TIMEOUT-0.1-0.2]
+tests/test_llm_client_cache_safety.py::test_runtime_rotation_prunes_superseded_sync_identity
+tests/test_llm_client_cache_safety.py::test_runtime_rotation_prunes_superseded_async_identity
+tests/test_llm_client_cache_safety.py::test_gemini_cache_hit_reapplies_process_network_policy
+tests/test_llm_client_cache_safety.py::test_sync_close_failure_does_not_log_exception_secret
+tests/test_llm_client_cache_safety.py::test_google_sync_close_runs_when_async_close_fails
+tests/test_llm_client_cache_safety.py::test_direct_async_runner_releases_cache_scope[False]
+tests/test_llm_client_cache_safety.py::test_direct_async_runner_releases_cache_scope[True]
+tests/test_llm_client_cache_safety.py::test_overlapping_async_cache_scopes_close_after_last_user
+tests/test_llm_kwargs.py::test_sample_model_kwargs_uses_max_tokens_for_local_openai
+tests/test_llm_kwargs.py::test_sample_model_kwargs_uses_max_output_tokens_for_dynamic_openrouter
+tests/test_llm_kwargs.py::test_gpt5_mini_pricing_metadata_enables_reasoning_kwargs_without_temperature
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[min-LOW-gemini-3.6-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[min-LOW-gemini-3.7-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[low-LOW-gemini-3.6-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[low-LOW-gemini-3.7-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[medium-MEDIUM-gemini-3.6-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[medium-MEDIUM-gemini-3.7-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[high-HIGH-gemini-3.6-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[high-HIGH-gemini-3.7-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[max-HIGH-gemini-3.6-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_maps_reasoning_effort_to_thinking_level[max-HIGH-gemini-3.7-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_disabled_reasoning_omits_thinking_controls[gemini-3.6-flash]
+tests/test_llm_kwargs.py::test_latest_gemini_flash_disabled_reasoning_omits_thinking_controls[gemini-3.7-flash]
+tests/test_llm_kwargs.py::test_legacy_gemini_keeps_token_budget_reasoning
+tests/test_llm_kwargs.py::test_deepseek_v4_reasoning_kwargs_enable_thinking_mode
+tests/test_llm_kwargs.py::test_deepseek_v4_max_reasoning_maps_to_deepseek_max_effort
+tests/test_llm_kwargs.py::test_deepseek_v4_disabled_reasoning_disables_thinking_mode
+tests/test_llm_kwargs.py::test_claude_opus_4_8_bedrock_kwargs_omit_deprecated_temperature
+tests/test_llm_query_routing.py::test_query_routes_local_openai
+tests/test_llm_query_routing.py::test_query_async_routes_local_openai
+tests/test_llm_retry_policy.py::test_sync_query_sleeps_between_transient_failures
+tests/test_llm_retry_policy.py::test_async_query_sleeps_between_transient_failures
+tests/test_llm_stall_timeout.py::test_stalled_local_openai_query_respects_configured_retry_bounds
+tests/test_local_openai_config.py::test_resolve_local_openai_api_key_from_custom_env
+tests/test_local_openai_config.py::test_resolve_local_openai_api_key_uses_local_fallback
+tests/test_local_openai_config.py::test_resolve_local_openai_api_key_defaults_to_local
+tests/test_local_openai_config.py::test_resolve_local_openai_api_key_missing_custom_env_raises
+tests/test_local_process_lifecycle.py::test_parse_time_rejects_negative_and_invalid_components
+tests/test_local_process_lifecycle.py::test_timeout_reaps_process_and_descendants
+tests/test_local_process_lifecycle.py::test_failed_process_cannot_report_success_from_leftover_files
+tests/test_local_process_lifecycle.py::test_crashed_evaluation_cannot_claim_success
+tests/test_local_process_lifecycle.py::test_async_cancellation_reaps_and_closes_logs
+tests/test_local_process_lifecycle.py::test_sync_scheduler_enforces_local_timeout
+tests/test_local_process_lifecycle.py::test_cleanup_logging_tolerates_thread_start_failure
+tests/test_logo.py::test_minimal_logo_has_leading_blank_line_and_shinka_cli_wordmark
+tests/test_logo.py::test_full_logo_preserves_existing_full_banner_art
+tests/test_logo.py::test_get_logo_ascii_supports_full_and_minimal_styles
+tests/test_marker_validation.py::test_well_formed_passes[python-# EVOLVE-BLOCK-START\nx = 1\n# EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[julia-# EVOLVE-BLOCK-START\nfunction f(x) end\n# EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[cpp-// EVOLVE-BLOCK-START\nint x;\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[cuda-// EVOLVE-BLOCK-START\n__device__ int f();\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[rust-// EVOLVE-BLOCK-START\nfn f() {}\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[swift-// EVOLVE-BLOCK-START\nfunc f() {}\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[json-// EVOLVE-BLOCK-START\n{"a": 1}\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[json5-// EVOLVE-BLOCK-START\n{a: 1}\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[go-// EVOLVE-BLOCK-START\nfunc f() {}\n// EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[fortran-! EVOLVE-BLOCK-START\ninteger :: x\n! EVOLVE-BLOCK-END]
+tests/test_marker_validation.py::test_well_formed_passes[markdown-<!-- EVOLVE-BLOCK-START -->\nhello\n<!-- EVOLVE-BLOCK-END -->]
+tests/test_marker_validation.py::test_well_formed_passes[wolfram-(* EVOLVE-BLOCK-START *)\nf[n_] := n\n(* EVOLVE-BLOCK-END *)]
+tests/test_marker_validation.py::test_python_aliases[py]
+tests/test_marker_validation.py::test_python_aliases[python3]
+tests/test_marker_validation.py::test_wolfram_aliases[wl]
+tests/test_marker_validation.py::test_wolfram_aliases[wls]
+tests/test_marker_validation.py::test_wolfram_aliases[mathematica]
+tests/test_marker_validation.py::test_wolfram_aliases[Mathematica]
+tests/test_marker_validation.py::test_cpp_aliases[c++]
+tests/test_marker_validation.py::test_cpp_aliases[cxx]
+tests/test_marker_validation.py::test_cpp_aliases[cc]
+tests/test_marker_validation.py::test_go_aliases
+tests/test_marker_validation.py::test_missing_start_fails[python]
+tests/test_marker_validation.py::test_missing_start_fails[julia]
+tests/test_marker_validation.py::test_missing_start_fails[cpp]
+tests/test_marker_validation.py::test_missing_start_fails[cuda]
+tests/test_marker_validation.py::test_missing_start_fails[rust]
+tests/test_marker_validation.py::test_missing_start_fails[swift]
+tests/test_marker_validation.py::test_missing_start_fails[json]
+tests/test_marker_validation.py::test_missing_start_fails[json5]
+tests/test_marker_validation.py::test_missing_start_fails[go]
+tests/test_marker_validation.py::test_missing_start_fails[fortran]
+tests/test_marker_validation.py::test_missing_start_fails[markdown]
+tests/test_marker_validation.py::test_missing_start_fails[wolfram]
+tests/test_marker_validation.py::test_missing_end_fails[python]
+tests/test_marker_validation.py::test_missing_end_fails[julia]
+tests/test_marker_validation.py::test_missing_end_fails[cpp]
+tests/test_marker_validation.py::test_missing_end_fails[cuda]
+tests/test_marker_validation.py::test_missing_end_fails[rust]
+tests/test_marker_validation.py::test_missing_end_fails[swift]
+tests/test_marker_validation.py::test_missing_end_fails[json]
+tests/test_marker_validation.py::test_missing_end_fails[json5]
+tests/test_marker_validation.py::test_missing_end_fails[go]
+tests/test_marker_validation.py::test_missing_end_fails[fortran]
+tests/test_marker_validation.py::test_missing_end_fails[markdown]
+tests/test_marker_validation.py::test_missing_end_fails[wolfram]
+tests/test_marker_validation.py::test_wolfram_markers_inside_single_comment_block
+tests/test_marker_validation.py::test_wolfram_missing_close_on_start_marker
+tests/test_marker_validation.py::test_wolfram_missing_open_on_end_marker
+tests/test_marker_validation.py::test_wolfram_extra_text_on_marker_line
+tests/test_marker_validation.py::test_wolfram_inner_comments_not_inspected
+tests/test_marker_validation.py::test_wolfram_block_comment_delim_in_string_not_rejected
+tests/test_marker_validation.py::test_python_trailing_marker_is_ok
+tests/test_marker_validation.py::test_cpp_trailing_marker_is_ok
+tests/test_marker_validation.py::test_go_trailing_marker_is_ok
+tests/test_marker_validation.py::test_fortran_trailing_marker_is_ok
+tests/test_marker_validation.py::test_unknown_language_defers
+tests/test_marker_validation.py::test_apply_full_patch_rejects_wolfram_smuggled_markers
+tests/test_marker_validation.py::test_apply_full_patch_accepts_well_formed_wolfram
+tests/test_marker_validation.py::test_apply_diff_patch_still_works_after_validation_hook
+tests/test_meta_summarizer.py::test_should_update_meta_respects_interval_and_mode
+tests/test_meta_summarizer.py::test_update_meta_memory_successfully_updates_state
+tests/test_meta_summarizer.py::test_step1_preserves_metadata_when_batch_response_is_missing
+tests/test_meta_summarizer.py::test_async_step1_preserves_metadata_when_batch_response_is_missing
+tests/test_meta_summarizer.py::test_update_meta_memory_returns_none_without_client_or_programs
+tests/test_meta_summarizer.py::test_get_sampled_recommendation_parses_multiline
+tests/test_meta_summarizer.py::test_save_and_load_meta_state_round_trip
+tests/test_meta_summarizer.py::test_load_meta_state_invalid_json_returns_false
+tests/test_meta_summarizer.py::test_perform_final_summary_writes_output_file
+tests/test_model_availability.py::test_validate_model_env_access_rejects_missing_llm_provider_key
+tests/test_model_availability.py::test_validate_model_env_access_allows_local_models_without_env_key
+tests/test_model_availability.py::test_validate_model_env_access_rejects_local_model_with_missing_key_env
+tests/test_model_availability.py::test_validate_model_env_access_rejects_missing_embedding_provider_key
+tests/test_model_availability.py::test_validate_model_env_access_allows_azure_v1_llm_without_api_version
+tests/test_model_availability.py::test_validate_model_env_access_requires_api_version_for_azure_embedding
+tests/test_model_availability.py::test_validate_model_env_access_rejects_incomplete_vertex_env
+tests/test_model_availability.py::test_async_runner_fails_fast_when_requested_model_env_is_missing
+tests/test_model_catalog_startup.py::test_runner_refreshes_catalog_before_model_validation
+tests/test_model_catalog_startup.py::test_runner_resume_uses_snapshot_without_network_refresh
+tests/test_model_catalog_startup.py::test_runner_catalog_context_propagates_to_worker_threads
+tests/test_model_catalog_startup.py::test_runtime_discovered_model_resolves_and_has_nonzero_cost
+tests/test_model_catalog_startup.py::test_shinka_models_verbose_refreshes_and_reports_catalog_source
+tests/test_model_catalog_startup.py::test_run_pricing_snapshot_is_not_replaced_when_resuming
+tests/test_model_catalog_startup.py::test_corrupt_run_pricing_snapshot_is_replaced
+tests/test_model_resolver.py::test_resolve_known_pricing_model
+tests/test_model_resolver.py::test_resolve_new_openai_pricing_models[gpt-5.4-pro]
+tests/test_model_resolver.py::test_resolve_new_openai_pricing_models[gpt-5.4-mini]
+tests/test_model_resolver.py::test_resolve_new_openai_pricing_models[gpt-5.4-nano]
+tests/test_model_resolver.py::test_resolve_new_claude_opus_models[claude-opus-4-7-anthropic]
+tests/test_model_resolver.py::test_resolve_new_claude_opus_models[anthropic.claude-opus-4-7-bedrock]
+tests/test_model_resolver.py::test_resolve_new_claude_opus_models[claude-opus-4-8-anthropic]
+tests/test_model_resolver.py::test_resolve_new_claude_opus_models[us.anthropic.claude-opus-4-8-bedrock]
+tests/test_model_resolver.py::test_claude_opus_keeps_standard_pricing_across_context_window[claude-opus-4-7-5.0-25.0]
+tests/test_model_resolver.py::test_claude_opus_keeps_standard_pricing_across_context_window[anthropic.claude-opus-4-7-5.0-25.0]
+tests/test_model_resolver.py::test_claude_opus_keeps_standard_pricing_across_context_window[claude-opus-4-8-5.0-25.0]
+tests/test_model_resolver.py::test_claude_opus_keeps_standard_pricing_across_context_window[us.anthropic.claude-opus-4-8-5.5-27.5]
+tests/test_model_resolver.py::test_latest_gemini_flash_pricing_is_registered[gemini-3.6-flash]
+tests/test_model_resolver.py::test_latest_gemini_flash_pricing_is_registered[gemini-3.7-flash]
+tests/test_model_resolver.py::test_gemini_3_5_flash_pricing_is_registered
+tests/test_model_resolver.py::test_deepseek_v4_pricing_is_registered[deepseek-v4-flash-0.15-0.6]
+tests/test_model_resolver.py::test_deepseek_v4_pricing_is_registered[deepseek-v4-pro-0.66-1.98]
+tests/test_model_resolver.py::test_resolve_openrouter_dynamic_model
+tests/test_model_resolver.py::test_resolve_local_model_with_inline_url
+tests/test_model_resolver.py::test_resolve_local_model_with_api_key_env_query_param
+tests/test_model_resolver.py::test_resolve_azure_prefixed_model
+tests/test_model_resolver.py::test_invalid_local_model_format_raises
+tests/test_models_dev_catalog.py::test_live_catalog_keeps_native_and_openrouter_prices_separate
+tests/test_models_dev_catalog.py::test_models_dev_prices_are_converted_to_per_token_and_context_tiers_apply
+tests/test_models_dev_catalog.py::test_200_response_is_cached_with_etag_and_304_reuses_it
+tests/test_models_dev_catalog.py::test_network_failure_keeps_last_known_good_cache[timeout]
+tests/test_models_dev_catalog.py::test_network_failure_keeps_last_known_good_cache[malformed]
+tests/test_models_dev_catalog.py::test_empty_cache_and_failed_request_use_packaged_fallback
+tests/test_models_dev_catalog.py::test_models_with_missing_costs_are_not_registered_as_free
+tests/test_models_dev_catalog.py::test_non_text_output_models_are_not_registered_as_llms
+tests/test_models_dev_catalog.py::test_generator_catalog_does_not_mask_missing_upstream_models
+tests/test_models_dev_catalog.py::test_offline_mode_skips_network_and_uses_bundled_catalog
+tests/test_models_dev_catalog.py::test_required_mode_fails_when_live_catalog_is_unavailable
+tests/test_models_dev_catalog.py::test_oversized_response_is_rejected_without_replacing_fallback
+tests/test_models_dev_catalog.py::test_invalid_cache_is_ignored_when_network_is_unavailable
+tests/test_models_dev_catalog.py::test_non_finite_cache_is_ignored
+tests/test_models_dev_catalog.py::test_live_catalog_survives_cache_write_failure
+tests/test_models_dev_catalog.py::test_non_finite_json_uses_bundled_fallback
+tests/test_models_dev_catalog.py::test_tampered_cache_is_not_used_after_network_failure
+tests/test_models_dev_live.py::test_live_models_dev_catalog_prices_representative_models
+tests/test_novelty_judge.py::test_should_check_novelty_rejects_missing_prereqs
+tests/test_novelty_judge.py::test_should_check_novelty_requires_initialized_islands
+tests/test_novelty_judge.py::test_assess_novelty_accepts_when_similarity_is_empty
+tests/test_novelty_judge.py::test_assess_novelty_rejects_after_exhausting_attempts
+tests/test_novelty_judge.py::test_assess_novelty_accepts_high_similarity_when_llm_marks_novel
+tests/test_novelty_judge.py::test_check_llm_novelty_handles_empty_response_and_exception
+tests/test_omega_certified_round_sync.py::test_round_jump_preserves_prior_lock_and_signed_progress
+tests/test_omega_certified_round_sync.py::test_round_jump_rejects_forgery_and_stale_cert
+tests/test_omega_checkpoint.py::test_resume_matches_uninterrupted_run
+tests/test_omega_checkpoint.py::test_exhausted_budget_resume_matches_full[0]
+tests/test_omega_checkpoint.py::test_exhausted_budget_resume_matches_full[1]
+tests/test_omega_checkpoint.py::test_exhausted_budget_resume_matches_full[8]
+tests/test_omega_checkpoint.py::test_wrong_key_and_tampering_are_rejected
+tests/test_omega_checkpoint.py::test_incompatible_config_and_existing_file_rejected
+tests/test_omega_checkpoint.py::test_interrupted_generation_replays_from_last_commit
+tests/test_omega_checkpoint.py::test_stale_writer_cannot_overwrite_newer_state
+tests/test_omega_checkpoint.py::test_external_provider_cannot_use_offline_checkpoint
+tests/test_omega_checkpoint.py::test_concurrent_stale_writer_is_rejected
+tests/test_omega_checkpoint.py::test_process_exit_during_transaction_preserves_checkpoint
+tests/test_omega_checkpoint.py::test_cli_resume_across_processes
+tests/test_omega_checkpoint.py::test_missing_db_cannot_be_created_by_resume
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[__import__("os")]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[x.__class__]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[x**999999]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[[x for x in y]]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[float("nan")]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[1e309]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[True]
+tests/test_omega_coevolution.py::test_untrusted_expression_rejected[x/0]
+tests/test_omega_coevolution.py::test_patch_strict_and_atomic
+tests/test_omega_coevolution.py::test_receipt_binds_candidate_and_replay
+tests/test_omega_coevolution.py::test_cascade_rejects_asymmetry_and_scores_baseline
+tests/test_omega_coevolution.py::test_archive_pareto_and_duplicate
+tests/test_omega_coevolution.py::test_router_never_exceeds_budget
+tests/test_omega_coevolution.py::test_distillation_comparable_only
+tests/test_omega_coevolution.py::test_simulation_reproducible_and_improves
+tests/test_omega_coevolution.py::test_adapter_uses_existing_client_contract
+tests/test_omega_coevolution.py::test_evaluator_source_integrity
+tests/test_omega_coevolution.py::test_holdout_failure_is_explicit
+tests/test_omega_final_gates.py::test_offline_legacy_helpers_do_not_import_cloud_sdks
+tests/test_omega_final_gates.py::test_timeout_certificate_requires_quorum_and_is_durable
+tests/test_omega_final_gates.py::test_pacemaker_partition_and_lost_leader
+tests/test_omega_final_gates.py::test_isabelle_generated_theory_and_fail_closed
+tests/test_omega_final_gates.py::test_pacemaker_real_rpc
+tests/test_omega_final_gates.py::test_resumable_architecture_search_final_test_only_once
+tests/test_omega_final_gates.py::test_safetensors_manifest_and_memory_admission
+tests/test_omega_final_gates.py::test_microbatch_gradient_matches_full_batch
+tests/test_omega_final_gates.py::test_pacemaker_all_single_validator_failures[0]
+tests/test_omega_final_gates.py::test_pacemaker_all_single_validator_failures[1]
+tests/test_omega_final_gates.py::test_pacemaker_all_single_validator_failures[2]
+tests/test_omega_final_gates.py::test_pacemaker_all_single_validator_failures[3]
+tests/test_omega_formal_closure.py::test_general_ctl_and_countermodel
+tests/test_omega_formal_closure.py::test_ast_specs_and_certificate
+tests/test_omega_formal_closure.py::test_hidden_pole_precedes_empirical
+tests/test_omega_formal_closure.py::test_audit_bound_to_proof_and_learning
+tests/test_omega_formal_closure.py::test_rulebook_readback_and_tamper
+tests/test_omega_formal_closure.py::test_actual_core_checkpoint
+tests/test_omega_formal_closure.py::test_actual_cluster_default_rules_and_forgery
+tests/test_omega_formal_closure.py::test_independent_exact_rational_checker_and_unknown
+tests/test_omega_formal_closure.py::test_ctl_validation_of_total_model_and_formula
+tests/test_omega_formal_closure.py::test_untrusted_worker_cannot_reach_profiler
+tests/test_omega_formal_closure.py::test_rulebook_capped_and_rejects_unproved
+tests/test_omega_formal_closure.py::test_cluster_process_resume_retains_certified_rules
+tests/test_omega_formal_closure.py::test_general_modal_k_validity_and_countermodel
+tests/test_omega_formal_closure.py::test_proof_replaces_redundant_numeric_smoke
+tests/test_omega_green.py::test_exact_units_and_uncertainty
+tests/test_omega_green.py::test_invalid_calibration[params0]
+tests/test_omega_green.py::test_invalid_calibration[params1]
+tests/test_omega_green.py::test_invalid_calibration[params2]
+tests/test_omega_green.py::test_invalid_calibration[params3]
+tests/test_omega_green.py::test_counter_wrap_and_ambiguity
+tests/test_omega_green.py::test_workload_real_and_paired
+tests/test_omega_identity.py::test_offline_core_has_no_upstream_import_side_effects
+tests/test_omega_identity.py::test_legacy_module_is_the_canonical_module[engine]
+tests/test_omega_identity.py::test_legacy_module_is_the_canonical_module[checkpoint]
+tests/test_omega_identity.py::test_legacy_module_is_the_canonical_module[workers]
+tests/test_omega_identity.py::test_legacy_module_is_the_canonical_module[providers]
+tests/test_omega_identity.py::test_cli_parity_with_multiprocessing
+tests/test_omega_identity.py::test_resume_across_cli_names
+tests/test_omega_remaining_closure.py::test_qubo_logistics_exact_and_feasibility
+tests/test_omega_remaining_closure.py::test_infeasible_provider_never_promoted
+tests/test_omega_remaining_closure.py::test_tensor_binary_decomposition
+tests/test_omega_remaining_closure.py::test_infeasible_problem_and_malformed
+tests/test_omega_remaining_closure.py::test_large_logistics_categorical_neighborhood
+tests/test_omega_remaining_closure.py::test_synthesized_memory_new_structure_and_holdout
+tests/test_omega_remaining_closure.py::test_mesh_discovery_and_propagation
+tests/test_omega_remaining_closure.py::test_cluster_epigenetics_real_switches_and_restart
+tests/test_omega_remaining_closure.py::test_mixed_bitvector_higher_order_and_fail_closed
+tests/test_omega_remaining_closure.py::test_formal_mixed_optimizer
+tests/test_omega_remaining_closure.py::test_bft_round_change_preserves_locked_value
+tests/test_omega_remaining_closure.py::test_bft_reassign_and_reconfigure
+tests/test_omega_remaining_closure.py::test_infinite_domain_theorem_synthesis_and_forgery
+tests/test_omega_remaining_closure.py::test_inverse_square_scientific_discovery
+tests/test_omega_remaining_closure.py::test_bft_network_leader_failure_and_conflict
+tests/test_omega_remaining_closure.py::test_transformer_plasticity_real_training_and_recovery
+tests/test_omega_remaining_closure.py::test_cloud_budget_lifecycle_and_recovery
+tests/test_omega_remaining_closure.py::test_cloud_api_reservation_and_manifest_tamper
+tests/test_omega_remaining_closure.py::test_cloud_worker_cpu_and_absent_gpu
+tests/test_omega_remaining_closure.py::test_cloud_https_real_transport
+tests/test_omega_remaining_closure.py::test_cloud_spec_tamper_after_reservation
+tests/test_omega_remaining_closure.py::test_qubo_external_contract_exact_sample
+tests/test_omega_remaining_closure.py::test_tpu_jax_cpu_contract
+tests/test_omega_remaining_closure.py::test_mesh_bounded_automatic_discovery_and_gossip
+tests/test_omega_residual_recovery.py::test_terminal_round_keeps_polling_for_certified_catchup
+tests/test_omega_residual_recovery.py::test_offline_legacy_llm_module_and_embedding_resolver
+tests/test_omega_residual_recovery.py::test_search_combines_two_novel_subtrees
+tests/test_omega_residual_recovery.py::test_google_auth_configuration_without_sdk
+tests/test_omega_residual_recovery.py::test_upstream_runner_import_does_not_load_diff_parser
+tests/test_omega_residual_recovery.py::test_headless_provider_gateway_is_independent_of_cloud_sdks
+tests/test_omega_residual_recovery.py::test_certified_progress_despite_byzantine_rpc_and_transient_partition[0]
+tests/test_omega_residual_recovery.py::test_certified_progress_despite_byzantine_rpc_and_transient_partition[1]
+tests/test_omega_residual_recovery.py::test_certified_progress_despite_byzantine_rpc_and_transient_partition[2]
+tests/test_omega_residual_recovery.py::test_certified_progress_despite_byzantine_rpc_and_transient_partition[3]
+tests/test_omega_simulation_acceptance.py::test_proof_source_roundtrip_and_solver[lean]
+tests/test_omega_simulation_acceptance.py::test_proof_source_roundtrip_and_solver[isabelle]
+tests/test_omega_simulation_acceptance.py::test_virtual_cluster_faults_capacity_restart_and_deadline
+tests/test_omega_simulation_acceptance.py::test_virtual_cluster_state_replays
+tests/test_omega_simulation_acceptance.py::test_distributed_gradient_reference_and_optimizer
+tests/test_omega_simulation_acceptance.py::test_virtual_cluster_success_and_uid_preconditions
+tests/test_omega_simulation_acceptance.py::test_virtual_accelerator_real_math_and_memory[gpu]
+tests/test_omega_simulation_acceptance.py::test_virtual_accelerator_real_math_and_memory[npu]
+tests/test_omega_terminal_recovery.py::test_terminal_round_leader_retries_after_quorum_restored
+tests/test_omega_terminal_recovery.py::test_synthesis_budget_can_be_extended_without_restarting
+tests/test_omega_v10.py::test_replay_and_fresh_gates
+tests/test_omega_v10.py::test_limits_and_resume
+tests/test_omega_v10.py::test_tampered_outer_checkpoint_fails_closed
+tests/test_omega_v10.py::test_failed_formal_gate_prevents_checkpoint_creation
+tests/test_omega_v11.py::test_paired_equal_budget
+tests/test_omega_v11.py::test_limits
+tests/test_omega_v12.py::test_symbolic_hypothesis_reproducible_and_verified[sum]
+tests/test_omega_v12.py::test_symbolic_hypothesis_reproducible_and_verified[product]
+tests/test_omega_v12.py::test_symbolic_hypothesis_reproducible_and_verified[squares]
+tests/test_omega_v12.py::test_symbolic_hypothesis_reproducible_and_verified[distance]
+tests/test_omega_v12.py::test_holdout_never_selects_hypothesis
+tests/test_omega_v12.py::test_dataset_validation
+tests/test_omega_v12.py::test_custom_json_data_not_a_named_fixture
+tests/test_omega_v13.py::test_modular_semantics_and_reject_injection
+tests/test_omega_v13.py::test_search_deterministic_and_holdout_not_used_for_selection
+tests/test_omega_v13.py::test_real_backends
+tests/test_omega_v13.py::test_nested_search_and_constant_wraparound
+tests/test_omega_v13.py::test_custom_json_bounded_and_java_backend
+tests/test_omega_v14_v15.py::test_real_training_and_replay
+tests/test_omega_v14_v15.py::test_hybrid_holdout_is_not_selection
+tests/test_omega_v14_v15.py::test_architecture_evolution_and_budget
+tests/test_omega_v14_v15.py::test_safe_reusable_weight_artifact
+tests/test_omega_v14_v15.py::test_exported_hybrid_and_nas_models_reproduce_predictions
+tests/test_omega_v16.py::test_real_cpu_inference
+tests/test_omega_v16.py::test_fallback_and_strict_policy[fail]
+tests/test_omega_v16.py::test_fallback_and_strict_policy[bad]
+tests/test_omega_v16.py::test_caps_and_simulated_device_not_hardware
+tests/test_omega_v16.py::test_concurrent_reservations_do_not_overcommit
+tests/test_omega_v16.py::test_torch_cpu_adapter_real_tensor_execution
+tests/test_omega_v17.py::test_durable_cited_graph_and_tenant_isolation
+tests/test_omega_v17.py::test_tampered_record_or_edge_fails_closed
+tests/test_omega_v17.py::test_validation_and_bound
+tests/test_omega_v17.py::test_namespace_key_binding_and_atomic_experiment
+tests/test_omega_v17.py::test_graph_storage_cap_and_strict_json
+tests/test_omega_v18.py::test_plan_and_selection_no_test_leakage
+tests/test_omega_v18.py::test_memory_integration_and_contract
+tests/test_omega_v18.py::test_work_budget_controls_plan_and_fails_closed
+tests/test_omega_v19_v20.py::test_dimensionally_valid_discovery[kinematics]
+tests/test_omega_v19_v20.py::test_dimensionally_valid_discovery[mechanics]
+tests/test_omega_v19_v20.py::test_dimensionally_valid_discovery[kinetics]
+tests/test_omega_v19_v20.py::test_dimensionally_valid_discovery[dynamics]
+tests/test_omega_v19_v20.py::test_test_label_isolation_and_limits
+tests/test_omega_v19_v20.py::test_runtime_resume_and_graph_recovery
+tests/test_omega_v19_v20.py::test_runtime_crash_between_checkpoint_and_graph
+tests/test_omega_v19_v20.py::test_campaign_limits
+tests/test_omega_v19_v20.py::test_custom_campaign_and_report_replay
+tests/test_omega_v19_v20.py::test_campaign_uses_original_evolution_and_semantic_memory
+tests/test_omega_v20_backlog.py::test_semantic_graph_and_grounded_output
+tests/test_omega_v20_backlog.py::test_real_torch_training_and_replay
+tests/test_omega_v20_backlog.py::test_qnn_missing_provider_fails_closed
+tests/test_omega_v20_backlog.py::test_torch_training_work_cap_and_plan_roundtrip
+tests/test_omega_v20_backlog.py::test_qnn_provider_contract_and_no_fallback
+tests/test_omega_v20_backlog.py::test_local_llm_http_quote_contract
+tests/test_omega_v20_recovery.py::test_population_checkpoint_matches_original
+tests/test_omega_v20_recovery.py::test_bitvector_equivalence_and_counterexample
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.049-None-0.5-True]
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.05-None-0.5-True]
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.06-None-0.5-False]
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.0-1.2-0.5-False]
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.1-None-0.55-True]
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.1-None-0.519-False]
+tests/test_omega_v21.py::test_policy_relative_threshold_and_correctness[1.3-None-0.99-False]
+tests/test_omega_v21.py::test_noise_and_validation
+tests/test_omega_v21.py::test_real_paired_profile
+tests/test_omega_v21.py::test_stage3_gate_rejects_before_archive
+tests/test_omega_v21.py::test_checkpoint_history_and_policy_binding
+tests/test_omega_v21.py::test_invalid_ast_never_profiled
+tests/test_omega_v21.py::test_cell_champion_and_parent_references
+tests/test_omega_v21.py::test_failed_profiler_rejects_and_json_roundtrip
+tests/test_omega_v21.py::test_gate_on_local_process_pool
+tests/test_omega_v21.py::test_profiling_budget_cap
+tests/test_omega_v21.py::test_remote_verified_workers_cannot_bypass_coordinator_gate
+tests/test_omega_v21.py::test_correctness_exception_promotes_candidate
+tests/test_omega_v21.py::test_second_baseline_can_veto
+tests/test_omega_v22.py::test_config_limits
+tests/test_omega_v22.py::test_actor_retry_and_lineage
+tests/test_omega_v22.py::test_store_authentication_and_cas
+tests/test_omega_v22.py::test_async_migration_recovery
+tests/test_omega_v22.py::test_real_process_transport
+tests/test_omega_v22.py::test_gate_including_migrations
+tests/test_omega_v22.py::test_malformed_migrant_and_wrong_contract
+tests/test_omega_v22.py::test_forged_worker_metrics_and_missing_gate
+tests/test_omega_v22.py::test_lost_actor_response_recovery
+tests/test_omega_v22.py::test_async_no_global_round_barrier
+tests/test_omega_v22.py::test_large_logical_archipelago
+tests/test_omega_v22.py::test_ray_unavailable_is_not_implicit_simulation
+tests/test_omega_v22.py::test_actual_worker_process_death
+tests/test_omega_v22.py::test_mandatory_challenge_cannot_be_removed
+tests/test_omega_v23.py::test_metric_spd_and_distance_axioms
+tests/test_omega_v23.py::test_adaptive_partition_preserves_lineage_and_champion
+tests/test_omega_v23.py::test_stagnant_region_coarsens
+tests/test_omega_v23.py::test_cluster_integration_and_tamper
+tests/test_omega_v23.py::test_policy_rejects_bad_parameters
+tests/test_omega_v23.py::test_curvature_constant_and_variable_metric
+tests/test_omega_v23.py::test_adaptive_gate_uses_real_cell_and_verifier
+tests/test_omega_v23.py::test_geometry_cache_is_bounded
+tests/test_omega_v23.py::test_guided_mutation_is_parent_conditioned_and_valid
+tests/test_omega_v23.py::test_cli_topology_enabled_and_disabled
+tests/test_omega_v26.py::test_tt_exact_and_rank_compression
+tests/test_omega_v26.py::test_policy_feedback_and_reproducible_sampling
+tests/test_omega_v26.py::test_memory_context_and_negative_evidence
+tests/test_omega_v26.py::test_safety_certificate[-(x+y)]
+tests/test_omega_v26.py::test_safety_certificate[-(x+y+(x-y)*(x-y)/(.01+x*y)+2)]
+tests/test_omega_v26.py::test_safety_certificate[min(abs(x-y),1)]
+tests/test_omega_v26.py::test_unsafe_or_unknown_rejected[1/(x-.123456)]
+tests/test_omega_v26.py::test_unsafe_or_unknown_rejected[1e6*1e6*1e6]
+tests/test_omega_v26.py::test_unsafe_or_unknown_rejected[__import__("os")]
+tests/test_omega_v26.py::test_unsafe_or_unknown_rejected[1/(x-x)]
+tests/test_omega_v26.py::test_modal_model
+tests/test_omega_v26.py::test_integrated_cluster_restart_and_tamper
+tests/test_omega_v26.py::test_memory_keys_compressed_and_stable_subprocess
+tests/test_omega_v26.py::test_annealed_operator_provenance
+tests/test_omega_v26.py::test_formal_failure_before_empirical
+tests/test_omega_v26.py::test_regression_gate_still_mandatory_with_proof
+tests/test_omega_v26.py::test_foreign_packet_tamper
+tests/test_omega_v29.py::test_qubo_constraint_and_reference
+tests/test_omega_v29.py::test_quantum_backend_authorization_and_malformed
+tests/test_omega_v29.py::test_architecture_search_split_and_provenance
+tests/test_omega_v29.py::test_peer_replay_and_independent_proof
+tests/test_omega_v29.py::test_peer_wrong_recipient_and_tamper
+tests/test_omega_v29.py::test_peer_network_and_reverse_exchange
+tests/test_omega_v29.py::test_packet_atomicity_deletion_and_allowlist
+tests/test_omega_v29.py::test_export_cluster_and_federated_evolution
+tests/test_omega_v29.py::test_non_loopback_fails_closed
+tests/test_omega_v29.py::test_qubo_penalty_all_bitstrings
+tests/test_omega_v29.py::test_graph_promotion_and_heldout_independence
+tests/test_omega_v29.py::test_federation_graph_publication_idempotent
+tests/test_omega_v29.py::test_signed_receipt_not_reusable_for_other_packet
+tests/test_omega_v29.py::test_real_mutual_tls
+tests/test_omega_v29.py::test_quantum_selection_on_real_artifacts
+tests/test_omega_v32.py::test_epigenetic_reversible_hysteresis
+tests/test_omega_v32.py::test_polynomial_proof_and_tamper
+tests/test_omega_v32.py::test_distribution_mod16_and_unknown
+tests/test_omega_v32.py::test_proof_optimizer
+tests/test_omega_v32.py::test_quorum_and_persisted_equivocation
+tests/test_omega_v32.py::test_swarm_work_and_fail_closed
+tests/test_omega_v32.py::test_network_vote
+tests/test_omega_v32.py::test_execution_persistence_and_manifest
+tests/test_omega_v32.py::test_signed_but_forged_search_result
+tests/test_omega_v32.py::test_quorum_intersection_exhaustive
+tests/test_omega_v32.py::test_lean_explicit_absent_backend
+tests/test_omega_v32.py::test_proof_checker_independent_of_generator
+tests/test_omega_v32.py::test_live_telemetry
+tests/test_omega_v32.py::test_swarm_federation_bridge
+tests/test_omega_v32.py::test_live_swarm_telemetry_replayed
+tests/test_omega_v35.py::test_axioms_discovery_and_replay
+tests/test_omega_v35.py::test_counterexample_and_unknown
+tests/test_omega_v35.py::test_finite_algebra_exhaustive
+tests/test_omega_v35.py::test_adapter_frozen_and_real_training
+tests/test_omega_v35.py::test_trajectory_tampering_and_leakage
+tests/test_omega_v35.py::test_durable_plasticity_budget_rollback
+tests/test_omega_v35.py::test_orchestration_real_execution_and_idempotent
+tests/test_omega_v35.py::test_orchestration_denies_and_stop
+tests/test_omega_v35.py::test_discovery_graph_idempotent_and_smt
+tests/test_omega_v35.py::test_cluster_trajectory_import
+tests/test_omega_v35.py::test_plasticity_reject_and_no_base_mutation
+tests/test_omega_v35.py::test_plasticity_interruption_consumes_reservation
+tests/test_omega_v35.py::test_orchestration_parallel_real_work_and_atomic_budget
+tests/test_omega_v35.py::test_orchestration_stop_running
+tests/test_omega_v35.py::test_orchestrator_crash_recovery
+tests/test_omega_v41.py::test_lease_recovery_fencing_and_duplicate
+tests/test_omega_v41.py::test_renewal_and_owner_binding
+tests/test_omega_v41.py::test_remote_worker_protocol_and_auth
+tests/test_omega_v41.py::test_remote_run_matches_local
+tests/test_omega_v41.py::test_false_result_rejected_by_coordinator
+tests/test_omega_v41.py::test_remote_tls_and_fail_closed
+tests/test_omega_v41.py::test_remote_checkpoint_resume
+tests/test_omega_v41.py::test_retry_exhaustion_and_no_worker_timeout
+tests/test_omega_v41.py::test_worker_keys_must_be_unique
+tests/test_omega_v41.py::test_concurrent_claims_do_not_share_a_lease
+tests/test_omega_v41.py::test_separate_worker_processes
+tests/test_omega_v5.py::test_genome_is_bounded_and_cannot_modify_gate
+tests/test_omega_v5.py::test_proposal_is_replayable_and_validated
+tests/test_omega_v5.py::test_promotion_requires_all_heldout_seeds_and_budgets
+tests/test_omega_v5.py::test_meta_search_reproducible_and_separate_validation
+tests/test_omega_v5.py::test_invalid_holdout_cannot_be_promoted
+tests/test_omega_v5.py::test_simplification_operator_integrates_v6
+tests/test_omega_v6.py::test_rewrite_reduces_ast_and_cse_reduces_ir
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[x*1]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[-(-x)]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[x/1]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[abs(abs(x-y))]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[(x+y)*(x+y)]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[x+0]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[0*x]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[x/(y-y)]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[(x*1000000)*1000000*1000000]
+tests/test_omega_v6.py::test_bit_exact_or_same_failure[min(-x,y)+max(y,-x)]
+tests/test_omega_v6.py::test_unsafe_ast_is_never_compiled[__import__("os")]
+tests/test_omega_v6.py::test_unsafe_ast_is_never_compiled[x.__class__]
+tests/test_omega_v6.py::test_unsafe_ast_is_never_compiled[x**2]
+tests/test_omega_v6.py::test_unsafe_ast_is_never_compiled[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
+tests/test_omega_v6.py::test_ir_rejects_out_of_domain
+tests/test_omega_v6.py::test_generated_expressions_and_exception_equivalence
+tests/test_omega_v7.py::test_optimization_certificate[-(-(x*1))/1]
+tests/test_omega_v7.py::test_optimization_certificate[abs(-abs(x-y))]
+tests/test_omega_v7.py::test_optimization_certificate[min(x/0,x/0)]
+tests/test_omega_v7.py::test_optimization_certificate[max(-0.0,-0.0)]
+tests/test_omega_v7.py::test_optimization_certificate[(x+y)*(x+y)]
+tests/test_omega_v7.py::test_optimization_certificate[(-1)*x]
+tests/test_omega_v7.py::test_reassociation_and_signed_zero_not_certified
+tests/test_omega_v7.py::test_all_symbolic_rules
+tests/test_omega_v7.py::test_forged_ir_is_rejected
+tests/test_omega_v7.py::test_invalid_source_never_certified
+tests/test_omega_v7.py::test_certified_optimization_fail_closed
+tests/test_omega_v8.py::test_training_determinism_and_serialization
+tests/test_omega_v8.py::test_seed_leakage_and_invalid_model
+tests/test_omega_v8.py::test_report_measures_heldout_teacher_and_student
+tests/test_omega_v9.py::test_role_routing_and_validation
+tests/test_omega_v9.py::test_population_migration_and_replay
+tests/test_omega_v9.py::test_no_leakage_or_runaway_budget
+tests/test_omega_workers.py::test_worker_returns_same_result_and_failure_deltas
+tests/test_omega_workers.py::test_real_process_worker
+tests/test_omega_workers.py::test_parallel_matches_serial[5]
+tests/test_omega_workers.py::test_parallel_matches_serial[77]
+tests/test_omega_workers.py::test_resume_across_execution_backends
+tests/test_omega_workers.py::test_invalid_process_count[0]
+tests/test_omega_workers.py::test_invalid_process_count[-1]
+tests/test_omega_workers.py::test_invalid_process_count[33]
+tests/test_omega_workers.py::test_invalid_process_count[True]
+tests/test_omega_workers.py::test_failed_worker_batch_preserves_last_commit
+tests/test_omega_workers.py::test_broken_process_pool_propagates_failure
+tests/test_openai_provider.py::test_get_openai_costs_defaults_to_zero_for_unknown_model_without_cost_details
+tests/test_openai_provider.py::test_get_openai_costs_uses_openrouter_cost_details_when_available
+tests/test_openai_provider.py::test_retry_after_seconds_reads_cloudflare_error_body
+tests/test_openai_provider.py::test_retry_after_seconds_prefers_response_header
+tests/test_openai_provider.py::test_query_openai_reads_text_from_first_output_item
+tests/test_openai_provider.py::test_query_openai_reads_text_after_reasoning_output_item
+tests/test_openai_provider.py::test_query_openai_scans_later_output_items_for_text
+tests/test_openai_provider.py::test_query_openai_uses_output_text_fallback
+tests/test_openai_provider.py::test_query_openai_raises_clear_error_when_response_has_no_text
+tests/test_openai_provider.py::test_query_openai_does_not_treat_reasoning_text_as_output
+tests/test_packaging_release.py::test_project_metadata_targets_pypi_release
+tests/test_packaging_release.py::test_httpx_dependency_allows_compatible_updates
+tests/test_packaging_release.py::test_google_genai_dependency_supports_thinking_levels
+tests/test_packaging_release.py::test_readme_documents_package_install
+tests/test_packaging_release.py::test_changelog_tracks_current_package_version
+tests/test_packaging_release.py::test_packaged_hydra_configs_live_inside_package
+tests/test_packaging_release.py::test_packaged_hydra_configs_are_importable
+tests/test_packaging_release.py::test_shinka_launch_preprocesses_global_args
+tests/test_packaging_release.py::test_release_check_flags_gitignored_members
+tests/test_packaging_release.py::test_release_check_handles_wheels
+tests/test_packaging_release.py::test_release_check_accepts_clean_archives[artifact.tar.gz]
+tests/test_packaging_release.py::test_release_check_accepts_clean_archives[artifact.whl]
+tests/test_pipeline_timing.py::test_with_pipeline_timing_adds_boundaries_and_durations
+tests/test_pipeline_timing.py::test_with_pipeline_timing_clamps_negative_stage_durations
+tests/test_pipeline_timing.py::test_configure_local_job_runtime_sets_numeric_thread_cap_from_eval_concurrency
+tests/test_pipeline_timing.py::test_with_side_effect_timing_adds_wait_and_end_to_end_fields
+tests/test_pipeline_timing.py::test_summarize_timing_metadata_reports_basic_stats
+tests/test_pipeline_timing.py::test_logical_slot_pool_reuses_slots
+tests/test_pipeline_timing.py::test_process_single_job_safely_persists_timing_metadata
+tests/test_pipeline_timing.py::test_process_single_job_uses_completion_detection_time_for_eval_finish
+tests/test_pipeline_timing.py::test_process_single_job_safely_flushes_metadata_once_after_side_effects
+tests/test_pipeline_timing.py::test_process_single_job_safely_skips_duplicate_source_job
+tests/test_pipeline_timing.py::test_process_single_job_safely_reuses_existing_row_when_duplicate_matches
+tests/test_pipeline_timing.py::test_process_single_job_safely_ignores_duplicate_marker_on_existing_row
+tests/test_pipeline_timing.py::test_process_single_job_safely_reuses_initial_eval_finish_time_on_retry
+tests/test_pipeline_timing.py::test_process_completed_jobs_safely_persists_completed_jobs_concurrently
+tests/test_pipeline_timing.py::test_process_completed_jobs_safely_waits_for_slow_side_effects
+tests/test_plot_throughput.py::test_prepare_pool_runtime_data_dedupes_rows_and_computes_capacities
+tests/test_plot_throughput.py::test_prepare_pool_runtime_data_handles_missing_optional_columns
+tests/test_plot_throughput.py::test_compute_occupancy_series_matches_expected_utilization_stats
+tests/test_plot_throughput.py::test_prepare_pool_runtime_data_reconciles_legacy_worker_overlap
+tests/test_plot_throughput.py::test_plot_generation_runtime_timeline_uses_deduped_pool_rows
+tests/test_plot_throughput.py::test_plot_normalized_occupancy_over_time_adds_reference_line
+tests/test_pricing_csv_generation.py::test_generate_llm_rows_preserves_schema_and_maps_aliases
+tests/test_pricing_csv_generation.py::test_generate_embedding_rows_maps_azure_alias_and_manual_google_entry
+tests/test_pricing_csv_generation.py::test_generate_latest_gemini_flash_from_manual_overlay[gemini-3.6-flash]
+tests/test_pricing_csv_generation.py::test_generate_latest_gemini_flash_from_manual_overlay[gemini-3.7-flash]
+tests/test_pricing_csv_generation.py::test_load_models_dev_payload_uses_browser_safe_user_agent
+tests/test_pricing_csv_generation.py::test_generator_fails_when_target_has_no_upstream_or_overlay
+tests/test_pricing_csv_generation.py::test_check_mode_reports_drift
+tests/test_pricing_runtime_overlay.py::test_embedding_overrides_replace_runtime_discovery_price
+tests/test_pricing_runtime_overlay.py::test_embedding_overrides_ignore_unknown_and_malformed_entries
+tests/test_program_summary.py::test_program_summary_excludes_full_embeddings_but_keeps_pca_fields
+tests/test_program_summary.py::test_program_summary_includes_text_feedback_for_lightweight_details
+tests/test_prompt_evolution.py::TestSystemPromptDataclass::test_create_system_prompt
+tests/test_prompt_evolution.py::TestSystemPromptDataclass::test_prompt_to_dict
+tests/test_prompt_evolution.py::TestSystemPromptDataclass::test_prompt_from_dict
+tests/test_prompt_evolution.py::TestSystemPromptDataclass::test_update_fitness
+tests/test_prompt_evolution.py::TestSystemPromptDataclass::test_update_fitness_correct_only
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_add_and_get_prompt
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_get_nonexistent_prompt
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_get_all_prompts
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_archive_management
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_update_fitness
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_sample_prompt
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_get_best_prompt
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_prompt_lineage
+tests/test_prompt_evolution.py::TestSystemPromptDatabase::test_persistence
+tests/test_prompt_evolution.py::TestSystemPromptSampler::test_sample
+tests/test_prompt_evolution.py::TestSystemPromptSampler::test_get_best_prompt
+tests/test_prompt_evolution.py::TestSystemPromptSampler::test_get_archive
+tests/test_prompt_evolution.py::TestSystemPromptSampler::test_ucb_exploration_effect
+tests/test_prompt_evolution.py::TestPromptEvolutionPrompts::test_diff_prompt_construction
+tests/test_prompt_evolution.py::TestPromptEvolutionPrompts::test_full_prompt_construction
+tests/test_prompt_evolution.py::TestPromptEvolutionPrompts::test_inspiration_prompt_formatting
+tests/test_prompt_evolution.py::TestEvolutionConfigPromptSettings::test_default_prompt_evolution_config
+tests/test_prompt_evolution.py::TestEvolutionConfigPromptSettings::test_custom_prompt_evolution_config
+tests/test_prompt_evolution.py::TestProgramSystemPromptId::test_program_with_prompt_id
+tests/test_prompt_evolution.py::TestProgramSystemPromptId::test_program_without_prompt_id
+tests/test_prompt_evolution.py::TestProgramSystemPromptId::test_program_to_dict_with_prompt_id
+tests/test_proposal_llm_kwargs.py::test_patch_proposal_sends_the_kwargs_it_records
+tests/test_proposal_llm_kwargs.py::test_fix_proposal_sends_the_kwargs_it_records
+tests/test_proposal_llm_kwargs.py::test_initial_program_sends_the_kwargs_it_records
+tests/test_proposal_oversubscription.py::test_compute_proposal_pipeline_target_defaults_to_small_buffer_before_samples
+tests/test_proposal_oversubscription.py::test_compute_proposal_pipeline_target_adapts_and_clamps
+tests/test_proposal_oversubscription.py::test_compute_proposal_pipeline_target_respects_disable_flag
+tests/test_proposal_oversubscription.py::test_compute_proposal_pipeline_target_ignores_invalid_hard_cap_below_eval_capacity
+tests/test_proposal_oversubscription.py::test_record_oversubscription_timing_sample_uses_ewma
+tests/test_result_file_integrity.py::test_malformed_correct_json_is_rejected
+tests/test_result_file_integrity.py::test_nonboolean_correct_field_is_rejected["true"]
+tests/test_result_file_integrity.py::test_nonboolean_correct_field_is_rejected[1]
+tests/test_result_file_integrity.py::test_nonboolean_correct_field_is_rejected[null]
+tests/test_result_file_integrity.py::test_nonboolean_correct_field_is_rejected[[]]
+tests/test_result_file_integrity.py::test_nonobject_metrics_are_rejected
+tests/test_result_file_integrity.py::test_successful_valid_evaluation_keeps_extra_metadata
+tests/test_result_file_integrity.py::test_log_tail_is_bounded_without_losing_full_disk_log
+tests/test_result_file_integrity.py::test_oversized_result_json_is_rejected
+tests/test_runtime_timeline_webui.py::test_runtime_timeline_layout_reserves_space_for_legend
+tests/test_runtime_timeline_webui.py::test_embeddings_heatmap_uses_scroll_wrapper_for_full_size_matrix
+tests/test_runtime_timeline_webui.py::test_embeddings_heatmap_requires_hydrated_embedding_fields_before_render
+tests/test_runtime_timeline_webui.py::test_embeddings_heatmap_refetches_when_cached_full_data_is_stale
+tests/test_runtime_timeline_webui.py::test_runtime_timeline_dedupes_source_jobs_and_deprioritizes_island_copies
+tests/test_runtime_timeline_webui.py::test_runtime_timeline_infers_stage_lanes_when_worker_ids_are_missing
+tests/test_runtime_timeline_webui.py::test_runtime_timeline_uses_adaptive_height_and_fixed_lane_thickness
+tests/test_runtime_timeline_webui.py::test_runtime_timeline_can_be_toggled_visible_by_default
+tests/test_runtime_timeline_webui.py::test_throughput_tab_contains_runtime_and_utilization_sections
+tests/test_runtime_timeline_webui.py::test_throughput_distribution_and_completion_plots_stack_vertically
+tests/test_runtime_timeline_webui.py::test_tab_labels_use_shortened_scratch_and_eval_text
+tests/test_runtime_timeline_webui.py::test_throughput_tab_uses_usage_label
+tests/test_runtime_timeline_webui.py::test_normalized_occupancy_plot_uses_short_util_label
+tests/test_runtime_timeline_webui.py::test_meta_panel_uses_update_wording_instead_of_generation_wording
+tests/test_scheduler_env_activation.py::test_slurm_env_config_rejects_conda_and_activate_script
+tests/test_scheduler_env_activation.py::test_local_job_config_rejects_conda_and_activate_script
+tests/test_scheduler_env_activation.py::test_submit_conda_sources_activate_script
+tests/test_scheduler_env_activation.py::test_submit_local_conda_sources_activate_script
+tests/test_scheduler_env_activation.py::test_job_scheduler_accepts_slurm_env_alias
+tests/test_scheduler_env_activation.py::test_job_scheduler_builds_local_sourced_command
+tests/test_scheduler_env_activation.py::test_job_scheduler_uses_current_python_without_activation
+tests/test_scheduler_env_activation.py::test_job_scheduler_builds_local_numeric_thread_env_overrides
+tests/test_scheduler_env_activation.py::test_slurm_conda_job_config_allows_activate_script_for_back_compat
+tests/test_score_chart_webui.py::test_webui_score_chart_click_selects_individual_solutions_dataset
+tests/test_score_chart_webui.py::test_webui_tree_render_cache_does_not_drop_pending_node_selection
+tests/test_score_chart_webui.py::test_webui_score_charts_hold_previous_max_until_improvement_is_evaluated
+tests/test_shinka_models_cli.py::test_shinka_models_help_describes_json_output
+tests/test_shinka_models_cli.py::test_shinka_models_lists_google_models_when_gemini_key_present
+tests/test_shinka_models_cli.py::test_shinka_models_lists_azure_llms_without_embedding_api_version
+tests/test_shinka_models_cli.py::test_shinka_models_verbose_prints_full_payload
+tests/test_shinka_models_cli.py::test_shinka_models_lists_google_models_when_vertex_env_present
+tests/test_shinka_models_cli.py::test_shinka_models_verbose_uses_vertex_requirements_in_vertex_mode
+tests/test_shinka_models_cli.py::test_shinka_models_requires_full_vertex_environment
+tests/test_shinka_models_cli.py::test_shinka_models_loads_dotenv_before_checking_provider_availability
+tests/test_shinka_models_cli.py::test_shinka_models_requires_full_bedrock_environment
+tests/test_shinka_models_cli.py::test_shinka_models_lists_bedrock_models_when_all_required_env_vars_present
+tests/test_shinka_models_cli.py::test_shinka_models_lists_sorted_union_for_multiple_available_providers
+tests/test_shinka_models_cli.py::test_shinka_models_returns_empty_payload_when_no_provider_keys_are_available
+tests/test_shinka_models_cli.py::test_shinka_models_never_prints_api_key_values
+tests/test_shinka_run_cli.py::test_shinka_run_help_is_detailed
+tests/test_shinka_run_cli.py::test_shinka_run_happy_path_with_authoritative_overrides
+tests/test_shinka_run_cli.py::test_shinka_run_infers_fortran_initial_extensions[.f90]
+tests/test_shinka_run_cli.py::test_shinka_run_infers_fortran_initial_extensions[.f95]
+tests/test_shinka_run_cli.py::test_shinka_run_infers_fortran_initial_extensions[.f03]
+tests/test_shinka_run_cli.py::test_shinka_run_infers_fortran_initial_extensions[.f08]
+tests/test_shinka_run_cli.py::test_shinka_run_infers_go_initial_extension
+tests/test_shinka_run_cli.py::test_shinka_run_infers_verilog_initial_extension
+tests/test_shinka_run_cli.py::test_shinka_run_prefers_python_over_fortran_initial
+tests/test_shinka_run_cli.py::test_shinka_run_prefers_python_over_go_initial
+tests/test_shinka_run_cli.py::test_shinka_run_parses_json_overrides
+tests/test_shinka_run_cli.py::test_shinka_run_parses_activate_script_override
+tests/test_shinka_run_cli.py::test_shinka_run_defaults_to_verbose_logging
+tests/test_shinka_run_cli.py::test_shinka_run_allows_disabling_verbose_logging
+tests/test_shinka_run_cli.py::test_shinka_run_loads_optional_config_yaml_with_precedence
+tests/test_shinka_run_cli.py::test_shinka_run_respects_config_verbose_false
+tests/test_shinka_run_cli.py::test_shinka_run_invalid_config_field_fails
+tests/test_shinka_run_cli.py::test_shinka_run_rejects_nested_concurrency_config
+tests/test_shinka_run_cli.py::test_shinka_run_unknown_override_field_fails
+tests/test_shinka_run_cli.py::test_shinka_run_invalid_override_type_fails
+tests/test_shinka_run_cli.py::test_shinka_run_requires_evaluate_file
+tests/test_shinka_run_cli.py::test_dataclass_defaults_match_shared_baseline
+tests/test_slurm_shell_safety.py::test_activation_script_does_not_execute_shell_substitution
+tests/test_slurm_shell_safety.py::test_conda_name_does_not_allow_command_separator
+tests/test_slurm_shell_safety.py::test_environment_exports_do_not_execute_shell_substitution
+tests/test_slurm_shell_safety.py::test_environment_exports_reject_invalid_variable_names
+tests/test_slurm_shell_safety.py::test_local_conda_preserves_literal_command_arguments
+tests/test_slurm_shell_safety.py::test_sbatch_rejects_newline_in_directive
+tests/test_slurm_shell_safety.py::test_local_scheduler_activation_does_not_execute_substitution
+tests/test_slurm_shell_safety.py::test_scheduler_unavailable_status_does_not_spin_forever
+tests/test_slurm_shell_safety.py::test_queued_local_job_is_not_considered_complete
+tests/test_slurm_shell_safety.py::test_cpu_only_local_slurm_job_skips_nvidia_smi
+tests/test_slurm_shell_safety.py::test_sbatch_tempfiles_are_deleted_after_submission[conda]
+tests/test_slurm_shell_safety.py::test_sbatch_tempfiles_are_deleted_after_submission[docker]
+tests/test_slurm_shell_safety.py::test_sbatch_failure_does_not_log_full_script_or_keep_script
+tests/test_tree_roots_webui.py::test_normalize_tree_roots_virtualizes_unified_and_spawned_roots
+tests/test_tree_roots_webui.py::test_normalize_tree_roots_leaves_single_root_trees_unchanged
+tests/test_tree_roots_webui.py::test_model_posteriors_charts_leave_space_for_top_y_axis_tick
+tests/test_unicode_io.py::test_read_file_async_reads_utf8_when_aiofiles_defaults_to_cp1252
+tests/test_unicode_io.py::test_write_file_async_writes_utf8_when_aiofiles_defaults_to_cp1252
+tests/test_unicode_io.py::test_read_file_async_fallback_uses_utf8_with_path_methods
+tests/test_unicode_io.py::test_write_file_async_fallback_uses_utf8_with_path_methods
+tests/test_unicode_io.py::test_validate_code_async_reads_utf8_for_other_languages
+tests/test_unicode_io.py::test_summarize_diff_reads_utf8_patch
+tests/test_unicode_io.py::test_store_best_path_writes_utf8_artifacts
+tests/test_unicode_io.py::test_async_runner_read_file_async_uses_utf8
+tests/test_visualization_meta.py::test_failed_node_language_infers_verilog_from_suffix
+tests/test_visualization_meta.py::test_failed_node_code_path_prefers_verilog_extension
+tests/test_visualization_meta.py::test_handle_get_meta_files_returns_processed_counts
+tests/test_visualization_meta.py::test_handle_get_meta_content_returns_processed_count
+tests/test_visualization_meta.py::test_handle_get_programs_summary_merges_failed_attempt_nodes
+tests/test_visualization_meta.py::test_handle_get_program_details_returns_failed_attempt_node
+tests/test_visualization_meta.py::test_handle_get_program_details_loads_failed_non_python_node_with_language_fallback
+tests/test_visualization_meta.py::test_handle_get_program_details_infers_failed_fortran_node_from_suffix
+tests/test_visualization_meta.py::test_handle_get_program_details_infers_failed_go_node_from_suffix
+tests/test_visualization_meta.py::test_handle_get_database_stats_uses_best_correct_program
+tests/test_visualization_meta.py::test_handle_get_database_stats_returns_no_best_when_no_correct_programs
+tests/test_wandb_database.py::test_population_progress_uses_aggregate_query_without_heavy_fields
+tests/test_wandb_database.py::test_population_aggregate_matches_full_program_metric_semantics
+tests/test_wandb_database.py::test_in_memory_snapshots_read_sqlite_on_owner_thread
+tests/test_wandb_database.py::test_wandb_sdk_operations_share_one_nonblocking_worker
+tests/test_wandb_database.py::test_wandb_candidate_queue_is_bounded_compact_and_rate_limited
+tests/test_wandb_database.py::test_wandb_population_queries_are_time_throttled_and_final_skips_delay
+tests/test_wandb_database.py::test_in_memory_population_query_failure_is_non_fatal
+tests/test_wandb_logging.py::test_wandb_logging_is_opt_in_and_does_not_configure_webui
+tests/test_wandb_logging.py::test_wandb_run_id_is_reused_and_can_be_overridden
+tests/test_wandb_logging.py::test_invalid_wandb_config_is_non_fatal
+tests/test_wandb_logging.py::test_wandb_history_failure_is_non_fatal_and_retryable
+tests/test_wandb_logging.py::test_wandb_history_skips_administrative_copies[_is_island_copy]
+tests/test_wandb_logging.py::test_wandb_history_skips_administrative_copies[_spawned_island]
+tests/test_wandb_logging.py::test_final_history_failure_does_not_suppress_summary_or_table
+tests/test_wandb_logging.py::test_final_summary_failure_does_not_suppress_table
+tests/test_wandb_logging.py::test_final_table_construction_failure_keeps_history_and_summary
+tests/test_wandb_logging.py::test_final_table_log_failure_is_non_fatal
+tests/test_wandb_logging.py::test_wandb_logger_dry_run_and_resume_use_fake_wandb
+tests/test_wandb_logging.py::test_wandb_online_logging_with_authenticated_sdk
+tests/test_wandb_metrics.py::test_program_payload_logs_one_compact_event_per_individual
+tests/test_wandb_metrics.py::test_program_payload_skips_bulky_values_and_duplicate_timing
+tests/test_wandb_metrics.py::test_population_progress_counts_copies_but_excludes_their_costs[_is_island_copy]
+tests/test_wandb_metrics.py::test_population_progress_counts_copies_but_excludes_their_costs[_spawned_island]
+tests/test_wandb_metrics.py::test_actual_headless_unknown_pricing_suppresses_only_api_cost
+tests/test_wandb_metrics.py::test_stale_headless_prompt_path_does_not_suppress_api_cost
+tests/test_wandb_metrics.py::test_program_payload_bounds_public_metrics_and_omits_private_metrics
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[apiKey]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[accessToken]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[clientSecret]
+tests/test_wandb_metrics.py::test_program_payload_omits_compound_sensitive_metric_keys[AuthorizationHeader]
+tests/test_wandb_metrics.py::test_run_summary_uses_correct_programs_for_best_score
+tests/test_wandb_metrics.py::test_run_summary_preserves_legacy_api_cost_and_prefers_explicit_total
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_run_once_parses_bridge_output
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_scores_correct_candidate
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_rejects_wrong_answer
+tests/test_wolfram_gcd_sum_example.py::test_wolfram_evaluator_records_empty_output_as_failure
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_matches_sequential
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_worker_error_surfaces
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_keeps_default_save_output
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_verbose_false_suppresses_framework_stdout
+tests/test_wrap_eval_parallel.py::test_parallel_mode_rejects_early_stop
+tests/test_wrap_eval_parallel.py::test_invalid_worker_configuration_raises
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_loads_dataclass_with_postponed_annotations
+tests/test_wrap_eval_parallel.py::test_run_shinka_eval_parallel_returns_program_defined_types
+
+==================================== ERRORS ====================================
+_____________ ERROR collecting tests/test_anthropic_accounting.py ______________
+ImportError while importing test module '/tmp/omega-v361/OMEGA-X-Evolution/tests/test_anthropic_accounting.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_anthropic_accounting.py:8: in <module>
+    import shinka.llm.providers.anthropic as anthropic_provider
+shinka/llm/providers/anthropic.py:2: in <module>
+    import anthropic
+/tmp/omega-v355-sdk/anthropic/__init__.py:186: in <module>
+    from .lib.tools import beta_tool, beta_async_tool
+/tmp/omega-v355-sdk/anthropic/lib/tools/__init__.py:1: in <module>
+    from ._beta_runner import BetaToolRunner, BetaAsyncToolRunner, BetaStreamingToolRunner, BetaAsyncStreamingToolRunner
+/tmp/omega-v355-sdk/anthropic/lib/tools/_beta_runner.py:46: in <module>
+    from ..streaming import BetaMessageStream, BetaAsyncMessageStream, ParsedBetaMessageStreamEvent
+/tmp/omega-v355-sdk/anthropic/lib/streaming/__init__.py:3: in <module>
+    from ._types import (
+/tmp/omega-v355-sdk/anthropic/lib/streaming/_types.py:4: in <module>
+    import jiter
+E   ModuleNotFoundError: No module named 'jiter'
+____________ ERROR collecting tests/test_current_claude_requests.py ____________
+ImportError while importing test module '/tmp/omega-v361/OMEGA-X-Evolution/tests/test_current_claude_requests.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_current_claude_requests.py:6: in <module>
+    import anthropic
+/tmp/omega-v355-sdk/anthropic/__init__.py:186: in <module>
+    from .lib.tools import beta_tool, beta_async_tool
+/tmp/omega-v355-sdk/anthropic/lib/tools/__init__.py:1: in <module>
+    from ._beta_runner import BetaToolRunner, BetaAsyncToolRunner, BetaStreamingToolRunner, BetaAsyncStreamingToolRunner
+/tmp/omega-v355-sdk/anthropic/lib/tools/_beta_runner.py:46: in <module>
+    from ..streaming import BetaMessageStream, BetaAsyncMessageStream, ParsedBetaMessageStreamEvent
+/tmp/omega-v355-sdk/anthropic/lib/streaming/__init__.py:3: in <module>
+    from ._types import (
+/tmp/omega-v355-sdk/anthropic/lib/streaming/_types.py:4: in <module>
+    import jiter
+E   ModuleNotFoundError: No module named 'jiter'
+_______________ ERROR collecting tests/test_llm_client_cache.py ________________
+ImportError while importing test module '/tmp/omega-v361/OMEGA-X-Evolution/tests/test_llm_client_cache.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_llm_client_cache.py:14: in <module>
+    import instructor
+E   ModuleNotFoundError: No module named 'instructor'
+______________ ERROR collecting tests/test_llm_retry_constants.py ______________
+ImportError while importing test module '/tmp/omega-v361/OMEGA-X-Evolution/tests/test_llm_retry_constants.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_llm_retry_constants.py:15: in <module>
+    from shinka.llm.providers.anthropic import MAX_TIME as ANTHROPIC_MAX_TIME
+shinka/llm/providers/anthropic.py:2: in <module>
+    import anthropic
+/tmp/omega-v355-sdk/anthropic/__init__.py:186: in <module>
+    from .lib.tools import beta_tool, beta_async_tool
+/tmp/omega-v355-sdk/anthropic/lib/tools/__init__.py:1: in <module>
+    from ._beta_runner import BetaToolRunner, BetaAsyncToolRunner, BetaStreamingToolRunner, BetaAsyncStreamingToolRunner
+/tmp/omega-v355-sdk/anthropic/lib/tools/_beta_runner.py:46: in <module>
+    from ..streaming import BetaMessageStream, BetaAsyncMessageStream, ParsedBetaMessageStreamEvent
+/tmp/omega-v355-sdk/anthropic/lib/streaming/__init__.py:3: in <module>
+    from ._types import (
+/tmp/omega-v355-sdk/anthropic/lib/streaming/_types.py:4: in <module>
+    import jiter
+E   ModuleNotFoundError: No module named 'jiter'
+=========================== short test summary info ============================
+ERROR tests/test_anthropic_accounting.py
+ERROR tests/test_current_claude_requests.py
+ERROR tests/test_llm_client_cache.py
+ERROR tests/test_llm_retry_constants.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!!
+1480 tests collected, 4 errors in 5.14s
+
+
+=== Build: python -m pip wheel . --no-deps --no-build-isolation -w /tmp/omega-v361-wheel ===
+exit 0
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /tmp/omega-v361/OMEGA-X-Evolution
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: omega-x-evolution
+  Building wheel for omega-x-evolution (pyproject.toml): started
+  Building wheel for omega-x-evolution (pyproject.toml): finished with status 'done'
+  Created wheel for omega-x-evolution: filename=omega_x_evolution-0.36.1.dev1-py3-none-any.whl size=4128040 sha256=c9f83d193ce4a9b8426fcf06ec704713658ff50d2060804c5856413b1a520190
+  Stored in directory: /tmp/pip-ephem-wheel-cache-7p90fz1n/wheels/cb/23/19/ea46b20d2a72d85fde2d076719b0c1f852f2d080821ccb3fba
+Successfully built omega-x-evolution

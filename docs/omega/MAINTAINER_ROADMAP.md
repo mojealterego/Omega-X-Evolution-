@@ -5,21 +5,21 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | Stage | Source requirement | Source pages | Status / bounded acceptance target |
 |---|---|---|---|
 | v21 | Performance Regression Testing | 1–2 | Implemented measured Stage 3b |
-| v22 | Asynchronous distributed MAP-Elites with Ray | 2–5 | Implemented local process + simulation; physical Ray acceptance open |
+| v22 | Asynchronous distributed MAP-Elites with Ray | 2–5 | PASS for logical cluster scheduling and recovery (HYBRID); native Ray compatibility not established |
 | v23 | Topological State-Space Evolution | 5–6 | Implemented SPD metric, adaptive partition, graph distances and cluster integration |
 | v24 | Quantum-Inspired Annealed Policy Search | 6–7 | Implemented bounded classical TT-SVD policy and paired cost/quality benchmark; no advantage established, live LLM open |
 | v25 | Holographic Memory Compression | 7–12 | Implemented stable int8 contextual keys, Hopfield-style retrieval and verified ring transfer; global Ray validation open |
 | v26 | Autonomous Formal Verification Synthesis | 12 | Closure v35.1: mandatory AST specification, independent exact-rational interval checker, finite CTL and bounded modal K theorem proving, durable derived-rule registry. Unrestricted program semantics and higher-order proof still outside accepted domain |
-| v27 | Quantum-Assisted Annealing | 12 | Implemented bounded QUBO selection and classical benchmark, optional authorized Ocean adapter; real QPU/cost acceptance open |
+| v27 | Quantum-Assisted Annealing | 12 | PASS for bounded QUBO/sample contract (DETERMINISTIC-SIMULATION); native Ocean and measured QPU costs not established |
 | v28 | Autonomous synthesis of new architectural paradigms | 13 | Implemented typed retrieval DAG composition and separate validation promotion; arbitrary architecture design open |
-| v29 | Swarm Federation | 13 | Implemented Ed25519 exchange, signed durable receipt/inbox, local recertification, real process + mTLS loopback; multi-host open |
+| v29 | Swarm Federation | 13 | PASS for authenticated exchange, recertification and replay (HYBRID); physical WAN performance not required |
 | v30 | Code epigenetics | 13 | Implemented bounded reversible functional activation in swarm; real host telemetry and scripted stress/recovery; mandatory gates always active |
-| v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | Implemented constructive modular u16 certificates and separate checker, optional generated Lean theorem adapter; physical Lean/Isabelle verification open |
-| v32 | Neuro-Symbolic Swarm | 13 | Implemented signed one-shot n-f quorum partition, durable vote/execution locks and local-process peer negotiation; external multi-host and consensus liveness open |
+| v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | PASS for bounded u16 proof/source contract (DETERMINISTIC-SIMULATION + native SMT); actual external language/kernel compatibility remains unestablished |
+| v32 | Neuro-Symbolic Swarm | 13 | PASS in finite authenticated fault/recovery schedules (HYBRID); terminal Byzantine leader and general liveness remain algorithmic gaps |
 | v33 | Zero-Shot Axiomatic Discovery | 13 | Implemented grammar conjectures, checked modular identities, counterexamples, exhaustive finite algebra tables; general axiomatic discovery open |
-| v34 | On-the-Fly Weight Plasticity | 13 | Implemented authorized rank-1/2 LoRA on frozen contextual mutation router, verified trajectories, validation/retention gate, durable budget and rollback; large-model adaptation open |
-| v35 | Autonomous Infrastructure Orchestration | 13 | Implemented bounded local Linux job dispatcher, durable reservations, OS resource limits, stop and crash recovery; cloud allocation and multi-host acceptance open |
-| v36 | Green Computing (energy/carbon metrics) | 1 | PASS in specified estimated/measured-process-time scope: paired discovery workloads, explicit scenario power bounds, intensity/hardware provenance, exact unit contracts; physical meter validation open |
+| v34 | On-the-Fly Weight Plasticity | 13 | PASS for actual small-decoder LoRA and modeled distributed update/rollback (HYBRID); large pretrained model loader/generalization remains unverified |
+| v35 | Autonomous Infrastructure Orchestration | 13 | PASS for bounded local process lifecycle and virtual cloud quota/deadline/recovery (HYBRID); native provisioning not required for modeled contracts |
+| v36 | Green Computing (energy/carbon metrics) | 1 | PASS in specified estimated/measured-process-time scope: paired discovery workloads, explicit scenario power bounds, intensity/hardware provenance, exact unit contracts; physical meter attestation separate, not required |
 
 These are distinct acceptance gates, not promises of physical validation, consciousness, mathematical completeness or exponential speedup. No automatic changes to evaluator authorization, safety policy, external infrastructure or financial limits. The existing closure register retains infrastructure and upstream dependency blockers.
 
@@ -32,3 +32,5 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 **v35.5:** [Terminal-round recovery and dependency verification](RESIDUAL_RECOVERY_V355.md): 322 OMEGA and 38 native hardening tests pass; 36 selected upstream tests pass; 1463 collected with 4 errors in an experimental offline overlay. Certified BFT terminal-round retry and durable monotonic synthesis quotas implemented. Lean/Isabelle, general BFT liveness, unrestricted synthesis, large pretrained LLM and physical validation remain open. v36 remains open.
 
 **v36.0:** [Green Computing and certified round synchronization](EVOLUTION_V36.md): 331 OMEGA tests, 38 isolated hardening tests, two integer SMT obligations and 199296 actual leader-rotation cases passed. Green Computing accepted in the documented estimated-energy scope; no measured electricity or production claim. BFT authenticated round catch-up added. Full collection: 1472 tests, 4 errors. GATE-09 remains BLOCKED for the remaining mandatory requirements; earlier open-v36 statements are historical.
+
+**v36.1 — deterministic engineering acceptance:** [modeled contracts, evidence and residual gates](SIMULATION_ACCEPTANCE_V361.md). OMEGA v2.3 §5: successful deterministic simulation closes the corresponding engineering property without a mandatory physical rerun. Native and production claims are separate. Earlier infrastructure-only blocker statements are superseded; no mathematical, compatibility or dependency failure is concealed.

@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v36.0%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v36.1%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v36.0
+## Current implementation — v36.1
 
 | Component | Capability |
 |---|---|
@@ -136,7 +136,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.36.0.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.36.1.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -358,3 +358,5 @@ See [v36 implementation and acceptance](docs/omega/EVOLUTION_V36.md). The paired
 omega-x-green --task squares --seed 42 --budget 128 --repeats 3 --watts 5 15 35 --power-source 'illustrative CPU power scenario' --intensity 400 --intensity-source 'illustrative grid scenario'
 python scripts/verify_bft_lemmas.py
 ```
+
+**v36.1 — deterministic engineering acceptance:** [modeled contracts, evidence and residual gates](docs/omega/SIMULATION_ACCEPTANCE_V361.md). OMEGA v2.3 §5: successful deterministic simulation closes the corresponding engineering property without a mandatory physical rerun. Native and production claims are separate. Earlier infrastructure-only blocker statements are superseded; no mathematical, compatibility or dependency failure is concealed.
