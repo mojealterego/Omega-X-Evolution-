@@ -1,0 +1,57 @@
+{
+  "python": "3.13.5",
+  "sqlite": "3.46.1",
+  "full_vs_resume": [
+    {
+      "seed": 1,
+      "budget": 1000,
+      "attempts": 72,
+      "committed_generation": 8,
+      "champion_score": 0.8770796922527809,
+      "baseline_score": 0.5679551215889774,
+      "result_sha256": "a5a97d2e926e32983041ff45fb3df9cbdff0e73d002831b9ab703683122199d6",
+      "identical": true
+    },
+    {
+      "seed": 5,
+      "budget": 1000,
+      "attempts": 72,
+      "committed_generation": 8,
+      "champion_score": 0.8467099216799955,
+      "baseline_score": 0.562628300015853,
+      "result_sha256": "7d4dfdb897481f6590330140a6656922bf47a492dd7af88390f3ee6b9d8e650a",
+      "identical": true
+    },
+    {
+      "seed": 17,
+      "budget": 1000,
+      "attempts": 72,
+      "committed_generation": 8,
+      "champion_score": 0.8504124703654564,
+      "baseline_score": 0.5642398941519552,
+      "result_sha256": "365e0594ebb8de4a7c09ae26465de9ae5e5f36e1a8aa7af44fa75d873bb40908",
+      "identical": true
+    },
+    {
+      "seed": 77,
+      "budget": 15,
+      "attempts": 7,
+      "committed_generation": 2,
+      "champion_score": 0.818409572822159,
+      "baseline_score": 0.5506845995785852,
+      "result_sha256": "0bfff5fd31835058bfae36275d7d7ecebb4a4b52fe802ab64be577884a3ea421",
+      "identical": true
+    },
+    {
+      "seed": 101,
+      "budget": 0,
+      "attempts": 0,
+      "committed_generation": 1,
+      "champion_score": 0.5585969120912295,
+      "baseline_score": 0.5585969120912295,
+      "result_sha256": "b73af037447053d3f361fd853ea7241196b75e5c4ed880e35b3021d31abdcbe2",
+      "identical": true
+    }
+  ],
+  "scope": "offline synthetic benchmark; not real LLM or distributed execution"
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "AlphaEvolve.pdf",
+    "sha256": "3bd3647f94fcd7b29c7c197585dfaf42127db79999222cba6a8cb9d5abc1583e",
+    "size_bytes": 3392746
+  },
+  {
+    "name": "DarwinGoedelMachine1.pdf",
+    "sha256": "3db9b063f7c7171044deb2a968c2e013c5de6f39add9f3b1083a7ee0baa5314a",
+    "size_bytes": 3431644
+  },
+  {
+    "name": "Darwin Gödel Machine_ Open-Ended Evolution of Self_261112_110856.pdf",
+    "sha256": "770211e6d2b46d5c251037872d7358b733ae5934c99725a1390952764c5f7c98",
+    "size_bytes": 2474341
+  },
+  {
+    "name": "Darwin Gödel Machine_ Open-Ended Evolution of Self-Improving Agents.PDF",
+    "sha256": "16822e7eb0e4a52eadfb91564c56aced665278b60f14a70f3841799f6101f940",
+    "size_bytes": 2445275
+  },
+  {
+    "name": "NOEVARIS_v1.17.7_ALPHAEVOLVE_TRACEABILITY.md",
+    "sha256": "fbce21c789a552b01f74cbb3dc7076730beb7c9791614e3e03bb49a8c271acba",
+    "size_bytes": 2143
+  },
+  {
+    "name": "NOEVARIS_v1.18.1_ALPHAEVOLVE_TRACEABILITY.md",
+    "sha256": "3fa1126848bfec21bc2a95465c059af12e4c84f2fb44734f5956f02eeff919d2",
+    "size_bytes": 5901
+  }
+]

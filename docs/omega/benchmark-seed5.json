@@ -1,0 +1,159 @@
+{
+  "mode": "offline-simulation",
+  "benchmark": "scheduler-ratio-v1",
+  "baseline_score": 0.562628300015853,
+  "champion_score": 0.8467099216799955,
+  "champion": "-(x+y+2.167*(x-y)*(x-y)/(0.0917+min(x,y))+1.835)",
+  "champion_metrics": [
+    0.8856483201700285,
+    0.7317073170731707,
+    0.78,
+    1.0
+  ],
+  "champion_genome": {
+    "sharpness": 8.420178842908832,
+    "threshold": 0.5373173031694574,
+    "novelty": 0.9512226740967374,
+    "weights": [
+      0.7270404892145574,
+      0.14148011089667942,
+      0.13147939988876312,
+      0.0
+    ]
+  },
+  "holdout_quality": 0.8982033487827856,
+  "baseline_holdout_quality": 0.3886837270148368,
+  "attempts": 45,
+  "rejections": 7,
+  "spent": 157,
+  "budget_unit": "synthetic proposal credits (not USD)",
+  "lineage_size": 47,
+  "occupied_cells": 14,
+  "model_pulls": {
+    "fast": 17,
+    "deep": 28
+  },
+  "sft": [
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+1.318*abs(x-y)+2.227)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.681*(x-y)*(x-y)+1.294)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.784*abs(x-y)+1.387)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.887*max(x,y)+1.522)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+2.675*abs(x-y)/(x+y+0.0207)+2.411)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.765*max(x,y)+2.077)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+0.765*max(x,y)+2.077)\", \"parent\": \"-(x+y+0.765*max(x,y)+2.077)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.765*max(x,y)+2.077)\n=======\n-(x+y+2.949*abs(x-y)/(x+y+0.0961)+2.115)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+0.765*max(x,y)+2.077)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.897*abs(x-y)/(x+y+0.0092)+1.086)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+1.879*(x-y)*(x-y)+1.273)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+1.879*(x-y)*(x-y)+1.273)\n=======\n-(x+y+1.76*abs(x-y)+1.143)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+1.617*abs(x-y)+1.297)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+2.949*abs(x-y)/(x+y+0.0961)+2.115)\", \"parent\": \"-(x+y+0.897*abs(x-y)/(x+y+0.0092)+1.086)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.897*abs(x-y)/(x+y+0.0092)+1.086)\n=======\n-(x+y+0.587*abs(x-y)+2.423)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+1.879*(x-y)*(x-y)+1.273)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+1.879*(x-y)*(x-y)+1.273)\n=======\n-(x+y+2.043*(x-y)*(x-y)/(0.0519+min(x,y))+0.94)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+0.573*(x-y)*(x-y)/(0.0331+min(x,y))+1.261)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.573*(x-y)*(x-y)/(0.0331+min(x,y))+1.261)\n=======\n-(x+y+0.527*abs(x-y)/(x+y+0.0499)+2.255)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+2.89*(x-y)*(x-y)+0.11)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n=======\n-(x+y+0.521*(x-y)*(x-y)+1.275)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+2.89*(x-y)*(x-y)+0.11)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n=======\n-(x+y+0.934*(x-y)*(x-y)/(0.0983+min(x,y))+2.581)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+2.949*abs(x-y)/(x+y+0.0961)+2.115)\", \"parent\": \"-(x+y+0.817*(x-y)*(x-y)/(0.0103+x*y)+1.116)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.817*(x-y)*(x-y)/(0.0103+x*y)+1.116)\n=======\n-(x+y+0.364*abs(x-y)/(x+y+0.0229)+2.295)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+2.949*abs(x-y)/(x+y+0.0961)+2.115)\", \"parent\": \"-(x+y+0.897*abs(x-y)/(x+y+0.0092)+1.086)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.897*abs(x-y)/(x+y+0.0092)+1.086)\n=======\n-(x+y+2.545*abs(x-y)/(x+y+0.0877)+2.263)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+2.043*(x-y)*(x-y)/(0.0519+min(x,y))+0.94)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+2.043*(x-y)*(x-y)/(0.0519+min(x,y))+0.94)\n=======\n-(x+y+1.732*(x-y)*(x-y)+1.917)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+0.521*(x-y)*(x-y)+1.275)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.521*(x-y)*(x-y)+1.275)\n=======\n-(x+y+1.819*(x-y)*(x-y)/(0.0789+x*y)+0.867)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+0.364*abs(x-y)/(x+y+0.0229)+2.295)\"}",
+      "completion": "<<<<<<< SEARCH\n-(x+y+0.364*abs(x-y)/(x+y+0.0229)+2.295)\n=======\n-(x+y+2.167*(x-y)*(x-y)/(0.0917+min(x,y))+1.835)\n>>>>>>> REPLACE"
+    }
+  ],
+  "dpo": [
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+1.318*abs(x-y)+2.227)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.681*(x-y)*(x-y)+1.294)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.784*abs(x-y)+1.387)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.681*(x-y)*(x-y)+1.294)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+0.887*max(x,y)+1.522)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y)\", \"parent\": \"-(x+y)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+2.675*abs(x-y)/(x+y+0.0207)+2.411)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y)\n=======\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+0.765*max(x,y)+2.077)\", \"parent\": \"-(x+y+0.765*max(x,y)+2.077)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y+0.765*max(x,y)+2.077)\n=======\n-(x+y+2.949*abs(x-y)/(x+y+0.0961)+2.115)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y+0.765*max(x,y)+2.077)\n=======\n-(x+y+0.754*max(x,y)+0.648)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+2.89*(x-y)*(x-y)+0.11)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n=======\n-(x+y+0.934*(x-y)*(x-y)/(0.0983+min(x,y))+2.581)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y+2.89*(x-y)*(x-y)+0.11)\n=======\n-(x+y+0.521*(x-y)*(x-y)+1.275)\n>>>>>>> REPLACE"
+    },
+    {
+      "prompt": "{\"contract\": \"Return one exact SEARCH/REPLACE expression patch over x,y in [0,1]. Only +,-,*,/,abs,min,max permitted.\", \"inspiration\": \"-(x+y+1.318*abs(x-y)+2.227)\", \"parent\": \"-(x+y+0.521*(x-y)*(x-y)+1.275)\"}",
+      "chosen": "<<<<<<< SEARCH\n-(x+y+0.521*(x-y)*(x-y)+1.275)\n=======\n-(x+y+1.819*(x-y)*(x-y)/(0.0789+x*y)+0.867)\n>>>>>>> REPLACE",
+      "rejected": "<<<<<<< SEARCH\n-(x+y+0.521*(x-y)*(x-y)+1.275)\n=======\n-(x+y+1.99*max(x,y)+2.411)\n>>>>>>> REPLACE"
+    }
+  ]
+}

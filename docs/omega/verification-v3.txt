@@ -1,0 +1,10 @@
+OMEGA-X increment 3 — durable checkpoint & recovery
+Base: ShinkaEvolve-OMEGA-X-COEVOLUTION-v2.zip
+RED: new checkpoint module absent (collection error); CLI resume test failed before CLI implementation.
+GREEN: python -m pytest -q tests/test_omega_checkpoint.py tests/test_omega_coevolution.py — 31 passed (13 new, 18 previous).
+Regression: python scripts/verify_hardening.py — 38 passed (isolated dependency shim as documented).
+Syntax: python -m compileall -q shinka tests scripts — exit 0.
+Full upstream: python -m pytest -q — exit 2, 72 collection errors (missing upstream dependencies).
+Comparison: 5 offline full vs resumed scenarios, identical result dictionaries, including budget exhaustion.
+Failure tests: os._exit(77) with open SQLite write transaction; rejected competing stale writer, wrong key, modified payload, config mismatch, missing file and invalid generation target.
+Scope: local SQLite + offline proposals only. No live LLM, remote workers, distributed consensus, actual training, or production power-loss test.

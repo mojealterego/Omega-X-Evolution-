@@ -1,0 +1,30 @@
+{
+  "python": "3.13.5",
+  "note": "Wall time includes process startup; single observation per configuration, not a throughput benchmark.",
+  "records": [
+    {
+      "seed": 5,
+      "matches": true,
+      "attempts": 45,
+      "champion_score": 0.8467099216799955,
+      "serial_seconds": 1.07567,
+      "process_pool_seconds": 2.296841
+    },
+    {
+      "seed": 17,
+      "matches": true,
+      "attempts": 45,
+      "champion_score": 0.8383892807437817,
+      "serial_seconds": 0.851611,
+      "process_pool_seconds": 2.182557
+    },
+    {
+      "seed": 77,
+      "matches": true,
+      "attempts": 45,
+      "champion_score": 0.8223272751035854,
+      "serial_seconds": 0.936228,
+      "process_pool_seconds": 1.92216
+    }
+  ]
+}

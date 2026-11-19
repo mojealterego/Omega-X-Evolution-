@@ -1,0 +1,8 @@
+OMEGA-X COEVOLUTION — increment 2
+Base: ShinkaEvolve-OMEGA-HARDENED.zip
+New focused tests: 18 passed (including adapter test double, audit source integrity, deterministic replay)
+Previous hardening suite: 38 passed (isolated dependency shim as documented by scripts/verify_hardening.py)
+Syntax: python -m compileall -q shinka tests scripts: exit 0
+Replay: byte-identical JSON for two independent --seed 5 runs (cmp exit 0)
+Full suite: 72 collection errors, missing upstream dependencies anthropic/google.genai/hydra/instructor/openai/radon among others; no full-suite pass.
+Benchmark: synthetic regularized ratio objective only; no real Borg scheduling, paid API requests, actual LLM generation, training, distributed runtime or production deployment tested.

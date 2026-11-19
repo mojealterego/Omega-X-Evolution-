@@ -1,0 +1,11 @@
+OMEGA-X v4 — local evaluation pool and source traceability
+Base: ShinkaEvolve-OMEGA-X-CHECKPOINT-v3.zip
+RED: tests/test_omega_workers.py failed collection (workers module absent).
+GREEN: 42 passed — tests/test_omega_workers.py tests/test_omega_checkpoint.py tests/test_omega_coevolution.py (11 new tests; 31 prior).
+HARDENED: 38 passed — python scripts/verify_hardening.py (isolated dependency shim).
+Full upstream: python -m pytest -q — exit 2, 72 collection errors due to missing dependencies.
+Compile: python -m compileall -q shinka tests scripts — exit 0.
+Actual process test: child PID differs from coordinator; abrupt process exit propagates BrokenProcessPool.
+Simulated batch failure: last authenticated generation preserved; resume equals uninterrupted run.
+CLI benchmark: seed 5, 17, 77 compared serial vs 2 processes (identical full JSON results); see worker-benchmark-v4.json.
+No remote cluster, paid model calls, scientific benchmark reproduction, independent sandbox or training.

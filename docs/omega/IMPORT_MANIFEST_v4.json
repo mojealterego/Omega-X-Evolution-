@@ -1,0 +1,1900 @@
+{
+  "source_archive": "ShinkaEvolve-OMEGA-X-EVALUATION-POOL-v4.zip",
+  "archive_sha256": "8b6d0f6d2eff0754f942ff3259f49d7f6c7ba517e618b00c7a7b6908878deca9",
+  "omitted_pdfs": [
+    {
+      "path": "docs/omega/architecture-source.pdf",
+      "sha256": "7f9c2fab6dddc6659febcfa5ec9834e11a1e564a490d32f4996b51dd02fc09f5",
+      "bytes": 464275
+    },
+    {
+      "path": "docs/omega/research/AlphaEvolve.pdf",
+      "sha256": "3bd3647f94fcd7b29c7c197585dfaf42127db79999222cba6a8cb9d5abc1583e",
+      "bytes": 3392746
+    },
+    {
+      "path": "docs/omega/research/Darwin Gödel Machine_ Open-Ended Evolution of Self-Improving Agents.PDF",
+      "sha256": "16822e7eb0e4a52eadfb91564c56aced665278b60f14a70f3841799f6101f940",
+      "bytes": 2445275
+    },
+    {
+      "path": "docs/omega/research/Darwin Gödel Machine_ Open-Ended Evolution of Self_261112_110856.pdf",
+      "sha256": "770211e6d2b46d5c251037872d7358b733ae5934c99725a1390952764c5f7c98",
+      "bytes": 2474341
+    },
+    {
+      "path": "docs/omega/research/DarwinGoedelMachine1.pdf",
+      "sha256": "3db9b063f7c7171044deb2a968c2e013c5de6f39add9f3b1083a7ee0baa5314a",
+      "bytes": 3431644
+    }
+  ],
+  "relocated_workflows": [
+    {
+      "from": ".github/workflows/ci.yml",
+      "to": "docs/upstream-workflows/ci.yml"
+    },
+    {
+      "from": ".github/workflows/claude.yml",
+      "to": "docs/upstream-workflows/claude.yml"
+    },
+    {
+      "from": ".github/workflows/docs-release.yml",
+      "to": "docs/upstream-workflows/docs-release.yml"
+    },
+    {
+      "from": ".github/workflows/integration.yml",
+      "to": "docs/upstream-workflows/integration.yml"
+    },
+    {
+      "from": ".github/workflows/pypi-release.yml",
+      "to": "docs/upstream-workflows/pypi-release.yml"
+    }
+  ],
+  "files": [
+    {
+      "path": ".githooks/pre-push",
+      "git_blob_sha1": "0ab66ecf79627936aad02b453235a6b78b4473af",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "git_blob_sha1": "c7e119a6dc5ebd1b3283adbe40a5b5af7dd533b2",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "git_blob_sha1": "3ba13e0cec6cbbfd462e9ebf529dd2093148cd69",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "git_blob_sha1": "7dd3609c9c144baae1f9ab3d557567b092a4a920",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "git_blob_sha1": "8eb97e2d8c6976ebbba671cc910320383b31ca12",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/upstream-workflows/ci.yml",
+      "git_blob_sha1": "7a30061fed40f0971fd0d9e8f89ab3cddd15577c",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/upstream-workflows/claude.yml",
+      "git_blob_sha1": "5cf31d18cd60252a258ef2f5f0b22e5f36fbab61",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/upstream-workflows/docs-release.yml",
+      "git_blob_sha1": "3ce0ff1d1899fa5f4daf62d2cfd96de99874d254",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/upstream-workflows/integration.yml",
+      "git_blob_sha1": "06b025b43ed73a88300e2e7acee31fa3e84b998e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/upstream-workflows/pypi-release.yml",
+      "git_blob_sha1": "086a12668cf00ab5faa015f62add277adc49d008",
+      "mode": "100644"
+    },
+    {
+      "path": ".gitignore",
+      "git_blob_sha1": "b21451aa61c5b30017b7e7b408ced43025d4ce69",
+      "mode": "100644"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "git_blob_sha1": "1884752aa2c410a2d25eb0ceda768602d1e0c84c",
+      "mode": "100644"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "git_blob_sha1": "01308da54de0ab77fd7a96b58246b3a92e5c579c",
+      "mode": "100644"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob_sha1": "1684699ee4d8e98bd3df9f0c4e405fc620139f4c",
+      "mode": "100644"
+    },
+    {
+      "path": "README.md",
+      "git_blob_sha1": "c128ff73351675ba66ab5386fe15cda9478b842e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/OMEGA_COEVOLUTION.md",
+      "git_blob_sha1": "bb449512d2bfe5fa9f229b7a3252c76779d569bb",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/OMEGA_HARDENING.md",
+      "git_blob_sha1": "8828a354ee08f31275dc828159307ba2946b4fe7",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/agentic_usage.md",
+      "git_blob_sha1": "69edba5dd85606d5f5b5881ad1f0f6442f5c5287",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/javascripts/async_throughput_demo.js",
+      "git_blob_sha1": "10df7f3fd9ff2e18df374b7761bd56bbf20848f6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/javascripts/async_throughput_demo_core.js",
+      "git_blob_sha1": "d330f8a5d804db8fb4cd6495638405cfb3bb7fcd",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/javascripts/bandit_selection.js",
+      "git_blob_sha1": "3df9cfa22b92fcf70b1ab5126348ad39773bd798",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/javascripts/bandit_selection_core.js",
+      "git_blob_sha1": "4e3e0cb233e0b05877d499a58512b866d6361d30",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/stylesheets/async_throughput_demo.css",
+      "git_blob_sha1": "d281906a8745511588a0245c091958633f5d570f",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/stylesheets/bandit_selection.css",
+      "git_blob_sha1": "e157e7c3106f86f5dd69b158104e95a574a8d6e1",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/assets/stylesheets/extra.css",
+      "git_blob_sha1": "a1808965e75bcb47cf918b0df2e29e99b898d07a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/async_evolution.md",
+      "git_blob_sha1": "821783e83dd4d48393fcc4c373a481cbaafa2b71",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/bandit_selection.md",
+      "git_blob_sha1": "d1e12897cadb9671fab5c2de1806ba2d8a4381f3",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/cli_usage.md",
+      "git_blob_sha1": "875c7070e326d831b70c3dc04cbd371346c2fbd2",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/configuration.md",
+      "git_blob_sha1": "6b5aa6834797046703d1ea596ccea3f8556f9763",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/core_concepts.md",
+      "git_blob_sha1": "8329262d6508cfcb20b46add69b1c9008d0045b4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/examples.md",
+      "git_blob_sha1": "bd32bd2604c13222a06eb6e56952da3015fba37a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/getting_started.md",
+      "git_blob_sha1": "2fdbed69383acc47fabf0deec1c0a45e126f557b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/index.md",
+      "git_blob_sha1": "9cb3944da23e100db9bf0ca458cc049494588685",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/async_speed.png",
+      "git_blob_sha1": "30d6dc3f683eb60ae66a51ae98017effa66ae98a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/claude_run_1.png",
+      "git_blob_sha1": "bbea18c9a992c3497499bf171997d84df031ce13",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/claude_run_2.png",
+      "git_blob_sha1": "e567912eff26354b8073cc6f0f6c128e2b869eb6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/claude_setup_1.png",
+      "git_blob_sha1": "0000c4af1c2f62d2ca7aec9d2ba65ef00edc7b2b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/claude_setup_2.png",
+      "git_blob_sha1": "f7c7295189ec36b986533d58933ebf76dda79127",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/conceptual.png",
+      "git_blob_sha1": "71c92a7432672a243e941080130c8757541717af",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/favicon.png",
+      "git_blob_sha1": "bee7524649968ab7ca9dfc6a797e5f2fd5311ed4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/media/webui.png",
+      "git_blob_sha1": "2542be6f2ff4c15678bef39750e285404a4a11c8",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/RESEARCH_TRACEABILITY_v4.md",
+      "git_blob_sha1": "620f9c30acd1dac60f4e512309fc455479748704",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/benchmark-seed5.json",
+      "git_blob_sha1": "283a36bf587b222d1b85f3d6144e19763617a970",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/checkpoint-benchmark-v3.json",
+      "git_blob_sha1": "0ff80356f4b665b73d475c9aa17bc8527d01798e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/research/NOEVARIS_v1.17.7_ALPHAEVOLVE_TRACEABILITY.md",
+      "git_blob_sha1": "ccf1d561cc4c16ea408198ed2acb680562acff3f",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/research/NOEVARIS_v1.18.1_ALPHAEVOLVE_TRACEABILITY.md",
+      "git_blob_sha1": "0fc1d7630c5969432b899c9e7e1a026a4c5a3ebe",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/research/sources.json",
+      "git_blob_sha1": "00b4bdd2d2e3791d1b310d7018579f119570e27a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/verification-v3.txt",
+      "git_blob_sha1": "cc8ef9cf77e1b1df79d97881f0789ebf70f0d469",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/verification-v4.txt",
+      "git_blob_sha1": "08e3a7a396150d72a92398a22a501105a3ba4020",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/verification.txt",
+      "git_blob_sha1": "fd3d4369820f38e074714c740e292359b7d0d164",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/omega/worker-benchmark-v4.json",
+      "git_blob_sha1": "a391169c1d9b70c66688f6edfbca4a2045ebcceb",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/reference/core_api.md",
+      "git_blob_sha1": "e381c12a6ddc107250344142dba84fb3ff4e8e72",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/reference/database_api.md",
+      "git_blob_sha1": "e4c8ae3ff00a678bdd1ef801b11ee39f69251911",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/reference/embed_api.md",
+      "git_blob_sha1": "9e0b8aea746c4fc75bc9a50ccb108f6f214c6ef1",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/reference/index.md",
+      "git_blob_sha1": "bc81f543d8256b30fb0c300a84131d18e74c14f9",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/reference/launch_api.md",
+      "git_blob_sha1": "6be69d4488d1f01686bd0f43f33d45da0b8735a6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/reference/llm_api.md",
+      "git_blob_sha1": "bd4a2c32db309c750ff71fc521e0c97609ae6e98",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/support_local_models.md",
+      "git_blob_sha1": "a9e9f835686ab1f12217980e063c212ea63d9107",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/webui.md",
+      "git_blob_sha1": "52f3ce0d5ce82c5c07aef0273e91b45eb8585c7f",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/__init__.py",
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/README.md",
+      "git_blob_sha1": "6c65a9de2f5d6694fe6cf6ec4414fa9cf43c7d55",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/evaluate.py",
+      "git_blob_sha1": "6cfe05b9ce55872a1e23970c0ca4ecae9e81fc28",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/initial.py",
+      "git_blob_sha1": "0b55e5be69cd8ddb3adf70684abe613065439f9a",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/load_results.ipynb",
+      "git_blob_sha1": "fd21f5cbaee8896d7df6a47fcf3fce751b9d6927",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/run_evo.py",
+      "git_blob_sha1": "cd238bdc3cf474771cd33eb3c36b3030106bc267",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/shinka_large.yaml",
+      "git_blob_sha1": "edf0f464b5a33409f027d5b628e691b11e36c526",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/shinka_medium.yaml",
+      "git_blob_sha1": "752cdccb3a910b1ce8dd95f0c4a3eb0fe281f373",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/shinka_small.yaml",
+      "git_blob_sha1": "4465567f53c9f83647871665b3530a6a5cc38fc0",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/circle_packing/viz_circles.ipynb",
+      "git_blob_sha1": "3e5b43b396b9da0ab856a62f6317efb54353a322",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/fortran_heat_diffusion/README.md",
+      "git_blob_sha1": "28b60ab4919dc4fc64f47f85077d178d9fa46236",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/fortran_heat_diffusion/evaluate.py",
+      "git_blob_sha1": "b1f10a333bfbb7e5e48b8e51d2f10658d4266e27",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/fortran_heat_diffusion/initial.f90",
+      "git_blob_sha1": "ea574fdf3b9b82f87c960ca63271b076ae1d0691",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/fortran_heat_diffusion/run_evo.py",
+      "git_blob_sha1": "8915622e8ff3dc7e220e53b919968389ea621390",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/game_2048/animate.py",
+      "git_blob_sha1": "b09d4c2b56bf468750efee7152499ced9bf2b96a",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/game_2048/env.py",
+      "git_blob_sha1": "47e8f402f78f693a020868bbf5482dcbb345e418",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/game_2048/evaluate.py",
+      "git_blob_sha1": "7a99c599d1a2bf6ae885811dc001bcdd04f9ca0d",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/game_2048/initial.py",
+      "git_blob_sha1": "71331b496d50adc572beffb9aed6fa69869b0cb2",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/game_2048/run_evo.py",
+      "git_blob_sha1": "256271aace8d19b0b83ae70537c11b7502f339bf",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/go_collatz_steps/README.md",
+      "git_blob_sha1": "27fd64e424be332b3b93d0461a4331761c149c60",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/go_collatz_steps/evaluate.py",
+      "git_blob_sha1": "f4bbfda60ed0630cd498b844db526e4e63d1ced4",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/go_collatz_steps/initial.go",
+      "git_blob_sha1": "a686cc51cd42731bcf34a652df57d8c3a621f2da",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/go_collatz_steps/run_evo.py",
+      "git_blob_sha1": "48fbf78119f50c360b4e6debd4db6f2713779ac3",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/julia_prime_counting/README.md",
+      "git_blob_sha1": "ac20907174f3d9cebd30f645b19bd2cf83d49a53",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/julia_prime_counting/evaluate.py",
+      "git_blob_sha1": "c2804d6670d42dbbc32384fe801b3e08fd373a9e",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/julia_prime_counting/initial.jl",
+      "git_blob_sha1": "5fd83406831905b70ca4ec08713c72256649db88",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/julia_prime_counting/run_evo.py",
+      "git_blob_sha1": "2df36b739efef0de8f964b3ffd18c90993dbe215",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/novelty_generator/evaluate.py",
+      "git_blob_sha1": "a5979939e5644b9a83cf4b7d39196466ede63ef9",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/novelty_generator/initial.py",
+      "git_blob_sha1": "7115a30cb52c04b6527a5aa91461ea2c490deb56",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/novelty_generator/lm_judge_prompt.py",
+      "git_blob_sha1": "c0374dcf6585dfe13694fcd0088ddaa06cef8d6d",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/.gitignore",
+      "git_blob_sha1": "1765e1337219ab42802d97fb33f2861fc07d4828",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/README.md",
+      "git_blob_sha1": "59195968d0af31130ebcb5d8b0fcae13802a97e7",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/evaluate.py",
+      "git_blob_sha1": "9f2b7bdd1acae1a7b7a47a3b0a10ff64a253f5e9",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/example.jsonl",
+      "git_blob_sha1": "d5ebde92562768b179bc369ba1301b7e99a12d5a",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/extract_dataset.py",
+      "git_blob_sha1": "3f3676c991f8f50e2476f61559804b5b2d6a3876",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/initial.sv",
+      "git_blob_sha1": "16c48657199da20399599a1a7b7e4921fbafe6d5",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/run_evo.py",
+      "git_blob_sha1": "aeeb1234a43ac88904ab5a6fc81877bb8c6d1b69",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/rtllm/shinka.yaml",
+      "git_blob_sha1": "8c7586b831b7a3c591df4cfd5eaa3d0d6435a869",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/shinka_tutorial.ipynb",
+      "git_blob_sha1": "cf4dea534b3779bbbd5543acbf256602a41be3a4",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/sine_approx_headless/README.md",
+      "git_blob_sha1": "6d525444286b2dd00312d27d5766fdecfa6943ac",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/sine_approx_headless/evaluate.py",
+      "git_blob_sha1": "61a9746cd9708893bcbe06fa5f9b1ff9601baabb",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/sine_approx_headless/initial.py",
+      "git_blob_sha1": "94bb3acb0ad068f5de6ded20ecb849ae6765c6f1",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/sine_approx_headless/run_evo.py",
+      "git_blob_sha1": "9936661db54ff8dd0a0e839fcae65a5dc982a25b",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/wolfram_gcd_sum/README.md",
+      "git_blob_sha1": "24c2c1283d40bf9d7a9c7fa9533c91175e4c3c0e",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/wolfram_gcd_sum/evaluate.py",
+      "git_blob_sha1": "289b747659c593d00bc42cbebf6565f90c9129cc",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/wolfram_gcd_sum/initial.wl",
+      "git_blob_sha1": "24d5eeba40667169943d80c5fbf50c1417698c20",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/wolfram_gcd_sum/run_evo.py",
+      "git_blob_sha1": "5cb0af88403be0cb1caa168b4a380f59281cadf4",
+      "mode": "100644"
+    },
+    {
+      "path": "mkdocs.yml",
+      "git_blob_sha1": "775f12ed2a17fdd324b44a359dae4c941253f52f",
+      "mode": "100644"
+    },
+    {
+      "path": "pyproject.toml",
+      "git_blob_sha1": "e4acf48190c2c0a3f4f7d9431d51631a75ca8e81",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/benchmark_omega_workers.py",
+      "git_blob_sha1": "3317c4275d64c7e468d45276285d67dac3686e43",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/verify_hardening.py",
+      "git_blob_sha1": "5ceb236709281c6331bf79b29888aa7a34c3b441",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/__init__.py",
+      "git_blob_sha1": "867be01665120408562d6335c5def27bf664f9b2",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/azure_openai_config.py",
+      "git_blob_sha1": "75b4984848bcead32ac248b1fe2674f483aae3cd",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/__init__.py",
+      "git_blob_sha1": "3783fba57d2d13b32e31c568a77241941856e9c7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/launch.py",
+      "git_blob_sha1": "56bac0c0ad76d5ff9d3ef081f8f612508bf8335e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/models.py",
+      "git_blob_sha1": "7343a210957de1b41c7f8b5cce5acb0f64cae217",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/run.py",
+      "git_blob_sha1": "3c971e46cb9ea8f298b8bf59696b25ca7d26c3ed",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/run_config.py",
+      "git_blob_sha1": "6d6f86220ca3ba1389c9ef8b6d6a1607852a5dfa",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/shinka_launch",
+      "git_blob_sha1": "66eb657ab890897397f4961d81b638633f03acc9",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/shinka_run",
+      "git_blob_sha1": "4ee29e62e94d6ac37c71cf02f7936c52f129687e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/cli/shinka_visualize",
+      "git_blob_sha1": "489f8131d082d1a8b62accabcc28218534334d37",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/__init__.py",
+      "git_blob_sha1": "6ad4352af49e825495942e2a43124111883edb82",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/cluster/__init__.py",
+      "git_blob_sha1": "7f921f815a85a67cb194647d621d2849c14ee21f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/cluster/gcp.yaml",
+      "git_blob_sha1": "fa6918f7884526cd1736a685089ba6a0b33e66e6",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/cluster/local.yaml",
+      "git_blob_sha1": "c8e4fc8c79716f3caf24d06d41bc89819da65513",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/cluster/remote.yaml",
+      "git_blob_sha1": "d07693ddfd22939e2bcadeeca986fb666af29652",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/config.yaml",
+      "git_blob_sha1": "1d2305a5c35e41b4b5cd5775d0ae8b0b160077ed",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/database/__init__.py",
+      "git_blob_sha1": "97730bfcf1e19948d43895630cff4e46d41eb9c7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/database/island_large.yaml",
+      "git_blob_sha1": "d1cde3e0f29c5d22eaa7411ee22df0d92b0c23bc",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/database/island_medium.yaml",
+      "git_blob_sha1": "2c9888a7d27590301578062505427e0ad4392d71",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/database/island_small.yaml",
+      "git_blob_sha1": "348ed03b1be4fdd511f625e62d1cb2fca14abdf8",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/evolution/__init__.py",
+      "git_blob_sha1": "c83343e810a154f8cc65d825d683ed59387db82c",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/evolution/large_budget.yaml",
+      "git_blob_sha1": "48792f12ccfdfabafba6823379d78913f6808299",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/evolution/medium_budget.yaml",
+      "git_blob_sha1": "3a1edf62f7fed95db32cb26ea937429ad87cba87",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/evolution/small_budget.yaml",
+      "git_blob_sha1": "938c6cb7298b72cd6dfbcc86baaf17bc90d07e43",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/task/__init__.py",
+      "git_blob_sha1": "b6178b1b380489b21867f293a06a09c55539ed10",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/task/circle_packing.yaml",
+      "git_blob_sha1": "43b0c8441d51fde74cab4a8c59136415f22078da",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/task/novelty_generator.yaml",
+      "git_blob_sha1": "906d012739c4e803c428cbe050556ec4090f0368",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/variant/__init__.py",
+      "git_blob_sha1": "5b2faba8e8446c7bff747684e35539d5284ec09d",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/variant/circle_packing_example.yaml",
+      "git_blob_sha1": "e19f4ac7a0d889015b37b2f4021e0b999d3f6e32",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/variant/default.yaml",
+      "git_blob_sha1": "24ade5b401f466ee83da7cd1bc0b5a120d545c1d",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/configs/variant/novelty_generator_example.yaml",
+      "git_blob_sha1": "fbfcc415f8e09c72fd602907e1bd3eaf76ab22ea",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/__init__.py",
+      "git_blob_sha1": "40264f5976f9fedf4293cda5cf06c7e780342bcc",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/async_novelty_judge.py",
+      "git_blob_sha1": "7491adb5ed4d94e6e28b19871e8693f013bbbdc3",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/async_runner.py",
+      "git_blob_sha1": "8faa8dae074e52368652b089bd14e636f669f9e7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/async_summarizer.py",
+      "git_blob_sha1": "f5e202f897a3798df2fe418e17b6306b62a3a621",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/config.py",
+      "git_blob_sha1": "b51f6b3956e7605e3464210bb407bac2b57e7a9b",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/novelty_judge.py",
+      "git_blob_sha1": "9fe0e0d00e286a8123aa2a906127d189ac8601fd",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/pipeline_timing.py",
+      "git_blob_sha1": "95971217e07821b030cd0cec20d62b88a05b6158",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/prompt_evolver.py",
+      "git_blob_sha1": "77d17dd4a4c079cb5e6d55ba1be8fb4b039adeb8",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/runtime_slots.py",
+      "git_blob_sha1": "de1aa825758f8d0cc32dec0f1e18e67e98a7a36e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/sampler.py",
+      "git_blob_sha1": "3e70f7be029ec06a4e6b057d1b69bee4d99bae14",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/summarizer.py",
+      "git_blob_sha1": "3f18384ae52051a7b4f6f5580a27b70cd05f3e59",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/core/wrap_eval.py",
+      "git_blob_sha1": "c5333a2fd9a50f1683ae2bb2bc31dbb429b72f76",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/__init__.py",
+      "git_blob_sha1": "0aaff807492abb8a05c6adb3e5110a500c3e6a30",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/async_dbase.py",
+      "git_blob_sha1": "b0092566d390e9ffdcfb29e64c6c6ee36f2b858c",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/complexity.py",
+      "git_blob_sha1": "1e7936ca77f02451ee173bc50955b80911b412c5",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/dbase.py",
+      "git_blob_sha1": "e88a0e49d504111672498ee0919d65480022eb70",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/display.py",
+      "git_blob_sha1": "0b75d8822730f38f08ed55bcab26ad04e4165cdf",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/inspirations.py",
+      "git_blob_sha1": "f0aa2e45fc29cff3aca7a2d5a4876d278370e0a1",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/island_sampler.py",
+      "git_blob_sha1": "5f28f6b6ae9fb02c9ef0e30a9db7f86507e14430",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/islands.py",
+      "git_blob_sha1": "b889cdbe346d65211abd0d03a9395cec83126801",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/parents.py",
+      "git_blob_sha1": "50acbe2562b597126b9d524a10d95f936571f494",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/database/prompt_dbase.py",
+      "git_blob_sha1": "1be6f48723117091105aef1581b3f7255e80a28b",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/defaults.py",
+      "git_blob_sha1": "010836900eb127fece104f3a0bbfeaf638f37c16",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/edit/__init__.py",
+      "git_blob_sha1": "61c5ecbbc7475b84f9ba6ac0fa02467739f22261",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/edit/apply_diff.py",
+      "git_blob_sha1": "341e9510f5c58c514f378245bcc3fe9e1729815d",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/edit/apply_full.py",
+      "git_blob_sha1": "06b5b869fda9d8fe373d6c737b3735078dc2efd5",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/edit/async_apply.py",
+      "git_blob_sha1": "dcd177397abf27a73b63f1775e32d59b58ca575c",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/edit/marker_validation.py",
+      "git_blob_sha1": "db1c4a45df12caeb50a8d698f10a8099a7977bac",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/edit/summary.py",
+      "git_blob_sha1": "7ded8bf07d1afb3603097d8035a5423fa86a7a2b",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/embed/__init__.py",
+      "git_blob_sha1": "b1045bf763759bd60c1a6c4988416b13d9eeb429",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/embed/client.py",
+      "git_blob_sha1": "bacc1db3f5e42499810c43ab3da390d1692b082c",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/embed/embedding.py",
+      "git_blob_sha1": "67eb66e2be87ce5b608d80acca5537bbdba148f5",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/embed/providers/__init__.py",
+      "git_blob_sha1": "6266e585bc99fd5a62d40b7592b63a08cfe7e73e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/embed/providers/pricing.csv",
+      "git_blob_sha1": "9ec5676afa7dc02e1166871b0289f49c49b0da1f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/embed/providers/pricing.py",
+      "git_blob_sha1": "52414020868b3920bba9a716d5b3bd81fa9a8aa6",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/env.py",
+      "git_blob_sha1": "998c43e6b478f7c4e376de2c88dfe95347f91328",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/eval_hydra.py",
+      "git_blob_sha1": "82b3c0d4bdd532d4b0ed8e3cb3ffceed0d8937ac",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/favicon.png",
+      "git_blob_sha1": "bee7524649968ab7ca9dfc6a797e5f2fd5311ed4",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/google_genai.py",
+      "git_blob_sha1": "0e59f7ecf1075e3631da201e212f6b7cef5a806e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/launch/__init__.py",
+      "git_blob_sha1": "59ec53dc27d6476d59835f27a48003db9961e2ac",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/launch/local.py",
+      "git_blob_sha1": "b3f2dbc577dd9406e1614f8e57e190db8e7fa9cb",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/launch/scheduler.py",
+      "git_blob_sha1": "619308803273d7dec05faba32ef88794fb97661f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/launch/slurm.py",
+      "git_blob_sha1": "4cf324a8b01ac9584060642114579f91aab8d6f8",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/launch_hydra.py",
+      "git_blob_sha1": "f11f120f6115096b0998dca06c2a861386a19f55",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/__init__.py",
+      "git_blob_sha1": "059765e9e47f550a1a8bc3790823b1250e52c6ac",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/client.py",
+      "git_blob_sha1": "345252e32ec752aed440c45708021221dc6c0658",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/constants.py",
+      "git_blob_sha1": "59af2134bcee434ebdda7a3a3af5a217d61f106e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/kwargs.py",
+      "git_blob_sha1": "8500e6694cb8ea29a48321cf4786f9b888e52cce",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/llm.py",
+      "git_blob_sha1": "6a51f13141b72bc0cf12b7c062d6ae15d2b1a3af",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/prioritization.py",
+      "git_blob_sha1": "e94756b24919085b872e4597e0407113bac58747",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/__init__.py",
+      "git_blob_sha1": "0360af90b8e4e261c2be50ebfb0fe386887814a7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/anthropic.py",
+      "git_blob_sha1": "f742e735698deaccaf22d8a4d5777447eee22106",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/deepseek.py",
+      "git_blob_sha1": "d4d0c92e2a48915a6fc403dba6f11f3b68eb091f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/errors.py",
+      "git_blob_sha1": "d98cbfb894d27810a393a400539d112f83401b2d",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/gemini.py",
+      "git_blob_sha1": "137fd43339560ecd3c7407a604da91232935481d",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/headless.py",
+      "git_blob_sha1": "7c7ac9078adeac4daa19b7c565af6a2f8135186b",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/local_openai.py",
+      "git_blob_sha1": "939e2cd91106bd0d8c1ef6b3418fef0c6bc26934",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/model_resolver.py",
+      "git_blob_sha1": "7f36bab63b845b0337ca120dd8169826d6165e40",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/openai.py",
+      "git_blob_sha1": "d5fe622873a76ce5270eab4d4c42193879deabbb",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/pricing.csv",
+      "git_blob_sha1": "cfe13ed499418414f6a34b1fcc63b11ed83c6b50",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/pricing.py",
+      "git_blob_sha1": "93f97fa5740ce4cf78abf808b068078fc94211a7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/providers/result.py",
+      "git_blob_sha1": "0d9194b67a0358a8c6a4a74f37956b3a048ea7d8",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/llm/query.py",
+      "git_blob_sha1": "bf82e9e8dfeab426d322719900865f69583e6410",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/local_openai_config.py",
+      "git_blob_sha1": "8e015e2405bcc8eea5770493beac51651e60e0df",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/logo.py",
+      "git_blob_sha1": "3622520314f743d8ccbfcb05e38e8db76b7c4821",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/model_availability.py",
+      "git_blob_sha1": "c5000ddc515e7b4e1f666736c6debd43bcf440d5",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/omega/__init__.py",
+      "git_blob_sha1": "5d7472643dc8d23c4665b915cb84c1266050bef5",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/omega/__main__.py",
+      "git_blob_sha1": "ea346936af78549bce03a7d15417f3b5e37b211f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/omega/checkpoint.py",
+      "git_blob_sha1": "bad758b239b8a227490154ecee7496272481639c",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/omega/engine.py",
+      "git_blob_sha1": "cef25eb08384932e0e5cb7a0eed80bc031216f01",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/omega/providers.py",
+      "git_blob_sha1": "4ce24bf68904ad078aa529e022b690cf355120d2",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/omega/workers.py",
+      "git_blob_sha1": "eed49e135ca312464a237979069c8c61b25b59ae",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/__init__.py",
+      "git_blob_sha1": "ec013a5bc00072b50c06286399ed01696ed30e22",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/code_path_anim.py",
+      "git_blob_sha1": "086f4713f9cba373d2b1d6bb9044371639a80794",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_costs.py",
+      "git_blob_sha1": "56c3703d5343fd1a9d89d18d0ce0a789e2ec0dd4",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_evals.py",
+      "git_blob_sha1": "6027c542bad5b3cb950a67ef98c8f55439e3480a",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_lineage_tree.py",
+      "git_blob_sha1": "6a107522329f0f6df4ec8039aefcdcb49d98ea01",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_llm.py",
+      "git_blob_sha1": "eecaa0078e80c536ce2f59e531c6b5bf3657ae74",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_pareto.py",
+      "git_blob_sha1": "0be0b6ad9db4c8d086ee6b80d00ce9d098169f51",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_similarity.py",
+      "git_blob_sha1": "2d2cc539b5c9cd3536ea57514c31718c6bc6bbb4",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_throughput.py",
+      "git_blob_sha1": "426214393d57bf8aed380f29ce789768ba52fcab",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/plots/plot_time.py",
+      "git_blob_sha1": "8d050650416228e10f86ad6e642797697fdc02fe",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/pricing/__init__.py",
+      "git_blob_sha1": "1b47c430ffd5a16ccd3783217a29b040079eb8cd",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/pricing/catalog.py",
+      "git_blob_sha1": "7a0ed44b5c5694e61fcfe4822af417e6f52e8461",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/pricing/normalization.py",
+      "git_blob_sha1": "57e08710c43c812d6e5776fdc00f8e8b4857c396",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/pricing/rendering.py",
+      "git_blob_sha1": "158b8763bcde2031cb41b877e832573b71d71b59",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/__init__.py",
+      "git_blob_sha1": "f316f7e3b04ca54bc251967f49b45d4d66a1e4e6",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_base.py",
+      "git_blob_sha1": "abc4c51a7cc7723c01774270b9ad0b8fae0dab73",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_cross.py",
+      "git_blob_sha1": "3cb6f3e815b4be2a71049985dc2bb211eba5658c",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_diff.py",
+      "git_blob_sha1": "1b0495988a0c4a0a7e358e376f0c4314bb47ea16",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_fix.py",
+      "git_blob_sha1": "3f40285447675d919a84e0d6caa87c781e1fa3a9",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_full.py",
+      "git_blob_sha1": "9039124b16c9c3c5c79254ff51f8a4341bf5be21",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_init.py",
+      "git_blob_sha1": "b39bf2cca3fa32d43faa994ae122f66621846613",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_meta.py",
+      "git_blob_sha1": "8afd16952414853ccfb15b8e976a74b7bf1587b7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_novelty.py",
+      "git_blob_sha1": "5ab633f07e703348a942197ee77eaefbed6efc22",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/prompts/prompts_prompt_evo.py",
+      "git_blob_sha1": "52e9295deb19c78428945466589b7918ee1d8d09",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/release_check.py",
+      "git_blob_sha1": "30ceb9db900f01af284594a38029ca873ced0c05",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/telemetry_safety.py",
+      "git_blob_sha1": "bb9eb63d7d47b9f3a13ab452b05012df90d529ab",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/tools/__init__.py",
+      "git_blob_sha1": "57c5ad2aab983ff63b6bf13f12ca071479134be8",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/tools/pricing/__init__.py",
+      "git_blob_sha1": "5399b37c6989d2894266b43c90b961e65f9f4df7",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/tools/pricing/generate_csvs.py",
+      "git_blob_sha1": "d382b2cf42e12ebda9bd3e8549cdf039a8c9ec12",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/tools/pricing/models_dev_overlay.json",
+      "git_blob_sha1": "4d01b3089dcda379933069b815bc1bdf5fef29cc",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/__init__.py",
+      "git_blob_sha1": "bf0c30800e2e35c43bf0e6c7b6799aee459d5cbf",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/eval_stop.py",
+      "git_blob_sha1": "d5ccd890acaf91e92661dc9e7d8c1b94002aff64",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/general.py",
+      "git_blob_sha1": "22ef8182a1603a16e1e47e286108428bf108d79f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/languages.py",
+      "git_blob_sha1": "e403a33049d68aeaa72c9c1d59498ca24c9db7b2",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/load_df.py",
+      "git_blob_sha1": "2ac7b1f47c2ad71bdb9413fe01eb38604001f933",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/utils_hydra.py",
+      "git_blob_sha1": "70cfa9691567a92b8e296a273ed4f0f3d90087b6",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/utils/wolfram.py",
+      "git_blob_sha1": "3b5b351e8bf88e91c969d118ceaa5db85582a1d3",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/wandb_logging.py",
+      "git_blob_sha1": "4356e2b4d96c9a71ffe85f084836328fe64ba19f",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/wandb_metrics.py",
+      "git_blob_sha1": "aac742072e67bdabc0950b5e4859a1afd10e6f18",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/webui/compare.html",
+      "git_blob_sha1": "66cd51ef8a698144916293a244e0e806c955fe1e",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/webui/favicon.png",
+      "git_blob_sha1": "bee7524649968ab7ca9dfc6a797e5f2fd5311ed4",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/webui/index.html",
+      "git_blob_sha1": "c221f97d0f45ef30c96b7bf65adf4d5fe24b9564",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/webui/sakana.jpg",
+      "git_blob_sha1": "27c5ce811c33bd7dc4438839d33ccc3a20195392",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/webui/visualization.py",
+      "git_blob_sha1": "057cca935a6d574d9c881facb586e19067b158aa",
+      "mode": "100644"
+    },
+    {
+      "path": "shinka/webui/viz_tree.html",
+      "git_blob_sha1": "686039dc4cc5b2deb576bbd59ec05432218d287f",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-convert/SKILL.md",
+      "git_blob_sha1": "b3a65be48192a6bdb889900744ac83881ae448fc",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-convert/scripts/run_evo.py",
+      "git_blob_sha1": "5be077459b5caf9f0ba286e74f0e25482dc8f5bb",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-convert/scripts/shinka.yaml",
+      "git_blob_sha1": "0836d1c1700275961b1131f9a1dd9335f2c084d2",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-inspect/SKILL.md",
+      "git_blob_sha1": "30f2cf955ba3d15d989fd60eb46882f4bfd5dc88",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-inspect/scripts/inspect_best_programs.py",
+      "git_blob_sha1": "371c32b4e3ceafea897145dee6b5c2ebd9bb530f",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-run/SKILL.md",
+      "git_blob_sha1": "41aa193387f97f8a0c22dcf8a053fda65d0ff8b9",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-setup/SKILL.md",
+      "git_blob_sha1": "8cc8dc10cde7b2085984b448fbb7c15991caeb77",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-setup/scripts/run_evo.py",
+      "git_blob_sha1": "8b6d3ed4a9c370de2ef05b2a95d2ffc72f568fb5",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/shinka-setup/scripts/shinka.yaml",
+      "git_blob_sha1": "0d06cddf0d18e8cdf9281af52b00f3d877612cd6",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/circle.py",
+      "git_blob_sha1": "9306383d5dbb8671983adb69c529a06d51537b62",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/conftest.py",
+      "git_blob_sha1": "8f97412d9bac7469ff156ef14bf99453ba55cfec",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/file.py",
+      "git_blob_sha1": "a70dcb6493dfee2cf6823cbbb3cc9dab12af2125",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/models_dev_catalog.json",
+      "git_blob_sha1": "def988ee9149701e1eac1784f1a6a0bb839bc80a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_anthropic_accounting.py",
+      "git_blob_sha1": "daa0974b37a84f226577653a02b120648811b111",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_archive_inspirations.py",
+      "git_blob_sha1": "7f0b6a509ef3b4890c5938b6570f0b3495209968",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_archive_ranked_criteria.py",
+      "git_blob_sha1": "9020078228552328e8968c6bab583794ee1b8c7f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_async_apply.py",
+      "git_blob_sha1": "2f8c276c51d4651a06c08a3133cfaadde1ceb243",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_async_complexity_1000.py",
+      "git_blob_sha1": "aa2fa0c6416d31cc132b15932a30c3551b01f7a3",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_async_runner_recovery.py",
+      "git_blob_sha1": "ba70cde36ab3944890f6577c0cf23dacbd2b3c0e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_bandit_decay_warnings.py",
+      "git_blob_sha1": "a04359c5e0d48f828dd30a94cbb7a64e926e3598",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_bandit_persistence.py",
+      "git_blob_sha1": "e69a2bde03102d5913ef084b5b6501a18d6614a7",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_ci_workflows.py",
+      "git_blob_sha1": "d11f734077aa41da045713895b42c335a3652018",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_circle_notebook_validation.py",
+      "git_blob_sha1": "93da6ab25839de404fbb5ff92e8a0174181f48b1",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_circle_packing_example.py",
+      "git_blob_sha1": "c6e03665ed84cf154190e8ab778c2442318d21fa",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_compare_webui.py",
+      "git_blob_sha1": "ab20350180c76e7d3a7b5ec70eb8aee64f938be2",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_complexity.py",
+      "git_blob_sha1": "c11727e9a49526ba23bf6fcda0e12314bc6b5f86",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_current_claude_requests.py",
+      "git_blob_sha1": "7f4a8f1701949683b2a14607464f45ef23def70d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_current_model_catalog.py",
+      "git_blob_sha1": "8983eca37fab11e65b33bf2d8c8b2f9594c542de",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_current_model_kwargs.py",
+      "git_blob_sha1": "398629b132c4446d6d4fffc27761f398bfd04146",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_database_display.py",
+      "git_blob_sha1": "f0e1c18340261f0f5e3dfb90ef6c020a2433f048",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_database_no_api_keys.py",
+      "git_blob_sha1": "5beb56334b2d9a9f93d70e26ed1ba4893692549b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_deepseek_accounting.py",
+      "git_blob_sha1": "decc9c6594a50e9aee6903b841d2ab5ca04ff5b9",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_dotenv_loading.py",
+      "git_blob_sha1": "aa0960cce59b9f9c978437f27794dd697d593030",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_dynamic_islands.py",
+      "git_blob_sha1": "f3eec65b012fe43596de4d2caeabbf93c93bd59a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_base.py",
+      "git_blob_sha1": "1029e9cb8d9399e6554e9d4244ad7ec0a419288d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_circle.py",
+      "git_blob_sha1": "1ecc3aa2fd40f99f63ae64f9fc38aa2923e6f4ba",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_cpp.py",
+      "git_blob_sha1": "e677d7846cd5c79cd3807834f7a5f9113ddd6756",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_fortran.py",
+      "git_blob_sha1": "f929947ebe3b0d81960e74fdfb46ef534fa711dd",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_go.py",
+      "git_blob_sha1": "b07dbc41a808ee03d096178b6216a28d528b9027",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_julia.py",
+      "git_blob_sha1": "29767cdd19de95381fa25be148698ba1eec60e96",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_markdown.py",
+      "git_blob_sha1": "1ee58513f73460953c6f3df8fccd8211c5d19a2e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_verilog.py",
+      "git_blob_sha1": "a17acd0b59932079ce4a5bb785b54573857f3e9a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_edit_wolfram.py",
+      "git_blob_sha1": "22ab2d03e0ce0a2178afb089059be5d4c0677470",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_embedding_client_backends.py",
+      "git_blob_sha1": "c135631d9abd8dd59c1d51ea109459e65e4a115e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_embedding_model_resolver.py",
+      "git_blob_sha1": "fb4ae2c22387201db46685aa3b7902874270460b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_endpoint_failures.py",
+      "git_blob_sha1": "e5b086f97a4d7e67e9ba03ffe878f4e9dd47e432",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_example_model_catalog.py",
+      "git_blob_sha1": "0442b4b77b6a8201b7c6c3ea4f2e49546789431b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_failure_nodes_webui.py",
+      "git_blob_sha1": "27881a9a3fa128026900a2965e772f3ff56b96ad",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_fortran_heat_diffusion_example.py",
+      "git_blob_sha1": "788e6490e0433c9564a2ccc85b7d5d756bca1962",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_gemini_embedding_integration.py",
+      "git_blob_sha1": "3f99f4fb20077f8e685fd0ce1addd28233bbe36f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_gemini_provider.py",
+      "git_blob_sha1": "99483bade382dd211a73481b25b85a104445a28b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_gemini_retry_policy.py",
+      "git_blob_sha1": "556085bd2087e38cc4e01ae563472e3bac4507d9",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_go_collatz_steps_example.py",
+      "git_blob_sha1": "07ebf6e3964fa1bdb7ba75e20182a963ecef7e26",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_google_genai.py",
+      "git_blob_sha1": "82d2c3019eca7973490e97d81b76011ebf56d23e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_headless_provider.py",
+      "git_blob_sha1": "afbdeaa4e6c5c9d1660079fac602710571aa3cb5",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_index_webui.py",
+      "git_blob_sha1": "172c252f8072447add44ee77ce05ae42dcf3bc20",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_island_copy_costs.py",
+      "git_blob_sha1": "c581e89105416c74af465e310abdda340dea1fe6",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_island_migration.py",
+      "git_blob_sha1": "3aeb7da96624e44bda935d8c241b0ba662a779b2",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_island_sampler.py",
+      "git_blob_sha1": "e7d1c3e3f7ef8e4f8e2cf7988fc6b3fdec90a42e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_job_timeout_clock.py",
+      "git_blob_sha1": "54bacc5b7d703d0ed5c7600066bcafa26b038ce2",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_launch_hydra_async.py",
+      "git_blob_sha1": "06801603219f0e1b7299c9ef9c082e15b260390a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_batch_alignment.py",
+      "git_blob_sha1": "a4ccdd3529fcfb0b65a862705eebcb450e6c560f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_client_backends.py",
+      "git_blob_sha1": "4bd093a587c9278e2d2f9ca4ee703884a8625425",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_client_cache.py",
+      "git_blob_sha1": "2a5d7abfd6f90c8cc755c3333d5d840550bd198e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_client_cache_safety.py",
+      "git_blob_sha1": "37927770f907623eb04520793bce7935a776e315",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_kwargs.py",
+      "git_blob_sha1": "d0614a84a484ee2c41a59258a9efbf8c4269078e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_query_routing.py",
+      "git_blob_sha1": "47898ec54af5ae52d53bdcbdfa820f11a3a85435",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_retry_constants.py",
+      "git_blob_sha1": "90d5d66386b685bbe09f3fa301d8601555422b25",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_retry_policy.py",
+      "git_blob_sha1": "a07aaa1c2250bc73f9d71115d3545fe77611cf9e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_llm_stall_timeout.py",
+      "git_blob_sha1": "44fcc4580038a9a912f2a715d8a93304ab41e8e9",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_local_openai_config.py",
+      "git_blob_sha1": "2e16a7444cb6b79854557aaca24d1a429c7488c3",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_local_process_lifecycle.py",
+      "git_blob_sha1": "fed15edf4286200cd71ac6a22d562fb8441ffd95",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_logo.py",
+      "git_blob_sha1": "92022cb90bffe504f631154d68465ec722231b5b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_marker_validation.py",
+      "git_blob_sha1": "254d75679602f831f871e5efe06eb79a3002e310",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_meta_summarizer.py",
+      "git_blob_sha1": "84f5f0be4a5ea67c39404ff1c21e2293cdc923df",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_model_availability.py",
+      "git_blob_sha1": "ee2302e4297c03c9268ca8a68e6c1c4656ecd76f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_model_catalog_startup.py",
+      "git_blob_sha1": "1d4683c7367f6fd14e28016f8a158792f6e424f0",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_model_resolver.py",
+      "git_blob_sha1": "38dab427888c55066542399cf1081896c8cd656c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_models_dev_catalog.py",
+      "git_blob_sha1": "4338f141764144fb0045cd4f3554b1d768030d55",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_models_dev_live.py",
+      "git_blob_sha1": "6579c0afcdd97ee888bbb6c1e425b19cf65ace54",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_novelty_judge.py",
+      "git_blob_sha1": "9c34738ed37e59cfdc2cabe4d4f519e322c57947",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_omega_checkpoint.py",
+      "git_blob_sha1": "aaa69789e83a3d97293e8b7a079c603947a10cdc",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_omega_coevolution.py",
+      "git_blob_sha1": "4afb3f5d585c850c03e499f1c364a8d7d1ce2186",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_omega_workers.py",
+      "git_blob_sha1": "0952c71b3f6854a44f0f5c7c9a813773cdd8277d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_openai_provider.py",
+      "git_blob_sha1": "43ff3a0ba2c451145a9967857cb3f4a9e54cc6b3",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_packaging_release.py",
+      "git_blob_sha1": "0660b198e3047b5b567d1d3a1632b173e517269d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_pipeline_timing.py",
+      "git_blob_sha1": "62d7e9992b4bf5414ac70a5b322c8c5b77582979",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_plot_throughput.py",
+      "git_blob_sha1": "8b7b7bd61ea6c53fdf712e45810fac05cfbd29cb",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_pricing_csv_generation.py",
+      "git_blob_sha1": "f6b46f484d9b9ccbdbc4c0357b01ad590f14f142",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_pricing_runtime_overlay.py",
+      "git_blob_sha1": "899e03f25ca74a9aa8026ac2d246ca60a96a983e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_program_summary.py",
+      "git_blob_sha1": "3f80116cad1046db408adc66870cc16743652566",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_prompt_evolution.py",
+      "git_blob_sha1": "3e1442ee4b048b725eaff848cb8ccd0435622727",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_proposal_llm_kwargs.py",
+      "git_blob_sha1": "06faa1bedd24d648a47aa71b2849d3003b53d7da",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_proposal_oversubscription.py",
+      "git_blob_sha1": "3ea7b8a3d19dd6f989a9dccc7b2224ab9babae5e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_result_file_integrity.py",
+      "git_blob_sha1": "23741a6e679dd10b576ae48af8e695afe16da2da",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_runtime_timeline_webui.py",
+      "git_blob_sha1": "89b10d0db177a26f761cb2882844cfb1900e7cc8",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_scheduler_env_activation.py",
+      "git_blob_sha1": "8b3d293c72155b413a2923d119bb813ce321c959",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_score_chart_webui.py",
+      "git_blob_sha1": "a3676bc006096b6e399a9ff50f8eacf518bb7269",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_shinka_models_cli.py",
+      "git_blob_sha1": "da38c8c80376466faaf8df2a06974661190e3590",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_shinka_run_cli.py",
+      "git_blob_sha1": "bef4ec3c1b36a740e4f2ec3a2c7780de16965a60",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_slurm_shell_safety.py",
+      "git_blob_sha1": "775c8d28030bdb6acd9b0d02915252f1a6f5fb16",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_tree_roots_webui.py",
+      "git_blob_sha1": "a231b28270c0e2554bbbe6d69367cdaf6318a654",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_unicode_io.py",
+      "git_blob_sha1": "48e9ddbf3bfceece6b50ac36f5db497cfe727034",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_visualization_meta.py",
+      "git_blob_sha1": "c0d5666922534bcbc50b3e23496cc8b987dfa371",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_wandb_database.py",
+      "git_blob_sha1": "cc22a380bddab6cb494f469265282da66db1ff0d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_wandb_logging.py",
+      "git_blob_sha1": "f023892e90f80ddac07a2ca2cd136553996ddc09",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_wandb_metrics.py",
+      "git_blob_sha1": "25552812d8f03472c2ef12971aa515a22c88ddfd",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_wolfram_gcd_sum_example.py",
+      "git_blob_sha1": "9f7bebc34608a3a3e283243f1f60e282f84e1635",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/test_wrap_eval_parallel.py",
+      "git_blob_sha1": "955a914d9aca812ee6d581eea0fcdd6313c82d2d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/wandb_test_utils.py",
+      "git_blob_sha1": "fe72d05e1ae8a40f11c6b653451552410d10ed03",
+      "mode": "100644"
+    },
+    {
+      "path": "OMEGA_IMPORT.md",
+      "git_blob_sha1": "ef321a80e3702655d82ca1afc89c7ccba0f1444a",
+      "mode": "100644"
+    }
+  ]
+}
