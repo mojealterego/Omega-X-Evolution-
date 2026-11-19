@@ -92,6 +92,8 @@ nav:
       - v10–v12: omega/EVOLUTION_V10_V12.md
       - v13–v15: omega/EVOLUTION_V13_V15.md
       - v16–v18: omega/EVOLUTION_V16_V18.md
+      - v19–v20: omega/EVOLUTION_V19_V20.md
+      - Acceptance Gates: omega/CLOSURE_REGISTER.md
       - Coevolution: OMEGA_COEVOLUTION.md
       - Runtime Hardening: OMEGA_HARDENING.md
       - Research Traceability: omega/RESEARCH_TRACEABILITY_v4.md

@@ -17,6 +17,7 @@ from .formal import verified_optimize
 from .graph_memory import GraphMemory, canonical
 from .neural import Architecture, fit, digest, rmse
 from .neuro_symbolic import Split, fixture, symbolic_predictions
+from .training import Trainer, TARGETS
 
 NEURAL=Architecture((8,), 'tanh','momentum',.05)
 RESIDUAL=Architecture((16,16),'tanh','momentum',.05)
@@ -39,6 +40,7 @@ class Plan:
     epochs: int
     work_cap: int
     candidates: tuple[str,...]
+    training_backend: str = "numpy"
 
     def __post_init__(self):
         if type(self.data_contract) is not str or len(self.data_contract)!=64 or any(c not in '0123456789abcdef' for c in self.data_contract): raise ValueError('invalid data contract')
@@ -46,7 +48,12 @@ class Plan:
             not 0<=self.seed<2**32 or not 1<=self.budget<=4096 or not 1<=self.epochs<=400 or not 1<=self.work_cap<=MAX_WORK): raise ValueError('invalid experiment bounds')
         if type(self.candidates) is not tuple or self.candidates not in (CANDIDATES[:1],CANDIDATES[:2],CANDIDATES): raise ValueError('invalid experiment candidates')
 
-    def to_json(self): return canonical({'schema':'omega-experiment-plan-v1',**asdict(self)})
+        if self.training_backend not in ('numpy',*TARGETS): raise ValueError('invalid training backend')
+
+    def to_json(self):
+        value=asdict(self)
+        if self.training_backend=='numpy': value.pop('training_backend')
+        return canonical({'schema':'omega-experiment-plan-v1',**value})
 
     @classmethod
     def from_json(cls, raw):
@@ -58,24 +65,25 @@ class Plan:
         except (TypeError,KeyError,AttributeError,RecursionError) as exc: raise ValueError('plan schema') from exc
 
 
-def design(data:Split, *, seed=42,budget=128,epochs=100,work_cap=MAX_WORK):
+def design(data:Split, *, seed=42,budget=128,epochs=100,work_cap=MAX_WORK,training_backend="numpy"):
     if not isinstance(data,Split): raise ValueError('invalid dataset')
-    base=Plan(_data_contract(data),seed,budget,epochs,work_cap,('symbolic',))
+    base=Plan(_data_contract(data),seed,budget,epochs,work_cap,('symbolic',),training_backend)
     if budget*len(data.train)>1_000_000: raise ValueError('symbolic work cap')
     # Fixed policy: admit neural fit and then residual fit only when their
     # combined epoch*sample*parameter proxy fits the declared training budget.
-    unit=len(data.train)*epochs
+    unit=len(data.train)*epochs*(1 if training_backend=="numpy" else 2)
     count=1+int(unit*NEURAL.parameters<=work_cap)+int(unit*(NEURAL.parameters+RESIDUAL.parameters)<=work_cap)
-    return Plan(base.data_contract,seed,budget,epochs,work_cap,CANDIDATES[:count])
+    return Plan(base.data_contract,seed,budget,epochs,work_cap,CANDIDATES[:count],training_backend)
 
 
 def execute(plan:Plan,data:Split, *, router:Router|None=None,memory:GraphMemory|None=None):
     if not isinstance(plan,Plan) or not isinstance(data,Split): raise ValueError('invalid experiment')
     # Reject altered/over-budget plans and changed train or validation inputs.
-    if plan!=design(data,seed=plan.seed,budget=plan.budget,epochs=plan.epochs,work_cap=plan.work_cap): raise ValueError('plan contract mismatch')
+    if plan!=design(data,seed=plan.seed,budget=plan.budget,epochs=plan.epochs,work_cap=plan.work_cap,training_backend=plan.training_backend): raise ValueError('plan contract mismatch')
     if router is None: router=Router([CPUBackend()])
     if not isinstance(router,Router) or (memory is not None and not isinstance(memory,GraphMemory)): raise ValueError('invalid execution services')
     routing=[]; models={}; validation={}; work=0
+    trainer=None if plan.training_backend=="numpy" else Trainer(plan.training_backend)
     report=discover(Dataset(data.train,data.validation),seed=plan.seed,budget=plan.budget)
     expression=verified_optimize(report['expression']).source
     validation['symbolic']=report['holdout_rmse']
@@ -88,8 +96,8 @@ def execute(plan:Plan,data:Split, *, router:Router|None=None,memory:GraphMemory|
     for name in plan.candidates[1:]:
         arch=NEURAL if name=='neural' else RESIDUAL
         residual=symbolic_predictions(expression,data.train) if name=='hybrid' else None
-        model=fit(arch,data.train,seed=plan.seed,epochs=plan.epochs,residual=residual)
-        models[name]=model;work+=plan.epochs*len(data.train)*arch.parameters
+        model=(fit if trainer is None else trainer.fit)(arch,data.train,seed=plan.seed,epochs=plan.epochs,residual=residual)
+        models[name]=model;work+=plan.epochs*len(data.train)*arch.parameters*(1 if trainer is None else 2)
         pred=infer(name,model,data.validation,'validation')
         validation[name]=(None if sym_val is None else rmse(pred+sym_val,data.validation)) if name=='hybrid' else rmse(pred,data.validation)
     valid=[name for name in plan.candidates if validation[name] is not None]
@@ -108,6 +116,7 @@ def execute(plan:Plan,data:Split, *, router:Router|None=None,memory:GraphMemory|
             'test_rmse':test_rmse,'attempts':report['attempts'],'validation_evaluations':len(plan.candidates),'test_evaluations':1,
             'training_work':work,'routing':routing,'model':json.loads(models[selected].to_json()) if selected!='symbolic' else None,
             'weights_sha256':digest(models[selected]) if selected!='symbolic' else None}
+    if trainer is not None: result["training_backend"]=plan.training_backend
     if memory is not None:
         plan_id,result_id=memory.record_experiment(result['plan'],result)
         result.update(plan_id=plan_id,result_id=result_id)
@@ -115,18 +124,18 @@ def execute(plan:Plan,data:Split, *, router:Router|None=None,memory:GraphMemory|
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--task',choices=('smooth','xor'),default='smooth');p.add_argument('--dataset',type=Path);p.add_argument('--seed',type=int,default=42);p.add_argument('--budget',type=int,default=128);p.add_argument('--epochs',type=int,default=100);p.add_argument('--work-cap',type=int,default=MAX_WORK);p.add_argument('--torch',action='store_true');p.add_argument('--npu',action='store_true');p.add_argument('--db',type=Path);p.add_argument('--key-file',type=Path);p.add_argument('--tenant',default='research');p.add_argument('--plan-only',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--task',choices=('smooth','xor'),default='smooth');p.add_argument('--dataset',type=Path);p.add_argument('--seed',type=int,default=42);p.add_argument('--budget',type=int,default=128);p.add_argument('--epochs',type=int,default=100);p.add_argument('--work-cap',type=int,default=MAX_WORK);p.add_argument('--torch',action='store_true');p.add_argument('--npu',action='store_true');p.add_argument('--qnn',action='store_true');p.add_argument('--training-backend',choices=('numpy',*TARGETS),default='numpy');p.add_argument('--db',type=Path);p.add_argument('--key-file',type=Path);p.add_argument('--tenant',default='research');p.add_argument('--plan-only',action='store_true');a=p.parse_args()
     if bool(a.db)!=bool(a.key_file): p.error('db and key-file required together')
     if a.dataset:
         with a.dataset.open(encoding='utf-8') as f: data=Split.from_json(f.read(262145))
     else: data=fixture(a.task,seed=a.seed)
-    plan=design(data,seed=a.seed,budget=a.budget,epochs=a.epochs,work_cap=a.work_cap)
+    plan=design(data,seed=a.seed,budget=a.budget,epochs=a.epochs,work_cap=a.work_cap,training_backend=a.training_backend)
     if a.plan_only: print(plan.to_json());return
     memory=None
     if a.db:
         with a.key_file.open('rb') as f: key=f.read(4097)
         memory=GraphMemory(a.db,key,a.tenant)
-    print(json.dumps(execute(plan,data,router=Router(probe(enable_torch=a.torch,enable_npu=a.npu)),memory=memory),indent=2,allow_nan=False))
+    print(json.dumps(execute(plan,data,router=Router(probe(enable_torch=a.torch,enable_npu=a.npu,enable_qnn=a.qnn)),memory=memory),indent=2,allow_nan=False))
 
 
 if __name__=='__main__': main()

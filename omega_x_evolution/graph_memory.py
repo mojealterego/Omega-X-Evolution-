@@ -136,18 +136,15 @@ class GraphMemory:
     def link(self,src,relation,dst):
         with self._db(write=True) as db: self._link(db,src,relation,dst)
 
-    def record_experiment(self,plan,result):
+    def record_experiment(self,plan,result, *, title="experiment plan symbolic neural hybrid regression",result_text="experiment result validation and test RMSE"):
         with self._db(write=True) as db:
-            a=self._add(db,'experiment','experiment plan symbolic neural hybrid regression',plan)
-            b=self._add(db,'result','experiment result validation and test RMSE',result)
+            a=self._add(db,'experiment',title,plan)
+            b=self._add(db,'result',result_text,result)
             self._link(db,a,'produced',b)
             return a,b
 
-    def retrieve(self,query, *, limit=8,hops=2):
-        if type(query) is not str or not 1<=len(query)<=1024 or type(limit) is not int or not 1<=limit<=32 or type(hops) is not int or not 0<=hops<=3:
-            raise ValueError('retrieval bounds')
-        q=tokens(query)
-        if not q: return []
+    def snapshot(self):
+        """Return the authenticated namespace snapshot and adjacency index."""
         with self._db() as db:
             count,size=db.execute('SELECT count(*),coalesce(sum(length(body)),0) FROM nodes WHERE tenant=?',(self.tenant,)).fetchone()
             if count>MAX_NODES or size>MAX_STORAGE: raise IntegrityError('graph capacity exceeded')
@@ -160,12 +157,24 @@ class GraphMemory:
             if a not in nodes or b not in nodes or r not in RELATIONS or not isinstance(mac,str) or not hmac.compare_digest(mac,self._sign('edge',a,r,b)):
                 raise IntegrityError('edge authentication failed')
             adj[a].append((b,r,'out'));adj[b].append((a,r,'in'))
+        return nodes,adj
+
+    def retrieve(self,query, *, limit=8,hops=2):
+        if type(query) is not str or not 1<=len(query)<=1024 or type(limit) is not int or not 1<=limit<=32 or type(hops) is not int or not 0<=hops<=3:
+            raise ValueError('retrieval bounds')
+        q=tokens(query)
+        if not q: return []
+        nodes,adj=self.snapshot()
         # Deterministic lexical seed ranking, then bounded provenance traversal.
         direct=[]
         for i,n in nodes.items():
             terms=tokens(n['text']); overlap=len(q&terms)
             if overlap: direct.append((i,overlap/len(q)))
         direct.sort(key=lambda v:(-v[1],v[0]));direct=direct[:limit]
+        return self.expand(nodes,adj,direct,limit=limit,hops=hops)
+
+    @staticmethod
+    def expand(nodes,adj,direct, *, limit,hops):
         result=[];visited={i for i,_ in direct};queue=deque()
         for i,score in direct: queue.append((i,score,[i],[]))
         while queue and len(result)<limit:

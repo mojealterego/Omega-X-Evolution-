@@ -62,11 +62,15 @@ class TorchBackend:
             return (a*model.scale).detach().cpu().numpy().astype(np.float64)
 
 
-def probe(*, enable_torch=False, enable_npu=False):
+def probe(*, enable_torch=False, enable_npu=False, enable_qnn=False):
     """Return usable runtime devices. memory is an admission cap, not reserved VRAM."""
-    if type(enable_torch) is not bool or type(enable_npu) is not bool or (enable_npu and not enable_torch):
+    if type(enable_torch) is not bool or type(enable_npu) is not bool or type(enable_qnn) is not bool or (enable_npu and not enable_torch):
         raise ValueError('NPU requires explicit Torch opt-in')
     devices: list[Backend]=[CPUBackend()]
+    if enable_qnn:
+        from .qnn import QNNBackend, QNNUnavailable
+        try: devices.append(QNNBackend())
+        except QNNUnavailable: pass
     if not enable_torch: return devices
     try:
         import torch
@@ -160,8 +164,8 @@ class Router:
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--torch',action='store_true');p.add_argument('--npu',action='store_true');p.add_argument('--demo',action='store_true');a=p.parse_args()
-    backends=probe(enable_torch=a.torch,enable_npu=a.npu)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--torch',action='store_true');p.add_argument('--npu',action='store_true');p.add_argument('--qnn',action='store_true');p.add_argument('--demo',action='store_true');a=p.parse_args()
+    backends=probe(enable_torch=a.torch,enable_npu=a.npu,enable_qnn=a.qnn)
     report={'devices':[asdict(b.device) for b in backends]}
     if a.demo:
         from .neural import BASELINE,fit
