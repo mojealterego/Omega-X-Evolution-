@@ -5,7 +5,7 @@
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Development](https://img.shields.io/badge/OMEGA--X-v35.2%20development-6a35b8)
+![Development](https://img.shields.io/badge/OMEGA--X-v35.3%20development-6a35b8)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![Branch](https://img.shields.io/badge/branch-main-24292f)
 
@@ -33,7 +33,7 @@ flowchart TD
 
 The diagram describes the implemented optional OMEGA-X research path. The general upstream execution path is separate and does not inherit its restricted interpreter guarantees.
 
-## Current implementation — v35.2
+## Current implementation — v35.3
 
 | Component | Capability |
 |---|---|
@@ -135,7 +135,7 @@ omega-x-evolution --seed 5 --generations 5 --evaluation-processes 2
 # Or: python -m omega_x_evolution --seed 5 --generations 5 --evaluation-processes 2
 ```
 
-This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.35.2.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
+This command uses the bounded offline experiment; it does not require paid inference. The canonical distribution is `omega-x-evolution` (development version `0.35.3.dev1`), with implementation in `omega_x_evolution`. The offline engine uses the standard library. The imported Shinka runtime and compatibility entry points remain bundled, so use a separate virtual environment from upstream `shinka-evolve`. See [migration guide](docs/omega/IDENTITY_MIGRATION.md).
 
 ## Advanced modes
 
@@ -281,6 +281,10 @@ The second command intentionally produces a countermodel in logic K and a nonzer
 
 See [bounded implementation and residual acceptance](docs/omega/REMAINING_REQUIREMENTS_CLOSURE.md) for constrained QUBO, memory synthesis, discovery/gossip, cluster switches, extensional proof, round-based quorum coordination, polynomial/Laurent discovery, online transformer adapters and Kubernetes workload control. Physical infrastructure and general research claims remain separately gated.
 
+## Corrective release v35.3
+
+See [residual gates and evidence](docs/omega/RESIDUAL_ACCEPTANCE.md): certified round changes and autonomous pacemaker, resumable architecture synthesis, Lean/Isabelle adapters, local model admission and microbatch training, and reduced upstream import coupling. Remaining physical and toolchain gates are explicitly open.
+
 ## Verification
 
 ```bash
@@ -289,7 +293,7 @@ python -m pytest -q tests/test_omega*.py
 python scripts/verify_hardening.py
 ```
 
-The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-remaining-closure.txt) for the new regression results and outstanding upstream dependency limitations.
+The imported v4 verification record reports 42 targeted OMEGA tests and 38 hardening tests passed. Full upstream collection was blocked by missing dependencies. No live distributed cluster, external scientific benchmark reproduction, large-model training or production attestation is claimed. These are historical results. See [current verification](docs/omega/verification-residual.txt) for the new regression results and outstanding upstream dependency limitations.
 
 ## Documentation & evidence
 

@@ -2,9 +2,6 @@ import ast
 import math
 import re
 
-from radon.complexity import cc_visit_ast
-from radon.metrics import h_visit_ast
-from radon.raw import analyze
 
 
 class _NestingVisitor(ast.NodeVisitor):
@@ -54,6 +51,10 @@ def analyze_python_complexity(code_string):
     Raises:
         SyntaxError: If the code cannot be parsed as valid Python
     """
+    from radon.complexity import cc_visit_ast
+    from radon.metrics import h_visit_ast
+    from radon.raw import analyze
+
     tree = ast.parse(code_string)
 
     cc_results = cc_visit_ast(tree)

@@ -42,22 +42,69 @@ def check_lean(a,b,*,timeout=30):
         return {**result,'status':'checked' if ok else 'rejected','proved':ok,'version':v.stdout.decode(errors='replace')[:256].strip()}
 
 
-def prove(a,b,*,require_lean=False):
-    if not isinstance(a,Program) or not isinstance(b,Program) or type(require_lean) is not bool:raise ValueError('proof input')
+def isabelle_source(a,b):
+    """Generate a closed HOL function equality; never accept supplied theory text."""
+    if not isinstance(a,Program) or not isinstance(b,Program):raise ValueError('pure typed programs required')
+    def emit(t):
+        if t[0] in ('x','y'):return t[0]
+        if t[0]=='lit':return f'({t[1]} :: 16 word)'
+        op={'add':'+','sub':'-','mul':'*','xor':'XOR','and':'AND','or':'OR'}[t[0]]
+        return f'({emit(t[1])} {op} {emit(t[2])})'
+    return (r'''theory Omega_Proof
+  imports "HOL-Library.Word"
+begin
+context includes bit_operations_syntax
+begin
+lemma omega_extensional_equivalence:
+''' +
+            f'  "(\\<lambda>(x::16 word) (y::16 word). {emit(a.tree)}) = (\\<lambda>(x::16 word) (y::16 word). {emit(b.tree)})"\n'
+            '  apply (rule ext)+\n  by (simp add: algebra_simps; (smt (z3)))\nend\nend\n')
+
+
+def check_isabelle(a,b,*,timeout=120):
+    if type(timeout) is not int or not 1<=timeout<=600:raise ValueError('Isabelle timeout')
+    src=isabelle_source(a,b);result={'backend':'isabelle','source_sha256':hashlib.sha256(src.encode()).hexdigest(),'proved':False}
+    binary=shutil.which('isabelle')
+    if not binary:return {**result,'status':'unavailable'}
+    import os,signal
+    with tempfile.TemporaryDirectory(prefix='omega-isabelle-') as temp:
+        path=Path(temp);(path/'Omega_Proof.thy').write_text(src,encoding='ascii')
+        (path/'ROOT').write_text('session Omega_Proof = "HOL-Library" +\n  options [document = false, quick_and_dirty = false]\n  theories Omega_Proof\n',encoding='ascii')
+        try:
+            version=subprocess.run([binary,'version'],capture_output=True,timeout=10,check=True).stdout.decode(errors='replace')[:256].strip()
+            with (path/'build.log').open('wb') as out:
+                cmd=[binary,'build','-D',temp,'-j','1','-o','threads=1','-o','quick_and_dirty=false']
+                proc=subprocess.Popen(cmd,cwd=temp,stdout=out,stderr=subprocess.STDOUT,start_new_session=True)
+                try:code=proc.wait(timeout=timeout)
+                except subprocess.TimeoutExpired:
+                    try:os.killpg(proc.pid,signal.SIGKILL)
+                    except ProcessLookupError:pass
+                    proc.wait();return {**result,'status':'timeout','version':version}
+            with (path/'build.log').open('rb') as f:log=f.read(1_048_577)
+            ok=code==0 and len(log)<=1_048_576
+            return {**result,'status':'checked' if ok else 'rejected','proved':ok,'version':version}
+        except (OSError,subprocess.SubprocessError):return {**result,'status':'failed-or-timeout'}
+
+
+def prove(a,b,*,require_lean=False,require_isabelle=False):
+    if not isinstance(a,Program) or not isinstance(b,Program) or type(require_lean) is not bool or type(require_isabelle) is not bool:raise ValueError('proof input')
     ring=proof_kernel.certify(a,b);checked=proof_kernel.verify_certificate(a,b,ring)
     try:solver=bitproof.prove(a,b)
     except (OSError,RuntimeError,subprocess.SubprocessError):solver={'status':'unavailable-or-timeout','proved':False}
     # SAT contradicts a native proof; fail closed even if a second proof passed.
     native=solver['status']!='sat' and (checked or solver['proved'])
     lean=check_lean(a,b) if require_lean else None
-    return {'schema':'omega-extensional-proof-v1','proved':native and (not require_lean or lean['proved']),
+    isa=check_isabelle(a,b) if require_isabelle else None
+    result={'schema':'omega-extensional-proof-v1','proved':native and (not require_lean or lean['proved']) and (not require_isabelle or isa['proved']),
             'left':json.loads(json.dumps(a.tree)),'right':json.loads(json.dumps(b.tree)),
             'ring_certificate':ring if checked else None,'solver':solver,'lean':lean,'require_lean':require_lean,
             'domain_size':2**32,'definition':'pure function equality over BitVec 16 × BitVec 16'}
+    if require_isabelle:result.update(isabelle=isa,require_isabelle=True)
+    return result
 
 
-def optimize(reference,*,budget=16,require_lean=False):
-    if not isinstance(reference,Program) or type(budget) is not int or not 1<=budget<=32 or type(require_lean) is not bool:raise ValueError('proof search bounds')
+def optimize(reference,*,budget=16,require_lean=False,require_isabelle=False):
+    if not isinstance(reference,Program) or type(budget) is not int or not 1<=budget<=32 or type(require_lean) is not bool or type(require_isabelle) is not bool:raise ValueError('proof search bounds')
     def trees(t):
         yield t
         if len(t)==3:
@@ -66,7 +113,7 @@ def optimize(reference,*,budget=16,require_lean=False):
     candidates=sorted((Program(t) for t in pool),key=lambda p:(p.size,repr(p.tree))); attempts=0
     for p in candidates:
         if p.size>=reference.size or attempts>=budget:break
-        attempts+=1;proof=prove(reference,p,require_lean=require_lean)
+        attempts+=1;proof=prove(reference,p,require_lean=require_lean,require_isabelle=require_isabelle)
         if proof['proved']:
             return {'promoted':True,'selected':json.loads(json.dumps(p.tree)),'attempts':attempts,'proof':proof}
     return {'promoted':False,'selected':json.loads(json.dumps(reference.tree)),'attempts':attempts,'proof':None}
@@ -76,6 +123,6 @@ def verify(report):
     """Reconstruct a positive decision; arbitrary supplied evidence is not trusted."""
     try:
         if report.get('proved') is not True:return False
-        fresh=prove(bitproof._program(report['left']),bitproof._program(report['right']),require_lean=report['require_lean'])
+        fresh=prove(bitproof._program(report['left']),bitproof._program(report['right']),require_lean=report['require_lean'],require_isabelle=report.get('require_isabelle',False))
         return fresh==report
     except (ValueError,TypeError,KeyError,IndexError):return False

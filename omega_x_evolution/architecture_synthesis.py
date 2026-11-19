@@ -19,8 +19,8 @@ class Plan:
         def validate(t,depth):
             nonlocal count
             count+=1
-            if type(t) is not tuple or not t or depth>4 or count>15:raise ValueError('score tree bound')
-            if t[0] in ('lex','assoc','hyper') and len(t)==1:return
+            if type(t) is not tuple or not t or depth>16 or count>255:raise ValueError('score tree bound')
+            if t[0] in ('lex','assoc','hyper','latent1','latent2','latent4','latent8') and len(t)==1:return
             if t[0] in ('square','prop') and len(t)==2:validate(t[1],depth+1);return
             if t[0] in ('add','mul','max') and len(t)==3:
                 validate(t[1],depth+1);validate(t[2],depth+1);return
@@ -29,7 +29,7 @@ class Plan:
     @classmethod
     def from_json(cls,value):
         def freeze(v,depth=0):
-            if depth>5 or type(v) is not list or not 1<=len(v)<=3 or type(v[0]) is not str:raise ValueError('invalid program encoding')
+            if depth>17 or type(v) is not list or not 1<=len(v)<=3 or type(v[0]) is not str:raise ValueError('invalid program encoding')
             return (v[0],*(freeze(x,depth+1) for x in v[1:]))
         return cls(freeze(value))
 
@@ -43,6 +43,28 @@ class SynthesizedIndex(Index):
         if sum(map(len,edges.values()))>65536:raise ValueError('hypergraph index cap')
         self.hypergraph=dict(edges)
         self.structure_sha256=hashlib.sha256(canonical([self.digest,self.hypergraph]).encode()).hexdigest()
+        self._latent=None
+
+    def latent(self,query,rank):
+        # Fit a projection solely from authenticated corpus contents, not labels.
+        import numpy as np
+        if self._latent is None:
+            keys=tuple(sorted(self.nodes));words=tuple(sorted(self.hypergraph,key=lambda w:(-len(self.hypergraph[w]),w))[:128]);lookup={w:i for i,w in enumerate(words)}
+            mat=np.zeros((len(keys),len(words)),dtype=np.float64)
+            for i,k in enumerate(keys):
+                for w in self.terms[k]:
+                    if w in lookup:mat[i,lookup[w]]=1/math.sqrt(len(self.hypergraph[w]))
+            if not words:raise ValueError('empty latent corpus')
+            _,singular,vh=np.linalg.svd(mat,full_matrices=False)
+            self._latent=(keys,lookup,mat,singular,vh)
+        keys,lookup,mat,singular,vh=self._latent;effective=min(rank,len(singular));basis=vh[:effective].T
+        q=np.zeros(len(lookup),dtype=np.float64)
+        for w in tokens(query):
+            if w in lookup:q[lookup[w]]=1/math.sqrt(len(self.hypergraph[w]))
+        projected=mat@basis;v=q@basis;norm=np.linalg.norm(v);lengths=np.linalg.norm(projected,axis=1)
+        out=np.divide(projected@v,lengths*norm,out=np.zeros(len(keys)),where=lengths*norm>1e-12)
+        self.last_work+=len(keys)*len(lookup)*effective+len(lookup)*effective
+        return {k:(float(min(1.,max(0.,x))),{k}) for k,x in zip(keys,out)}
 
     def retrieve(self,plan,query,*,limit=8):
         if not isinstance(plan,Plan) or type(query) is not str or not 1<=len(query)<=1024 or type(limit) is not int or not 1<=limit<=32:raise ValueError('retrieval bounds')
@@ -59,6 +81,8 @@ class SynthesizedIndex(Index):
             elif op=='assoc':
                 q=vector(query);self.last_work+=128*n
                 out={i:(max(0.,sum(a*b for a,b in zip(q,self.vectors[i]))),{i}) for i in keys}
+            elif op.startswith('latent'):
+                out=self.latent(query,int(op[6:]))
             elif op=='hyper':
                 base=calc(('lex',));weights={};evidence={}
                 for i,(s,_) in base.items():

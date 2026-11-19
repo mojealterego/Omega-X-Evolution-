@@ -14,6 +14,7 @@ from .mesh import Endpoint, _transport
 
 def _dispatch(replica,op,args):
     if op=='status' and args==[]:return replica.status()
+    if op=='view' and len(args)==2:return replica.view(*args)
     if op=='prevote' and len(args)==1:return replica.prevote(args[0])
     if op=='precommit' and len(args)==2:return replica.precommit(*args)
     if op=='commit' and len(args)==3:return replica.commit(*args)

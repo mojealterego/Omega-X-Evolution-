@@ -1,0 +1,41 @@
+OMEGA-X Evolution 0.35.3.dev1 — residual gates, no new stage
+BASE 23248aeeddc4721d4e62533546c0274ebe269a5a; tree 880e1c87befc297401a8110e8749bdd9ff015c45
+Environment: Linux-6.18.57-x86_64-with-glibc2.41 / Python 3.13.5 / cgroup 4294967296 bytes; no CUDA, Lean, Isabelle, Transformers, Ray, Ocean.
+TDD RED: missing pacemaker, Isabelle adapter, search, memory admission and pure parser; latest RED test offline_legacy fails at anthropic import (exit 1); GREEN after pure parser move 1 passed (11 deselected).
+REGRESSION (before last pure parser extraction): OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 JAX_PLATFORMS=cpu python -m pytest -q tests/test_omega*.py — 310 passed in 96.96s, exit 0.
+NATIVE HARDENING: python -m pytest -q tests/test_local_process_lifecycle.py tests/test_slurm_shell_safety.py tests/test_result_file_integrity.py tests/test_scheduler_env_activation.py — 38 passed in 3.71s, exit 0, no shim.
+FINAL SELECTED UPSTREAM after parser extraction: python -m pytest -q tests/test_bandit_decay_warnings.py tests/test_bandit_persistence.py tests/test_database_no_api_keys.py tests/test_archive_inspirations.py tests/test_archive_ranked_criteria.py tests/test_dynamic_islands.py tests/test_island_sampler.py tests/test_marker_validation.py — 103 passed in 0.88s, exit 0.
+FINAL COLLECTION: python -m pytest -q --collect-only — 911 collected, 36 errors, exit 2. Earlier 72. Missing external SDKs.
+PIP: python -m pip download --retries 0 --timeout 5 --no-deps -d /tmp/omega-final-deps anthropic openai backoff hydra-core instructor google-genai — exit 1, no matching distribution for anthropic.
+COMPILE: python -m compileall -q omega_x_evolution shinka tests/test_omega_final_gates.py — exit 0.
+BFT: 24 outage/order schedules in four parametrized tests; quorum, minority block, signed loopback RPC, catch-up. Not a general liveness proof.
+Proof assistants and large model: fail closed/unavailable; no full execution.
+SOURCE SHA256:
+3944ea7d11757faeff80663f278b5f6e7098aad7fbda055be3fd269feba9e420  README.md
+83cc6eda1c8f7e270ba8e816bbdca17547eab5ae4a6e8e8a0962a9812d039b70  docs/index.md
+b20b54746ef0ff3c7c480c4e73a019612b2b1649c7db9593381df4657effa54c  docs/omega/CLOSURE_REGISTER.md
+af773bc5427e190a8a77901a1a87aab4823c04da5d039261babd8c05dc4310e5  docs/omega/MAINTAINER_ROADMAP.md
+2ccbab040c124c9dd91ae0a791f013655f82adddcd083bcbf2189f058920f6fa  docs/omega/RESIDUAL_ACCEPTANCE.md
+def97aa7af9ccd4b8d317d620b99487912c6885ac760df031fa591c919d590e0  mkdocs.yml
+e249eccbc00eea9a15d4af9a1c680693b7294794742ec0e9d687ec5a5afa983c  omega_x_evolution/__init__.py
+0cfc25807173b2ac5a088edf3dd2dfa69df126a30a45a96c505646827c1df3ab  omega_x_evolution/architecture_search.py
+2b60e112a17c998a14a1c829d96da0b5ea0007cc2b0cc25140c5096a36d58c4c  omega_x_evolution/architecture_synthesis.py
+8df4ac044f3b289a092e90c6b9c98c9ab92ad25644b2360bb6577a0fd0111389  omega_x_evolution/bft.py
+2f45bef116148eab8c272bdb7302babd9e13e3d146a663e6691cb734211212fd  omega_x_evolution/bft_transport.py
+f9eb5316bc4537e9109afa9c0c9fadf982c78a74994ec3df603c647fadbb7d65  omega_x_evolution/higher_order.py
+d82ca2bf6d6b6f0f048139f6488f3cb61ba242eb2ab1aa888ea6048cf76daf74  omega_x_evolution/llm_plasticity.py
+bcb6686a1c3a5ab8755670ee3228d6ebd0cee03b4514a22a778ee4e1f205c9ca  omega_x_evolution/pacemaker.py
+5f2a4ea6effd150b5667615dd232ea797b1e13b4432bc64d2019fe72a032239c  shinka/core/__init__.py
+e3071deb05b667f1152f2beb8d10890044f7c7426e0ed027f59363a77b256044  shinka/database/__init__.py
+e1d23c36513c49a79dce1ee13ccbb3631df116d1c9248ef8eac8f91ab994588f  shinka/database/complexity.py
+ff0fb3a24e9f835148c12a526a3ef06ff54aa45c264c981337e7703ff46aa0ff  shinka/database/dbase.py
+f2ea08d456185e6759c468e5a6a37c4c337883ca1788ddfdd1e5b8f89b8bd9d2  shinka/edit/__init__.py
+223b6c50c0880ad941e4ff471dad8ef0ea746c93678184a06cafea242fa11274  shinka/embed/__init__.py
+599a3d3c53e9563c342aff7c8c7464000f05d1c8b395ce691d79fec8d63d8c73  shinka/launch/__init__.py
+a1f29cb4850c5adc2dcbad1daeec5e089ccb15a72270c4a94d759799a960f8fb  shinka/llm/__init__.py
+d63e4e3a94266806c7cfe48801ec7280eb8dff654a83b5fe8643d03e310fd283  shinka/llm/llm.py
+30c00c9f4be651e6e0d1345fb5a0b35f47bd8afbfbdd5f2406d756d39f04fc39  shinka/llm/providers/__init__.py
+9ac61fefe822b8a33a11ab4a968467b861b832297d5e5111c486dbd46e63c99a  shinka/llm/text.py
+54195d9a5c8768996f0b935b712b9e1f7421af2de2ff010d6e39a3739158084d  shinka/plots/__init__.py
+cbc3b31474197b0affcd122960aceb780ab644eac4733f05b6f86d540b552cd9  shinka/utils/__init__.py
+daf1abe8ca8193dda1d6515f670c7b48299aec4ddf466f2aa2ae0d9e8b2e2c66  tests/test_omega_final_gates.py

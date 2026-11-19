@@ -42,7 +42,7 @@ class Session:
         if device=='cuda':
             free,_=torch.cuda.mem_get_info();size=sum(p.numel()*p.element_size() for p in model.parameters())
             if size*1.5>free:raise RuntimeError('insufficient free CUDA memory')
-        self.model=model.to(device);self.encoder=encoder;self.action_ids=action_ids;self.device=device;self.rank=rank;self.encoder_id=encoder_id;self.frozen=frozen
+        self.model=model.to(device);self.encoder=encoder;self.action_ids=action_ids;self.device=device;self.rank=rank;self.encoder_id=encoder_id;self.frozen=frozen;self.microbatch=1 if frozen>=10_000_000 else 64
         for p in model.parameters():p.requires_grad_(False)
         generator=torch.Generator(device='cpu').manual_seed(seed)
         class LowRank(nn.Module):
@@ -119,11 +119,30 @@ class Session:
         import torch
         b,a,y=data;v=self._values(b);return ((v[torch.arange(len(a),device=self.device),a]-y)**2).mean()
 
+    def _chunks(self,data):
+        b,a,y=data
+        if type(self.microbatch) is not int or not 1<=self.microbatch<=64:raise ValueError('microbatch bound')
+        for i in range(0,len(a),self.microbatch):
+            part=slice(i,i+self.microbatch)
+            yield (tuple(x[part] for x in b),a[part],y[part]),len(a[part])/len(a)
+
+    def _mean_loss(self,data):
+        return sum(float(self._loss(chunk).item())*weight for chunk,weight in self._chunks(data))
+
+    def _backward(self,data):
+        # Aggregate gradients with exact sample-count weighting. Each graph is
+        # freed before the next microbatch, rather than retaining all logits.
+        total=0.
+        for chunk,weight in self._chunks(data):
+            loss=self._loss(chunk)*weight
+            total+=float(loss.detach().item());loss.backward()
+        return total
+
     def evaluate(self,rows):
         import torch
         if type(rows) is not tuple or not 1<=len(rows)<=64:raise ValueError('test bound')
         rows=tuple(plasticity.validate_record(r) for r in rows)
-        with torch.no_grad():return float(self._loss(self._dataset(rows)).item())
+        with torch.no_grad():return self._mean_loss(self._dataset(rows))
 
     def fit(self,train,validation,retention,*,steps=8,learning_rate=.01):
         import torch
@@ -131,12 +150,12 @@ class Session:
         groups=plasticity._prepare((train,validation,retention));data=[self._dataset(g) for g in groups];prior=self.snapshot()
         if self.base_digest()!=self.base_sha:raise ValueError('base model changed')
         def losses():
-            with torch.no_grad():return [float(self._loss(d).item()) for d in data]
+            with torch.no_grad():return [self._mean_loss(d) for d in data]
         before=losses();self.restore(self.initial);root=losses()[2];self.restore(prior)
         opt=torch.optim.AdamW(list(self.params.values()),lr=learning_rate,weight_decay=0.)
         try:
             for _ in range(steps):
-                opt.zero_grad(set_to_none=True);loss=self._loss(data[0]);loss.backward();torch.nn.utils.clip_grad_norm_(list(self.params.values()),1.,error_if_nonfinite=True);opt.step()
+                opt.zero_grad(set_to_none=True);self._backward(data[0]);torch.nn.utils.clip_grad_norm_(list(self.params.values()),1.,error_if_nonfinite=True);opt.step()
             candidate=self.snapshot();self.restore(candidate);after=losses()
             if not all(math.isfinite(x) for x in before+after) or self.base_digest()!=self.base_sha:raise ValueError('nonfinite training or changed base')
             promoted=after[1]<before[1]-1e-9 and after[2]<=min(root,before[2])+.002
@@ -146,16 +165,70 @@ class Session:
         finally:opt.zero_grad(set_to_none=True)
 
 
+def model_manifest(path):
+    """Inspect local safe tensor headers and shard index before allocating weights."""
+    from safetensors import safe_open
+    path=Path(path).resolve(strict=True)
+    files=tuple(sorted(path.glob('*.safetensors'))) if path.is_dir() else ()
+    if not files or len(files)>128 or any(x.is_symlink() or not x.is_file() for x in files):raise ValueError('local safetensors required')
+    size=sum(x.stat().st_size for x in files)
+    if not 0<size<=16_000_000_000:raise ValueError('local model byte cap')
+    config=path/'config.json'
+    if not config.is_file() or config.is_symlink() or config.stat().st_size>1_048_576:raise ValueError('local model config')
+    config_bytes=config.read_bytes();cfg=json.loads(config_bytes)
+    if type(cfg) is not dict or cfg.get('auto_map'):raise ValueError('untrusted model code')
+    weights={};records=[];elements=0
+    for f in files:
+        with safe_open(str(f),framework='pt',device='cpu') as obj:
+            for name in obj.keys():
+                if name in weights or len(weights)>=100_000:raise ValueError('duplicate or excessive tensor keys')
+                info=obj.get_slice(name);shape=info.get_shape();dtype=info.get_dtype()
+                if dtype not in ('F16','BF16','F32','F64','I64','I32','I16','I8','U8','BOOL') or len(shape)>8 or any(type(x) is not int or x<0 for x in shape):raise ValueError('tensor metadata')
+                elements+=math.prod(shape);weights[name]=f.name
+                if elements>4_000_000_000:raise ValueError('model parameter cap')
+        h=hashlib.sha256()
+        with f.open('rb') as stream:
+            for chunk in iter(lambda:stream.read(4*1024*1024),b''):h.update(chunk)
+        records.append({'name':f.name,'bytes':f.stat().st_size,'sha256':h.hexdigest()})
+    idx=path/'model.safetensors.index.json'
+    if idx.exists() or len(files)>1:
+        if not idx.is_file() or idx.is_symlink() or idx.stat().st_size>16*1024*1024:raise ValueError('shard index required')
+        mapping=json.loads(idx.read_bytes()).get('weight_map')
+        if mapping!=weights:raise ValueError('shard index does not match exact local tensors')
+    if elements<1:raise ValueError('empty model')
+    return {'parameter_elements':elements,'storage_bytes':size,'config_sha256':hashlib.sha256(config_bytes).hexdigest(),'files':records}
+
+
+def memory_admission(info,*,device,available_bytes=None):
+    """Conservative weight/loading estimate, not an allocator or hardware proof."""
+    import torch
+    if device not in ('cpu','cuda'):raise ValueError('device')
+    if available_bytes is None:
+        if device=='cuda':
+            if not torch.cuda.is_available():raise RuntimeError('CUDA unavailable')
+            available_bytes=torch.cuda.mem_get_info()[0]
+        else:
+            import psutil
+            available_bytes=psutil.virtual_memory().available
+            try:
+                limit=Path('/sys/fs/cgroup/memory.max').read_text().strip()
+                if limit!='max':available_bytes=min(available_bytes,max(0,int(limit)-int(Path('/sys/fs/cgroup/memory.current').read_text())))
+            except (OSError,ValueError):pass
+    if type(available_bytes) is not int or available_bytes<0 or type(info.get('parameter_elements')) is not int or not 1<=info['parameter_elements']<=4_000_000_000 or type(info.get('storage_bytes')) is not int or not 1<=info['storage_bytes']<=16_000_000_000:raise ValueError('memory admission metadata')
+    weights=info['parameter_elements']*(2 if device=='cuda' else 4)
+    # Weight conversion/loading, one microbatch, inference scratch and adapter.
+    # Actual activations depend on the model: caller must still enforce OS limits.
+    required=max(2*weights,weights+info['storage_bytes'])+256*1024*1024
+    if required>available_bytes*3//4:raise RuntimeError('memory admission rejected local model')
+    return {'admitted':True,'estimated_bytes':required,'available_bytes':available_bytes,'device':device,'microbatch':1}
+
+
 def load_local(path,*,device='cuda',rank=2,seed=42):
     """Operator-provided local model; no network or remote model code permitted."""
     import torch
     if device not in ('cpu','cuda') or device=='cuda' and not torch.cuda.is_available():raise RuntimeError('requested device unavailable')
     path=Path(path).resolve(strict=True)
-    files=tuple(path.glob('*.safetensors')) if path.is_dir() else ()
-    if not files or len(files)>128 or any(x.is_symlink() or not x.is_file() for x in files):raise ValueError('local safetensors model required')
-    size=sum(x.stat().st_size for x in files)
-    if not 0<size<=16_000_000_000:raise ValueError('local model byte cap')
-    if device=='cuda' and size*1.5>torch.cuda.mem_get_info()[0]:raise RuntimeError('insufficient free CUDA memory for local model')
+    manifest=model_manifest(path);memory_admission(manifest,device=device)
     from transformers import AutoModelForCausalLM,AutoTokenizer
     tok=AutoTokenizer.from_pretrained(str(path),trust_remote_code=False,local_files_only=True)
     ids=tuple(tok.encode(str(i),add_special_tokens=False) for i in range(6))
@@ -166,7 +239,9 @@ def load_local(path,*,device='cuda',rank=2,seed=42):
     # are rejected rather than relying only on their vocabulary.
     if not getattr(tok,'is_fast',False):raise ValueError('fast tokenizer required for contract')
     encoder_id=hashlib.sha256(tok.backend_tokenizer.to_str().encode()).hexdigest()
-    return Session(model,encode,tuple(x[0] for x in ids),encoder_id=encoder_id,device=device,rank=rank,seed=seed)
+    session=Session(model,encode,tuple(x[0] for x in ids),encoder_id=encoder_id,device=device,rank=rank,seed=seed)
+    session.microbatch=1;session.local_manifest=manifest
+    return session
 
 
 class OnlineCampaign:
@@ -174,7 +249,7 @@ class OnlineCampaign:
         if not isinstance(session,Session) or any(type(v) is not int for v in (rounds,batch,steps,seed)) or not 1<=rounds<=8 or not 1<=batch<=8 or not 1<=steps<=64 or not 0<=seed<2**32:raise ValueError('campaign bounds')
         self.path=Path(path);self.key=key;self.session=session;self.validation,self.retention=plasticity._prepare((validation,retention));self.excluded={_context(r['parent']) for r in (*self.validation,*self.retention)};self.store=CheckpointStore(path,key);self.rounds=rounds;self.batch=batch;self.steps=steps;self.seed=seed
         if _context(BASELINE) in self.excluded:raise ValueError('evaluation split contains seed')
-        root=Path(__file__).parent;self.contract=_digest([session.base_sha,session.encoder_id,session.action_ids,session.rank,session.device,rounds,batch,steps,seed,self.validation,self.retention,*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('llm_plasticity.py','plasticity.py','engine.py','annealed.py','safety_synthesis.py','interval_checker.py','modal.py')]])
+        root=Path(__file__).parent;self.contract=_digest([session.base_sha,session.encoder_id,session.action_ids,session.rank,session.device,session.microbatch,rounds,batch,steps,seed,self.validation,self.retention,*[hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('llm_plasticity.py','plasticity.py','engine.py','annealed.py','safety_synthesis.py','interval_checker.py','modal.py')]])
         if create:self.store.initialize({'contract':self.contract,'active':session.initial,'parents':[BASELINE],'rounds':0,'history':[],'spent_steps':0,'attempts':0,'pending':None,'rollbacks':0})
         self.inspect()
     def _load(self):

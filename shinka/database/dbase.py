@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass, field
 from functools import wraps
 from pathlib import Path
 import numpy as np
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, TYPE_CHECKING
 import math
 from .complexity import analyze_code_metrics
 from .parents import CombinedParentSelector
@@ -14,7 +14,8 @@ from .inspirations import CombinedContextSelector
 from .islands import CombinedIslandManager
 from .island_sampler import create_island_sampler, IslandSampler
 from .display import DatabaseDisplay
-from shinka.embed import EmbeddingClient
+if TYPE_CHECKING:
+    from shinka.embed import EmbeddingClient
 from shinka.defaults import default_archive_criteria
 
 logger = logging.getLogger(__name__)
@@ -375,7 +376,7 @@ class ProgramDatabase:
             f"Last iter: {self.last_iteration}. Best ID: {self.best_program_id}"
         )
 
-    def _ensure_embedding_client(self) -> Optional[EmbeddingClient]:
+    def _ensure_embedding_client(self) -> "Optional[EmbeddingClient]":
         """Create embedding client on demand.
 
         Returns:
@@ -389,6 +390,7 @@ class ProgramDatabase:
             return None
 
         try:
+            from shinka.embed import EmbeddingClient
             self.embedding_client = EmbeddingClient(model_name=self.embedding_model)
         except Exception as e:
             self._embedding_client_init_failed = True

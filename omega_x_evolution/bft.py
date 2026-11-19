@@ -158,11 +158,25 @@ def _valid(s,v,round):
     return v
 
 
+
+def timeout_quorum(s, votes, round):
+    """A timeout is not a vote for a block; quorum authorizes only round change."""
+    if type(round) is not int or not 0 <= round < MAX_ROUND-1 or type(votes) not in (list,tuple) or not len(s['members'])-s['faults'] <= len(votes) <= len(s['members']):
+        raise ValueError('timeout quorum unavailable')
+    seen=set()
+    for raw in votes:
+        b=_envelope(raw); who=b.get('voter')
+        if who not in s['members'] or who in seen or b != {**_header(s),'round':round,'phase':'timeout','voter':who}:
+            raise ValueError('timeout binding')
+        verify(who,b,raw['signature']);seen.add(who)
+    return {'round':round,'votes':sorted(votes,key=lambda v:v['body']['voter'])}
+
+
 class Replica:
     def __init__(self,path,key,genesis,identity,*,create=False):
         if not isinstance(genesis,Genesis) or not isinstance(identity,Identity) or identity.public not in genesis.eligible:raise ValueError('replica identity')
         self.path=Path(path).absolute();self.g=genesis;self.identity=identity;self.store=CheckpointStore(self.path,key)
-        if create:self.store.initialize({'genesis':genesis.id,'identity':identity.public,'state':initial(genesis),'round':0,'locked':None,'votes':{},'log':[]})
+        if create:self.store.initialize({'genesis':genesis.id,'identity':identity.public,'state':initial(genesis),'round':0,'locked':None,'votes':{},'timeouts':{},'log':[]})
         self._load()
     def _load(self):
         rev,d=self.store.load()
@@ -183,6 +197,26 @@ class Replica:
             if d['round']+1>=MAX_ROUND:raise ValueError('round budget exhausted')
             d['round']+=1;self.store.save(rev+1,d)
         return self.status()
+    def timeout_vote(self):
+        with _lock(self.path):
+            rev,d=self._load();self._active(d);r=d['round'];s=d['state']
+            if r>=MAX_ROUND-1:raise ValueError('round budget exhausted')
+            key=f'{r}:timeout';old=d['votes'].get(key)
+            if old is not None:return old
+            raw=_signed(self.identity,{**_header(s),'round':r,'phase':'timeout','voter':self.identity.public})
+            d['votes'][key]=raw;self.store.save(rev+1,d);return raw
+    def advance_certified(self,cert):
+        with _lock(self.path):
+            rev,d=self._load();self._active(d);r=d['round']
+            if type(cert) is not dict or set(cert)!={'round','votes'} or cert['round']!=r or cert!=timeout_quorum(d['state'],cert['votes'],r):raise ValueError('invalid timeout certificate')
+            d['timeouts'][str(r)]=cert;d['round']+=1;self.store.save(rev+1,d)
+        return self.status()
+    def view(self,height,round):
+        if type(height) is not int or not 1<=height<=MAX_HEIGHT or type(round) is not int or not 0<=round<MAX_ROUND:raise ValueError('view bounds')
+        d=self.inspect();s=d['state']
+        if height<s['height']:return {'commit':d['log'][height-1],'timeout_vote':None,'timeout_certificate':None}
+        if height>s['height']:return {'commit':None,'timeout_vote':None,'timeout_certificate':None}
+        return {'commit':None,'timeout_vote':d['votes'].get(f'{round}:timeout'),'timeout_certificate':d['timeouts'].get(str(round))}
     def propose(self,block,statuses):
         with _lock(self.path):
             rev,d=self._load();self._active(d);s=d['state'];r=d['round'];_apply(s,block)
@@ -237,7 +271,7 @@ class Replica:
                 return False
             out=_apply(s,block);_qc(s,pv,'prevote',value);_qc(s,pc,'precommit',value)
             if pv['round']!=pc['round']:raise ValueError('commit round mismatch')
-            d['log'].append({'block':block,'prevote':pv,'precommit':pc});d.update(state=out,round=0,locked=None,votes={});self.store.save(rev+1,d);return True
+            d['log'].append({'block':block,'prevote':pv,'precommit':pc});d.update(state=out,round=0,locked=None,votes={},timeouts={});self.store.save(rev+1,d);return True
     def sync(self,records):
         if type(records) is not list or len(records)>MAX_HEIGHT:raise ValueError('sync bounds')
         for r in records:self.commit(r['block'],r['prevote'],r['precommit'])

@@ -28,3 +28,5 @@ The upstream authors' documentation is preserved in the [ShinkaEvolve guide](ups
 The v35.1 patch closes the bounded formal-safety acceptance requirements 1–4, without adding a roadmap stage. See [formal safety closure](omega/FORMAL_SAFETY_CLOSURE.md).
 
 The v35.2 corrective patch extends the existing review requirements 5–12; see [implemented contracts and outstanding acceptance](omega/REMAINING_REQUIREMENTS_CLOSURE.md). No new roadmap stage.
+
+The v35.3 corrective release extends [residual acceptance gates](omega/RESIDUAL_ACCEPTANCE.md). No new roadmap stage.
