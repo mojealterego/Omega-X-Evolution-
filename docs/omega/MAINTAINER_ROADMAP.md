@@ -16,9 +16,9 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v30 | Code epigenetics | 13 | Implemented bounded reversible functional activation in swarm; real host telemetry and scripted stress/recovery; mandatory gates always active |
 | v31 | Real-time neurosymbolic formal verification (Lean/Isabelle) | 13 | Implemented constructive modular u16 certificates and separate checker, optional generated Lean theorem adapter; physical Lean/Isabelle verification open |
 | v32 | Neuro-Symbolic Swarm | 13 | Implemented signed one-shot n-f quorum partition, durable vote/execution locks and local-process peer negotiation; external multi-host and consensus liveness open |
-| v33 | Zero-Shot Axiomatic Discovery | 13 | Open; conjecture generation, counterexample search, consistency constraints and bounded proof; no claim of discovering real physical laws without experiments |
-| v34 | On-the-Fly Weight Plasticity | 13 | Open; finite authorized LoRA/training budget, isolated evaluation and rollback |
-| v35 | Autonomous Infrastructure Orchestration | 13 | Open; allowlisted, budget-capped resource lifecycle, explicit authorization for external resource allocation, stop and recovery; no uncontrolled propagation or infinite resource consumption |
+| v33 | Zero-Shot Axiomatic Discovery | 13 | Implemented grammar conjectures, checked modular identities, counterexamples, exhaustive finite algebra tables; general axiomatic discovery open |
+| v34 | On-the-Fly Weight Plasticity | 13 | Implemented authorized rank-1/2 LoRA on frozen contextual mutation router, verified trajectories, validation/retention gate, durable budget and rollback; large-model adaptation open |
+| v35 | Autonomous Infrastructure Orchestration | 13 | Implemented bounded local Linux job dispatcher, durable reservations, OS resource limits, stop and crash recovery; cloud allocation and multi-host acceptance open |
 | v36 | Green Computing (energy/carbon metrics) | 1 | Open; measured or clearly estimated energy, uncertainty and hardware/intensity provenance, correct units and comparable workload profiles |
 
 These are distinct acceptance gates, not promises of physical validation, consciousness, mathematical completeness or exponential speedup. No automatic changes to evaluator authorization, safety policy, external infrastructure or financial limits. The existing closure register retains infrastructure and upstream dependency blockers.

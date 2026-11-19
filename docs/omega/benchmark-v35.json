@@ -1,0 +1,249 @@
+{
+  "discovery": {
+    "seed": 42,
+    "budget": 256,
+    "grammar_programs": 411,
+    "proposals": 256,
+    "proved": 46,
+    "refuted": 96,
+    "unknown": 114,
+    "sample_proof": {
+      "left": [
+        "add",
+        [
+          "lit",
+          1
+        ],
+        [
+          "y"
+        ]
+      ],
+      "right": [
+        "add",
+        [
+          "y"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ],
+      "status": "proved",
+      "proof": {
+        "schema": "omega-u16-ring-proof-v1",
+        "left_sha256": "4e3fe830546c7064cbbabbc6bae44a02e9740b985f1d074100195f2ac2032366",
+        "right_sha256": "c9a12fe87f93dc8bfb731e2366ac7ce76b8721f60fb53f75b9d1adadb862a495",
+        "proved": true,
+        "left": [
+          [
+            [
+              0,
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1
+            ]
+          ]
+        ],
+        "right": [
+          [
+            [
+              0,
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1
+            ]
+          ]
+        ],
+        "domain_size": 4294967296,
+        "reason": "equal modular polynomial"
+      }
+    },
+    "sample_counterexample": {
+      "left": [
+        "x"
+      ],
+      "right": [
+        "and",
+        [
+          "lit",
+          1
+        ],
+        [
+          "x"
+        ]
+      ],
+      "status": "refuted",
+      "counterexample": [
+        2,
+        0,
+        2,
+        0
+      ]
+    },
+    "replay_verified": true
+  },
+  "finite_algebra": {
+    "order": 3,
+    "examined": 19683,
+    "exhaustive": true,
+    "groups": 3,
+    "associative": 113
+  },
+  "plasticity": {
+    "fit": {
+      "schema": "omega-router-lora-v1",
+      "base_sha256": "bd660858e989ff873799b088b0b65a0dfc1d5f605866b2bdfbcf2aade2acedde",
+      "rank": 2,
+      "steps": 400,
+      "trainable_parameters": 24,
+      "frozen_parameters": 54,
+      "train_before": 0.022989274911799508,
+      "train_after": 0.02027543417387343,
+      "validation_before": 0.019190675032485525,
+      "validation_candidate": 0.018649543685522067,
+      "retention_before": 0.011739895469823979,
+      "retention_candidate": 0.011205198351695858,
+      "retention_base": 0.011739895469823979,
+      "selected_validation": 0.018649543685522067,
+      "promoted": true,
+      "adapter": {
+        "a": [
+          [
+            0.017407530875360018,
+            -0.011369163053803878
+          ],
+          [
+            0.1862287114809528,
+            0.03689351193345266
+          ],
+          [
+            -0.2439935961613709,
+            0.09879257224825312
+          ],
+          [
+            0.286041776412444,
+            0.051969673757017866
+          ],
+          [
+            0.158222357485436,
+            -0.015140440701573804
+          ],
+          [
+            -0.03604200692154561,
+            0.08558789326009647
+          ]
+        ],
+        "b": [
+          [
+            -0.1439250016028954,
+            -0.1865340484582212,
+            -0.16207635372895246,
+            -0.1571782289398998,
+            -0.2456905519268581,
+            -0.11043784712813266
+          ],
+          [
+            0.003985265258181119,
+            0.004142568868274626,
+            0.0031988357051433176,
+            0.003067909781099574,
+            0.006182090823847937,
+            0.0012929369271703433
+          ]
+        ]
+      },
+      "candidate_sha256": "a33b0ee65d13cdaf87273478388e688871fbc1be2869581766f60c0857dff418",
+      "split_sha256": "5eed795060e6b63b72d55bdfad1908a9ffd443c7fed9cef3ae40234c7d33b449"
+    },
+    "test": {
+      "base_mse": 0.010138534453084803,
+      "adapter_mse": 0.008670980345100799,
+      "rows": 36
+    },
+    "proposal": {
+      "id": "plastic-42",
+      "island": 0,
+      "parent_id": "parent",
+      "parent": "-(x+y)",
+      "child": "-(x+y+1.088*(x-y)*(x-y)/(0.0175+x*y)+1.153)",
+      "action": 4,
+      "accepted": true,
+      "quality": 0.7918294353246085,
+      "baseline": 0.5591341064073991,
+      "stage": 3,
+      "proposal_seed": 1181241943,
+      "reward": 0.23269532891720934
+    },
+    "rows_per_split": [
+      36,
+      36,
+      36,
+      36
+    ],
+    "rollback_verified": true,
+    "used_steps_after_rollback": 400
+  },
+  "infrastructure": {
+    "reserved_cpu_seconds": 15,
+    "peak_parallel": 2,
+    "unique_child_processes": 3,
+    "jobs": [
+      {
+        "kind": "axioms",
+        "status": "succeeded",
+        "exit_code": 0,
+        "wall_seconds": 1.053034683000078
+      },
+      {
+        "kind": "scheduler",
+        "status": "succeeded",
+        "exit_code": 0,
+        "wall_seconds": 0.906038553000144
+      },
+      {
+        "kind": "plasticity",
+        "status": "succeeded",
+        "exit_code": 0,
+        "wall_seconds": 1.195883712000068
+      }
+    ],
+    "idempotent_replay": true,
+    "stop_marker": true
+  }
+}

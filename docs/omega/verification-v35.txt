@@ -1,0 +1,21 @@
+OMEGA-X Evolution 0.35.0.dev1 — verification v33–v35
+Base main: fe5a70821d64664fde72db04ef7a919e1cb59e3b; tree 6103a94d8cc7abb03222b00af0d888aecf718096
+Base ZIP SHA-256 d5198697ecb1dc7159e190cc27007d24f45948ffbe9508414bed81ffd2fd537b; all 490 tracked Git blobs matched before edits.
+RED: python -m pytest -q tests/test_omega_v35.py — initial collection failed on missing axioms module.
+REGRESSION: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q tests/test_omega*.py — 260 passed in 59.02s, exit 0, includes all 15 new tests.
+POST-METADATA GREEN: same thread limits, python -m pytest -q tests/test_omega_v35.py tests/test_omega_identity.py — 22 passed in 16.11s, exit 0.
+HARDENING: python scripts/verify_hardening.py — 38 passed in 3.96s, exit 0 (existing isolated dependency shim).
+FULL UPSTREAM: python -m pytest -q — 72 collection errors in 4.58s, exit 2. Missing upstream dependencies remain, not suppressed.
+COMPILE: python -m compileall -q omega_x_evolution tests scripts/benchmark_v35.py — exit 0.
+METADATA: version 0.35.0.dev1; TOML parsed, all 33 canonical CLI entry points imported and callable. Axioms, authorized plasticity and infrastructure help CLI smoke exit 0.
+BENCHMARK: PYTHONPATH=. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python scripts/benchmark_v35.py — exit 0, output benchmark-v35.json.
+V33: seed42, 256 grammar proposals from 411 programs, 46 constructive proofs, 96 concrete counterexamples, 114 unknown. Exact report replay and proof checking. Order-3 finite algebra: 19683/19683 labeled operation tables, 113 associative, 3 groups. Z3 optional bitvector proof verified in test; unknown not promoted. Graph publication idempotent. No new physical laws or universal theorem prover claim.
+V34: rank2 adapter (24 trainable weights, 54 frozen base weights), 400 actual CPU update steps, 36 rows each of train/validation/retention/test. Validation MSE .0191906750 -> .0186495437, retention .0117398955 -> .0112051984, final test .0101385345 -> .0086709803. Fixed base digest, authenticated state, charged idempotent update, rollback retains 400 consumed steps. Real cluster trajectory import, score and proposal reconstruction, split collision rejection, interrupted update accounting. Small contextual router, not large LLM LoRA.
+V35: local Linux subprocesses; three workloads, three distinct PIDs, max parallelism 2 observed, 15 CPU seconds reserved (not actual consumption), all three exit 0. Replay identical, stop marker persistent. Tests actually stop live batch, kill coordinator, observe child death and recover charged interrupted work. Kernel direct-child CPU/address-space/file limits and wall time; no external cloud, no process-tree resource isolation or multi-host claim. No paid API or Actions activation.
+ENV: 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0] Linux-6.18.57-x86_64-with-glibc2.41 NumPy 2.3.5
+SHA256 5436d5837938e35667e0c888137c3c811c4ea56725640d3e4be059de913cedc5 omega_x_evolution/axioms.py
+SHA256 eca4cfa1c70bf7a6f291a4a87862f099558e7dc05032831ceb84f0f4dbbec168 omega_x_evolution/plasticity.py
+SHA256 539d5a8e5c0119a3feea3ffe56e11f1ed633fdcb97262e4c3db3260999eb78c9 omega_x_evolution/infrastructure.py
+SHA256 4de0f6e2576a38fce239d588b431e2d2e342e5580b9afb2320cee2340aee6414 tests/test_omega_v35.py
+SHA256 62e51a41f2246b7dc8ddafb511d79bdd11e26369e40547cbf6437237d226f302 scripts/benchmark_v35.py
+SHA256 dfa3bf6ab594ecb54d84257564b6802bec4e7ad3077acf5be8a00bf68aa806d7 docs/omega/benchmark-v35.json
