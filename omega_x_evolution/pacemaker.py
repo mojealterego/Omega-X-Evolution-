@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 import time
 from concurrent.futures import ThreadPoolExecutor
-from .bft import Replica, MAX_HEIGHT, round_limit, leader, make_block, quorum, recover_ops, timeout_quorum, _header, _vote_body, _valid
+from .bft import Replica, MAX_HEIGHT, round_limit, leader, make_block, quorum, recover_ops, timeout_quorum, _header, _vote_body, _valid, _qc, _apply, _envelope
 from .bft_transport import _dispatch, _rpc
 from .federation import digest,verify
 from .mesh import Endpoint,_transport
@@ -42,6 +42,38 @@ class Pacemaker:
                 try:out[p]=f.result()
                 except _ERRORS:continue
         return out
+    def _recover_commit(self,s,views):
+        """Any replica can reassemble a quorum, without trusting the leader.
+
+        Hints only select peers to query; signatures, block replay, quorum and
+        scope are checked locally. Keep at most one vote per eligible voter.
+        """
+        peers=tuple(who for who,v in views.items() if who in s['members'] and
+                    isinstance(v,dict) and type(v.get('precommit_round')) is int and
+                    0<=v['precommit_round']<round_limit(s))
+        if len(peers)<len(s['members'])-s['faults']:return False
+        groups={}
+        for who,row in self._gather(peers,'commit_evidence',[s['height']]).items():
+            try:
+                if type(row) is not dict or set(row)!={'vote','lock'}:continue
+                vote=row['vote'];body=_envelope(vote);lock=row['lock']
+                if type(lock) is not dict or set(lock)!={'block','qc'}:continue
+                block=lock['block'];qc=lock['qc'];value=digest(block);r=body['round']
+                if body!=_vote_body(s,r,'precommit',value,who):continue
+                verify(who,body,vote['signature']);_apply(s,block)
+                _qc(s,qc,'prevote',value)
+                if qc['round']!=r:continue
+                group=groups.setdefault((r,value),(block,qc,[]));group[2].append(vote)
+            except _ERRORS:continue
+        for _,(block,pv,votes) in sorted(groups.items(),reverse=True):
+            try:
+                pc=quorum(s,votes,phase='precommit')
+                if self.replica.commit(block,pv,pc):
+                    self._gather(tuple(x for x in s['eligible'] if x!=self.replica.identity.public),'commit',[block,pv,pc])
+                    return True
+            except _ERRORS:continue
+        return False
+
     def tick(self,ops=None):
         d=self._reset();s=d['state'];h,r=self.marker;me=self.replica.identity.public
         if h>MAX_HEIGHT:return {'status':'height-limit','height':h,'round':r}
@@ -54,6 +86,8 @@ class Pacemaker:
                     if self.replica.commit(c['block'],c['prevote'],c['precommit']):
                         self._reset();return report('caught-up')
             except _ERRORS:continue
+        if self._recover_commit(s,views):
+            self._reset();return report('recovered-commit')
         if me not in s['members']:return report('observer')
         if r<round_limit(s)-1:
             # Advanced peers retain the signed certificate; lagging peers can

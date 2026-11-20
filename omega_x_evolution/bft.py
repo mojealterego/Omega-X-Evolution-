@@ -186,7 +186,7 @@ class Replica:
     def __init__(self,path,key,genesis,identity,*,create=False):
         if not isinstance(genesis,Genesis) or not isinstance(identity,Identity) or identity.public not in genesis.eligible:raise ValueError('replica identity')
         self.path=Path(path).absolute();self.g=genesis;self.identity=identity;self.store=CheckpointStore(self.path,key)
-        if create:self.store.initialize({'genesis':genesis.id,'identity':identity.public,'state':initial(genesis),'round':0,'locked':None,'votes':{},'timeouts':{},'log':[]})
+        if create:self.store.initialize({'genesis':genesis.id,'identity':identity.public,'state':initial(genesis),'round':0,'locked':None,'last_precommit':None,'votes':{},'timeouts':{},'log':[]})
         self._load()
     def _load(self):
         rev,d=self.store.load()
@@ -256,7 +256,18 @@ class Replica:
         if height<s['height']:return {'commit':d['log'][height-1],'timeout_vote':None,'timeout_certificate':None,'latest_timeout_certificate':None}
         if height>s['height']:return {'commit':None,'timeout_vote':None,'timeout_certificate':None,'latest_timeout_certificate':None}
         latest=max(d['timeouts'],key=int,default=None)
-        return {'commit':None,'timeout_vote':d['votes'].get(f'{round}:timeout'),'timeout_certificate':d['timeouts'].get(str(round)),'latest_timeout_certificate':d['timeouts'].get(latest)}
+        return {'commit':None,'timeout_vote':d['votes'].get(f'{round}:timeout'),'timeout_certificate':d['timeouts'].get(str(round)),'latest_timeout_certificate':d['timeouts'].get(latest),'precommit_round':d['last_precommit']['body']['round'] if d.get('last_precommit') is not None else None}
+    def commit_evidence(self, height):
+        """Expose only the latest durable signed precommit and its matching lock.
+
+        A round change retains this evidence, but a height change clears it.
+        Consumers independently verify both certificates before committing.
+        """
+        if type(height) is not int or not 1<=height<=MAX_HEIGHT:raise ValueError('evidence height')
+        d=self.inspect()
+        if d['state']['height']!=height or d.get('last_precommit') is None:return None
+        return {'vote':d['last_precommit'],'lock':d['locked']}
+
     def propose(self,block,statuses):
         with _lock(self.path):
             rev,d=self._load();self._active(d);s=d['state'];r=d['round'];_apply(s,block)
@@ -282,7 +293,8 @@ class Replica:
             if old['body']!=body:raise ValueError('durable vote conflict')
             return old
         raw=_signed(self.identity,body);d['votes'][key]=raw
-        if lock is not None:d['locked']=lock
+        if lock is not None:
+            d['locked']=lock;d['last_precommit']=raw
         self.store.save(rev+1,d);return raw
     def prevote(self,proposal):
         with _lock(self.path):
@@ -311,7 +323,7 @@ class Replica:
                 return False
             out=_apply(s,block);_qc(s,pv,'prevote',value);_qc(s,pc,'precommit',value)
             if pv['round']!=pc['round']:raise ValueError('commit round mismatch')
-            d['log'].append({'block':block,'prevote':pv,'precommit':pc});d.update(state=out,round=0,locked=None,votes={},timeouts={});self.store.save(rev+1,d);return True
+            d['log'].append({'block':block,'prevote':pv,'precommit':pc});d.update(state=out,round=0,locked=None,last_precommit=None,votes={},timeouts={});self.store.save(rev+1,d);return True
     def sync(self,records):
         if type(records) is not list or len(records)>MAX_HEIGHT:raise ValueError('sync bounds')
         for r in records:self.commit(r['block'],r['prevote'],r['precommit'])

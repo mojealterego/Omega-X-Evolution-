@@ -1,0 +1,55 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+____________ test_terminal_quorum_survives_leader_crash_and_restart ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_terminal_quorum_survives_0')
+
+    def test_terminal_quorum_survives_leader_crash_and_restart(tmp_path):
+        nodes, state, r, dead, live, block = prepare(tmp_path, terminal=True)
+        for k in live:
+            n = nodes[k]
+            nodes[k] = Replica(n.path, b'k'*32, n.g, n.identity)
+        def call(peer, op, args):
+            if peer == dead:
+                raise OSError('leader vanished before publishing commit')
+            return _dispatch(nodes[peer], op, args)
+        clock = [0.]
+        d = Pacemaker(nodes[live[0]], call, clock=lambda:clock[0], base_timeout=1.)
+        clock[0] = 2.
+>       assert d.tick()['status'] == 'recovered-commit'
+E       AssertionError: assert 'waiting-leader' == 'recovered-commit'
+E         
+E         - recovered-commit
+E         + waiting-leader
+
+tests/test_omega_precommit_recovery.py:39: AssertionError
+__________ test_timeout_transition_preserves_unpublished_certificate ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_timeout_transition_preser0')
+
+    def test_timeout_transition_preserves_unpublished_certificate(tmp_path):
+        nodes, state, r, dead, live, block = prepare(tmp_path)
+        cert = timeout_quorum(state, [nodes[k].timeout_vote() for k in live], r)
+        for k in live:
+            nodes[k].advance_certified(cert)
+        def call(peer, op, args):
+            if peer == dead:
+                raise OSError('unreachable')
+            return _dispatch(nodes[peer], op, args)
+>       assert Pacemaker(nodes[live[0]], call, clock=lambda:0.).tick()['status'] == 'recovered-commit'
+E       AssertionError: assert 'committed' == 'recovered-commit'
+E         
+E         - recovered-commit
+E         + committed
+
+tests/test_omega_precommit_recovery.py:53: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_precommit_recovery.py::test_terminal_quorum_survives_leader_crash_and_restart - AssertionError: assert 'waiting-leader' == 'recovered-commit'
+  
+  - recovered-commit
+  + waiting-leader
+FAILED tests/test_omega_precommit_recovery.py::test_timeout_transition_preserves_unpublished_certificate - AssertionError: assert 'committed' == 'recovered-commit'
+  
+  - recovered-commit
+  + committed
+2 failed, 1 passed in 1.03s

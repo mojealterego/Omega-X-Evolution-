@@ -59,3 +59,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v36.4 native checkpoint increment 488→500:** [build and replay evidence](NATIVE_STD_BVDECIDE_500.md). 92 additional pinned sources, 12 new compiled modules, 500 total; verified reconstruction and six native proof/checker replays. Full elaborator remains open; no physical/hardware or external audit prerequisite.
+
+
+**v32 corrective — leader-independent precommit recovery:** [native fault/restart and authenticated RPC evidence](BFT_PRECOMMIT_RECOVERY.md). Reproduced unpublished-quorum deadlock fixed, including terminal round, durable receipt after certified round change, signature/scope rejection and actual local RPC. 38 targeted tests passed. This is a distinct recovery property, not unconditional liveness; GATE-09 remains open for residual mandatory obligations.
