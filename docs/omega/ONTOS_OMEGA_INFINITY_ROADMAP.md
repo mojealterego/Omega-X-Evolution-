@@ -215,3 +215,6 @@ Następny etap nowej linii: v49 (odzysk i kontrola manifestu) oraz v37 (testbed)
 
 
 **v46–v48 — audyt statystyczny, skończony IR i kampania referencyjna:** [implementacja i TDD](ONTOS_V46_V48_INCREMENT.md). 40 nowych testów PASS, dokładny null z 4096 ścieżek, pełne sprawdzenie i4 na 256 parach, 30 nasion × 4 stałe taśmy × 240 kroków = 28 800 kroków, 20 dev / 10 holdout. Zgodność z przypiętym v37 (1788 poprawnych i 678 OOD, SHA śladów). **TESTED wyłącznie ograniczone podkontrakty**, całość v46–v48 OPEN: brak natywnego MLIR/egglog/Rust/WASI, pełnego PACE/GSAI/SAE i adaptacyjnej ewaluacji L7. Brak zmiany praw, evaluatorów i istniejącego GATE-09.
+
+
+**Phase0 v49–v51 (2026-11-20) — [kod i dowody](ONTOS_V49_V51_PHASE0.md):** 33/33 nazw źródeł zidentyfikowanych w [rejestrze](V49_SOURCE_MANIFEST.json), 0/33 faktycznych plików źródłowych odzyskanych/weryfikowanych, wszystkie wpisy RESEARCH/UNKNOWN (brak automatycznej promocji). v49: kontrolowane bajty+SHA/ścieżki/licencja TESTED; v50: podłoga posterior ε=1e-4 po normalizacji, abstencja i 30-seed replay TESTED; v51: kwarantanna, korekty bitemporalne, źródła/tenant/grupy TESTED. **51 nowych + 40 regresyjnych = 91 PASS w lokalnym wycinku**, pełna regresja/integracja nieuruchomione. Szersze v49–v51 pozostają OPEN, historyczny ograniczony GATE-09 PASS bez zmian. Następne v52–v54.

@@ -1,0 +1,246 @@
+{
+  "base_commit": "4bdfa3bf7df51aeb80ce85e20477f8ce35b86491",
+  "entries": [
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "README.md",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "pyproject.toml",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "requirements-lock.txt",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "config/ontos_l12_config.json",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "schemas/telemetry_schema.json",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/__init__.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/types.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/poly_interface.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/cognitive_substrate.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/living_memory.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/causal_engine.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/thermodynamics.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/immune_kernel.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/uir_evolution.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "src/omega_ontos/organism.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "simulators/__init__.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "simulators/environments.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "simulators/hardware_substrates.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "benchmarks/__init__.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "benchmarks/run_benchmarks.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "tests/__init__.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "tests/test_ontos_suite.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "interfaces/wit/ontos_poly.wit",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "runtime/rust_zenoh_core/Cargo.toml",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "runtime/rust_zenoh_core/src/main.rs",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "compiler/mlir/ontos_uir.mlir",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "compiler/egglog/uir_eqsat.egg",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "hardware/rtl/static_shell_guard.sv",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "hardware/rtl/dfx_cfc_accel.sv",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "formal/lean4/OntosInvariants.lean",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "formal/smt/hyperltl_noninterference.smt2",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "scripts/compute_manifest_sha256.py",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    },
+    {
+      "decision": "RESEARCH",
+      "license_id": "UNKNOWN",
+      "path": "scripts/verify_all.sh",
+      "rationale": "Await source byte recovery and license review; no execution.",
+      "sha256": null
+    }
+  ],
+  "entry_digest_sha256": "4b704d592923a0e125a2df02affcf21444ae99c57559e58b0991641a7980d09c",
+  "notes": [
+    "This file contains no source bytes, secrets, or executable code.",
+    "No source-license or runtime integration approval follows from this registry.",
+    "All dispositions are RESEARCH until source bytes, licensing and independent tests are checked."
+  ],
+  "schema": "ontos-source-register-v49-v1",
+  "source_sha256": "95c2794d9a3b5e237781b296b2aa6da0b6cdb174d6a73e5f754f48e7264edc36",
+  "source_title": "OMEGA-X ONTOS (Generacje L8-L12 / Omega-infinity), 91 pages, Argon source-reported",
+  "status": "SOURCE_REGISTERED_NOT_RECOVERED"
+}
