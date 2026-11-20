@@ -88,3 +88,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **RSI L5+ supplemental input:** [source register](RSI_L5_SOURCE_REGISTER.md). **v25 corrective:** [transfer boundary TDD](V25_MEMORY_BOUNDS.md). 78 focused tests passed, 8-record transfer and 64-record capacity unchanged; global Ray memory and full regression remain open. Existing GATE-09 scope unchanged.
+
+
+**v27 — exact classical QUBO swap delta:** [evidence](V27_QUBO_DELTA.md). 36 new targeted tests and 11 existing Ocean contract tests PASS; exact seeded reference parity and reduced pair work. Native Ocean SDK and full regression remain open. Existing GATE-09 scope unchanged.

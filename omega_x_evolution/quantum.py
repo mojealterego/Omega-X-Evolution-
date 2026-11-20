@@ -75,7 +75,14 @@ def anneal(p,*,seed=42,steps=512):
     t=time.perf_counter();rng=random.Random(seed);x=tuple(sorted(rng.sample(range(p.n),p.k)));e=p.energy(x);best=(e,x);work=1
     if p.k<p.n:
         for s in range(steps):
-            out=rng.choice(x);inc=rng.choice([i for i in range(p.n) if i not in x]);y=tuple(sorted(set(x)-{out}|{inc}));v=p.energy(y);work+=1
+            out=rng.choice(x);inc=rng.choice([i for i in range(p.n) if i not in x]);y=tuple(sorted(set(x)-{out}|{inc}))
+            # At k>=5 the exact swap delta uses fewer pair terms than recomputation.
+            # Retained pairs cancel; integer arithmetic preserves the acceptance path.
+            if p.k>=5:
+                v=e+p.quality[out]-p.quality[inc]+sum(p.diversity(out,j)-p.diversity(inc,j) for j in x if j!=out)
+            else:
+                v=p.energy(y)
+            work+=1
             temp=500*(.001**(s/max(1,steps-1)))
             if v<=e or rng.random()<math.exp((e-v)/temp):x,e=y,v
             best=min(best,(e,x))
