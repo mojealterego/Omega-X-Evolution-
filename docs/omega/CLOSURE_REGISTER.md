@@ -91,3 +91,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v27 — exact classical QUBO swap delta:** [evidence](V27_QUBO_DELTA.md). 36 new targeted tests and 11 existing Ocean contract tests PASS; exact seeded reference parity and reduced pair work. Native Ocean SDK and full regression remain open. Existing GATE-09 scope unchanged.
+
+
+**ONTOS L7 — supplemental research roadmap (v37–v48):** [source register, dependencies, acceptance criteria and source review](ONTOS_L7_ROADMAP.md). All 12 new stages OPEN; Argon/source-reported tests retained as provenance, not fresh integration evidence. Existing v1–v36 evidence, residuals, bounded GATE-09 release acceptance and authorization scope unchanged. L7 work does not supersede the fixed evaluator or grant runtime autonomy.
