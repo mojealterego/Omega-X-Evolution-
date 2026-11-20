@@ -109,3 +109,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v43/v46 — independent zero-gradient and statistical audit:** [focused evidence](ONTOS_V43_V46_ANALYTIC_AUDIT.md). Nine new tests PASS; 30 synthetic seeds replay identically; exact 4096-path null enumeration exposes wealth-floor counterexample. v43 and v46 sub-contracts TESTED only, actual frozen-model integration and remaining v46 diagnostics OPEN. v47/v48 not completed. No private source publication, operational change or new GATE-09 acceptance. Full repository regression unavailable.
+
+
+**v46–v48 — audyt statystyczny, skończony IR i kampania referencyjna:** [implementacja i TDD](ONTOS_V46_V48_INCREMENT.md). 40 nowych testów PASS, dokładny null z 4096 ścieżek, pełne sprawdzenie i4 na 256 parach, 30 nasion × 4 stałe taśmy × 240 kroków = 28 800 kroków, 20 dev / 10 holdout. Zgodność z przypiętym v37 (1788 poprawnych i 678 OOD, SHA śladów). **TESTED wyłącznie ograniczone podkontrakty**, całość v46–v48 OPEN: brak natywnego MLIR/egglog/Rust/WASI, pełnego PACE/GSAI/SAE i adaptacyjnej ewaluacji L7. Brak zmiany praw, evaluatorów i istniejącego GATE-09.
