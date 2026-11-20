@@ -52,3 +52,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **v36.4 v3.0 corrective continuation:** [native checkpoint increment 470→488](NATIVE_STD_BVDECIDE_488.md): 66 pinned source files and 18 successfully compiled modules added, verified reconstruction and native replay. GATE-09 still not PASS; external infrastructure and certification are no longer prerequisites under v3.0.
+
+
+**v36.4 native checkpoint increment 488→500:** [build and replay evidence](NATIVE_STD_BVDECIDE_500.md). 92 additional pinned sources, 12 new compiled modules, 500 total; verified reconstruction and six native proof/checker replays. Full elaborator remains open; no physical/hardware or external audit prerequisite.

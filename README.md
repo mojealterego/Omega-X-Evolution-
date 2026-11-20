@@ -371,3 +371,6 @@ See [upstream changelog](CHANGELOG.md) and [contributing](CONTRIBUTING.md) for i
 **v36.3:** [Native Lean bootstrap and proof acceptance](docs/omega/NATIVE_LEAN_V363.md). Actual offline Lean 4.36.0-pre compiler built from upstream sources, 50-module portable proof runtime; extensional equations over BitVec 16 × BitVec 16 verified natively for tested additive cases, false equality rejected, shared proof adapter and replay. Full Std/CaDiCaL and Isabelle remain open. GATE-09 remains partially blocked.
 
 **v36.4:** [Native BitVec expansion and source inventory](docs/omega/NATIVE_BITVEC_V364.md). Kernel-checked lemma route spans all six u16 IR operators; 376 core tests passed on independent packaged runtime. 173-module upstream BitVec.Lemmas closure built; portable runtime and build cache preserved. Full BVDecide, Isabelle and other residual obligations remain open.
+
+
+**v36.4 native checkpoint increment 488→500:** [build and replay evidence](docs/omega/NATIVE_STD_BVDECIDE_500.md). 92 additional pinned sources, 12 new compiled modules, 500 total; verified reconstruction and six native proof/checker replays. Full elaborator remains open; no physical/hardware or external audit prerequisite.
