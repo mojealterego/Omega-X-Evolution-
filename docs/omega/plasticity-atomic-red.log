@@ -1,0 +1,114 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_reference_evaluation_failure_preserves_active_adapter __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4eb064a9e0>
+
+    def test_reference_evaluation_failure_preserves_active_adapter(monkeypatch):
+        import torch
+        torch.set_num_threads(1)
+        session=llm_plasticity.tiny_decoder()
+        with torch.no_grad():
+            for p in session.params.values(): p.add_(0.01)
+        active=session.snapshot()
+        assert active != session.initial
+        train,validation,retention,_=plasticity.fixture(42,groups=4)
+        original=session._mean_loss
+        def fail_at_reference(data):
+            if session.snapshot() == session.initial:
+                raise RuntimeError('injected reference evaluation failure')
+            return original(data)
+        monkeypatch.setattr(session,'_mean_loss',fail_at_reference)
+        with pytest.raises(RuntimeError,match='injected reference'):
+            session.fit(train[:4],validation[:4],retention[:4],steps=1)
+>       assert session.snapshot() == active
+E       AssertionError: assert {'q_proj.lora...pe': [24, 2]}} == {'q_proj.lora...pe': [24, 2]}}
+E         
+E         Differing items:
+E         {'q_proj.lora_b': {'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', 'shape': [24, 2]}} != {'q_proj.lora_b': {'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIz...M8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8', 'shape': [24, 2]}}
+E         {'q_proj.lora_a': {'data': 'V9qdPDetczzRkhM8+XusvN1N3juQREq8MMzhuU50g7yudfa7OhCHPH+bgLuM92W8HIPuu2dQt7vh7vu7jtb5O+KJhj...o5VN8kuxThDDxs3WK8S74OvJViEruur4w8PftQOzsbi7t1W0g7h9H9u1Mxf7wBICM85CQQvHP7xLvGwVC8B+atPBtJSrwu4Z+7', 'shape': [2, 24]}} != {'q_proj.lora_a': {'data': '3MXvPCDCyzzutJs86CA1vPx+iTwYthm7qMgcPCQjxrvMcCI7v/vYPJUSxzsEQYS78FUyO61dkDtmfhc7KGGQPGd12D...o8aj71Ow9cmDyIGXy7+MWoOsp8/jszm9482RVYPNmSvDvn7VU8GrkTO5K0truGe6M8MJGdOqGygjvwqjO7jNH/PETIGbvmzKc7', 'shape': [2, 24]}}
+E         {'v_proj.lora_b': {'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', 'shape': [24, 2]}} != {'v_proj.lora_b': {'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIz...M8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8', 'shape': [24, 2]}}
+E         {'v_proj.lora_a': {'data': 'hLgVvI6o17vviEw6CUysO7bnn7ukMUM89F0FvIwr8bt76GW8TsO8OeBmJrqvYt07jDKAuvAblzwZE0K8RK5iPE7FbD...K7h7+0vOwF9rvn6+M4if9duyyoW7xw0L+7uLKvO4noqzt3+To8bmEHOjfH8zs6zp27zfErvLTixTslF428JJ8HvICtWjw3cp47', 'shape': [2, 24]}} != {'v_proj.lora_a': {'data': 'YOhhOgwLYDuZnzA8Dv15PF7GpztXhLM8sMjzOhAFLTviIoS7JL0pPJxwGTwxRIk8uNATPHUH6Tx44PG6p0LDPCxOyD...o7BKhFvFBQIzviniU8UK7YO4hEX7uk3Yc7ZrB7PE7LeTxAaK88IU0sPFPdjjza36k7MKwBujJkgzyAruy7ML/hOkVCvzwmEHM8', 'shape': [2, 24]}}
+E         
+E         Full diff:
+E           {
+E               'q_proj.lora_a': {
+E         -         'data': '3MXvPCDCyzzutJs86CA1vPx+iTwYthm7qMgcPCQjxrvMcCI7v/vYPJUSxzsEQYS78FUyO61dkDtmfhc7KGGQPGd12DwJsQk8WbGkO8Dcazzcgh47ekGqPIaFkzywmNs8tLS6PHofvDzu7YM8AEO/PAbI+zuPrio8aj71Ow9cmDyIGXy7+MWoOsp8/jszm9482RVYPNmSvDvn7VU8GrkTO5K0truGe6M8MJGdOqGygjvwqjO7jNH/PETIGbvmzKc7',
+E         +         'data': 'V9qdPDetczzRkhM8+XusvN1N3juQREq8MMzhuU50g7yudfa7OhCHPH+bgLuM92W8HIPuu2dQt7vh7vu7jtb5O+KJhjwGMNG6u/yiu2sLkDumbPi766swPAI0AzwrrYk8XZJRPOpnVDykCcg79a5aPB3MF7uk8No5VN8kuxThDDxs3WK8S74OvJViEruur4w8PftQOzsbi7t1W0g7h9H9u1Mxf7wBICM85CQQvHP7xLvGwVC8B+atPBtJSrwu4Z+7',
+E                   'shape': [
+E                       2,
+E                       24,
+E                   ],
+E               },
+E               'q_proj.lora_b': {
+E         -         'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8',
+E         +         'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+E                   'shape': [
+E                       24,
+E                       2,
+E                   ],
+E               },
+E               'v_proj.lora_a': {
+E         -         'data': 'YOhhOgwLYDuZnzA8Dv15PF7GpztXhLM8sMjzOhAFLTviIoS7JL0pPJxwGTwxRIk8uNATPHUH6Tx44PG6p0LDPCxOyDzKE5g8+M8DPTGOeTx0olw8XIIDPAAaD7oInbo83aAHPFKoeTzuHS08Mq9pPEAGgTy4zGo7BKhFvFBQIzviniU8UK7YO4hEX7uk3Yc7ZrB7PE7LeTxAaK88IU0sPFPdjjza36k7MKwBujJkgzyAruy7ML/hOkVCvzwmEHM8',
+E         +         'data': 'hLgVvI6o17vviEw6CUysO7bnn7ukMUM89F0FvIwr8bt76GW8TsO8OeBmJrqvYt07jDKAuvAblzwZE0K8RK5iPE7FbDyLUAw8a7S1PE5uqzupLWM7uVIBu6rILLwFY1E8a7Hhuo+iqztCbhQ6ULCLO+tqvDu4R9K7h7+0vOwF9rvn6+M4if9duyyoW7xw0L+7uLKvO4noqzt3+To8bmEHOjfH8zs6zp27zfErvLTixTslF428JJ8HvICtWjw3cp47',
+E                   'shape': [
+E                       2,
+E                       24,
+E                   ],
+E               },
+E               'v_proj.lora_b': {
+E         -         'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8',
+E         +         'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+E                   'shape': [
+E                       24,
+E                       2,
+E                   ],
+E               },
+E           }
+
+tests/test_omega_plasticity_atomic.py:23: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_plasticity_atomic.py::test_reference_evaluation_failure_preserves_active_adapter - AssertionError: assert {'q_proj.lora...pe': [24, 2]}} == {'q_proj.lora...pe': [24, 2]}}
+  
+  Differing items:
+  {'q_proj.lora_b': {'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', 'shape': [24, 2]}} != {'q_proj.lora_b': {'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIz...M8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8', 'shape': [24, 2]}}
+  {'q_proj.lora_a': {'data': 'V9qdPDetczzRkhM8+XusvN1N3juQREq8MMzhuU50g7yudfa7OhCHPH+bgLuM92W8HIPuu2dQt7vh7vu7jtb5O+KJhj...o5VN8kuxThDDxs3WK8S74OvJViEruur4w8PftQOzsbi7t1W0g7h9H9u1Mxf7wBICM85CQQvHP7xLvGwVC8B+atPBtJSrwu4Z+7', 'shape': [2, 24]}} != {'q_proj.lora_a': {'data': '3MXvPCDCyzzutJs86CA1vPx+iTwYthm7qMgcPCQjxrvMcCI7v/vYPJUSxzsEQYS78FUyO61dkDtmfhc7KGGQPGd12D...o8aj71Ow9cmDyIGXy7+MWoOsp8/jszm9482RVYPNmSvDvn7VU8GrkTO5K0truGe6M8MJGdOqGygjvwqjO7jNH/PETIGbvmzKc7', 'shape': [2, 24]}}
+  {'v_proj.lora_b': {'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', 'shape': [24, 2]}} != {'v_proj.lora_b': {'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIz...M8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8', 'shape': [24, 2]}}
+  {'v_proj.lora_a': {'data': 'hLgVvI6o17vviEw6CUysO7bnn7ukMUM89F0FvIwr8bt76GW8TsO8OeBmJrqvYt07jDKAuvAblzwZE0K8RK5iPE7FbD...K7h7+0vOwF9rvn6+M4if9duyyoW7xw0L+7uLKvO4noqzt3+To8bmEHOjfH8zs6zp27zfErvLTixTslF428JJ8HvICtWjw3cp47', 'shape': [2, 24]}} != {'v_proj.lora_a': {'data': 'YOhhOgwLYDuZnzA8Dv15PF7GpztXhLM8sMjzOhAFLTviIoS7JL0pPJxwGTwxRIk8uNATPHUH6Tx44PG6p0LDPCxOyD...o7BKhFvFBQIzviniU8UK7YO4hEX7uk3Yc7ZrB7PE7LeTxAaK88IU0sPFPdjjza36k7MKwBujJkgzyAruy7ML/hOkVCvzwmEHM8', 'shape': [2, 24]}}
+  
+  Full diff:
+    {
+        'q_proj.lora_a': {
+  -         'data': '3MXvPCDCyzzutJs86CA1vPx+iTwYthm7qMgcPCQjxrvMcCI7v/vYPJUSxzsEQYS78FUyO61dkDtmfhc7KGGQPGd12DwJsQk8WbGkO8Dcazzcgh47ekGqPIaFkzywmNs8tLS6PHofvDzu7YM8AEO/PAbI+zuPrio8aj71Ow9cmDyIGXy7+MWoOsp8/jszm9482RVYPNmSvDvn7VU8GrkTO5K0truGe6M8MJGdOqGygjvwqjO7jNH/PETIGbvmzKc7',
+  +         'data': 'V9qdPDetczzRkhM8+XusvN1N3juQREq8MMzhuU50g7yudfa7OhCHPH+bgLuM92W8HIPuu2dQt7vh7vu7jtb5O+KJhjwGMNG6u/yiu2sLkDumbPi766swPAI0AzwrrYk8XZJRPOpnVDykCcg79a5aPB3MF7uk8No5VN8kuxThDDxs3WK8S74OvJViEruur4w8PftQOzsbi7t1W0g7h9H9u1Mxf7wBICM85CQQvHP7xLvGwVC8B+atPBtJSrwu4Z+7',
+            'shape': [
+                2,
+                24,
+            ],
+        },
+        'q_proj.lora_b': {
+  -         'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8',
+  +         'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+            'shape': [
+                24,
+                2,
+            ],
+        },
+        'v_proj.lora_a': {
+  -         'data': 'YOhhOgwLYDuZnzA8Dv15PF7GpztXhLM8sMjzOhAFLTviIoS7JL0pPJxwGTwxRIk8uNATPHUH6Tx44PG6p0LDPCxOyDzKE5g8+M8DPTGOeTx0olw8XIIDPAAaD7oInbo83aAHPFKoeTzuHS08Mq9pPEAGgTy4zGo7BKhFvFBQIzviniU8UK7YO4hEX7uk3Yc7ZrB7PE7LeTxAaK88IU0sPFPdjjza36k7MKwBujJkgzyAruy7ML/hOkVCvzwmEHM8',
+  +         'data': 'hLgVvI6o17vviEw6CUysO7bnn7ukMUM89F0FvIwr8bt76GW8TsO8OeBmJrqvYt07jDKAuvAblzwZE0K8RK5iPE7FbDyLUAw8a7S1PE5uqzupLWM7uVIBu6rILLwFY1E8a7Hhuo+iqztCbhQ6ULCLO+tqvDu4R9K7h7+0vOwF9rvn6+M4if9duyyoW7xw0L+7uLKvO4noqzt3+To8bmEHOjfH8zs6zp27zfErvLTixTslF428JJ8HvICtWjw3cp47',
+            'shape': [
+                2,
+                24,
+            ],
+        },
+        'v_proj.lora_b': {
+  -         'data': 'CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8CtcjPArXIzwK1yM8',
+  +         'data': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+            'shape': [
+                24,
+                2,
+            ],
+        },
+    }
+1 failed in 1.98s

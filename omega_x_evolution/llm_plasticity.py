@@ -151,7 +151,14 @@ class Session:
         if self.base_digest()!=self.base_sha:raise ValueError('base model changed')
         def losses():
             with torch.no_grad():return [self._mean_loss(d) for d in data]
-        before=losses();self.restore(self.initial);root=losses()[2];self.restore(prior)
+        before=losses()
+        # Reference evaluation temporarily replaces the active adapter. Restore
+        # it even if inference fails before the optimizer is constructed.
+        try:
+            self.restore(self.initial)
+            root=losses()[2]
+        finally:
+            self.restore(prior)
         opt=torch.optim.AdamW(list(self.params.values()),lr=learning_rate,weight_decay=0.)
         try:
             for _ in range(steps):

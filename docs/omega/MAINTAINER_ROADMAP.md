@@ -58,3 +58,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **v32 corrective — leader-independent precommit recovery:** [native fault/restart and authenticated RPC evidence](BFT_PRECOMMIT_RECOVERY.md). Reproduced unpublished-quorum deadlock fixed, including terminal round, durable receipt after certified round change, signature/scope rejection and actual local RPC. 38 targeted tests passed. This is a distinct recovery property, not unconditional liveness; GATE-09 remains open for residual mandatory obligations.
+
+
+**v34 corrective — failure-atomic adapter retention:** [implementation, TDD evidence and accepted formal scope](PLASTICITY_ATOMIC_RECOVERY.md). Active adapter now survives failure during reference inference; four focused training, microbatch and distributed numerical tests PASS. Previously verified native CaDiCaL + Isabelle-exported LRAT properties and Lean u16 proofs are explicitly PASS; do not reopen them or repeat the bootstrap. Full theory/elaborator compatibility is distinct and not asserted. GATE-09 is not unconditionally accepted.
