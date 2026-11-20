@@ -4,6 +4,7 @@ Classical reference and explicit, single-submission quantum adapter.
 from __future__ import annotations
 from dataclasses import dataclass
 from itertools import combinations
+from numbers import Integral
 import argparse
 import json
 import math
@@ -100,16 +101,21 @@ def hardware(p,sampler,*,authorized=False,reads=64):
 
 def dwave_sample(qubo,reads):
     """Opt-in Ocean adapter; operator supplies credentials and provider limits."""
+    if type(reads) is not int or not 1<=reads<=256:raise ValueError('quantum reads budget')
     from dwave.system import DWaveSampler, EmbeddingComposite
     with DWaveSampler(failover=False,request_timeout=15,polling_timeout=90,permissive_ssl=False) as sampler:
         samples=EmbeddingComposite(sampler).sample_qubo(qubo,num_reads=reads)
         # Resolve provider data before closing sampler. Never trust reported energy.
         result=[]
-        for r in samples.data(fields=['sample']):
-            if len(result)>=reads:raise ValueError('provider exceeded read cap')
+        for r in samples.data(fields=['sample','num_occurrences']):
+            count=r.num_occurrences
+            if isinstance(count,bool) or not isinstance(count,Integral) or count<=0:
+                raise ValueError('invalid quantum occurrence count')
+            if count>reads-len(result):raise ValueError('provider exceeded read cap')
             if any(v not in (0,1) for v in r.sample.values()):raise ValueError('invalid quantum binary sample')
             if set(r.sample)!={i for i,j in qubo if i==j}:raise ValueError('quantum variable mismatch')
-            result.append(tuple(int(i) for i,v in r.sample.items() if v==1))
+            selected=tuple(int(i) for i,v in r.sample.items() if v==1)
+            result.extend([selected]*int(count))
         return result
 
 

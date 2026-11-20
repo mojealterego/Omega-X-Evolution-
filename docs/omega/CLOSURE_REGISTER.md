@@ -80,3 +80,5 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v34 — native Llama-subset local checkpoint adaptation:** [strict admission, CPU reference and real training evidence](NATIVE_LLAMA_PLASTICITY_V34.md). PASS for the bounded native CPU backend, exact Safetensors admission, logits/parity reference, 1,045,824 frozen weights plus 4,032 LoRA parameters, durable campaign recovery and rollback. 17 targeted tests PASS. External billion-parameter pretrained checkpoint and full upstream Transformers compatibility remain unverified.
+
+**v27 — aggregated Ocean read accounting:** [corrective evidence](OCEAN_OCCURRENCES_V27.md). PASS for contract-simulated multiplicity and read-budget enforcement (11 focused tests); native SDK and fresh full regression remain open.
