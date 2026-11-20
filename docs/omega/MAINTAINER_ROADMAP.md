@@ -98,3 +98,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **v37–v39 bounded offline reference:** [implementation and test evidence](ONTOS_V37_V39_REFERENCE.md), [30-seed campaign](v37-campaign.json). 42 focused tests PASS, 7200 fixed-tape steps reproducible. v37 environment subset TESTED (full source reproduction OPEN); v38 finite thermodynamic-accounting contract PASS; v39 finite information diagnostics PASS (full integrated decision loop OPEN). No change to operational code, evaluator or existing GATE-09. Full repository regression unavailable. Historical OPEN labels remain historical; this entry governs the tested subsets.
+
+
+**v40–v42 — sampled numerical and finite logic reference:** [TDD and integration evidence](ONTOS_V40_V42_REFERENCE.md). 39 new tests plus 42 prior subset regressions PASS (81 total). v40 sampled CfC/CTM reference PASS, native compatibility OPEN; v41 bounded data repair/contraction and 15% reserve PASS, actual TAME competence measurements OPEN; v42 finite Poly/Heyting/NARS evidence contracts PASS, broader inference and authenticated provenance OPEN. No runtime capability changes. Existing bounded GATE-09 preserved. Full upstream regression unavailable. Next v43–v45; all earlier residuals retained.
