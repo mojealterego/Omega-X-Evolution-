@@ -1,0 +1,166 @@
+FFFFF.                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_cloud_rejects_security_override_after_reservation[container-security-patch0] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_cloud_rejects_security_ov0')
+location = 'container-security', patch = {'runAsNonRoot': False, 'runAsUser': 0}
+
+    @pytest.mark.parametrize('location,patch', [
+        ('container-security', {'runAsNonRoot': False, 'runAsUser': 0}),
+        ('container-security', {'seccompProfile': {'type': 'Unconfined'}}),
+        ('container-security', {'procMount': 'Unmasked'}),
+        ('pod-security', {'sysctls': [{'name': 'kernel.shm_rmid_forced', 'value': '1'}]}),
+        ('pod', {'shareProcessNamespace': True}),
+    ])
+    def test_cloud_rejects_security_override_after_reservation(tmp_path, location, patch):
+        class Provider:
+            namespace = 'omega-test'
+            identity = 'deterministic-admission-contract'
+            def create(self, body):
+                self.actual = mutated(body, location, patch)
+                return self.actual
+            def get(self, name):
+                return self.actual
+            def delete(self, name, uid):
+                pytest.fail('unverified workload must not be deleted')
+    
+        controller = CloudOrchestrator(tmp_path/'ledger.db', b'k'*32, policy(),
+                                       Provider(), ledger_id='b'*64, create=True)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_omega_cloud_security_context.py:43: Failed
+_ test_cloud_rejects_security_override_after_reservation[container-security-patch1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_cloud_rejects_security_ov1')
+location = 'container-security'
+patch = {'seccompProfile': {'type': 'Unconfined'}}
+
+    @pytest.mark.parametrize('location,patch', [
+        ('container-security', {'runAsNonRoot': False, 'runAsUser': 0}),
+        ('container-security', {'seccompProfile': {'type': 'Unconfined'}}),
+        ('container-security', {'procMount': 'Unmasked'}),
+        ('pod-security', {'sysctls': [{'name': 'kernel.shm_rmid_forced', 'value': '1'}]}),
+        ('pod', {'shareProcessNamespace': True}),
+    ])
+    def test_cloud_rejects_security_override_after_reservation(tmp_path, location, patch):
+        class Provider:
+            namespace = 'omega-test'
+            identity = 'deterministic-admission-contract'
+            def create(self, body):
+                self.actual = mutated(body, location, patch)
+                return self.actual
+            def get(self, name):
+                return self.actual
+            def delete(self, name, uid):
+                pytest.fail('unverified workload must not be deleted')
+    
+        controller = CloudOrchestrator(tmp_path/'ledger.db', b'k'*32, policy(),
+                                       Provider(), ledger_id='b'*64, create=True)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_omega_cloud_security_context.py:43: Failed
+_ test_cloud_rejects_security_override_after_reservation[container-security-patch2] _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_cloud_rejects_security_ov2')
+location = 'container-security', patch = {'procMount': 'Unmasked'}
+
+    @pytest.mark.parametrize('location,patch', [
+        ('container-security', {'runAsNonRoot': False, 'runAsUser': 0}),
+        ('container-security', {'seccompProfile': {'type': 'Unconfined'}}),
+        ('container-security', {'procMount': 'Unmasked'}),
+        ('pod-security', {'sysctls': [{'name': 'kernel.shm_rmid_forced', 'value': '1'}]}),
+        ('pod', {'shareProcessNamespace': True}),
+    ])
+    def test_cloud_rejects_security_override_after_reservation(tmp_path, location, patch):
+        class Provider:
+            namespace = 'omega-test'
+            identity = 'deterministic-admission-contract'
+            def create(self, body):
+                self.actual = mutated(body, location, patch)
+                return self.actual
+            def get(self, name):
+                return self.actual
+            def delete(self, name, uid):
+                pytest.fail('unverified workload must not be deleted')
+    
+        controller = CloudOrchestrator(tmp_path/'ledger.db', b'k'*32, policy(),
+                                       Provider(), ledger_id='b'*64, create=True)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_omega_cloud_security_context.py:43: Failed
+_ test_cloud_rejects_security_override_after_reservation[pod-security-patch3] __
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_cloud_rejects_security_ov3')
+location = 'pod-security'
+patch = {'sysctls': [{'name': 'kernel.shm_rmid_forced', 'value': '1'}]}
+
+    @pytest.mark.parametrize('location,patch', [
+        ('container-security', {'runAsNonRoot': False, 'runAsUser': 0}),
+        ('container-security', {'seccompProfile': {'type': 'Unconfined'}}),
+        ('container-security', {'procMount': 'Unmasked'}),
+        ('pod-security', {'sysctls': [{'name': 'kernel.shm_rmid_forced', 'value': '1'}]}),
+        ('pod', {'shareProcessNamespace': True}),
+    ])
+    def test_cloud_rejects_security_override_after_reservation(tmp_path, location, patch):
+        class Provider:
+            namespace = 'omega-test'
+            identity = 'deterministic-admission-contract'
+            def create(self, body):
+                self.actual = mutated(body, location, patch)
+                return self.actual
+            def get(self, name):
+                return self.actual
+            def delete(self, name, uid):
+                pytest.fail('unverified workload must not be deleted')
+    
+        controller = CloudOrchestrator(tmp_path/'ledger.db', b'k'*32, policy(),
+                                       Provider(), ledger_id='b'*64, create=True)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_omega_cloud_security_context.py:43: Failed
+______ test_cloud_rejects_security_override_after_reservation[pod-patch4] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_cloud_rejects_security_ov4')
+location = 'pod', patch = {'shareProcessNamespace': True}
+
+    @pytest.mark.parametrize('location,patch', [
+        ('container-security', {'runAsNonRoot': False, 'runAsUser': 0}),
+        ('container-security', {'seccompProfile': {'type': 'Unconfined'}}),
+        ('container-security', {'procMount': 'Unmasked'}),
+        ('pod-security', {'sysctls': [{'name': 'kernel.shm_rmid_forced', 'value': '1'}]}),
+        ('pod', {'shareProcessNamespace': True}),
+    ])
+    def test_cloud_rejects_security_override_after_reservation(tmp_path, location, patch):
+        class Provider:
+            namespace = 'omega-test'
+            identity = 'deterministic-admission-contract'
+            def create(self, body):
+                self.actual = mutated(body, location, patch)
+                return self.actual
+            def get(self, name):
+                return self.actual
+            def delete(self, name, uid):
+                pytest.fail('unverified workload must not be deleted')
+    
+        controller = CloudOrchestrator(tmp_path/'ledger.db', b'k'*32, policy(),
+                                       Provider(), ledger_id='b'*64, create=True)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_omega_cloud_security_context.py:43: Failed
+=========================== short test summary info ============================
+FAILED tests/test_omega_cloud_security_context.py::test_cloud_rejects_security_override_after_reservation[container-security-patch0] - Failed: DID NOT RAISE <class 'ValueError'>
+FAILED tests/test_omega_cloud_security_context.py::test_cloud_rejects_security_override_after_reservation[container-security-patch1] - Failed: DID NOT RAISE <class 'ValueError'>
+FAILED tests/test_omega_cloud_security_context.py::test_cloud_rejects_security_override_after_reservation[container-security-patch2] - Failed: DID NOT RAISE <class 'ValueError'>
+FAILED tests/test_omega_cloud_security_context.py::test_cloud_rejects_security_override_after_reservation[pod-security-patch3] - Failed: DID NOT RAISE <class 'ValueError'>
+FAILED tests/test_omega_cloud_security_context.py::test_cloud_rejects_security_override_after_reservation[pod-patch4] - Failed: DID NOT RAISE <class 'ValueError'>
+5 failed, 1 passed in 0.14s

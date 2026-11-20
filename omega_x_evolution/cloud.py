@@ -102,6 +102,19 @@ def _match(actual,wanted):
     metadata=actual['metadata'];uid=metadata.get('uid')
     if type(uid) is not str or not 1<=len(uid)<=128:raise ValueError('provider UID missing')
     pod=actual['spec']['template']['spec'];container=pod['containers'][0]
+    # A container securityContext takes precedence over its pod defaults.
+    # Subset matching alone admits additional, conflicting settings. Permit
+    # only the requested policy and explicit security-equivalent API defaults.
+    wanted_pod=wanted['spec']['template']['spec']
+    if canonical(pod['securityContext'])!=canonical(wanted_pod['securityContext']):
+        raise ValueError('unexpected pod security context')
+    expected=dict(wanted_pod['containers'][0]['securityContext'])
+    defaults={'runAsNonRoot':True,'runAsUser':10001,
+              'seccompProfile':{'type':'RuntimeDefault'},'procMount':'Default'}
+    observed=container['securityContext']
+    expected.update({k:v for k,v in defaults.items() if k in observed})
+    if canonical(observed)!=canonical(expected) or pod.get('shareProcessNamespace',False) is not False:
+        raise ValueError('unexpected effective container security context')
     if pod.get('initContainers') or pod.get('ephemeralContainers') or pod.get('hostAliases') or container.get('envFrom') or container.get('lifecycle') or container.get('securityContext',{}).get('capabilities',{}).get('add') or any(p.get('hostPort') for p in container.get('ports',[])):raise ValueError('unexpected workload injection')
     return uid
 

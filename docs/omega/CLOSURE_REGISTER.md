@@ -68,3 +68,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **Current maintainer release decision: GATE-09 — PASS (bounded release acceptance).** See [GATE-09 maintainer decision](GATE09_MAINTAINER_ACCEPTANCE.md). This is an explicit authorization to proceed, not an unconditional engineering PASS or a new test result. Historical technical residuals remain recorded; passed properties are not reopened.
+
+
+**Post-acceptance v35 security maintenance:** [cloud effective security-context hardening](CLOUD_SECURITY_CONTEXT.md) — 5 reproduced override defects corrected; 11 native targeted and 3 virtual-cluster tests PASS. Retains the [maintainer release decision](GATE09_MAINTAINER_ACCEPTANCE.md). No new roadmap stage.
