@@ -59,6 +59,7 @@ cluster = ["ray>=2.40,<3"]
 federation = ["cryptography>=41"]
 quantum = ["dwave-system>=1.29,<2"]
 llm = ["torch", "transformers", "safetensors"]
+llm-native = ["torch", "safetensors", "sentencepiece"]
 tpu = ["jax"]
 
 [project.scripts]

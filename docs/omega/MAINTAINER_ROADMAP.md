@@ -73,3 +73,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **v33 — conditional rational-function identity discovery:** [exact proof, non-pole witnesses, verified publication and native regressions](RATIONAL_AXIOMS_V33.md). PASS for bounded rational identities on explicit common nonzero domains; seed 42 generated 64 conjectures, 48 proved and 16 refuted, independently replayed. 14 targeted tests PASS. Unrestricted axiomatic discovery remains a research objective.
+
+
+**v34 — native Llama-subset local checkpoint adaptation:** [strict admission, CPU reference and real training evidence](NATIVE_LLAMA_PLASTICITY_V34.md). PASS for the bounded native CPU backend, exact Safetensors admission, logits/parity reference, 1,045,824 frozen weights plus 4,032 LoRA parameters, durable campaign recovery and rollback. 17 targeted tests PASS. External billion-parameter pretrained checkpoint and full upstream Transformers compatibility remain unverified.

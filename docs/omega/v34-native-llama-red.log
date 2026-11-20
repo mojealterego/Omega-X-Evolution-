@@ -1,0 +1,207 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+_______________ test_v34_real_native_loader_logits_and_causality _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_real_native_loader_lo0')
+
+    def test_v34_real_native_loader_logits_and_causality(tmp_path):
+        torch.set_num_threads(1)
+>       model,cfg,tensors=fixture(tmp_path/'model')
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_real_native_loader_lo0/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+_______________ test_v34_actual_pretraining_checkpoint_and_lora ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_actual_pretraining_ch0')
+
+    def test_v34_actual_pretraining_checkpoint_and_lora(tmp_path):
+        torch.set_num_threads(1);torch.use_deterministic_algorithms(True)
+>       model,cfg,tensors=fixture(tmp_path/'model',hidden=192,layers=3,pretrain=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_actual_pretraining_ch0/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+________ test_v34_reject_incomplete_or_incompatible_artifacts[missing] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_0')
+defect = 'missing'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_0/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+_________ test_v34_reject_incomplete_or_incompatible_artifacts[extra] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_1')
+defect = 'extra'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_1/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+_________ test_v34_reject_incomplete_or_incompatible_artifacts[shape] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_2')
+defect = 'shape'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_2/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+_________ test_v34_reject_incomplete_or_incompatible_artifacts[dtype] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_3')
+defect = 'dtype'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_3/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+__________ test_v34_reject_incomplete_or_incompatible_artifacts[nan] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_4')
+defect = 'nan'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_4/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+______ test_v34_reject_incomplete_or_incompatible_artifacts[unsupported] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_5')
+defect = 'unsupported'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_5/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+_____ test_v34_reject_incomplete_or_incompatible_artifacts[tokenizer-link] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_6')
+defect = 'tokenizer-link'
+
+    @pytest.mark.parametrize('defect',['missing','extra','shape','dtype','nan','unsupported','tokenizer-link'])
+    def test_v34_reject_incomplete_or_incompatible_artifacts(tmp_path,defect):
+        torch.set_num_threads(1)
+>       path=tmp_path/'model';_,cfg,tensors=fixture(path)
+                                            ^^^^^^^^^^^^^
+
+tests/test_omega_native_llama.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-root/pytest-6/test_v34_reject_incomplete_or_6/model')
+
+    def fixture(path, *, hidden=48, layers=2, pretrain=False):
+>       from omega_x_evolution.native_llama import Config, CausalLM
+E       ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+
+tests/test_omega_native_llama.py:12: ModuleNotFoundError
+=============================== warnings summary ===============================
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_omega_native_llama.py::test_v34_real_native_loader_logits_and_causality - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_actual_pretraining_checkpoint_and_lora - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[missing] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[extra] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[shape] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[dtype] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[nan] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[unsupported] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+FAILED tests/test_omega_native_llama.py::test_v34_reject_incomplete_or_incompatible_artifacts[tokenizer-link] - ModuleNotFoundError: No module named 'omega_x_evolution.native_llama'
+9 failed, 2 warnings in 1.99s
+<sys>:0: DeprecationWarning: builtin type swigvarlink has no __module__ attribute

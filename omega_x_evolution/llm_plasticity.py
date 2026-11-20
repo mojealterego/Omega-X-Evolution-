@@ -230,12 +230,16 @@ def memory_admission(info,*,device,available_bytes=None):
     return {'admitted':True,'estimated_bytes':required,'available_bytes':available_bytes,'device':device,'microbatch':1}
 
 
-def load_local(path,*,device='cuda',rank=2,seed=42):
+def load_local(path,*,device='cuda',rank=2,seed=42,backend='transformers'):
     """Operator-provided local model; no network or remote model code permitted."""
     import torch
     if device not in ('cpu','cuda') or device=='cuda' and not torch.cuda.is_available():raise RuntimeError('requested device unavailable')
     path=Path(path).resolve(strict=True)
+    if backend not in ('transformers','native-llama'):raise ValueError('local model backend')
     manifest=model_manifest(path);memory_admission(manifest,device=device)
+    if backend=='native-llama':
+        from .native_llama import _load_session
+        return _load_session(path,manifest,device=device,rank=rank,seed=seed)
     from transformers import AutoModelForCausalLM,AutoTokenizer
     tok=AutoTokenizer.from_pretrained(str(path),trust_remote_code=False,local_files_only=True)
     ids=tuple(tok.encode(str(i),add_special_tokens=False) for i in range(6))
@@ -320,7 +324,7 @@ def demo(path):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--demo',action='store_true');p.add_argument('--db',type=Path,required=True);p.add_argument('--model',type=Path);p.add_argument('--key-file',type=Path);p.add_argument('--splits',type=Path);p.add_argument('--device',choices=('cpu','cuda'),default='cuda');p.add_argument('--rounds',type=int,default=4);p.add_argument('--batch',type=int,default=4);p.add_argument('--steps',type=int,default=8);p.add_argument('--create',action='store_true');p.add_argument('--authorize-training',action='store_true');p.add_argument('--recover',action='store_true');p.add_argument('--rollback',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--demo',action='store_true');p.add_argument('--db',type=Path,required=True);p.add_argument('--model',type=Path);p.add_argument('--key-file',type=Path);p.add_argument('--splits',type=Path);p.add_argument('--device',choices=('cpu','cuda'),default='cuda');p.add_argument('--backend',choices=('transformers','native-llama'),default='transformers');p.add_argument('--rounds',type=int,default=4);p.add_argument('--batch',type=int,default=4);p.add_argument('--steps',type=int,default=8);p.add_argument('--create',action='store_true');p.add_argument('--authorize-training',action='store_true');p.add_argument('--recover',action='store_true');p.add_argument('--rollback',action='store_true');a=p.parse_args()
     if a.demo:
         print(json.dumps(demo(a.db),indent=2,allow_nan=False));return
     if not a.model or not a.key_file or not a.splits or not a.authorize_training:p.error('local model, key, verified splits and explicit authorization required')
@@ -328,7 +332,7 @@ def main():
     if not 32<=len(key)<=4096:raise ValueError('key size')
     with a.splits.open('rb') as f:raw=f.read(1048577)
     if len(raw)>1048576:raise ValueError('split cap')
-    data=json.loads(raw);session=load_local(a.model,device=a.device);c=OnlineCampaign(a.db,key,session,tuple(data['validation']),tuple(data['retention']),rounds=a.rounds,batch=a.batch,steps=a.steps,create=a.create)
+    data=json.loads(raw);session=load_local(a.model,device=a.device,backend=a.backend);c=OnlineCampaign(a.db,key,session,tuple(data['validation']),tuple(data['retention']),rounds=a.rounds,batch=a.batch,steps=a.steps,create=a.create)
     if a.recover:out=c.recover(authorized=True)
     elif a.rollback:out=c.rollback(authorized=True)
     else:out=c.step(authorized=True)
