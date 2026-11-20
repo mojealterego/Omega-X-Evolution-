@@ -127,8 +127,13 @@ def publish(memory,report):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--seed',type=int,default=42);p.add_argument('--budget',type=int,default=256);p.add_argument('--structures',type=int,choices=(2,3));a=p.parse_args()
-    r=structures(a.structures,budget=a.budget) if a.structures else discover(seed=a.seed,budget=a.budget)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--seed',type=int,default=42);p.add_argument('--budget',type=int);mode=p.add_mutually_exclusive_group();mode.add_argument('--structures',type=int,choices=(2,3));mode.add_argument('--rational',action='store_true',help='discover conditional rational-function identities');a=p.parse_args()
+    if a.rational:
+        from .rational_axioms import discover as discover_rational
+        r=discover_rational(seed=a.seed,budget=64 if a.budget is None else a.budget)
+    else:
+        budget=256 if a.budget is None else a.budget
+        r=structures(a.structures,budget=budget) if a.structures else discover(seed=a.seed,budget=budget)
     print(json.dumps(r,indent=2,allow_nan=False))
 
 if __name__=='__main__':main()

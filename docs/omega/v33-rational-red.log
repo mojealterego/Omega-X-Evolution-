@@ -1,0 +1,54 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+__________________ test_v33_cancellation_has_explicit_domain ___________________
+
+    def test_v33_cancellation_has_explicit_domain():
+>       from omega_x_evolution.rational_axioms import classify, verify
+E       ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+
+tests/test_omega_rational_axioms.py:15: ModuleNotFoundError
+___________ test_v33_zero_denominator_cannot_prove_vacuous_identity ____________
+
+    def test_v33_zero_denominator_cannot_prove_vacuous_identity():
+>       from omega_x_evolution.rational_axioms import classify, verify
+E       ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+
+tests/test_omega_rational_axioms.py:29: ModuleNotFoundError
+____________ test_v33_nonidentity_has_counterexample_outside_poles _____________
+
+    def test_v33_nonidentity_has_counterexample_outside_poles():
+>       from omega_x_evolution.rational_axioms import classify, verify
+E       ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+
+tests/test_omega_rational_axioms.py:35: ModuleNotFoundError
+_______________ test_v33_fraction_identity_over_three_variables ________________
+
+    def test_v33_fraction_identity_over_three_variables():
+>       from omega_x_evolution.rational_axioms import classify, verify
+E       ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+
+tests/test_omega_rational_axioms.py:45: ModuleNotFoundError
+_____________ test_v33_autonomous_discovery_replay_and_publication _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-3/test_v33_autonomous_discovery_0')
+
+    def test_v33_autonomous_discovery_replay_and_publication(tmp_path):
+>       from omega_x_evolution.rational_axioms import discover,verify_discovery,publish
+E       ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+
+tests/test_omega_rational_axioms.py:53: ModuleNotFoundError
+_____________________ test_v33_forged_polynomial_rejected ______________________
+
+    def test_v33_forged_polynomial_rejected():
+>       from omega_x_evolution.rational_axioms import Quotient, classify
+E       ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+
+tests/test_omega_rational_axioms.py:69: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_omega_rational_axioms.py::test_v33_cancellation_has_explicit_domain - ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+FAILED tests/test_omega_rational_axioms.py::test_v33_zero_denominator_cannot_prove_vacuous_identity - ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+FAILED tests/test_omega_rational_axioms.py::test_v33_nonidentity_has_counterexample_outside_poles - ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+FAILED tests/test_omega_rational_axioms.py::test_v33_fraction_identity_over_three_variables - ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+FAILED tests/test_omega_rational_axioms.py::test_v33_autonomous_discovery_replay_and_publication - ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+FAILED tests/test_omega_rational_axioms.py::test_v33_forged_polynomial_rejected - ModuleNotFoundError: No module named 'omega_x_evolution.rational_axioms'
+6 failed in 0.11s

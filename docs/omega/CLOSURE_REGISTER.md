@@ -74,3 +74,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v28 — corpus-weighted graph architecture synthesis:** [implementation, native TDD and promotion evidence](ARCHITECTURE_EVOLUTION_V28.md). PASS for the extended bounded 8-leaf/3-unary/3-binary grammar, normalized BM25, degree-normalized multi-source diffusion, independent split promotion, restart and plan-boundary hardening. 29 targeted tests PASS. Arbitrary new primitive invention remains an open research objective.
+
+
+**v33 — conditional rational-function identity discovery:** [exact proof, non-pole witnesses, verified publication and native regressions](RATIONAL_AXIOMS_V33.md). PASS for bounded rational identities on explicit common nonzero domains; seed 42 generated 64 conjectures, 48 proved and 16 refuted, independently replayed. 14 targeted tests PASS. Unrestricted axiomatic discovery remains a research objective.
