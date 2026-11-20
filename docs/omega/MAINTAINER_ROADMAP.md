@@ -95,3 +95,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **Aktualna nadrzędna Roadmapa ONTOS Ω∞:** [L7–L12 / post-Ω∞](ONTOS_OMEGA_INFINITY_ROADMAP.md) — 32 nowe etapy v49–v80, 10 kontraktów Phase0, mapowanie 33 listingów i 17 ustaleń statycznego audytu dokumentu Argona. Zachowuje v1–v48 oraz przyjęty ograniczony GATE-09. Nowe etapy OPEN; wyniki źródłowe nie są świeżym dowodem integracji. Nie zmienia uprawnień, evaluatorów, limitów ani harmonogramu.
+
+
+**v37–v39 bounded offline reference:** [implementation and test evidence](ONTOS_V37_V39_REFERENCE.md), [30-seed campaign](v37-campaign.json). 42 focused tests PASS, 7200 fixed-tape steps reproducible. v37 environment subset TESTED (full source reproduction OPEN); v38 finite thermodynamic-accounting contract PASS; v39 finite information diagnostics PASS (full integrated decision loop OPEN). No change to operational code, evaluator or existing GATE-09. Full repository regression unavailable. Historical OPEN labels remain historical; this entry governs the tested subsets.

@@ -200,3 +200,6 @@ Bramki GATE-01 wymagania → 02 architektura → 03 implementacja → 04 testy �
 S2 Tom XII: Phase0 Q4 2026; L8–L9 2027; L10 2027–2028; L11 2028–2031; L12 2031–2035+. Traktujemy te daty jako projekcję źródłową, nie zobowiązanie dostawy. Testy kontraktowe można wykonać wcześniej niż dostępność fizycznego sprzętu. Nie obiecywać dat wdrożenia i nie uruchamiać płatnych usług.
 
 Następny etap nowej linii: v49 (odzysk i kontrola manifestu) oraz v37 (testbed), po których następuje walidacja Phase0 zgodnie z zależnościami. Dotychczasowa kolejka v22–v34 nadal obowiązuje. Nie zmieniamy istniejącej automatyzacji ani ramy 20.11.2026 08:26 CET – 21.11.2026 08:26 CET. Dalsze wykonanie poza tą ramą wymaga nowej autoryzacji. Niniejsza zmiana dotyczy wyłącznie dokumentacji.
+
+
+**v37–v39 bounded offline reference:** [implementation and test evidence](ONTOS_V37_V39_REFERENCE.md), [30-seed campaign](v37-campaign.json). 42 focused tests PASS, 7200 fixed-tape steps reproducible. v37 environment subset TESTED (full source reproduction OPEN); v38 finite thermodynamic-accounting contract PASS; v39 finite information diagnostics PASS (full integrated decision loop OPEN). No change to operational code, evaluator or existing GATE-09. Full repository regression unavailable. Historical OPEN labels remain historical; this entry governs the tested subsets.
