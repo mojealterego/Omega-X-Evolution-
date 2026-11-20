@@ -14,15 +14,15 @@ import sys
 
 from .architecture import Case
 from .architecture_search import LEAVES, Search, _hash
-from .architecture_synthesis import Plan, SynthesizedIndex, _wire
+from .architecture_synthesis import Plan, SynthesizedIndex, _wire, UNARY_OPS, BINARY_OPS
 from .checkpoint import CheckpointStore
 from .graph_memory import tokens
 from .infrastructure import _lock
 
 MAX_SIZE = 255
 MAX_DEPTH = 16
-UNARY = ('prop', 'square')
-BINARY = ('add', 'mul', 'max')
+UNARY = UNARY_OPS
+BINARY = BINARY_OPS
 QUERY_WORK = 4_000_000  # reserve includes one bounded operation beyond retrieval cap
 MAX_STEP_WORK = 200_000_000
 

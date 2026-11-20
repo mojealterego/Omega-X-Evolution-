@@ -21,11 +21,11 @@ def test_streaming_synthesis_crosses_old_budget_with_small_durable_cursor(tmp_pa
     assert after['evaluations']==8200 and after['cursor']!=before['cursor']
     assert not {'queue','seen'}&after.keys()
     assert path.stat().st_size<200_000
-    assert tree_count(1,16)==7
-    assert tree_count(2,16)==14
-    assert tree_count(3,16)==175
-    assert len({tree_at(3,16,i) for i in range(tree_count(3,16))})==175
-    assert all(Plan(tree_at(3,16,i)) for i in range(175))
+    assert tree_count(1,16)==8
+    assert tree_count(2,16)==24
+    assert tree_count(3,16)==264
+    assert len({tree_at(3,16,i) for i in range(tree_count(3,16))})==264
+    assert all(Plan(tree_at(3,16,i)) for i in range(264))
     assert campaign.finalize()['test_evaluations']==2
     assert campaign.finalize()==campaign.inspect()['final']
     with pytest.raises(ValueError):campaign.step(1)
@@ -49,8 +49,8 @@ def test_streaming_chunking_replays_with_same_cursor_and_incumbent(tmp_path):
 def test_grammar_caps_and_transaction_guard(tmp_path):
     from omega_x_evolution.streaming_synthesis import StreamingSearch,tree_count,tree_at
     assert tree_count(3,0)==0
-    assert tree_count(3,1)==147
-    with pytest.raises(ValueError):tree_at(3,1,147)
+    assert tree_count(3,1)==192
+    with pytest.raises(ValueError):tree_at(3,1,192)
     with pytest.raises(ValueError):tree_count(256,16)
     with pytest.raises(ValueError):tree_count(1,17)
     memory=GraphMemory(tmp_path/'graph.db',b'm'*32,'a')

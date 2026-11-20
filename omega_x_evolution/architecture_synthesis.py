@@ -3,12 +3,19 @@ No generated source or dynamic imports: plans are bounded pure score trees.
 """
 from __future__ import annotations
 from dataclasses import dataclass
-from collections import defaultdict
+from collections import Counter, defaultdict
 import hashlib
 import itertools
 import math
+import re
 from .architecture import Index, Case, vector
 from .graph_memory import canonical, tokens
+
+
+LEAF_OPS = ('lex','assoc','hyper','latent1','latent2','latent4','latent8','bm25')
+UNARY_OPS = ('prop','square','diffuse')
+BINARY_OPS = ('add','mul','max')
+WORK_CAP = 2_000_000
 
 
 @dataclass(frozen=True)
@@ -20,16 +27,21 @@ class Plan:
             nonlocal count
             count+=1
             if type(t) is not tuple or not t or depth>16 or count>255:raise ValueError('score tree bound')
-            if t[0] in ('lex','assoc','hyper','latent1','latent2','latent4','latent8') and len(t)==1:return
-            if t[0] in ('square','prop') and len(t)==2:validate(t[1],depth+1);return
-            if t[0] in ('add','mul','max') and len(t)==3:
+            if type(t[0]) is not str:raise ValueError('invalid score program')
+            if t[0] in LEAF_OPS and len(t)==1:return
+            if t[0] in UNARY_OPS and len(t)==2:validate(t[1],depth+1);return
+            if t[0] in BINARY_OPS and len(t)==3:
                 validate(t[1],depth+1);validate(t[2],depth+1);return
             raise ValueError('invalid score program')
         validate(self.tree,0)
     @classmethod
     def from_json(cls,value):
+        count=0
         def freeze(v,depth=0):
-            if depth>17 or type(v) is not list or not 1<=len(v)<=3 or type(v[0]) is not str:raise ValueError('invalid program encoding')
+            nonlocal count
+            count+=1
+            if count>255 or depth>16:raise ValueError('score tree bound')
+            if type(v) is not list or not 1<=len(v)<=3 or type(v[0]) is not str:raise ValueError('invalid program encoding')
             return (v[0],*(freeze(x,depth+1) for x in v[1:]))
         return cls(freeze(value))
 
@@ -44,6 +56,51 @@ class SynthesizedIndex(Index):
         self.hypergraph=dict(edges)
         self.structure_sha256=hashlib.sha256(canonical([self.digest,self.hypergraph]).encode()).hexdigest()
         self._latent=None
+        self._frequencies = {i: Counter(re.findall(r'[^\W_]+',self.nodes[i]['text'].casefold(),flags=re.UNICODE)) for i in self.nodes}
+        self._lengths = {i: sum(tf.values()) for i,tf in self._frequencies.items()}
+        self._mean_length = sum(self._lengths.values()) / len(self.nodes) or 1.0
+        self._neighbors = {i: tuple(sorted({j for j,_,_ in self.adj[i] if j != i})) for i in self.nodes}
+
+    def _charge(self, work):
+        self.last_work += work
+        if self.last_work > WORK_CAP:
+            raise ValueError('retrieval work cap')
+
+    def _bm25(self, terms, keys):
+        # Normalized BM25 (k1=1.2, b=0.75); absent terms contribute to the
+        # denominator but not the document score. All weights come from the
+        # authenticated corpus, never from the training/holdout target labels.
+        n=len(keys); k1=1.2; b=.75
+        weights=[(t,math.log1p((n-len(self.hypergraph.get(t,()))+.5)/(len(self.hypergraph.get(t,()))+.5))) for t in sorted(terms)]
+        upper=sum(w for _,w in weights)*(k1+1)
+        self._charge(n*len(weights)+len(weights))
+        out={}
+        for i in keys:
+            norm=k1*(1-b+b*self._lengths[i]/self._mean_length)
+            tf=self._frequencies[i]
+            score=sum(w*tf[t]*(k1+1)/(tf[t]+norm) for t,w in weights if tf[t]) / upper
+            out[i]=(min(1.,max(0.,score)),{i})
+        return out
+
+    def _diffuse(self, base, keys):
+        # Bounded multi-source saturation, not a calibrated probability.
+        # One contribution per adjacent node, independent of relation count.
+        # Synchronous round: never use results from this round as input.
+        complements=dict.fromkeys(keys,1.)
+        evidence={i:set() for i in keys}
+        for i in keys:
+            score,support=base[i]; neighbors=self._neighbors[i]
+            if score<=0 or not neighbors:continue
+            share=.5*min(1.,score)/len(neighbors)
+            for j in neighbors:
+                self._charge(1+len(support))
+                complements[j]*=1-share
+                evidence[j].update(support)
+        out={}
+        for i in keys:
+            score,support=base[i];incoming=1-complements[i]
+            out[i]=(incoming,evidence[i]|{i}) if incoming>score else (score,set(support))
+        return out
 
     def latent(self,query,rank):
         # Fit a projection solely from authenticated corpus contents, not labels.
@@ -67,7 +124,9 @@ class SynthesizedIndex(Index):
         return {k:(float(min(1.,max(0.,x))),{k}) for k,x in zip(keys,out)}
 
     def retrieve(self,plan,query,*,limit=8):
-        if not isinstance(plan,Plan) or type(query) is not str or not 1<=len(query)<=1024 or type(limit) is not int or not 1<=limit<=32:raise ValueError('retrieval bounds')
+        if type(plan) is not Plan or type(query) is not str or not 1<=len(query)<=1024 or type(limit) is not int or not 1<=limit<=32:raise ValueError('retrieval bounds')
+        tree=plan.tree
+        Plan(tree)  # validate immutable snapshot at the execution boundary
         terms=tokens(query); keys=tuple(sorted(self.nodes)); n=len(keys); self.last_work=0
         if not terms:return []
         # Each score carries an auditable set of supporting document ids.
@@ -78,6 +137,7 @@ class SynthesizedIndex(Index):
             op=t[0];out={};self.last_work+=n
             if op=='lex':
                 out={i:(len(terms&self.terms[i])/len(terms),{i}) for i in keys}
+            elif op=='bm25':out=self._bm25(terms,keys)
             elif op=='assoc':
                 q=vector(query);self.last_work+=128*n
                 out={i:(max(0.,sum(a*b for a,b in zip(q,self.vectors[i]))),{i}) for i in keys}
@@ -104,15 +164,16 @@ class SynthesizedIndex(Index):
                     for j,_,_ in self.adj[i]:
                         self.last_work+=1
                         if s*.5>out[j][0]:out[j]=(s*.5,e|{j})
+            elif op=='diffuse':out=self._diffuse(calc(t[1]),keys)
             elif op=='square':out={i:(s*s,e) for i,(s,e) in calc(t[1]).items()}
             else:
                 a,b=calc(t[1]),calc(t[2])
                 for i in keys:
                     x,e=a[i];y,f=b[i];s={'add':(x+y)*.5,'mul':x*y,'max':max(x,y)}[op]
                     out[i]=(s,e|f)
-            if self.last_work>2_000_000:raise ValueError('retrieval work cap')
+            if self.last_work>WORK_CAP:raise ValueError('retrieval work cap')
             cache[t]=out;return out
-        found=calc(plan.tree)
+        found=calc(tree)
         return [{'id':i,**self.nodes[i],'score':s,'supporting_nodes':sorted(e),'provenance':'authenticated nodes; inferred retrieval links are not graph assertions'} for i,(s,e) in sorted(found.items(),key=lambda x:(-x[1][0],x[0])) if s>0][:limit]
 
 
@@ -137,8 +198,8 @@ def synthesize(index,train,validation,test,*,budget=64):
         total_work+=work
         if total_work>20_000_000:raise ValueError('aggregate work cap')
         return {'mrr':sum(rr)/len(rr),'work':work}
-    baseline=Plan(('lex',)); leaves=[('lex',),('hyper',),('assoc',)]; queue=list(leaves); used=set();hist=[]
-    for t in leaves:queue.extend([('prop',t),('square',t)])
+    baseline=Plan(('lex',)); leaves=[(op,) for op in LEAF_OPS]; queue=list(leaves); used=set();hist=[]
+    for t in leaves:queue.extend((op,t) for op in UNARY_OPS)
     while queue and len(hist)<budget:
         t=queue.pop(0)
         if t in used:continue
@@ -149,9 +210,9 @@ def synthesize(index,train,validation,test,*,budget=64):
         # Expand the best-scoring structures, not only fixed component weights.
         if len(hist)%6==0:
             for a,_ in sorted(hist,key=lambda z:(-z[1]['mrr'],z[1]['work'],repr(z[0].tree)))[:3]:
-                for unary in ('prop','square'):queue.append((unary,a.tree))
+                for unary in UNARY_OPS:queue.append((unary,a.tree))
                 for b in leaves:
-                    for op in ('add','mul','max'):queue.append((op,a.tree,b))
+                    for op in BINARY_OPS:queue.append((op,a.tree,b))
     challenger=max(hist,key=lambda z:(z[1]['mrr'],-z[1]['work']))[0]
     bv=assess(baseline,validation);cv=assess(challenger,validation)
     promoted=(cv['mrr'],-cv['work'])>(bv['mrr'],-bv['work']);selected=challenger if promoted else baseline

@@ -1,0 +1,144 @@
+FFFF.                                                                    [100%]
+=================================== FAILURES ===================================
+_____________________ test_v28_bm25_real_corpus_weighting ______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_v28_bm25_real_corpus_weig0')
+
+    def test_v28_bm25_real_corpus_weighting(tmp_path):
+        m, _, _, c, d = graph(tmp_path)
+        idx = SynthesizedIndex(m)
+>       rows = idx.retrieve(Plan(('bm25',)), 'rare common')
+                            ^^^^^^^^^^^^^^^
+
+tests/test_omega_architecture_evolution.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+omega_x_evolution/architecture_synthesis.py:28: in __post_init__
+    validate(self.tree,0)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+t = ('bm25',), depth = 0
+
+    def validate(t,depth):
+        nonlocal count
+        count+=1
+        if type(t) is not tuple or not t or depth>16 or count>255:raise ValueError('score tree bound')
+        if t[0] in ('lex','assoc','hyper','latent1','latent2','latent4','latent8') and len(t)==1:return
+        if t[0] in ('square','prop') and len(t)==2:validate(t[1],depth+1);return
+        if t[0] in ('add','mul','max') and len(t)==3:
+            validate(t[1],depth+1);validate(t[2],depth+1);return
+>       raise ValueError('invalid score program')
+E       ValueError: invalid score program
+
+omega_x_evolution/architecture_synthesis.py:27: ValueError
+___ test_v28_diffusion_combines_sources_without_parallel_edge_amplification ____
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_v28_diffusion_combines_so0')
+
+    def test_v28_diffusion_combines_sources_without_parallel_edge_amplification(tmp_path):
+        m, a, b, c, d = graph(tmp_path)
+        idx = SynthesizedIndex(m)
+>       plan = Plan(('diffuse', ('lex',)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_omega_architecture_evolution.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:4: in __init__
+    ???
+omega_x_evolution/architecture_synthesis.py:28: in __post_init__
+    validate(self.tree,0)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+t = ('diffuse', ('lex',)), depth = 0
+
+    def validate(t,depth):
+        nonlocal count
+        count+=1
+        if type(t) is not tuple or not t or depth>16 or count>255:raise ValueError('score tree bound')
+        if t[0] in ('lex','assoc','hyper','latent1','latent2','latent4','latent8') and len(t)==1:return
+        if t[0] in ('square','prop') and len(t)==2:validate(t[1],depth+1);return
+        if t[0] in ('add','mul','max') and len(t)==3:
+            validate(t[1],depth+1);validate(t[2],depth+1);return
+>       raise ValueError('invalid score program')
+E       ValueError: invalid score program
+
+omega_x_evolution/architecture_synthesis.py:27: ValueError
+______________ test_v28_new_grammar_autonomous_search_and_resume _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_v28_new_grammar_autonomou0')
+
+    def test_v28_new_grammar_autonomous_search_and_resume(tmp_path):
+        m, a,b,c,d = graph(tmp_path)
+        idx = SynthesizedIndex(m)
+        splits = ((Case('alpha',c),),(Case('red blue',c),),(Case('alpha common',c),))
+        plans = {tree_at(2,16,i) for i in range(tree_count(2,16))}
+>       assert ('diffuse',('bm25',)) in plans
+E       AssertionError: assert ('diffuse', ('bm25',)) in {('prop', ('assoc',)), ('prop', ('hyper',)), ('prop', ('latent1',)), ('prop', ('latent2',)), ('prop', ('latent4',)), ('prop', ('latent8',)), ...}
+
+tests/test_omega_architecture_evolution.py:58: AssertionError
+________________ test_v28_forged_plan_rejected_before_execution ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_v28_forged_plan_rejected_0')
+
+    def test_v28_forged_plan_rejected_before_execution(tmp_path):
+        m,*_=graph(tmp_path)
+        idx=SynthesizedIndex(m)
+        plan=Plan(('lex',))
+        object.__setattr__(plan,'tree',('shell',))
+        with pytest.raises(ValueError,match='invalid score program'):
+>           idx.retrieve(plan,'alpha')
+
+tests/test_omega_architecture_evolution.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+omega_x_evolution/architecture_synthesis.py:115: in retrieve
+    found=calc(plan.tree)
+          ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+t = ('shell',)
+
+    def calc(t):
+        if t in cache:return cache[t]
+        op=t[0];out={};self.last_work+=n
+        if op=='lex':
+            out={i:(len(terms&self.terms[i])/len(terms),{i}) for i in keys}
+        elif op=='assoc':
+            q=vector(query);self.last_work+=128*n
+            out={i:(max(0.,sum(a*b for a,b in zip(q,self.vectors[i]))),{i}) for i in keys}
+        elif op.startswith('latent'):
+            out=self.latent(query,int(op[6:]))
+        elif op=='hyper':
+            base=calc(('lex',));weights={};evidence={}
+            for i,(s,_) in base.items():
+                if s<=0:continue
+                for token in sorted(self.terms[i]):
+                    # Penalize frequent terms; no target labels used to build edges.
+                    w=s/(1+len(self.hypergraph[token]));self.last_work+=1
+                    if w>weights.get(token,0.):weights[token]=w;evidence[token]=i
+            for token,w in weights.items():
+                if token in terms:continue
+                for i in self.hypergraph[token]:
+                    self.last_work+=1
+                    if w>out.get(i,(0.,set()))[0]:out[i]=(w,{i,evidence[token]})
+            out={i:max((out.get(i,(0.,{i})),base[i]),key=lambda r:r[0]) for i in keys}
+        elif op=='prop':
+            a=calc(t[1]);out={i:(s,set(e)) for i,(s,e) in a.items()}
+            for i,(s,e) in a.items():
+                if s<=0:continue
+                for j,_,_ in self.adj[i]:
+                    self.last_work+=1
+                    if s*.5>out[j][0]:out[j]=(s*.5,e|{j})
+        elif op=='square':out={i:(s*s,e) for i,(s,e) in calc(t[1]).items()}
+        else:
+>           a,b=calc(t[1]),calc(t[2])
+                     ^^^^
+E           IndexError: tuple index out of range
+
+omega_x_evolution/architecture_synthesis.py:109: IndexError
+=========================== short test summary info ============================
+FAILED tests/test_omega_architecture_evolution.py::test_v28_bm25_real_corpus_weighting - ValueError: invalid score program
+FAILED tests/test_omega_architecture_evolution.py::test_v28_diffusion_combines_sources_without_parallel_edge_amplification - ValueError: invalid score program
+FAILED tests/test_omega_architecture_evolution.py::test_v28_new_grammar_autonomous_search_and_resume - AssertionError: assert ('diffuse', ('bm25',)) in {('prop', ('assoc',)), ('prop', ('hyper',)), ('prop', ('latent1',)), ('prop', ('latent2',)), ('prop', ('latent4',)), ('prop', ('latent8',)), ...}
+FAILED tests/test_omega_architecture_evolution.py::test_v28_forged_plan_rejected_before_execution - IndexError: tuple index out of range
+4 failed, 1 passed in 0.21s

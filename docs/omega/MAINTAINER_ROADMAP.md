@@ -67,3 +67,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **Post-acceptance v35 security maintenance:** [cloud effective security-context hardening](CLOUD_SECURITY_CONTEXT.md) — 5 reproduced override defects corrected; 11 native targeted and 3 virtual-cluster tests PASS. Retains the [maintainer release decision](GATE09_MAINTAINER_ACCEPTANCE.md). No new roadmap stage.
+
+
+**v28 — corpus-weighted graph architecture synthesis:** [implementation, native TDD and promotion evidence](ARCHITECTURE_EVOLUTION_V28.md). PASS for the extended bounded 8-leaf/3-unary/3-binary grammar, normalized BM25, degree-normalized multi-source diffusion, independent split promotion, restart and plan-boundary hardening. 29 targeted tests PASS. Arbitrary new primitive invention remains an open research objective.

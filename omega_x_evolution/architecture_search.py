@@ -10,12 +10,12 @@ from pathlib import Path
 import sys
 from dataclasses import asdict
 from .architecture import Case
-from .architecture_synthesis import Plan,SynthesizedIndex,_wire
+from .architecture_synthesis import Plan,SynthesizedIndex,_wire,LEAF_OPS,UNARY_OPS,BINARY_OPS
 from .checkpoint import CheckpointStore
 from .graph_memory import canonical,tokens
 from .infrastructure import _lock
 
-LEAVES=tuple((x,) for x in ('lex','assoc','hyper','latent1','latent2','latent4','latent8'))
+LEAVES=tuple((x,) for x in LEAF_OPS)
 
 
 def _hash(x):return hashlib.sha256(canonical(x).encode()).hexdigest()
@@ -84,9 +84,9 @@ class Search:
                 # Expand every valid candidate, not just the incumbent; derive
                 # compositions recursively and retain deterministic search order.
                 tree=plan.tree
-                children=[('prop',tree),('square',tree)]
+                children=[(op,tree) for op in UNARY_OPS]
                 for leaf in LEAVES:
-                    children.extend((op,tree,leaf) for op in ('add','mul','max'))
+                    children.extend((op,tree,leaf) for op in BINARY_OPS)
                 # Periodic crossover joins two previously evaluated non-leaf
                 # trees. Insert a bounded number near the head without starving
                 # ordinary breadth expansion. Persist the parent across restarts.
@@ -95,7 +95,7 @@ class Search:
                     s['recent']=raw
                     if previous is not None and s['evaluations']%8==0:
                         other=Plan.from_json(previous).tree
-                        for op in ('add','mul','max'):
+                        for op in BINARY_OPS:
                             try:p=Plan((op,tree,other))
                             except ValueError:continue
                             v=_wire(p.tree);h=_hash(v)
@@ -117,5 +117,5 @@ class Search:
             # Reserve a conservative upper bound before touching final test.
             if s['work']+bv['work']+cv['work']+4_000_000*len(self.test)>s['work_cap']:raise ValueError('insufficient final test budget')
             st=self._evaluate(selected,self.test);bt=self._evaluate(baseline,self.test);s['work']+=bv['work']+cv['work']+st['work']+bt['work']
-            s['final']={'schema':'omega-durable-architecture-v1','contract':self.contract,'evaluations':s['evaluations'],'work':s['work'],'selected':_wire(selected.tree),'challenger':_wire(candidate.tree),'promoted':promoted,'validation':cv,'baseline_validation':bv,'test':st,'baseline_test':bt,'test_evaluations':2,'structures':[{'kind':'hypergraph','sha256':self.index.structure_sha256},{'kind':'latent','ranks':[1,2,4,8],'derived_from':self.index.digest}]}
+            s['final']={'schema':'omega-durable-architecture-v1','contract':self.contract,'evaluations':s['evaluations'],'work':s['work'],'selected':_wire(selected.tree),'challenger':_wire(candidate.tree),'promoted':promoted,'validation':cv,'baseline_validation':bv,'test':st,'baseline_test':bt,'test_evaluations':2,'structures':[{'kind':'hypergraph','sha256':self.index.structure_sha256},{'kind':'latent','ranks':[1,2,4,8],'derived_from':self.index.digest},{'kind':'bm25','derived_from':self.index.digest},{'kind':'diffuse','derived_from':self.index.digest}]}
             self.store.save(rev+1,s);return s['final']
