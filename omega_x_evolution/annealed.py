@@ -45,6 +45,16 @@ def context(code):
     return min(3,e.count//8),min(3,e.operations//4)
 
 
+def _feedback(row):
+    a=row['action'];reward=row['reward']
+    # ACTIONS itself is the non-tensor proposal sentinel in cluster trajectories.
+    if type(a) is not int or not 0<=a<=ACTIONS:
+        raise ValueError('feedback action')
+    if type(reward) not in (int,float) or not -1<=reward<=1:
+        raise ValueError('feedback reward')
+    return a,reward
+
+
 def policy(parent,records,*,temperature=0.5,associations=()):
     import numpy as np
     if not math.isfinite(temperature) or not .1<=temperature<=2 or len(records)>64 or len(associations)>8:
@@ -52,15 +62,17 @@ def policy(parent,records,*,temperature=0.5,associations=()):
     # Shrink sparse local means toward the global action prior, then TT compress.
     sums=np.zeros((4,4,ACTIONS));counts=np.zeros_like(sums);global_sum=np.zeros(ACTIONS);global_n=np.zeros(ACTIONS)
     for row in records:
-        a=row['action']
-        if a>=ACTIONS:continue
-        i,j=context(row['parent']); reward=row['reward'];sums[i,j,a]+=reward;counts[i,j,a]+=1;global_sum[a]+=reward;global_n[a]+=1
+        a,reward=_feedback(row)
+        if a==ACTIONS:continue
+        i,j=context(row['parent']);sums[i,j,a]+=reward;counts[i,j,a]+=1;global_sum[a]+=reward;global_n[a]+=1
     prior=global_sum/(global_n+2)
     tt=TensorTrain.fit((sums+2*prior)/(counts+2),3)
     i,j=context(parent);values=np.array([tt.at(i,j,a) for a in range(ACTIONS)])
     for hit in associations:
-        row=hit['record'];a=row['action']
-        if a<ACTIONS:values[a]+=hit['weight']*row['reward']
+        a,reward=_feedback(hit['record']);weight=hit['weight']
+        if type(weight) not in (int,float) or not 0<=weight<=1:
+            raise ValueError('association weight')
+        if a<ACTIONS:values[a]+=weight*reward
     # Parallel vector scoring, annealed Gibbs sampling, positive exploration floor.
     logits=(values-values.max())/temperature;prob=np.exp(logits);prob/=prob.sum()
     return tuple(float(.9*x+.1/ACTIONS) for x in prob)

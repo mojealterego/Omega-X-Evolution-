@@ -82,3 +82,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 **v34 — native Llama-subset local checkpoint adaptation:** [strict admission, CPU reference and real training evidence](NATIVE_LLAMA_PLASTICITY_V34.md). PASS for the bounded native CPU backend, exact Safetensors admission, logits/parity reference, 1,045,824 frozen weights plus 4,032 LoRA parameters, durable campaign recovery and rollback. 17 targeted tests PASS. External billion-parameter pretrained checkpoint and full upstream Transformers compatibility remain unverified.
 
 **v27 — aggregated Ocean read accounting:** [corrective evidence](OCEAN_OCCURRENCES_V27.md). PASS for contract-simulated multiplicity and read-budget enforcement (11 focused tests); native SDK and fresh full regression remain open.
+
+
+**v24 — feedback boundary correction:** [focused TDD evidence](ANNEALED_FEEDBACK_V24.md). Reject invalid action, reward and association weight; preserve action 6 sentinel. 34 focused tests passed against production module with extracted production AST validator; full cluster regression and actual LLM integration remain open. No change to GATE-09 release decision.
