@@ -1,5 +1,8 @@
 # Residual recovery v36.2
 
+> **Current acceptance policy:** [Mandatory execution directive v3.0](EXECUTION_DIRECTIVE_V3.md) supersedes conflicting historical criteria. External audits, third-party certification and physical infrastructure reruns are not required. Accepted deterministic engineering simulations close modeled properties. Native/production claims and functional or mathematical obligations remain distinct.
+
+
 Base main: `b6200c56ec0edb951a4b6dee3ed9876d3da02e56`. This release preserves the v2.3 §5 simulation acceptance policy. No new stage, paid infrastructure, or CI activation.
 
 ## BFT progress beyond the historical terminal round

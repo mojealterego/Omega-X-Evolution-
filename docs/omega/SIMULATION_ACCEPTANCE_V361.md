@@ -1,5 +1,8 @@
 # Deterministic engineering acceptance — v36.1
 
+> **Current acceptance policy:** [Mandatory execution directive v3.0](EXECUTION_DIRECTIVE_V3.md) supersedes conflicting historical criteria. External audits, third-party certification and physical infrastructure reruns are not required. Accepted deterministic engineering simulations close modeled properties. Native/production claims and functional or mathematical obligations remain distinct.
+
+
 Base `42ac0be401ba8fca3d51483327fcfcce598c4525` on main. Maintainer OMEGA v2.3 §5 supersedes the earlier requirement to repeat successfully modeled properties on independent infrastructure. A genuine deterministic-simulation PASS is an engineering acceptance, not a provisional failure pending a physical rerun. Native deployment/production attestations are separate and are not prerequisites for accepting a modeled contract. No original functional requirement is deleted. No implicit simulator selection in the actual Lean, Isabelle, CUDA, QNN, Ray, QPU or Kubernetes adapters.
 
 ## Model, test IDs and acceptance boundaries

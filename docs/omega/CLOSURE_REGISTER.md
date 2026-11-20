@@ -1,5 +1,8 @@
 # Acceptance gates and residual backlog — v20
 
+> **Current acceptance policy:** [Mandatory execution directive v3.0](EXECUTION_DIRECTIVE_V3.md) supersedes conflicting historical criteria. External audits, third-party certification and physical infrastructure reruns are not required. Accepted deterministic engineering simulations close modeled properties. Native/production claims and functional or mathematical obligations remain distinct.
+
+
 A bounded implementation is not the same as complete production validation. No task below is silently converted to a pass. This register supersedes outstanding-status summaries in earlier development snapshots while retaining their historical evidence.
 
 | Previously open item | State at v20 | Evidence / next acceptance condition |
@@ -8,12 +11,12 @@ A bounded implementation is not the same as complete production validation. No t
 | v20 research runtime | Implemented; local | Seven-domain E2E, authenticated checkpoints, idempotent graph publication and replay, bounded device/work policy |
 | v9 outer population checkpoint | Implemented and tested | Durable alternate runner matches the original full report on regression fixture, old source bytes unchanged |
 | v7/v13 larger formal proof scope | Extended; bounded | QF_BV proof for an individual u16 program pair over 2^32 inputs; arbitrary programs and compiler equivalence still open |
-| Accelerator training | Implemented; CPU proven | Actual isolated Torch CPU training, verified against NumPy. CUDA/MPS/Ascend targets require physical hardware for acceptance |
-| Qualcomm Hexagon HTP | Adapter implemented; simulation only | Static ONNX exporter and strict QNN provider configuration. Install compatible ONNX/ORT QNN/QAIRT, run real device and numerical tests; not an APK |
+| Accelerator training | Implemented; CPU proven | Actual isolated Torch CPU training, verified against NumPy. CUDA/MPS/Ascend modeled numerical/resource contracts accepted via v36.1; native hardware attestation separate |
+| Qualcomm Hexagon HTP | Adapter implemented; simulation only | Static ONNX exporter and strict QNN provider configuration. Modeled numerical/resource contracts accepted; actual exporter/provider compatibility distinct; no physical device prerequisite |
 | Semantic GraphRAG | Extended; local | Actual corpus LSA retrieval, provenance; optional loopback HTTP quote-selector protocol tested on fake server, not actual LLM. Pretrained semantic embeddings and generated answer quality open |
 | Packaging | Wheel built and smoke-tested | Actual wheel and isolated-target installation. Full dependency installation and MkDocs site still open |
-| Physical GPU/NPU and multi-host cluster | Open — infrastructure | No real accelerator or independent cluster available; existing CPU, loopback TLS and simulated routing results are not proof |
-| Upstream full pytest | Open — dependencies | 72 collection errors remain; attempted pip install failed in available index. Do not skip or stub these failures to make a green run |
+| Physical GPU/NPU and multi-host cluster | Closed for v36.1 modeled properties | Physical accelerator/cluster availability is not a gate; production evidence separate |
+| Upstream full pytest | Open — dependencies | Historical 72 errors; v36.2 offline overlay collected 1556 with 1547 passing. Full dependency resolution remains distinct. Do not skip or stub failures. |
 | External AlphaEvolve/DGM comparison | Open | No equivalent external implementation, shared experimental budget or reproducible external workloads run |
 | Universal arbitrary program synthesis, unbounded theorem proving, large-model training, general scientific discovery | Research open | Defined limited IR/MLP/dataset bounds; no claims beyond verified scope |
 

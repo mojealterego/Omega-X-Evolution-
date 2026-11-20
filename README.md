@@ -1,5 +1,8 @@
 # OMEGA-X Evolution Ω
 
+> **Current acceptance policy:** [Mandatory execution directive v3.0](docs/omega/EXECUTION_DIRECTIVE_V3.md) supersedes conflicting historical criteria. External audits, third-party certification and physical infrastructure reruns are not required. Accepted deterministic engineering simulations close modeled properties. Native/production claims and functional or mathematical obligations remain distinct.
+
+
 ![OMEGA-X emblem](docs/media/omega-x.svg)
 
 **Autonomous Evolutionary Intelligence & Scientific Discovery Engine**

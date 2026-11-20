@@ -1,5 +1,8 @@
 # Maintainer roadmap — extended source register
 
+> **Current acceptance policy:** [Mandatory execution directive v3.0](EXECUTION_DIRECTIVE_V3.md) supersedes conflicting historical criteria. External audits, third-party certification and physical infrastructure reruns are not required. Accepted deterministic engineering simulations close modeled properties. Native/production claims and functional or mathematical obligations remain distinct.
+
+
 Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0ec58c3c41188ffe1e4d3966df2efb86214d5bc`). The original document remains a maintainer input, not a claim of implemented features. It contains more than the originally indicated seven requirements. The order below preserves v21/v22 and the sequence of the later distinct headings. Green Computing is a cross-cutting opening heading; its proposed standalone number v36 is an engineering bookkeeping decision, not a change to the requested scope.
 
 | Stage | Source requirement | Source pages | Status / bounded acceptance target |
@@ -21,7 +24,7 @@ Source: `Dokument bez nazwy.docx` (13 pages; SHA-256 `46b56e6ca8087b20211205c9e0
 | v35 | Autonomous Infrastructure Orchestration | 13 | PASS for bounded local process lifecycle and virtual cloud quota/deadline/recovery (HYBRID); native provisioning not required for modeled contracts |
 | v36 | Green Computing (energy/carbon metrics) | 1 | PASS in specified estimated/measured-process-time scope: paired discovery workloads, explicit scenario power bounds, intensity/hardware provenance, exact unit contracts; physical meter attestation separate, not required |
 
-These are distinct acceptance gates, not promises of physical validation, consciousness, mathematical completeness or exponential speedup. No automatic changes to evaluator authorization, safety policy, external infrastructure or financial limits. The existing closure register retains infrastructure and upstream dependency blockers.
+These are distinct acceptance gates, not promises of physical validation, consciousness, mathematical completeness or exponential speedup. No automatic changes to evaluator authorization, safety policy, external infrastructure or financial limits. The closure register retains functional and dependency blockers; infrastructure-only acceptance blockers are superseded by v3.0.
 
 The maintainer requires sequential closure of the review list before proceeding. Requirements 1–4 map to v26/v33; see [formal safety closure](FORMAL_SAFETY_CLOSURE.md). The v35.1 patch did not address points 5–12 or v36. The v35.2 corrective release extends points 5–12; see [requirement-by-requirement evidence and residual gates](REMAINING_REQUIREMENTS_CLOSURE.md). v36 remains open.
 
