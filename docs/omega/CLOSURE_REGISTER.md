@@ -85,3 +85,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v24 — feedback boundary correction:** [focused TDD evidence](ANNEALED_FEEDBACK_V24.md). Reject invalid action, reward and association weight; preserve action 6 sentinel. 34 focused tests passed against production module with extracted production AST validator; full cluster regression and actual LLM integration remain open. No change to GATE-09 release decision.
+
+
+**RSI L5+ supplemental input:** [source register](RSI_L5_SOURCE_REGISTER.md). **v25 corrective:** [transfer boundary TDD](V25_MEMORY_BOUNDS.md). 78 focused tests passed, 8-record transfer and 64-record capacity unchanged; global Ray memory and full regression remain open. Existing GATE-09 scope unchanged.

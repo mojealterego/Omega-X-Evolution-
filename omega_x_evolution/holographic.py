@@ -82,4 +82,5 @@ class Memory:
 
 def bounded_records(local,foreign):
     # Keep the latest foreign batch and local history; never re-broadcast imports.
+    if len(foreign)>TRANSFER:raise ValueError('foreign trajectory limit')
     return list(local[-(CAPACITY-len(foreign)):])+list(foreign) if foreign else list(local[-CAPACITY:])
