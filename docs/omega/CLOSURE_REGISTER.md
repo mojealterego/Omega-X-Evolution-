@@ -106,3 +106,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v43–v45 — offline evidence references:** [test evidence](ONTOS_V43_V45_REFERENCE.md). 36 new tests + 81 prior ONTOS regressions = 117 PASS. v43 fixed synthetic multirate regression audit TESTED (native Titans/HOPE/JEPA and continual-retention integration OPEN); v44 immutable bitemporal snapshot and Hopfield/VSA diagnostics TESTED (durable integration and authenticated provenance OPEN); v45 exact tiny assembly and finite EI/CP reference PASS within stated model (general assembly and causal inference OPEN). No operational adaptation, promotion or changes to evaluator or privilege controls. Full upstream regression unavailable. Existing bounded GATE-09 preserved; all previous residuals retained.
+
+
+**v43/v46 — independent zero-gradient and statistical audit:** [focused evidence](ONTOS_V43_V46_ANALYTIC_AUDIT.md). Nine new tests PASS; 30 synthetic seeds replay identically; exact 4096-path null enumeration exposes wealth-floor counterexample. v43 and v46 sub-contracts TESTED only, actual frozen-model integration and remaining v46 diagnostics OPEN. v47/v48 not completed. No private source publication, operational change or new GATE-09 acceptance. Full repository regression unavailable.
