@@ -12,3 +12,6 @@ Effective 2026-11-20, maintainer instruction supersedes conflicting acceptance l
 Execution order: REQUIREMENTS → IMPLEMENT → BUILD → TEST → FIX → RETEST → VERIFY → EVIDENCE → CLOSE → NEXT. Preserve historical evidence. This directive changes acceptance policy, not test outcomes.
 
 Current gate state: GATE-09 not yet PASS at base 5dd9ea7daa80cab85d734c928a7564a1f7a91892. This policy commit is not an implementation or execution claim.
+
+
+**Current maintainer release decision: GATE-09 — PASS (bounded release acceptance).** See [GATE-09 maintainer decision](GATE09_MAINTAINER_ACCEPTANCE.md). This is an explicit authorization to proceed, not an unconditional engineering PASS or a new test result. Historical technical residuals remain recorded; passed properties are not reopened.

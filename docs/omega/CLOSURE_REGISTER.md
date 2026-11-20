@@ -65,3 +65,6 @@ V33–v35 implement bounded grammar-generated modular conjectures and finite alg
 
 
 **v34 corrective — failure-atomic adapter retention:** [implementation, TDD evidence and accepted formal scope](PLASTICITY_ATOMIC_RECOVERY.md). Active adapter now survives failure during reference inference; four focused training, microbatch and distributed numerical tests PASS. Previously verified native CaDiCaL + Isabelle-exported LRAT properties and Lean u16 proofs are explicitly PASS; do not reopen them or repeat the bootstrap. Full theory/elaborator compatibility is distinct and not asserted. GATE-09 is not unconditionally accepted.
+
+
+**Current maintainer release decision: GATE-09 — PASS (bounded release acceptance).** See [GATE-09 maintainer decision](GATE09_MAINTAINER_ACCEPTANCE.md). This is an explicit authorization to proceed, not an unconditional engineering PASS or a new test result. Historical technical residuals remain recorded; passed properties are not reopened.
