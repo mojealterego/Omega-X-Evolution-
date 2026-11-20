@@ -1,5 +1,7 @@
 # Maintainer roadmap — extended source register
 
+> **Roadmapa nadrzędna dalszego rozwoju (R2, 2026-11-20):** [ONTOS Ω∞: Phase0, L8–L12 i post-Ω∞](ONTOS_OMEGA_INFINITY_ROADMAP.md). Niniejszy rejestr zachowuje wszystkie wcześniejsze etapy i dowody. Nowe kryteria są w R2; nie zmienia ona historycznych wyników ani ograniczonej decyzji GATE-09.
+
 > **Current acceptance policy:** [Mandatory execution directive v3.0](EXECUTION_DIRECTIVE_V3.md) supersedes conflicting historical criteria. External audits, third-party certification and physical infrastructure reruns are not required. Accepted deterministic engineering simulations close modeled properties. Native/production claims and functional or mathematical obligations remain distinct.
 
 
@@ -90,3 +92,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **ONTOS L7 — supplemental research roadmap (v37–v48):** [source register, dependencies, acceptance criteria and source review](ONTOS_L7_ROADMAP.md). All 12 new stages OPEN; Argon/source-reported tests retained as provenance, not fresh integration evidence. Existing v1–v36 evidence, residuals, bounded GATE-09 release acceptance and authorization scope unchanged. L7 work does not supersede the fixed evaluator or grant runtime autonomy.
+
+
+**Aktualna nadrzędna Roadmapa ONTOS Ω∞:** [L7–L12 / post-Ω∞](ONTOS_OMEGA_INFINITY_ROADMAP.md) — 32 nowe etapy v49–v80, 10 kontraktów Phase0, mapowanie 33 listingów i 17 ustaleń statycznego audytu dokumentu Argona. Zachowuje v1–v48 oraz przyjęty ograniczony GATE-09. Nowe etapy OPEN; wyniki źródłowe nie są świeżym dowodem integracji. Nie zmienia uprawnień, evaluatorów, limitów ani harmonogramu.

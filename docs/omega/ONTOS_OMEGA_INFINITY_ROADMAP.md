@@ -1,0 +1,202 @@
+# OMEGA-X ONTOS Ω∞ — nadrzędna Roadmapa L7–L12 i post-Ω∞
+
+**Wydanie Roadmapy:** 2026-11-20 / R2. **Status:** REGISTERED / OPEN (nowe etapy). **Baza:** main d699dc2bde2afb0426c326e0799ca1473079f355. **Źródło S2:** Argon, Dokument bez nazwy.PDF, „OMEGA-X ONTOS (Generacje L8–L12 / Ω∞)”, 91 stron, 14 tomów, 1 112 162 bajty, SHA-256 95c2794d9a3b5e237781b296b2aa6da0b6cdb174d6a73e5f754f48e7264edc36. Źródło S1: [L7](ONTOS_L7_ROADMAP.md). Oryginalne binaria nie są publikowane w publicznym repozytorium. Raport zawiera 33 listingi; nie są to jeszcze 33 odtworzone i skompilowane pliki.
+
+**Cel:** jeden spójny system badań i weryfikacji, rozwijany ponad L12 przez poprawę jakości dowodów, reprodukowalności, stabilności numerycznej, odporności na błędy i efektywności zasobów.
+
+**Architektura:** istniejący silnik pozostaje podstawą. ONTOS jest odseparowaną, skończoną domeną eksperymentalną; działa na danych, modelach i symulowanych akcjach, bez uprawnień do hosta, sieci, repozytorium, poświadczeń lub samodzielnych wdrożeń. Interfejs do istniejącego silnika to walidowane dane i certyfikaty czystych, ograniczonych obliczeń. Evaluator, korzeń zaufania, bramki, limity i uprawnienia pozostają poza zasięgiem eksperymentów.
+
+**Stack:** istniejący Python/NumPy/SciPy, SQLite, pytest, ograniczona IR, Lean/Isabelle i SMT; zewnętrzne formaty Rust/Zenoh, WIT/WASI, MLIR/CIRCT, egglog, RTL jako osobne zakresy kompatybilności i symulacji. Wersje i licencje wymagają sprawdzenia przy implementacji; numer w raporcie nie dowodzi dostępności.
+
+## 1. Nadrzędność, granice i statusy
+
+Niniejsza Roadmapa porządkuje wszystkie kolejne etapy. Zachowuje [v1–v36 i wcześniejsze przyrosty](MAINTAINER_ROADMAP.md), [v37–v48](ONTOS_L7_ROADMAP.md) oraz [rejestr odbiorowy](CLOSURE_REGISTER.md). Nie zmienia istniejących wymagań w PASS, nie usuwa długu technicznego i nie powtarza potwierdzonych już własności bez dowodu regresji. [GATE-09](GATE09_MAINTAINER_ACCEPTANCE.md) jest zachowany dla dotychczasowego ograniczonego zakresu wydania, nie stanowi certyfikacji ONTOS L7–L12.
+
+Kolejność: istniejące niezależne reszty v22, v24–v28, v31–v34; bazowe v37–v48 według zależności; następnie integracja Phase0 v49–v54, L8 v55–v58, L9 v59–v62, L10 v63–v67, L11 v68–v71, L12 v72–v75, post-Ω∞ v76–v80. Możliwa równoległa realizacja niezależnych zadań bez tworzenia innych gałęzi, przy zachowaniu atomowych odbiorów. Numery v49–v80 są decyzją projektową niniejszej rewizji, nie numeracją Argona. Status każdego nowego etapu OPEN.
+
+Zakres operacyjny nie rozszerza zgody operatora. Nie zmieniamy harmonogramu, mechanizmów autoryzacji, zabezpieczeń ani produkcyjnego ewaluatora. Eksperymenty nie otrzymują poświadczeń, nie tworzą procesów samomodyfikujących się, nie wykonują generowanego kodu hosta, nie mogą modyfikować weryfikatora, nie rozszerzają praw. Brak dowodu oznacza brak dopuszczenia; nieznany wynik nie jest PASS. Testy deterministyczne mogą zastąpić niedostępne podłoże w zakresie wiernie modelowanego kontraktu; nie zastępują matematycznego dowodu, którego wymaga kryterium, ani nie są dowodem wdrożenia. Żadnych płatnych zleceń, rzeczywistego QPU/FPGA DFX ani zewnętrznych wdrożeń w tej zgodzie.
+
+## 2. Źródłowy stan dowodowy
+
+S2, Tom I, XI–XIII: Argon deklaruje wykonanie 1080 głównych i 720 ablacyjnych epizodów (1800 łącznie, 486,72 s), 4 suity × 30 ziaren i symulatory sześciu podłoży. L7_baseline jest rekonstrukcją, nie oryginalnym L7. Rust/Zenoh, RTL, Lean, SMT, egglog, MLIR i WIT nie mają w raporcie kompletnej natywnej weryfikacji. Zachowujemy te wyniki jako SOURCE-REPORTED. Dla wszystkich nowych etapów repozytorium wymagamy dowodów powiązanych z jego SHA.
+
+| Miara S2 | L7-Phase0 | L8 | L9 | L10–L12 |
+|---|---:|---:|---:|---:|
+| Przeżycie A/B/C/D | 30/30 każda | 30/30 każda | 30/30 każda | 30/30 każda |
+| Trafność A | 91,51% | 90,25% | 90,25% | 90,25% |
+| Trafność B | 92,21% | 91,15% | 91,15% | 91,15% |
+| Trafność C | 90,74% | 90,17% | 90,17% | 90,17% |
+| OOD recall C | 0% | 38,5% | 38,5% | 38,5% |
+| Trafność D | 74,31% | 72,93% | 89,71% | 90,79% |
+| Zdrowie organelli D | 0,44 | 0,44 | 0,93 | 0,93 |
+| Śr. FLOPs A (wg źródła) | 373,5k | 793,2k | 710,8k | 710,8k |
+
+S2 podaje zero Goodharta dla Phase0–L12. Nie jest to uniwersalna gwarancja. Wzrost OOD i odporności D współwystępuje z narzutem obliczeń i spadkiem trafności A/B. Nie wolno ukrywać tego kompromisu. Symulacje SOT-MRAM 11,69 nJ, p-bit 1,14 nJ i H100 167,13 nJ dotyczą założeń 350 000 operacji; nie są pomiarem z gniazdka.
+
+## 3. Faza 0 i ponowne powiązanie v37–v48
+
+Poniższe dziesięć kontraktów P0-01–P0-10 to rekonstrukcja wymagań na podstawie Tomów I, III, V i listingów X.7–X.22, nie deklaracja dokładnego odtworzenia numeracji pierwotnego audytu. Każdy musi mieć test na rzeczywistym komponencie repozytorium. Powtórny test integracyjny nie oznacza ponownej implementacji już przyjętego modułu.
+
+| ID | Defekt / zobowiązanie | Etap bazowy | Nowa bramka |
+|---|---|---|---|
+| P0-01 | Zanik przekonań: ziarno 9274, predykcja B_eff i dodatnia podłoga po normalizacji | v39 | v50 |
+| P0-02 | Skażenie atraktorów: ziarna 9216 i 9651, niezależna ocena przed konsolidacją | v44 | v51 |
+| P0-03 | Oddzielenie prawdy symulatora od obserwacji i niezależny holdout | v37/v48 | v49/v54 |
+| P0-04 | Memory Skepticism: historia wiarygodności i odwracalna konsolidacja | v44 | v51 |
+| P0-05 | Przegląd PACE/VaG oraz długotrwałego zapisu | v46 | v51 |
+| P0-06 | Wywołanie rzeczywistych klas w eksperymencie zamiast liczników zastępczych | v40–v44 | v53 |
+| P0-07 | Uczciwe rozliczenie kosztu operacji, budżetu i jednostek | v38 | v53 |
+| P0-08 | ATLAS Omega i hierarchiczne podcele JEPA w skończonych zadaniach lokalnych | v43 | v52 |
+| P0-09 | Norm-preserving OOD: udokumentować ślepotę bazową i odrębnie sprawdzać detekcję | v46 | v54/v58 |
+| P0-10 | Kompletność pamięci, bitemporalności i pochodzenia dowodów | v42/v44 | v52 |
+
+## 4. Roadmapa wykonawcza v49–v80
+
+Wszystkie poniższe etapy mają status OPEN. „S” oznacza wymaganie źródłowe; „E” oznacza dodatkowe proponowane rozszerzenie, a nie zacytowany wynik Argona. Proponowane lokalizacje: omega_x_evolution/ontos_research/ dla izolowanych, czystych modułów i tests/test_ontos_vNN_*.py dla testów. Istniejące moduły wykorzystywać przez ich rzeczywiste kontrakty, bez zastępowania silnika ani kopiowania monolitu. Każde zadanie ma oddzielny dowód odbioru.
+
+### Phase0 — v49–v54 (S2, Tom I, X, XI; poprzednik v37–v48)
+
+| Etap / proponowane pliki | S: wymaganie i zależności | E: rozszerzenie i kryterium odbioru |
+|---|---|---|
+| v49 source_ingest.py, test_ontos_v49_source.py | Manifest 33 listingów; v37 | Kontrolowany import źródła po przeglądzie, SHA każdego pliku, stos zależności i licencje; 33/33 pozycji z dyspozycją REUSE/PORT/REJECT/RESEARCH i uzasadnieniem. Niezaufane listingi nie są wykonywane. Testy zniekształceń PDF, braków i kolizji nazw. |
+| v50 belief.py, test_ontos_v50_belief.py | P0-01, v39; B_eff, prior mix 0,06, ε=1e-4 | Jawna definicja podłogi po normalizacji, kontrola skończoności i sumy; długie ślady zera, skrajne likelihood i ziarno 9274; porównanie z niezależną referencją o większej precyzji. |
+| v51 memory_evidence.py, test_ontos_v51_memory.py | P0-02/04/05, v44/v46; PACE/VaG, Memory Skepticism | W izolowanym zbiorze prototypów audyt statystyczny e-procesu, kontrola wielokrotnych prób, korelacji i fałszywej konsolidacji; niezmienne ślady dowodowe, brak publikacji do pamięci operacyjnej. Ziarna 9216/9651 i przypadki błędnych etykiet. |
+| v52 temporal_contracts.py, test_ontos_v52_temporal.py | P0-08/10, v42/v43/v44; Titans/JEPA/VSA/NARS/KG | Recenzja zgodności zegarów 1/6/24 i okna 4; obie osie czasu, korekty wsteczne, niezależność dowodów; powtarzalna retencja na małym zbiorze; ponowne użycie graph_memory.py i holographic.py. Nie utożsamiać uproszczonej pamięci z produkcyjnym HOPE. |
+| v53 accounting.py, test_ontos_v53_accounting.py | P0-06/07; v38/v40; FLOPsCounter | Instrumentacja obejmuje inferencję i aktualizacje, QR/SVD/LP, oddzielne koszty pamięci i I/O; walidacja licznika dla znanych jąder; jawne UNKNOWN dla niepoliczonych operacji; rezerwacja przed wykonaniem w testbedzie; powiązanie z green.py. |
+| v54 phase0_replay.py, test_ontos_v54_replay.py | v49–v53, v48; suity A/B i bazowa C | Zamrożony comparator i seedy; scorer poza observation API; per-seed log, replay, uwzględnienie abstynencji i awarii. Cel źródłowy 30/30 w A/B, ≥91% wg tej samej definicji i zero symulowanych lure hits. Raportować niepowodzenia, nie dostrajać holdout. |
+
+### L8 — przyczynowość i epistemika, v55–v58 (S2, Tom II–IV, VII, X.11)
+
+| Etap / proponowane pliki | S: wymaganie i zależności | E: rozszerzenie i kryterium odbioru |
+|---|---|---|
+| v55 causal_contract.py, test_ontos_v55_scm.py | Obserwacje i interwencje SCM; v54 | Ocena identyfikowalności na skończonych, jawnie określonych modelach; osobno obserwacja i do(a), brak ukrytych etykiet, testy confounding i brak danych. Nie twierdzić, że log obserwacyjny jest interwencją. |
+| v56 harm_bounds.py, test_ontos_v56_lp.py | Balke–Pearl LP [l,u], v55 | Dwa niezależne orakle małych tabel, jawne ograniczenia i niepewność danych; p00=0, sprzeczne marginesy i brak identyfikacji → UNKNOWN/[0,1]; nie dopuszczać działań na podstawie fikcyjnych marginesów. |
+| v57 causal_metrics.py, test_ontos_v57_metrics.py | VoI, EI i przyczynowe pomiary; v45/v55 | Znane analityczne przykłady informacji, rozdzielić mutual information od empowerment; sprawdzić jednostki i szum, raportować brak niezależnej identyfikacji. Tylko skończone dane eksperymentalne. |
+| v58 ood_evaluation.py, test_ontos_v58_ood.py | Vietoris–Rips/dDCA i Suite C; v54–v57 | Rzeczywista ocena separowalności, nie nazywać prostego NN wynikiem homologii trwałej; skalibrowane raporty ROC/PR, false-positive i coverage. Cel E (nie wynik): recall ≥70% w zamrożonej C i FPR ≤5% z przedziałami ufności, bez zwiększania praw. Nie zastępować istniejących barier bezpieczeństwa detektorem. |
+
+### L9 — substrat i odporność, v59–v62 (S2, Tom III–V, X.9–X.10)
+
+| Etap / proponowane pliki | S: wymaganie i zależności | E: rozszerzenie i kryterium odbioru |
+|---|---|---|
+| v59 oscillator_reference.py, test_ontos_v59_numeric.py | Niskorangowy Kuramoto-CTM; v40/v53 | Weryfikacja matematyczna i numeryczna istniejącego wzoru na skończonych macierzach, osobno przypadek bez wymuszenia i z wymuszeniem; test kroku całkowania, tolerancji i symetrii. Nie przenosić gwarancji Lapunowa na dowolny dyskretny krok. |
+| v60 sheaf_reference.py, test_ontos_v60_sheaf.py | Dyfuzja snopów, v59 | Zgodność z małymi jawnie złożonymi macierzami, energia przed/po, izolacja uszkodzeń i przypadek źle uwarunkowany; próbkowanie profilu kosztu z jawnie podaną szerokością. |
+| v61 fault_testbed.py, test_ontos_v61_faults.py | BraiNCA, (M,R), TAME; v41/v54 | Symulacja awarii stałej siatki, równoczesne uszkodzenia, brak zasobów, rollback stanu danych; zero samonaprawy kodu/procesów. Oceniać odzyskanie stanu, nie sam wskaźnik health. |
+| v62 memory_noise_bench.py, test_ontos_v62_noise.py | Kinetic Proofreading, v51/v52 | Sprawdzić p_err^(m+1) wyłącznie przy niezależności; wprowadzić skorelowany szum i drifty jako testy falsyfikujące. Docelowe 89,71% trafności D i health 0,93 wg źródła, raport obu metryk z kosztem. |
+
+### L10 — formalna kompatybilność i izolacja, v63–v67 (S2, Tom IV, VII–VIII, X.14, X.23–X.31)
+
+| Etap / proponowane pliki | S: wymaganie i zależności | E: rozszerzenie i kryterium odbioru |
+|---|---|---|
+| v63 finite_interface_model.py, test_ontos_v63_interface.py | PolyTr_U/WIT, kanały A–E; v42/v47 | Skończony model stanów i śladów, monotoniczna redukcja w obrębie transakcji; restart nie przywraca praw. Model nie przyznaje realnych capabilities. Testy LOCKDOWN, błędów ramek, przeterminowania; niezależna kontrola nieinterferencji. |
+| v64 ir_certificate_review.py, test_ontos_v64_ir.py | UIR, egglog/MLIR/CIRCT, EqSat/MDL; v26/v28/v31/v47 | Reuse proof_kernel.py, bitproof.py i lean_native.py; tylko czyste IR i statyczne fixture. Cztery próbki nie są dowodem; test znanych kontrprzykładów, floating point i modularne domeny oddzielnie. Zewnętrzny certyfikat wiązany z dokładnym IR i wersją semantyki. |
+| v65 trace_noninterference.py, test_ontos_v65_traces.py | Bezalternacyjny HyperLTL, SMT; v63/v64 | Rozróżnić deklarowane zbiory zapisu od rzeczywistych obserwacji śladów; model skończony, self-composition, konflikt RAW/WAR/WAW, wyczerpanie limitu → UNKNOWN. Stały evaluator bez zmian. |
+| v66 transport_contracts.py, test_ontos_v66_transport.py | Rust/Zenoh/WASI, v47/v63 | Model kontraktowy serializacji, wersjonowania, awarii/replay i opóźnienia; natywna kompatybilność osobno, jeżeli dostępna. Limit źródłowy IPC <1 ms jest fizycznym celem testowym, nie rezultatem symulacji. Bez nowej usługi. |
+| v67 rtl_model.py, test_ontos_v67_rtl.py | FPGA DFX, static shell, CIRCT LEC; v64/v65 | Wyłącznie statyczny testbed RTL/DFX bez generowania wdrażalnych zmian urządzenia; ślady reset/timeout/awaria, dowody równoważności dla ustalonych jąder, fail-closed. ≤2,5 ms jest źródłowym celem ICAP, nie poświadczeniem sprzętowym. |
+
+### L11 — termodynamika i heterogeniczne podłoża, v68–v71 (S2, Tom III, V–VI, X.12/X.18)
+
+| Etap / proponowane pliki | S: wymaganie i zależności | E: rozszerzenie i kryterium odbioru |
+|---|---|---|
+| v68 si_units.py, test_ontos_v68_units.py | GΩ+ w J, v38/v53/v57 | Zweryfikować bity/naty, T>0, termodynamiczne granice kasowania; odrębnie operacje i bity, bez automatycznego utożsamiania FLOP z wymazaniem. Test skali, sumowania i porządku raportowanych miar. |
+| v69 substrate_model.py, test_ontos_v69_substrate.py | Sześć podłoży, v68 | Model wall-plug, ADC/DAC, memory traffic, chłodzenie, zużycie i niepewność kalibracji. Zakres parametrów i scenariusze skrajne; odtwarzanie źródłowych liczb jako scenariusza, nie pomiaru. |
+| v70 endurance_model.py, test_ontos_v70_endurance.py | SOT-MRAM/s-MTJ/RRAM i trwałość, v69 | Symulacja rozkładu zapisów, wear-out i awarii, fizyczne jednostki i warunki graniczne; założenie pięciu lat przy 100 Hz sprawdzić na profilu zapisów, nie uznać za osiągnięte sprzętowo. |
+| v71 energy_pareto_report.py, test_ontos_v71_pareto.py | Źródłowa granica ≤15 nJ dla 350k operacji, v68–v70 | Ocena porównawcza przy równych zadaniach i poprawności; przedziały kosztów, analiza wrażliwości i Pareto; raportować przecięcie przedziałów bez obietnicy przewagi. Cel E: kompletność rachunku w całym eksperymencie. |
+
+### L12 — pełna integracja dowodowa, v72–v75 (S2, Tom VII–XII, X.5/X.13/X.25/X.30/X.31)
+
+| Etap / proponowane pliki | S: wymaganie i zależności | E: rozszerzenie i kryterium odbioru |
+|---|---|---|
+| v72 receipt_contracts.py, test_ontos_v72_receipts.py | HMAC/Merkle, RFC 8785, profile Ed25519/ML-DSA/SLH-DSA i ML-KEM; v63/v66 | Offline test vectors, kanoniczność, separacja kluczy testowych i odrzucanie uszkodzeń; digest nie jest podpisem PQC, ML-KEM to ustanawianie klucza, nie podpis. Zewnętrzne biblioteki wymagają natywnej kwalifikacji. Bez zmiany produkcyjnego korzenia zaufania. |
+| v73 isolation_evidence.py, test_ontos_v73_isolation.py | T_ext ≠ T_obj i kanały A–E, v65–v72 | Dowody na skończone modele i istniejące granice izolacji, testy negatywne dla dostępu do hosta/sieci/kluczy/evaluatorów. Nie utożsamiać prywatnego pola obiektu z izolacją procesu. |
+| v74 campaign_report.py, test_ontos_v74_campaign.py | Pełne Suity A–D, 30 ziaren, ablacje; v54/v58/v62/v67/v71/v73 | Raport z 1080+720 źródłowych konfiguracji po zamrożeniu protokołu, osobne rozliczenie generacji, paired bootstrap/permutation z korektą wielokrotnego testowania, bez selekcji korzystnych seedów. Publikacja zagregowanych pomiarów i niezmiennych artefaktów, bez automatycznej promocji. |
+| v75 integration_acceptance.md, test_ontos_v75_contracts.py | Wydanie badawcze L12, v72–v74 i wszystkie obowiązujące zależności | Weryfikacja 33/33 pozycji manifestu, pokrycie wymagań, zgodność licencyjna, testy odzyskania, TCB i dowody niezmienione; osobne NATIVE/SIMULATION/HYBRID. GATE-09 nowego zakresu wyłącznie po wszystkich obowiązujących bramkach. |
+
+### Post-Ω∞ — rozszerzenia autorskie E, v76–v80 (S2, Tom XIV)
+
+Te etapy nie tworzą nowej certyfikowanej generacji L13. Stanowią rozszerzenie metodologii i rygoru w dziedzinach wskazanych jako otwarte. Zakaz współewolucji weryfikatora, przyznawania uprawnień, automatycznej migracji TCB i samodzielnej egzekucji rezultatów.
+
+| Etap / proponowane pliki | Rozszerzenie | Kryterium odbioru |
+|---|---|---|
+| v76 ood_benchmark_registry.py, test_ontos_v76_ood_cases.py | Zewnętrzny względem modelu rejestr testów semantycznej spójności i niezmienności względem transformacji, v58/v74 | Odrębny zamrożony zbiór falsyfikacji, pokrycie klas błędów, worst-group recall/precision, koszt i ryzyko błędnej abstynencji. E: recall ≥85% jako cel badawczy przy FPR ≤5%, z zakazem dostrajania do testu. |
+| v77 planning_evaluation.py, test_ontos_v77_planning_eval.py | Ocena istniejących podcelów JEPA w skończonych światach, v52/v74 | Niezależny oracle dla małych przestrzeni, koszt i sukces w kilku horyzontach, błędy poza rozkładem; badanie ograniczeń, bez otwartego generowania realnych celów. |
+| v78 proof_evidence_catalog.py, test_ontos_v78_proof_catalog.py | Archiwum krzyżowej weryfikacji niezależnych dowodów, v64/v65/v73 | Weryfikatory zewnętrzne względem badanego programu pozostają zamrożone; różne reprezentacje jednego twierdzenia sprawdzane bez migracji TCB, brak dowodu → UNKNOWN. Nie implementować samoweryfikującej się zmiany interpretera. |
+| v79 local_learning_measure.py, test_ontos_v79_energy.py | Rachunkowość fizycznego uczenia kontrastowego, v68–v71 | Symulacja bilansu energetycznego układów referencyjnych, jawne granice i koszty odzysku; porównanie ilościowe bez przypisywania potencjału sprzętowi, którego nie testowano. |
+| v80 reproducibility_release.md, test_ontos_v80_replay.py | Długoterminowa reprodukcja i audyt jakości dowodów po L12 | Manifest danych/narzędzi/testów z SHA, dwie niezależne rekonstrukcje z zachowaniem tolerancji, pełne rozliczenie regresji i decyzji; brak automatycznej akceptacji przez model. |
+
+## 5. Pełna identyfikowalność 33 plików S2 (Tom IX–X)
+
+Poniższy rejestr nie jest deklaracją, że pliki z PDF istnieją już w repozytorium. Nazwy zachowano zgodnie z manifestem źródła. Żaden listing nie ma domyślnego statusu zaufanego kodu.
+
+| Nr z X | Ścieżka źródłowa | Docelowy etap integracji / przeglądu |
+|---|---|---|
+| 1 | README.md | v49, v75 |
+| 2 | pyproject.toml | v49; istniejący manifest pozostaje nadrzędny |
+| 3 | requirements-lock.txt | v49; poprawność składni, wersje, hashe |
+| 4 | config/ontos_l12_config.json | v49, v54 |
+| 5 | schemas/telemetry_schema.json | v63, v72 |
+| 6 | src/omega_ontos/__init__.py | v49; brak nowego drugiego runtime |
+| 7 | src/omega_ontos/types.py | v50, v53, v63 |
+| 8 | src/omega_ontos/poly_interface.py | v63 |
+| 9 | src/omega_ontos/cognitive_substrate.py | v59–v61 |
+| 10 | src/omega_ontos/living_memory.py | v51, v52, v62 |
+| 11 | src/omega_ontos/causal_engine.py | v55–v57 |
+| 12 | src/omega_ontos/thermodynamics.py | v68–v71 |
+| 13 | src/omega_ontos/immune_kernel.py | v51, v58, v65, v72–v73; przegląd offline |
+| 14 | src/omega_ontos/uir_evolution.py | v64 |
+| 15 | src/omega_ontos/organism.py | v53–v54, v74; tylko testbed |
+| 16 | simulators/__init__.py | v49 |
+| 17 | simulators/environments.py | v54, v61 |
+| 18 | simulators/hardware_substrates.py | v69–v71 |
+| 19 | benchmarks/__init__.py | v49, v74 |
+| 20 | benchmarks/run_benchmarks.py | v54, v74 |
+| 21 | tests/__init__.py | v49 |
+| 22 | tests/test_ontos_suite.py | v50–v75 |
+| 23 | interfaces/wit/ontos_poly.wit | v63, v66 |
+| 24 | runtime/rust_zenoh_core/Cargo.toml | v66 |
+| 25 | runtime/rust_zenoh_core/src/main.rs | v66, v73; test kontraktów |
+| 26 | compiler/mlir/ontos_uir.mlir | v64, v67 |
+| 27 | compiler/egglog/uir_eqsat.egg | v64 |
+| 28 | hardware/rtl/static_shell_guard.sv | v67 |
+| 29 | hardware/rtl/dfx_cfc_accel.sv | v67 |
+| 30 | formal/lean4/OntosInvariants.lean | v63, v65, v78 |
+| 31 | formal/smt/hyperltl_noninterference.smt2 | v65 |
+| 32 | scripts/compute_manifest_sha256.py | v49, v80 |
+| 33 | scripts/verify_all.sh | v75, v80; rozróżnić SKIP/BLOCKED/PASS |
+
+## 6. Audyt dokumentu S2: defekty i granice deklaracji
+
+To statyczny przegląd listingów, nie wykonane reprodukcje testów. Wnioski wyznaczają dodatkowe testy i nie są podstawą wprowadzenia zmian bez weryfikacji.
+
+| ID | Lokalizacja | Problem do sprawdzenia | Odbiór |
+|---|---|---|---|
+| A01 | X.3 | Ekstrakcja PDF lockfile może zgubić operatory wersji; zakaz zgadywania oryginalnych bajtów | v49 |
+| A02 | X.15 | max(prior*likelihood, ε), potem normalizacja: deklarowana podłoga ε wymaga dowodu po normalizacji | v50 |
+| A03 | X.13/X.10 | Czynnik sukcesu PACE 2,3 i porażki 0,4 przy p0=0,25 daje oczekiwanie 0,875 przed obcięciami; floor/cap i selekcja prób zmieniają proces; potrzeba jawnej hipotezy i kontroli powtarzania | v51 |
+| A04 | X.10/X.15 | KG zapisuje recorded_at, ale query_at nie rozdziela osi transakcji; test bitemporalny i historia korekt konieczne | v52 |
+| A05 | X.15 | Rozliczenie ledger następuje przed observe_outcome, gdzie są dalsze aktualizacje; SVD i LP nie są kompletnie naliczane | v53 |
+| A06 | X.7/X.15/X.17 | ObservationPacket zawiera prawdę o OOD/reżimie, fault flags, a wynik correct/new_state_est jest dostarczany przez środowisko; sprawdzić wycieki oraz zakres legalnego feedbacku w benchmarku | v54 |
+| A07 | X.11/X.15 | LP okresowo otrzymuje stałe 0,04/0,03, między wywołaniami harm_u=0,02; zakres bez danych musi pozostać nieznany | v55/v56 |
+| A08 | X.15 | macro_ei=emp_bits; EFE i information gain przekazywane z log naturalnych do pól bits; decyzja oparta na g_norm, nie total_G_omega_J; raport typu i jednostki wymagają niezależnej kontroli | v57/v68 |
+| A09 | X.13 | Nearest-neighbor ratio nie wystarcza do pełnej homologii trwałej; SAE/dDCA nie są gwarancją bezpieczeństwa | v58 |
+| A10 | X.9 | Symetria J=UUᵀ nie gwarantuje spadku energii przy naturalnych częstościach, wymuszeniu i dowolnej dyskretyzacji | v59 |
+| A11 | X.8 | Przynależność caps do root_universe nie dowodzi monotoniczności kolejnych przejść; ograniczenia wykonawcze muszą pozostać zewnętrzne | v63 |
+| A12 | X.14 | Cztery punkty testowe nie są dowodem równoważności; fma w kodzie to osobne mnożenie i dodawanie; nie wolno nazywać wyniku formalnym certyfikatem | v64 |
+| A13 | X.13/X.15 | Zbiory nazw zapisów nie stanowią ogólnego HyperLTL; scenariusz konfliktu używa znanych z góry konfliktowych zbiorów | v65 |
+| A14 | X.12 | N_ops nie jest liczbą bitów wymazanych; korekta podwójnego liczenia, kosztów i wspólnej jednostki | v68 |
+| A15 | X.13 | Domyślny publiczny secret_key, json.dumps zamiast pełnego RFC 8785, SHA3 digest zamiast PQC i łańcuch hashy zamiast pełnego dowodu Merkle | v72; nie używać produkcyjnie |
+| A16 | X.13/X.15 | Jądro i organizm w tym samym procesie; zliczenie trybu symulacyjnego nie dowodzi fizycznej separacji ani blokady ataku | v73 |
+| A17 | Tom XI | Dane generacji L10–L12 agregowane, syntetyczne baselines i rekonstrukcja L7; statystyka musi uwzględnić wspólne ziarna, cenzurowanie i wielokrotne porównania | v74 |
+
+## 7. Kontrakty wykonawcze i odbiór
+
+Wszystkie nowe moduły mają być małe, czyste i testowalne. Proponowany kierunek interfejsów testbedu: immutable Observation (tylko dane dostępne w danej chwili) → istniejący, ograniczony model eksperymentalny → Proposal (skończona domena symulowana) → zewnętrzny, niezmieniany evaluator → Outcome → log i komplet dowodów. GroundTruth pozostaje w evaluatorze. Raporty nie są certyfikatami wdrożenia. Nie stosować niejawnych fallbacków, przekroczeń budżetu ani modyfikacji środowiska podczas prób.
+
+Dla każdego vNN: zapis testów RED/GREEN, lokalne polecenie python -m pytest -q na konkretnych rzeczywiście utworzonych testach, compileall modułu, regresja dotkniętych kontraktów, SHA wejścia/wyjścia oraz wersje środowiska. Brak dostępnego natywnego toolchainu: oznaczyć NATIVE-BLOCKED i wykonać deterministyczny model tylko właściwej części kontraktu. Wzorzec rejestru: requirement_id, source_section, base_sha, code_blob, test_id, seed, environment, command, exit_code, evidence_sha256, verification_mode, verdict, limitations. Artefakty i logi przechowywać z kontrolą integralności. Zmiany wyłącznie na main, bez force push; sprawdzić zegar i HEAD przed modyfikacją, nie publikować niezweryfikowanej implementacji.
+
+Bramki GATE-01 wymagania → 02 architektura → 03 implementacja → 04 testy → 05 integracja → 06 bezpieczeństwo → 07 recovery → 08 dowody → 09 odbiór. Obowiązkowe kryterium nie może być zastąpione wynikiem statycznej analizy. Brak natywnego sprzętu nie blokuje przyjęcia poprawnego modelu; nie zmienia statusu fizycznego. W żadnej fazie nie deklarować absolutnego bezpieczeństwa, świadomości, globalnej niesprzeczności, pełnej autonomii ani dowolnego udowodnionego przyśpieszenia.
+
+## 8. Horyzont źródłowy i kolejność prac
+
+S2 Tom XII: Phase0 Q4 2026; L8–L9 2027; L10 2027–2028; L11 2028–2031; L12 2031–2035+. Traktujemy te daty jako projekcję źródłową, nie zobowiązanie dostawy. Testy kontraktowe można wykonać wcześniej niż dostępność fizycznego sprzętu. Nie obiecywać dat wdrożenia i nie uruchamiać płatnych usług.
+
+Następny etap nowej linii: v49 (odzysk i kontrola manifestu) oraz v37 (testbed), po których następuje walidacja Phase0 zgodnie z zależnościami. Dotychczasowa kolejka v22–v34 nadal obowiązuje. Nie zmieniamy istniejącej automatyzacji ani ramy 20.11.2026 08:26 CET – 21.11.2026 08:26 CET. Dalsze wykonanie poza tą ramą wymaga nowej autoryzacji. Niniejsza zmiana dotyczy wyłącznie dokumentacji.

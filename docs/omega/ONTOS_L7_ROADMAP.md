@@ -40,3 +40,6 @@ The PDF reports 234.4/240 survival steps, 92.9% accuracy, 93.0% return-regime re
 ## Integration policy
 
 Use Argon results as reproducibility targets. If the original source, raw results and test logs become available, bind them by SHA-256 and reproduce relevant tests rather than duplicating proven components. The source phases map to v37–42 and v46–47 (runtime and formal study), v43–44 (memory), v45–48 (measurements and evidence). L8 is not specified by this document. Full Godel/Lob self-proof, universal safety, phenomenal consciousness, and the physical Landauer limit on CMOS are not acceptance claims. The current time-limited authorization and existing automation are unchanged.
+
+
+**Aktualna nadrzędna Roadmapa ONTOS Ω∞:** [L7–L12 / post-Ω∞](ONTOS_OMEGA_INFINITY_ROADMAP.md) — 32 nowe etapy v49–v80, 10 kontraktów Phase0, mapowanie 33 listingów i 17 ustaleń statycznego audytu dokumentu Argona. Zachowuje v1–v48 oraz przyjęty ograniczony GATE-09. Nowe etapy OPEN; wyniki źródłowe nie są świeżym dowodem integracji. Nie zmienia uprawnień, evaluatorów, limitów ani harmonogramu.
