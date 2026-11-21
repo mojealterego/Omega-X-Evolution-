@@ -81,3 +81,8 @@ sequenceDiagram
 - v72–v73: dowody HMAC/Merkle, modelowanego PQC i egzekwowanej izolacji TCB. Hash nie stanowi podpisu PQC.
 
 **Kryterium odbioru v81 dokumentacji:** 5 kanałów, 3 negatywne ścieżki (zła ramka, szkoda, brak dowodu), oddzielny scorer, dwie transakcje pre-commit (C i D), blokada eskalacji i jawny status niewdrożonego runtime.
+
+
+### Potwierdzone ograniczone przejścia referencyjne (v63–v66)
+
+Kod: [A–E automat](../../omega_x_evolution/ontos_v63_interface.py), [transport](../../omega_x_evolution/ontos_v66_wire.py), [testy](../../tests/test_ontos_v63_v66.py). W modelu A:observe → B:assess → C/D:propose → E:allow produkuje *wyłącznie* MODEL_APPROVED, nigdy praw operacyjnych. E:veto, alarm lub timeout skutkują LOCKDOWN; restart nie przywraca Caps. Walidacja ramek i odbioru nie daje autentykacji nadawcy. v65 analizuje modelowane ślady, nie wykonane trace procesu. [Dowody L10](ONTOS_V63_V66_L10.md). Diagram wyżej nadal przedstawia wymagany przyszły podział TCB i nie jest certyfikatem produkcyjnego pre-commit.

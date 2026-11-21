@@ -242,3 +242,8 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 - **v87** (v64/v67/v72–v73): synteza wyłącznie kandydata RTL i niezależna LEC/Z3 w DFX, stała powłoka FPGA z SHA, bez fizycznej podmiany, fail-closed → OPEN.
 
 **Brama akceptacyjna:** żadne nowe wymaganie v81–v87 nie dostaje pełnego PASS na podstawie samego planu lub diagramu. Zamykanie tylko z rzeczywistą implementacją, testami, falsyfikacją, dowodami SHA i niezależnym od podmiotu weryfikatorem. Brak infrastruktury dopuszcza wierną symulację tylko modelowanych własności, nie udowadnia władania sprzętem.
+
+
+## ONTOS L10 v63–v66 (2026-11-21): finite reference gates
+
+[Implementacja, dowody, bramki](ONTOS_V63_V66_L10.md) · [kampania JSON](ONTOS_V63_V66_CAMPAIGN.json) · [SHA-256](V63_V66_SHA256SUMS). Zaimplementowano 4 odseparowane referencyjne moduły: v63 A–E pre-commit, modelowa monotoniczność Caps i blokada restartu (TESTED); v64 certyfikat pełnej domeny i4 256/256, niezależny interpreter, fałszerstwa odrzucane (TESTED); v65 skończona samokompozycja śladów, RAW/WAR/WAW, UNKNOWN przy przekroczeniu budżetu (TESTED); v66 kanoniczny komunikat IPC, nonce/sequence/replay/timeout, atomowy most v63↔v66 i deklaracja WIT (TESTED wyłącznie Python; **RUST/ZENOH/WASI/WIT NATIVE-BLOCKED**). Kampania 30-seed: 120 doręczeń, 30 powtórek odrzuconych, 30 celowo konfliktowych przeplotów wykrytych i 0 realnie przyznanych praw; nie zmierzono fizycznego IPC poniżej 1 ms. **40 nowych + 220 poprzednich = 260/260 lokalnych testów PASS**, compileall PASS. Pełne etapy v63–v66 oraz formalne HyperLTL, Lean/SMT, izolacja TCB i natywne porty pozostają OPEN; nie przyznano nowego GATE-09. Historyczny ograniczony GATE-09 PASS niezmieniony. Następny etap v67.

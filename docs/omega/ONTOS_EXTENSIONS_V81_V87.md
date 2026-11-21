@@ -44,3 +44,8 @@ flowchart TD
 - Zewnętrzny dokument użytkownika „OMEGA-X ONTOS (Generacje L8–L12 / Ω∞)”, TOM VI–VIII: energia, Jądro Immunologiczne, kanały A–E.
 - [CIRCT LEC — dokumentacja kompilatora](https://circt.llvm.org/docs/Tools/circt-lec/): ograniczona równoważność w dialektach HW/Comb/Seq (nie gwarancja wszystkiego RTL).
 - [Monitoring hyperproperties / HyperLTL](https://arxiv.org/abs/1807.00758): weryfikacja wielośladowa i ograniczenia skończonych logów.
+
+
+### Stan realizacyjny po L10 v63–v66
+
+Powstały [testowane, skończone kontrakty](ONTOS_V63_V66_L10.md) — v63 modeluje przebieg A–E i monotonię Caps, v65 enumeruje krótkie przeploty oraz zwraca kontrprzykłady RAW/WAR/WAW, a v66 bada kanoniczny format komunikatu. Stan **EXT-01/v81:** diagram + model Python TESTED, *odseparowane Jądro i rzeczywiste zdolności nadal OPEN*. Stan **EXT-06/v86:** finite HyperLTL-style trace comparison TESTED, pełna kwantyfikacja ∀*ψ, niezależny solver i własności procesowe OPEN. Pozostałe rozszerzenia v82–v85 oraz v87 bez zmiany statusu. Pythonowy model E:allow nie jest zgłoszeniem podpisanej zgody ani decyzji fizycznego TCB.

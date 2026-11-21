@@ -1,0 +1,25 @@
+// Proposed typed boundary, NOT native WIT/Zenoh interoperability evidence.
+package omega:ontos@0.1.0;
+
+interface ae-protocol {
+  enum channel { a, b, c, d, e }
+  record envelope {
+    schema: string,
+    channel: channel,
+    tenant: string,
+    nonce: string,
+    sequence: u32,
+    issued-tick: u64,
+    expires-tick: u64,
+    payload: list<u8>,
+  }
+  record receipt {
+    status: string,
+    logical-age-ticks: option<u64>,
+  }
+  receive: func(message: envelope) -> receipt;
+}
+
+world ontos-model {
+  export ae-protocol;
+}
