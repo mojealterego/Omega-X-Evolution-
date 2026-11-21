@@ -1,0 +1,34 @@
+{
+  "base_head": "5e24375d6e77835e7752f6ef4d489d38b4850b23",
+  "commands": {
+    "compile": "python -m compileall -q omega_x_evolution/haee_admission.py omega_x_evolution/pynn_lif_reference.py tests/test_omega_haee_pynn_reference.py",
+    "green": "PYTHONPATH=. python -m pytest -q --strict-markers tests/test_omega_haee_pynn_reference.py",
+    "red": "PYTHONPATH=. python -m pytest -q tests/test_omega_haee_pynn_reference.py (before modules: import error)",
+    "source_package": "python -m unittest discover -s tests -v (unpacked HAEE source)"
+  },
+  "date": "2026-11-21",
+  "environment": {
+    "os": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "pytest": "9.0.2",
+    "python": "3.13.5"
+  },
+  "files_sha256": {
+    "docs/omega/HAEE_PYNN_RESEARCH_ADMISSION.md": "170feb48804c20a5c77deaefc793225881b58b94a66fdd9f4f2677b12f6b1f49",
+    "omega_x_evolution/haee_admission.py": "85e5ce2526985231c3d79b56706edfce93a30b93bfed5d11d8bcd25c9f4ca195",
+    "omega_x_evolution/pynn_lif_reference.py": "bdf95599aac2c4bfdb6c2eb9b8d96b8e676496e975f1070f8447367830b285b1",
+    "tests/fixtures/haee_experiment_v1.json": "ca80111e2c61527da603e81c9fb2363638a7ce23a2fac129563f0ea144439210",
+    "tests/fixtures/haee_genome_v1.json": "af22853b0669c73788772f4f0c234839f6f23f8a84f77842de58655e8075c36b",
+    "tests/test_omega_haee_pynn_reference.py": "c5b93e3d15c7d882b7a915106e985a295f876f24078608fa7c33f19612ffce62"
+  },
+  "results": {
+    "compile_exit": 0,
+    "full_repo_regression": "NOT_RUN",
+    "native_pynn": "NOT_RUN",
+    "new_tests_fail": 0,
+    "new_tests_pass": 52,
+    "production": "NOT_RUN",
+    "source_package_tests_pass": 10
+  },
+  "schema": "omega-optional-haee-pynn-evidence-v1",
+  "source_archive_sha256": "a1ca7baead447e0e43ffe22385828239fbac08d893386eb87afae8673f74149e"
+}

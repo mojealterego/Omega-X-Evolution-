@@ -1,0 +1,35 @@
+{
+  "allow_external_dataset_egress": false,
+  "allowed_operators": [
+    "MUTATE_PARAM",
+    "ADD_NODE",
+    "REMOVE_NODE",
+    "FUSE_SUBGRAPH",
+    "SWITCH_OPTIMIZER",
+    "MUTATE_LOSS",
+    "SHOCK_MUTATION"
+  ],
+  "approval_policy": "HUMAN_BEFORE_PROMOTION",
+  "baseline_candidate_id": "candidate-baseline-001",
+  "dataset": {
+    "train_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "validation_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "experiment_id": "22222222-2222-4222-8222-222222222222",
+  "max_evaluations": 480,
+  "max_generations": 40,
+  "max_parallel_evaluations": 2,
+  "max_wall_clock_minutes": 240,
+  "objective_ids": [
+    "TASK_ERROR",
+    "GPU_SECONDS",
+    "ROBUSTNESS_DROP",
+    "PARAMETER_COUNT"
+  ],
+  "population": 24,
+  "run_profile": "HYBRID",
+  "schema_version": "1.0.0",
+  "seed": 42,
+  "task_id": "synthetic-neuro-task",
+  "tenant_id": "team-studio"
+}
