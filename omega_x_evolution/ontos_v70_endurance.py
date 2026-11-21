@@ -21,7 +21,7 @@ class EnduranceExceeded(ValueError):
 
 
 def _temperature(value: object) -> bool:
-    return type(value) in (int, float) and math.isfinite(value) and -40 <= value <= 105
+    return type(value) in (int, float) and -40 <= value <= 105 and math.isfinite(value)
 
 
 def rated_cycle_budget(temperature_c: float) -> int | None:
@@ -150,10 +150,10 @@ def predict_hotspot(*, temperature_c: float, events_hz: float, years: float) -> 
     temperature variation, shared wear and retention qualification.
     """
     rated = rated_cycle_budget(temperature_c)
-    if (type(events_hz) not in (float, int) or not math.isfinite(events_hz) or
-        not 0 <= events_hz <= 1e8 or
-        type(years) not in (float, int) or not math.isfinite(years) or
-        not 0 <= years <= 1000):
+    if (type(events_hz) not in (float, int) or
+        not 0 <= events_hz <= 1e8 or not math.isfinite(events_hz) or
+        type(years) not in (float, int) or
+        not 0 <= years <= 1000 or not math.isfinite(years)):
         raise ValueError('hotspot workload bounds')
     cycles = math.ceil(events_hz * years * YEAR_SECONDS)
     return {

@@ -1,4 +1,11 @@
 {
+  "adversarial_red": {
+    "evidence_sha256": "7c3b90045d7f4f47495aa4eb8d1fb8daa6fa7e677a1898464d7c91ad15880ec1",
+    "exit": 1,
+    "fix": "range-before-finiteness validation for unbounded Python ints",
+    "result": "2 failed (unhandled OverflowError), 42 passed",
+    "test": "test_v70_extreme_integer_inputs_fail_closed_with_value_error and test_v70_mutated_frozen_registry_rejected_on_report"
+  },
   "base_commit": "c73690fe87c374da1b97694424d2e3b903c40d95",
   "compile": {
     "command": "python -m compileall -q omega_x_evolution/ontos_v69_substrate.py omega_x_evolution/ontos_v70_endurance.py tests/test_ontos_v69_v70_ramxeed.py",
@@ -11,18 +18,18 @@
     "python": "3.13.5"
   },
   "files": {
-    "docs/omega/ONTOS_V69_V70_RAMXEED_REFERENCE.md": "e72e64f5a4f30b1f0537eaa0c48635f209473015bdd2bf7ca3124f2589d99bfe",
+    "docs/omega/ONTOS_V69_V70_RAMXEED_REFERENCE.md": "65552f087623f8cb6a162ca415d7dffa4f3f1fde955c188ac798ab6697742461",
     "omega_x_evolution/ontos_v69_substrate.py": "39bc8f8e4a2d55ffd2a689e445c5e5af49757348530b6318c18ae4dd89a3819c",
-    "omega_x_evolution/ontos_v70_endurance.py": "0f3de0b3802cba2761328afab32b52a4f8726124f885c3f39b5188fb36ad9c4f",
-    "tests/test_ontos_v69_v70_ramxeed.py": "5e317949eb06c57840db400f961e8d21202bfe04cfdde86e35a9468f6e265c02"
+    "omega_x_evolution/ontos_v70_endurance.py": "a185110cce6239062980ee8608f1daf702ee56381bf7e5661717b949b60b225b",
+    "tests/test_ontos_v69_v70_ramxeed.py": "13add248eb662ee14642ae91b72a9594256e0a724e84cb4ae6b8b6f0d31e67c9"
   },
   "green": {
     "command": "PYTHONPATH=. pytest -q tests/test_ontos_v69_v70_ramxeed.py",
     "exit": 0,
-    "log_sha256": "745f363f58d82ed61dec7c0b2552daa11f0771d481ce8e10dfc984effe3c4f1d",
+    "log_sha256": "18b4045681189cd2509eb491e43dbeaa10e75d710a029e2c69e724be81a14604",
     "seed": 70,
     "tests_failed": 0,
-    "tests_passed": 42
+    "tests_passed": 44
   },
   "new_gate09": "OPEN for complete L11",
   "red": {

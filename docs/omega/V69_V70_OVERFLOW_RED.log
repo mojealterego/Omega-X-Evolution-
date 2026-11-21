@@ -1,0 +1,55 @@
+..........................................FF                             [100%]
+=================================== FAILURES ===================================
+_________ test_v70_extreme_integer_inputs_fail_closed_with_value_error _________
+
+    def test_v70_extreme_integer_inputs_fail_closed_with_value_error():
+        huge = 10**400
+>       with pytest.raises(ValueError): FeRAMWear(huge)
+                                        ^^^^^^^^^^^^^^^
+
+tests/test_ontos_v69_v70_ramxeed.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<string>:6: in __init__
+    ???
+omega_x_evolution/ontos_v70_endurance.py:68: in __post_init__
+    if not _temperature(self.temperature_c):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 100000000000000000...0000000000000000000
+
+    def _temperature(value: object) -> bool:
+>       return type(value) in (int, float) and math.isfinite(value) and -40 <= value <= 105
+                                               ^^^^^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+omega_x_evolution/ontos_v70_endurance.py:24: OverflowError
+_____________ test_v70_mutated_frozen_registry_rejected_on_report ______________
+
+    def test_v70_mutated_frozen_registry_rejected_on_report():
+        model = FeRAMWear(85)
+        object.__setattr__(model, 'temperature_c', 10**400)
+>       with pytest.raises(ValueError): model.report()
+                                        ^^^^^^^^^^^^^^
+
+tests/test_ontos_v69_v70_ramxeed.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+omega_x_evolution/ontos_v70_endurance.py:128: in report
+    self.__post_init__()
+omega_x_evolution/ontos_v70_endurance.py:68: in __post_init__
+    if not _temperature(self.temperature_c):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+value = 100000000000000000...0000000000000000000
+
+    def _temperature(value: object) -> bool:
+>       return type(value) in (int, float) and math.isfinite(value) and -40 <= value <= 105
+                                               ^^^^^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+omega_x_evolution/ontos_v70_endurance.py:24: OverflowError
+=========================== short test summary info ============================
+FAILED tests/test_ontos_v69_v70_ramxeed.py::test_v70_extreme_integer_inputs_fail_closed_with_value_error - OverflowError: int too large to convert to float
+FAILED tests/test_ontos_v69_v70_ramxeed.py::test_v70_mutated_frozen_registry_rejected_on_report - OverflowError: int too large to convert to float
+2 failed, 42 passed in 0.15s

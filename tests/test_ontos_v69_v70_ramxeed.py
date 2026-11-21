@@ -174,3 +174,17 @@ def test_v70_monotonicity_over_randomized_hotspots():
 def test_v70_unknown_device_retention_is_not_fabricated():
     assert FeRAMWear(85).report()['retention_years_at_temperature'] is None
     assert FeRAMWear(105).report()['retention_years_at_temperature']==10
+
+
+def test_v70_extreme_integer_inputs_fail_closed_with_value_error():
+    huge = 10**400
+    with pytest.raises(ValueError): FeRAMWear(huge)
+    with pytest.raises(ValueError): rated_cycle_budget(huge)
+    with pytest.raises(ValueError): predict_hotspot(temperature_c=85, events_hz=huge, years=1)
+    with pytest.raises(ValueError): predict_hotspot(temperature_c=85, events_hz=1, years=huge)
+
+
+def test_v70_mutated_frozen_registry_rejected_on_report():
+    model = FeRAMWear(85)
+    object.__setattr__(model, 'temperature_c', 10**400)
+    with pytest.raises(ValueError): model.report()
