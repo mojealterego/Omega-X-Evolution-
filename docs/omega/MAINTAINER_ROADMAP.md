@@ -140,3 +140,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **2026-11-21 RAMXEED FeRAM for ONTOS L11:** [v69–v70 reference and source-qualified testbed](ONTOS_V69_V70_RAMXEED_REFERENCE.md), [evidence](V69_V70_EVIDENCE.json). Two production modules and 44 focused PASS with interruptible write simulation; targeted energy accounting supports six *named* substrates but does not provide their physically calibrated models. FeRAM is an auxiliary NVM/checkpoint profile, not inference RAM or a replacement for secure monotonic trust anchors. Complete L11 and hardware verification OPEN; historical GATE-09 unchanged.
+
+
+**2026-11-21 — ONTOS L11 v71:** [Model porównywania scenariuszy](ONTOS_V71_PARETO_RESEARCH.md), [przyjęcie 10 źródeł badawczych](RESEARCH_SOURCE_INTAKE_20261121.md) i [dowody SHA/test](V71_EVIDENCE.json). 74 ukierunkowane testy PASS (w tym 44 v69/v70), `compileall` PASS. Konserwatywne Pareto energii wall-plug, czasu i poprawności; brak ukrytego wypełniania UNKNOWN. **TESTED scenariuszowo / hardware OPEN / full L11 GATE-09 OPEN**; bez nowych obowiązkowych epok i bez zmian historycznego GATE-09.
