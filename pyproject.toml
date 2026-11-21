@@ -25,6 +25,7 @@ urls = {Homepage = "https://github.com/mojealterego/Omega-X-Evolution-", Documen
 dependencies = [
     "openai",
     "numpy",
+    "scipy>=1.11,<2",
     "pandas",
     "anthropic>=1.9.0",
     "requests",

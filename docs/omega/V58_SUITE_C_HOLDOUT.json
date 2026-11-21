@@ -1,0 +1,55 @@
+{
+  "average_precision": 0.9954546035497058,
+  "cohort_digest_is_manifest_not_full_features": true,
+  "confidence_gate_95_passed": false,
+  "confusion": {
+    "fn": 1,
+    "fp": 101,
+    "negative_abstain": 0,
+    "positive_abstain": 0,
+    "tn": 2052,
+    "tp": 246
+  },
+  "coverage": 1.0,
+  "dev_calibration_count": 2189,
+  "dev_calibration_seeds": 10,
+  "dev_empirical_fpr": 0.04979442667884879,
+  "dev_reference_count": 2180,
+  "dev_reference_seeds": 10,
+  "dev_reference_sha256": "20be4f45b9890cd7526822c5c3c30f401d3898dec86354f9e09b23ee59e7c853",
+  "fpr_wilson_95": [
+    0.038758163410556025,
+    0.056678363914564565
+  ],
+  "h0_cohort_diagnostics": {
+    "dev_reference": {
+      "finite_deaths": 31,
+      "max_death": 0.6124911385048466,
+      "total_persistence": 6.623154964141235
+    },
+    "holdout": {
+      "finite_deaths": 31,
+      "max_death": 5.3103396958642985,
+      "total_persistence": 24.85624652164609
+    }
+  },
+  "h0_cohort_subset_size": 32,
+  "holdout_fpr": 0.046911286576869486,
+  "holdout_negative": 2153,
+  "holdout_positive": 247,
+  "holdout_recall": 0.9959514170040485,
+  "holdout_rows": 2400,
+  "holdout_seeds": 10,
+  "holdout_sha256": "4914beeb0fab6d35d8721dc4f7b8363e1937f445a95abf36291438c774a4b328",
+  "meets_70_recall_5_fpr_target": true,
+  "persistent_h0_diagnostics": "Euclidean VR H0 on 32-point bounded cohorts, not H1/dDCA",
+  "recall_wilson_95": [
+    0.9774275786171014,
+    0.9992849678329265
+  ],
+  "release_approved": false,
+  "roc_auc": 0.9982399100398465,
+  "selection_rule": "first 10 dev-reference, next 10 dev-calibration, final 10 holdout; fixed before scoring",
+  "status": "EVALUATED_HOLDOUT",
+  "threshold": 0.6242414277609991
+}
