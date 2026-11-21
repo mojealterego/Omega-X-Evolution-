@@ -1,0 +1,44 @@
+{
+  "base_sha": "16eae9789d046b2720b98f84777fbf44dc4433c2",
+  "branch": "main",
+  "compile": {
+    "command": "python -m compileall -q omega_x_evolution/ontos_observability.py tests/test_ontos_observability.py",
+    "exit": 0
+  },
+  "files_sha256": {
+    "docs/omega/ASYNC_TELEMETRY_RESEARCH_20261121.md": "bf603bf38356a2f9b089e5a2eb2ffcc3b64778cce6315e2d56cc673432a559a9",
+    "docs/omega/TELEMETRY_COVERAGE.log": "d1e08fc89bdeb4c79702674d9649c29e5fc9a1b973638d2678a4383c34238715",
+    "docs/omega/TELEMETRY_GREEN.log": "bdbc1eba491664f96fbb0bfab3c68929d5490e307256b3b0bcc15fe8acae5694",
+    "docs/omega/TELEMETRY_RED.log": "39995fdd19b9aa4e2e077d3816ab61ba9a40e04f38b78aef606ba7769f3179eb",
+    "omega_x_evolution/ontos_observability.py": "9db42481ca20346ae91344229e1ba8f0d71e85f231d892b4fd03d9561f747161",
+    "tests/test_ontos_observability.py": "aa06ea5d51cb0ff0fcc8f08cf205243be3d70176f905c5b3f9a3bcbcccc1aa32"
+  },
+  "full_repository_regression_verified": false,
+  "limits": "focused tests use actual imported v69,v70,v71 modules from validated prior patch; no original host runtime, hardware, MCP, FHE, or QPU integration.",
+  "mode": "NATIVE-FINITE-LOCAL",
+  "new_gate09": "NOT_GRANTED",
+  "physical_measurement_verified": false,
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "pytest": "9.0.2",
+  "python": "3.13.5",
+  "red": {
+    "exit": 2,
+    "reason": "missing production module",
+    "sha256": "39995fdd19b9aa4e2e077d3816ab61ba9a40e04f38b78aef606ba7769f3179eb"
+  },
+  "runner_instrumentation_verified": false,
+  "schema": "omega-observability-evidence-v1",
+  "test_command": "PYTHONPATH=. python -m pytest -q tests/test_ontos_observability.py tests/test_ontos_v69_v70_ramxeed.py tests/test_ontos_v71_energy_pareto.py",
+  "test_result": {
+    "exit": 0,
+    "failed": 0,
+    "log_sha256": "bdbc1eba491664f96fbb0bfab3c68929d5490e307256b3b0bcc15fe8acae5694",
+    "passed": 106
+  },
+  "unit_coverage": {
+    "log_sha256": "d1e08fc89bdeb4c79702674d9649c29e5fc9a1b973638d2678a4383c34238715",
+    "module": "omega_x_evolution.ontos_observability",
+    "statement_percent": 100,
+    "test_count": 32
+  }
+}
