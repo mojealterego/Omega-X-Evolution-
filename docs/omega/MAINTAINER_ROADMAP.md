@@ -137,3 +137,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 **2026-11-21: propozycje v21–v35 — [audyt pokrycia i priorytety](USER_PROPOSALS_TECH_AUDIT_20261121.md).** Przesłane szkice Stage 3, Ray MAP-Elites, geometry, TT, Hopfield, formal, QUBO, federacji, epigenetyki, aksjomatów, LoRA i chmury mapują się na już istniejące moduły. Nie kopiować drugich klas o nieistniejących importach. Native Ray, globalna trwałość, pełne HOL i przewaga nad klasycznymi bazami referencyjnymi nadal wymagają dowodów.
 
 **ONTOS L11 v68:** [native SI + Landauer model / TDD](ONTOS_V68_SI_ACCOUNTING.md) — 43 focused PASS, compileall PASS, modelowany podkontrakt v68 PASS. Pozostałe v69–v71 i pełny nowy zakres GATE-09 OPEN. Wcześniejsze decyzje dla ograniczonych wydań zachowane.
+
+
+**2026-11-21 RAMXEED FeRAM for ONTOS L11:** [v69–v70 reference and source-qualified testbed](ONTOS_V69_V70_RAMXEED_REFERENCE.md), [evidence](V69_V70_EVIDENCE.json). Two production modules and 42 focused PASS with interruptible write simulation; targeted energy accounting supports six *named* substrates but does not provide their physically calibrated models. FeRAM is an auxiliary NVM/checkpoint profile, not inference RAM or a replacement for secure monotonic trust anchors. Complete L11 and hardware verification OPEN; historical GATE-09 unchanged.
