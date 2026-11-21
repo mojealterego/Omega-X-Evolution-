@@ -224,3 +224,21 @@ Następny etap nowej linii: v49 (odzysk i kontrola manifestu) oraz v37 (testbed)
 
 
 **ONTOS L8 v55–v58 (2026-11-21)** — [implementacja i testy](ONTOS_V55_V58_L8.md), [Suity C holdout](V58_SUITE_C_HOLDOUT.json), [SHA-256](V55_V58_SHA256SUMS). v55: binarne SCM, 16 latentnych typów i kontrola `observation`≠`do(X)` TESTED; v56: numeryczne przedziały Balke–Pearla (HiGHS dual simplex/IPM, infeasible→UNKNOWN/INFEASIBLE bez fikcyjnego efektu) TESTED; v57: VoI/EI/pojemność kanału ze świadomą separacją jednostek TESTED; v58: H0 Vietorisa–Rips na 32-punktowych kohortach i zamrożony OOD holdout 10/10/10 nasion, 2 400 prób, recall 246/247=99,60%, FPR 101/2153=4,69%, ROC AUC 0,99824; 95% CI FPR 3,88–5,67% → **confidence gate FAIL**, promocja niedozwolona. **48 nowych + 116 regresyjnych = 164 PASS** w lokalnym wycinku, compileall PASS. Pełne dDCA, wymagania natywne, generalizacja i operacyjna integracja pozostają OPEN. Historyczny ograniczony GATE-09 PASS bez zmian; nowy L8 GATE-09 niezaliczony. Następne v59–v62.
+
+
+## ONTOS L9: v59–v62 (2026-11-21, ograniczone podkontrakty)
+
+[Implementacja i dowody](ONTOS_V59_V62_L9.md) · [Kampania L9, SHA z ZIP](ONTOS_V59_V62_L9_SUMMARY.json) · [Diagnostyka ziaren](PHASE0_FAILURE_SEEDS_SUMMARY.json). v59: low-rank symmetric Kuramoto, siła O(nr), 100 kroków w modelu, potencjał 0,7243034→0,1086437 (TESTED); v60: snopowa dyfuzja z restrykcjami, 100 kroków, E=8,0625→0,1921434 (TESTED); v61: rzeczywisty kod v41 RepairState, 30 seedów i 2 symultaniczne usterki/seed, 31,87% modelowej kontrakcji oraz 15% rezerwy (TESTED); v62: 7200 prób korekty szumu, 14 fałszywych akceptacji w modelu niezależnym i 942 w wariancie skorelowanym (TESTED). **220/220 lokalnych testów PASS**, 164 wcześniejsze + 56 nowe; compileall PASS, reprodukcja po rozpakowaniu ZIP PASS. Nie jest to natywne L9 ani potwierdzenie SOURCE Suite D 89,71%/health 0,93. Pełny L9 GATE-09 OPEN; historyczny ograniczony GATE-09 PASS niezmieniony. Regresja całego upstream repo nieuruchomiona.
+
+## Nowe rozszerzenia v81–v87 — wymagana realizacja po zależnościach
+
+Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sekwencji A–E](ONTOS_CHANNELS_A_E_SEQUENCE.md), [tabela energetyczna peak / core / wall-plug](ONTOS_ENERGY_BOUNDARIES.md). Uzupełnienia nie skreślają v1–v80 i stanowią **obowiązkowe nowe wymagania**, nie osiągnięcia:
+- **v81** (v63/v65): model sekwencji kanałów A–E i pre-commit; dokument diagramu TESTED, runtime/izolacja TCB OPEN. Wymagane walidacja ramek, timeout, E-LOCKDOWN, niezmienność Caps.
+- **v82** (v49–v54): pełne ślady ziaren 9216/9274/9651, log obserwacji oddzielony od scorera, SHA, skrypt odtwarzania; syntetyczne zrzuty TESTED, reprodukcja błędów oryginalnego źródła OPEN. Zrzuty surowe w ZIP, manifest z SHA w repo.
+- **v83** (v68–v71): separacja mocy akceleratora [W] od wall-plug [W] i E_core/E_wall [J]; specyfikacja jednostek TESTED, fizyczna kalibracja i symulacje ADC/DAC/PSU/chłodzenia OPEN.
+- **v84** (v42/v63): PolyTr_U, dynamiczna adjunkcja w kategorii fibrowanej, bezpieczna rekonfiguracja koindukcyjna, monotonia uprawnień i rollback, model checking → OPEN.
+- **v85** (v38/v53/v68–v71): zdarzeniowy model Landauer-Bounded Free Energy z deterministyczną kolejką, rezerwacją pracy i modelami SOT-MRAM, bez urojonych fizycznych oszczędności → OPEN.
+- **v86** (v65/v73): HyperLTL ∀* dla współbieżnych śladów; self-composition i RAW/WAR/WAW na ograniczonej domenie, UNKNOWN dla limitów, bez deklaracji uniwersalnej eliminacji konfliktów → OPEN.
+- **v87** (v64/v67/v72–v73): synteza wyłącznie kandydata RTL i niezależna LEC/Z3 w DFX, stała powłoka FPGA z SHA, bez fizycznej podmiany, fail-closed → OPEN.
+
+**Brama akceptacyjna:** żadne nowe wymaganie v81–v87 nie dostaje pełnego PASS na podstawie samego planu lub diagramu. Zamykanie tylko z rzeczywistą implementacją, testami, falsyfikacją, dowodami SHA i niezależnym od podmiotu weryfikatorem. Brak infrastruktury dopuszcza wierną symulację tylko modelowanych własności, nie udowadnia władania sprzętem.

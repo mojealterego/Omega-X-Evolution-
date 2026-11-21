@@ -1,0 +1,69 @@
+{
+  "generator": "scripts/ontos_phase0_seed_diagnostics.py",
+  "raw_full_traces_in_zip": true,
+  "raw_json_sha256": "68d7f7f03f621295aa3b8003fa1ca10afa87ea95e99530cd820fd8e915d17cbf",
+  "rows": [
+    {
+      "correct": 60,
+      "floor_preserved": true,
+      "lure_count": 73,
+      "minimum_belief": 0.0021037186638325567,
+      "observation_count": 240,
+      "ood": 17,
+      "seed": 9216,
+      "synthetic_memory_probe": {
+        "automatic_promotion": false,
+        "decision": "QUARANTINED_REVIEW_ONLY",
+        "post_e_value": "32/3",
+        "post_eligible_for_manual_review": false,
+        "pre_e_value": "32",
+        "pre_eligible_for_manual_review": true,
+        "scenario": "SYNTHETIC_INJECTED_BITEMPORAL_CORRECTION"
+      },
+      "tamper_count": 12,
+      "trace_sha256": "3888409f221f1c66756542f855a7ffc68249a1fe020a86b5216a4675f3bafd74"
+    },
+    {
+      "correct": 60,
+      "floor_preserved": true,
+      "lure_count": 72,
+      "minimum_belief": 0.0022342185528892284,
+      "observation_count": 240,
+      "ood": 20,
+      "seed": 9274,
+      "synthetic_memory_probe": {
+        "automatic_promotion": false,
+        "decision": "QUARANTINED_REVIEW_ONLY",
+        "post_e_value": "32/3",
+        "post_eligible_for_manual_review": false,
+        "pre_e_value": "32",
+        "pre_eligible_for_manual_review": true,
+        "scenario": "SYNTHETIC_INJECTED_BITEMPORAL_CORRECTION"
+      },
+      "tamper_count": 12,
+      "trace_sha256": "aa944f40eb79d4d3af2da66774c73458ea0da28487e61b785772557834580e33"
+    },
+    {
+      "correct": 60,
+      "floor_preserved": true,
+      "lure_count": 60,
+      "minimum_belief": 0.002080454989336626,
+      "observation_count": 240,
+      "ood": 28,
+      "seed": 9651,
+      "synthetic_memory_probe": {
+        "automatic_promotion": false,
+        "decision": "QUARANTINED_REVIEW_ONLY",
+        "post_e_value": "32/3",
+        "post_eligible_for_manual_review": false,
+        "pre_e_value": "32",
+        "pre_eligible_for_manual_review": true,
+        "scenario": "SYNTHETIC_INJECTED_BITEMPORAL_CORRECTION"
+      },
+      "tamper_count": 12,
+      "trace_sha256": "5cc3cb66bccbdfd760af985172e5ac5369cbcdacc7e376770f6607638512a342"
+    }
+  ],
+  "schema": "ontos-phase0-failure-seeds-summary-v1",
+  "source_is_synthetic_testbed": true
+}

@@ -1,0 +1,35 @@
+{
+  "full_campaign_in_zip": true,
+  "full_campaign_sha256": "266af02dca9b790c661d68ae74d9e4b198a2da9842fda270097ada4731ffc715",
+  "generator": "scripts/ontos_v59_v62_campaign.py",
+  "physical_validation": false,
+  "schema": "ontos-l9-summary-v59-v62-v1",
+  "v59": {
+    "coherence_end": 0.9578089477245364,
+    "coherence_start": 0.6808420693554902,
+    "energy_end": 0.10864370919305599,
+    "energy_start": 0.7243034007498854,
+    "factor_rank": 2,
+    "phase_count": 4,
+    "physical_validation": false,
+    "steps": 100
+  },
+  "v60": {
+    "edges": 2,
+    "energy_end": 0.19214341937166968,
+    "energy_start": 8.0625,
+    "physical_validation": false,
+    "steps": 100,
+    "vertices": 3
+  },
+  "v61": {
+    "mean_repaired_error_fraction": 0.3187356249999999,
+    "number_of_seeds": 30
+  },
+  "v62": {
+    "correlated_false_acceptance": 942,
+    "independent_false_acceptance": 14,
+    "number_of_seeds": 30,
+    "trials": 7200
+  }
+}
