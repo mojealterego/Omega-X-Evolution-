@@ -1,0 +1,117 @@
+{
+  "base_main": "c45323d58e12e5867cfceec37a90872554725544",
+  "evidence": {
+    "dual_rollback_xfail": {
+      "path": "docs/omega/L10_DUAL_ROLLBACK_XFAIL.log",
+      "result": "XFAIL",
+      "sha256": "0cd46e9facef0b1077c8eaa5f74b72638df8c60b078c6213b7e332e841a04a2e"
+    },
+    "go_race": {
+      "command": "GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off CGO_ENABLED=1 go test -race -count=1 ./...",
+      "path": "docs/omega/L10_GO_RACE.log",
+      "result": "PASS",
+      "sha256": "bf67377de36af556b4ef523944e55f88e17a02ae1f4f5fd9a3c8bcf15638791e"
+    },
+    "pytest": {
+      "command": "OPENBLAS_NUM_THREADS=1 PYTHONPATH=. python -m pytest -q --strict-markers tests/test_ontos_v46_v48.py ... tests/test_ontos_l10_native_math.py",
+      "count": 303,
+      "environment": "Linux x86_64 / Python 3.13.5 / pytest 9.0.2 / numpy 2.3.5 / scipy 1.17.0 / cryptography 46.0.4",
+      "path": "docs/omega/L10_PYTEST_FULL.log",
+      "result": "PASS",
+      "sha256": "fbcdbe9f27b95444bc438f83a1e2e8b8cd2600d8f1df4e974826defafb5f7dce"
+    },
+    "q16_green": {
+      "command": "PYTHONPATH=. pytest -q tests/test_ontos_l10_formal.py -k q16 (after implementation)",
+      "path": "docs/omega/L10_Q16_GREEN.log",
+      "result": "PASS",
+      "sha256": "9e94a15983e11b5ff86b4b5ff2e6882f9f03206697d58ac5fe27770d54aa3df4"
+    },
+    "q16_red": {
+      "command": "PYTHONPATH=. pytest -q tests/test_ontos_l10_formal.py -k q16 (before implementation)",
+      "path": "docs/omega/L10_Q16_RED.log",
+      "result": "EXPECTED_FAIL",
+      "sha256": "71fbdc1df5c97fe01a17cab7eacb7e2dc811febf2d025f4fe259e622249efe8b"
+    }
+  },
+  "full_l10_gate": {
+    "gate_09": "BLOCKED",
+    "native_rust_zenoh_wasi_verified": false,
+    "physical_fpga_verified": false,
+    "production_verified": false,
+    "source_suite_d_reproduced": false,
+    "status": "BLOCKED",
+    "unverified_properties": [
+      "Native Rust/Zenoh/WASI production transport and compiled WIT component ABI",
+      "Native SystemVerilog simulation, CIRCT LEC and physical FPGA DFX/ICAP",
+      "Production external immutable TCB and hardware-backed monotonic rollback root",
+      "Independent anti-rollback of simultaneous old state+anchor pair (reproduced as strict XFAIL)",
+      "Source L10 Suite D 90.79% objective and original conflict-free skill-pool campaign",
+      "Physical IPC latency below 1 ms and physical shell reconfiguration time",
+      "Full upstream repository integration regression and environment-qualified production deployment",
+      "Unbounded HyperLTL proof or kernel-checked Lean proof for all candidate languages"
+    ]
+  },
+  "main_branch_only": true,
+  "mode": "HYBRID_NATIVE_AND_DETERMINISTIC_SIMULATION",
+  "model_gate": {
+    "gate_01": "PASS",
+    "gate_02": "PASS",
+    "gate_03": "PASS",
+    "gate_04": "PASS",
+    "gate_05": "PASS_MODEL_ONLY",
+    "gate_06": "PASS_MODEL_ONLY",
+    "gate_07": "PASS_MODEL_ONLY",
+    "gate_08": "PASS",
+    "scope": "finite i4, deterministic A-E/DFX transitions, bounded multi-traces, native Go Unix socket, native Z3 via libz3, C/Wasm Q16.16; not production certified",
+    "status": "PASS"
+  },
+  "rebuildable_go_binary_sha256": "ab1cf3c526f6eeb408d4a7d1c574165c56d1ec0aa4c8fe5b85895833bdc4b270",
+  "schema": "ontos-l10-closeout-v1",
+  "signature_algorithm": "Ed25519, keys generated in isolated test environment; production issuer NOT provisioned",
+  "solver": "native libz3.so.4 invoked by bounded isolated Python process",
+  "source_sha256": {
+    "hardware/rtl/ontos_q16_core_v67.sv": "d89d06ad0cb230764bdfd4cf742dbed75206bb0e66ec8806fc408eb0ebf3753f",
+    "hardware/rtl/ontos_static_shell_v67.sv": "56ba8551aa94e5da2b7703fe38d6e1e2da7246bae16925f87e3e2b7441274d13",
+    "native/ontos-l10-gateway/go.mod": "b1ee99545eff066090ae5366584d0614c5095a861b2c945bfddab4b37645ab2b",
+    "native/ontos-l10-gateway/main.go": "ca89b91c4ee2a129e504c5891f379055fce7e1a62d716dcd117b4e594e075459",
+    "native/ontos-l10-gateway/main_test.go": "d20eeab5f8af05837c1bc1fee33b0ce1174b28352de6e8f39bec354bf3b008e2",
+    "native/ontos_l10_q16.c": "c125c65d34bb8ae26196749219485df152770bb29ac75b4ca1e22cd12a789d7e",
+    "omega_x_evolution/ontos_l10_approval.py": "70ff47fb1ab935cc96506088a6301b533f54b500d348c7c9d2b8700040200ce4",
+    "omega_x_evolution/ontos_l10_formal.py": "905a85783e2ce9806dfa7b1e58db8c4e63c8639a5f672dbecbd6b70438814426",
+    "omega_x_evolution/ontos_l10_release.py": "8df66694004e4bc036f65cf159e84425483b1f4c072c06edafe242e16cb724fd",
+    "omega_x_evolution/ontos_v67_dfx.py": "e7a395a08ea3977e414cb1c1fad786bf84d5b2fe1674f811153140b93f7a3e88",
+    "scripts/verify_ontos_l10.py": "b91518a7391df9dc3d04d4696a91061a5b3610a9a35c98b2ad76d1a37b93ad94",
+    "tests/test_ontos_l10_formal.py": "8c36d7591913ed02ca3ee0ab17666404dcc35219ebea02f229c70c4b9c88c2d5",
+    "tests/test_ontos_l10_gate.py": "11bc80d3adb73224f39e9b75d340424ac4e2da71442151d4d8b7545315492f27",
+    "tests/test_ontos_l10_native_boundary.py": "de6d57bf5267fca69f117efcefda3e5ea157ea7357c1ea4d844aff3a9858fcb1",
+    "tests/test_ontos_l10_native_math.py": "9dcb6b8af32e169a93b9124fc67c6813afb85d22ca5f2c074c028874eefb6d7a",
+    "tests/test_ontos_l10_release.py": "4d4f573a4f0ba28784fc7f6b6222cad293053c17ca43b4a330fdc886418b117a",
+    "tests/test_ontos_v67_dfx.py": "b4408cf354f739c56196c361662791eefeed74d0b0d2e045e14c0accc6c2216d"
+  },
+  "tests_by_stage": {
+    "v63": [
+      "tests/test_ontos_v63_v66.py",
+      "tests/test_ontos_l10_native_boundary.py"
+    ],
+    "v64": [
+      "tests/test_ontos_v63_v66.py",
+      "tests/test_ontos_v67_dfx.py",
+      "tests/test_ontos_l10_formal.py"
+    ],
+    "v65": [
+      "tests/test_ontos_v63_v66.py",
+      "tests/test_ontos_l10_formal.py",
+      "tests/test_ontos_l10_release.py"
+    ],
+    "v66": [
+      "tests/test_ontos_v63_v66.py",
+      "tests/test_ontos_l10_native_boundary.py",
+      "native/ontos-l10-gateway/main_test.go"
+    ],
+    "v67": [
+      "tests/test_ontos_v67_dfx.py",
+      "tests/test_ontos_l10_native_math.py",
+      "tests/test_ontos_l10_release.py"
+    ]
+  }
+}

@@ -86,3 +86,6 @@ sequenceDiagram
 ### Potwierdzone ograniczone przejścia referencyjne (v63–v66)
 
 Kod: [A–E automat](../../omega_x_evolution/ontos_v63_interface.py), [transport](../../omega_x_evolution/ontos_v66_wire.py), [testy](../../tests/test_ontos_v63_v66.py). W modelu A:observe → B:assess → C/D:propose → E:allow produkuje *wyłącznie* MODEL_APPROVED, nigdy praw operacyjnych. E:veto, alarm lub timeout skutkują LOCKDOWN; restart nie przywraca Caps. Walidacja ramek i odbioru nie daje autentykacji nadawcy. v65 analizuje modelowane ślady, nie wykonane trace procesu. [Dowody L10](ONTOS_V63_V66_L10.md). Diagram wyżej nadal przedstawia wymagany przyszły podział TCB i nie jest certyfikatem produkcyjnego pre-commit.
+
+
+**Zweryfikowana podwarstwa v63–v67:** w odseparowanym natywnym procesie Go testowano kanoniczne IPC A–E i odrzucanie samodzielnego E:allow; niezależnie podpisana decyzja DFX wymaga czterech dowodów. Go nie jest Rust/Zenoh/WASI, a modelowy podpis nie stanowi uprawnienia systemowego. [Szczegóły](ONTOS_L10_V63_V67_CLOSEOUT.md). Oryginalny diagram nadal opisuje docelową izolację Jądra i nie jest potwierdzeniem wdrożonego FPGA.

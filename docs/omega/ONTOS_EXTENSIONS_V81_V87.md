@@ -49,3 +49,6 @@ flowchart TD
 ### Stan realizacyjny po L10 v63–v66
 
 Powstały [testowane, skończone kontrakty](ONTOS_V63_V66_L10.md) — v63 modeluje przebieg A–E i monotonię Caps, v65 enumeruje krótkie przeploty oraz zwraca kontrprzykłady RAW/WAR/WAW, a v66 bada kanoniczny format komunikatu. Stan **EXT-01/v81:** diagram + model Python TESTED, *odseparowane Jądro i rzeczywiste zdolności nadal OPEN*. Stan **EXT-06/v86:** finite HyperLTL-style trace comparison TESTED, pełna kwantyfikacja ∀*ψ, niezależny solver i własności procesowe OPEN. Pozostałe rozszerzenia v82–v85 oraz v87 bez zmiany statusu. Pythonowy model E:allow nie jest zgłoszeniem podpisanej zgody ani decyzji fizycznego TCB.
+
+
+**Po rozszerzeniu L10 v63–v67:** [ograniczona implementacja/dowody](ONTOS_L10_V63_V67_CLOSEOUT.md). v81: model A–E, rzeczywisty sidecar Go i podpisane przejścia TESTED, lecz fizyczna izolacja TCB OPEN. v86: Z3 na skończonych dwusladowych modelach, RAW/WAR/WAW i kontrprzykłady TESTED; pełny HyperLTL dla nieograniczonych śladów OPEN. v87: podpisy Ed25519 z 4 obowiązkami, model DFX, C/WebAssembly Q16.16 i HDL source TESTED; rzeczywiste FPGA/ICAP oraz formalna HDL LEC OPEN. Wspólny rollback obu podpisanych plików stanu pozostaje jawnie XFAIL i nie pozwala na pełny GATE-09.

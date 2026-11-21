@@ -1,0 +1,20 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_____ test_q16_arithmetic_shift_matches_independent_floor_div_for_products _____
+
+    def test_q16_arithmetic_shift_matches_independent_floor_div_for_products():
+>       from omega_x_evolution.ontos_l10_formal import prove_q16_floor_shift
+E       ImportError: cannot import name 'prove_q16_floor_shift' from 'omega_x_evolution.ontos_l10_formal' (/mnt/data/ontos_l10_closure/omega_x_evolution/ontos_l10_formal.py)
+
+tests/test_ontos_l10_formal.py:55: ImportError
+________ test_q16_wrong_towards_zero_rule_generates_real_counterexample ________
+
+    def test_q16_wrong_towards_zero_rule_generates_real_counterexample():
+>       from omega_x_evolution.ontos_l10_formal import prove_q16_floor_shift
+E       ImportError: cannot import name 'prove_q16_floor_shift' from 'omega_x_evolution.ontos_l10_formal' (/mnt/data/ontos_l10_closure/omega_x_evolution/ontos_l10_formal.py)
+
+tests/test_ontos_l10_formal.py:63: ImportError
+=========================== short test summary info ============================
+FAILED tests/test_ontos_l10_formal.py::test_q16_arithmetic_shift_matches_independent_floor_div_for_products - ImportError: cannot import name 'prove_q16_floor_shift' from 'omega_x_evolution.ontos_l10_formal' (/mnt/data/ontos_l10_closure/omega_x_evolution/ontos_l10_formal.py)
+FAILED tests/test_ontos_l10_formal.py::test_q16_wrong_towards_zero_rule_generates_real_counterexample - ImportError: cannot import name 'prove_q16_floor_shift' from 'omega_x_evolution.ontos_l10_formal' (/mnt/data/ontos_l10_closure/omega_x_evolution/ontos_l10_formal.py)
+2 failed, 7 deselected in 0.08s
