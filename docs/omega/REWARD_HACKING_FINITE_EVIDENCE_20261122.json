@@ -1,0 +1,47 @@
+{
+  "schema": "omega-finite-reward-order-evidence-v1",
+  "date": "2026-11-22",
+  "source_pdfs_sha256": {
+    "2209.13085v2.PDF": "6626ffe7685f249a60d31d9eae86d61072f0b5e528314b648febc5d4ce735b08",
+    "E2-eval.PDF": "a3978c6eb7bb0b829804d0ec384588aff931ecd97cd6efd1db3afdacb3d76194",
+    "W1.PDF": "42233610c713cff9ce0c065f62ca17889fbef8f1c533044324ddb3e1b8874c5c",
+    "W2.PDF": "0f9e8dc7d96af110635f4301faf671b662f67def44bb2847f68f716166f547e1",
+    "W3.PDF": "7e73c428350cc3dcb298f9e53568bb2548d8633dbb0e18b3703b970f7fff011f",
+    "W4.PDF": "91e02d4a03765b93de1f5dfe2f4be924d92ab881f2d67f8c443f642916c98bef",
+    "W5.PDF": "feebb746c797fe1af4086ca338146a13fba21fa7b540334d119c44363b876598",
+    "W6.PDF": "64985a0422ae79044eb29b0d9345457465ed979ac9091e40563832d7a78b21b2",
+    "W7.PDF": "a827fec320b9101a4e4f80e814e87a79ee892d265afb0a2c50808fb1b6e884fa",
+    "W9.PDF": "15eb92ab6f262391ef2d7f9b0a8c1f82913cb860cead6d2ce89803b38484c12d"
+  },
+  "code_sha256": {
+    "omega_x_evolution/reward_order.py": "063ab9494e06eb3a11659d986c62895d3fac79fcc9439f50c5d869e3c9102aa6",
+    "tests/test_reward_order.py": "7068cd80d3d831886a1aa13f50e8745dd3773e19ec1ac9d2d7cde9b26f6c7ff1"
+  },
+  "code_git_blob_sha": {
+    "omega_x_evolution/reward_order.py": "8357ab0b1da90d12714d2ac705da4cc205f5d52c",
+    "tests/test_reward_order.py": "d14d110542977e021bc199aa1cc18f565626af1e"
+  },
+  "tests": {
+    "command": "coverage run --source=omega_x_evolution.reward_order -m unittest discover -s tests -p test_reward_order.py",
+    "passed": 17,
+    "failed": 0,
+    "module_statement_coverage_percent": 100,
+    "source_lines": 72,
+    "run_scope": "ISOLATED_LOCAL",
+    "python": "3.13"
+  },
+  "red": {
+    "expected_failure": "ModuleNotFoundError prior to implementation"
+  },
+  "build": {
+    "command": "python -m compileall -q omega_x_evolution/reward_order.py tests/test_reward_order.py",
+    "status": "PASS_LOCAL"
+  },
+  "limitations": {
+    "full_repo_regression": "NOT_RUN",
+    "external_reference_attestation": "NOT_RUN",
+    "production": "NOT_RUN",
+    "mandatory_gate_integration": "NOT_RUN",
+    "new_global_gate09": "OPEN"
+  }
+}
