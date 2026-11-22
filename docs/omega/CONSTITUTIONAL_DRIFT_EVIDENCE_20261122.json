@@ -1,0 +1,58 @@
+{
+  "base_main": "57704ae3c24ed2ea0d2d46316721116b1f1b2322",
+  "compile": {
+    "command": "python -m compileall -q omega_x_evolution/constitutional_drift.py tests/test_constitutional_drift.py tests/test_graph_memory_dag_bounded.py",
+    "exit": 0
+  },
+  "coverage": {
+    "module": "omega_x_evolution.constitutional_drift",
+    "percent": 98
+  },
+  "dag_stress": {
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_graph_memory_dag_bounded.py",
+    "exit": 0,
+    "passed": 7,
+    "scope": "Verbatim extracted GraphMemory.expand in staging; full production GraphMemory integration not executed"
+  },
+  "date": "2026-11-22",
+  "environment": {
+    "architecture": "x86_64",
+    "pytest": "9.0.2",
+    "python": "3.13.5",
+    "system": "Linux"
+  },
+  "green": {
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_constitutional_drift.py tests/test_rsi_ir_guard.py",
+    "exit": 0,
+    "passed": 56
+  },
+  "red": {
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_constitutional_drift.py",
+    "exit": 2,
+    "result": "ModuleNotFoundError for missing module"
+  },
+  "schema": "omega-constitutional-drift-evidence-v1",
+  "sources": {
+    "docs/omega/CONSTITUTIONAL_DRIFT_AND_DAG_SCOPE_20261122.md": {
+      "git_blob_sha": "5c2cb6cdfab5d70b6b6bef96c1f874f2845e839a",
+      "sha256": "2f2965fa7a25d93c1c8e61552a17417f56b953aafb5ab87631f5f07c39ab8b1a"
+    },
+    "omega_x_evolution/constitutional_drift.py": {
+      "git_blob_sha": "715ccffc22f42b728fe80b193fd21c1d528b86a9",
+      "sha256": "6019b4290904a8e1d28c1bb3d72976ee1b43d148a9eb75ac78eab45df75f381a"
+    },
+    "tests/test_constitutional_drift.py": {
+      "git_blob_sha": "d7c0f99717baf0e5f5d1db5e14cae469b80af47b",
+      "sha256": "dd48398e62cbfe3f734a01710c610ea034df735fc349e73209505a3d0e8a7756"
+    },
+    "tests/test_graph_memory_dag_bounded.py": {
+      "git_blob_sha": "c7ff1a57d4bddbc03ec3888a96be0e085272aae1",
+      "sha256": "8e55ba009f05b8e7141ece3c92b135fe3881330c788822dee960219936d7ed31"
+    }
+  },
+  "status": {
+    "graph_production_integration": "NOT_TESTED",
+    "new_constitution_module": "NATIVE_LOCAL_TESTED",
+    "new_full_gate09": "OPEN"
+  }
+}
