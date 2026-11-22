@@ -1,0 +1,62 @@
+[
+  {
+    "old": "from dataclasses import asdict, dataclass\n",
+    "new": "from dataclasses import asdict, dataclass\nfrom functools import partial\n"
+  },
+  {
+    "old": "from .workers import EvaluationInput, evaluate_one\n",
+    "new": "from .workers import EvaluationInput, evaluate_one\nfrom .cluster_green import GreenLedger, Reading, WorkerPowerScenario, sample_worker_step\n"
+  },
+  {
+    "old": "    def execute(self,*args):\n        return {'state':self.step(*args),'pid':os.getpid()}\n",
+    "new": "    def execute(self,*args,observed=False):\n        if type(observed) is not bool:raise ValueError('observation flag must be boolean')\n        def invoke(*items):return {'state':self.step(*items),'pid':os.getpid()}\n        return sample_worker_step(invoke,*args) if observed else invoke(*args)\n"
+  },
+  {
+    "old": "def _process(cfg,i,expected,args):\n    return IslandActor(cfg,i,expected).execute(*args)\n",
+    "new": "def _process(cfg,i,expected,args,observed=False):\n    return IslandActor(cfg,i,expected).execute(*args,observed=observed)\n"
+  },
+  {
+    "old": "    async def call(self,i,*args):\n        loop=asyncio.get_running_loop()\n        result=await (loop.run_in_executor(self.pool,_process,self.cfg,i,self.expected,args) if self.processes else loop.run_in_executor(self.pool,self.actors[i].execute,*args))\n        self.worker_pids.add(result['pid']);return result['state']\n",
+    "new": "    async def call(self,i,*args,observed=False):\n        if type(observed) is not bool:raise ValueError('observation flag must be boolean')\n        loop=asyncio.get_running_loop()\n        result=await (loop.run_in_executor(self.pool,_process,self.cfg,i,self.expected,args,observed)\n                      if self.processes else loop.run_in_executor(self.pool,partial(self.actors[i].execute,*args,observed=observed)))\n        self.worker_pids.add(result['pid'])\n        return result if observed else result['state']\n"
+  },
+  {
+    "old": "class RayIslandActor(IslandActor):\n    def execute(self,*args):\n        import ray\n        return {**super().execute(*args),'node_id':ray.get_runtime_context().get_node_id()}\n",
+    "new": "class RayIslandActor(IslandActor):\n    def execute(self,*args,observed=False):\n        import ray\n        return {**super().execute(*args,observed=observed),'node_id':ray.get_runtime_context().get_node_id()}\n"
+  },
+  {
+    "old": "    async def call(self,i,*args):\n        result=await self.actors[i].execute.remote(*args)\n        node=result['node_id']\n        if not isinstance(node,str) or not node or (i in self.pinned and self.pinned[i]!=node):raise ClusterError('Ray node placement mismatch')\n        self.nodes.add(node);self.worker_pids.add((node,result['pid']));return result['state']\n",
+    "new": "    async def call(self,i,*args,observed=False):\n        if type(observed) is not bool:raise ValueError('observation flag must be boolean')\n        result=await self.actors[i].execute.remote(*args,observed=observed)\n        node=result['node_id']\n        if not isinstance(node,str) or not node or (i in self.pinned and self.pinned[i]!=node):raise ClusterError('Ray node placement mismatch')\n        self.nodes.add(node);self.worker_pids.add((node,result['pid']))\n        return result if observed else result['state']\n"
+  },
+  {
+    "old": "async def run_cluster(store,backend,*,stop_after=None):\n",
+    "new": "async def run_cluster(store,backend,*,stop_after=None,green=None):\n"
+  },
+  {
+    "old": "    rows=[store.read(i) for i in range(cfg.islands)]\n    commits=0;pending={};todo=deque(i for i,(_,s) in enumerate(rows) if s['round']<cfg.rounds)\n",
+    "new": "    rows=[store.read(i) for i in range(cfg.islands)]\n    if green is not None and type(green) is not WorkerPowerScenario:\n        raise ValueError('typed optional worker power scenario required')\n    ledger=(GreenLedger(green,islands=cfg.islands,initial_revisions=tuple(rev for rev,_ in rows))\n            if green is not None else None)\n    commits=0;pending={};todo=deque(i for i,(_,s) in enumerate(rows) if s['round']<cfg.rounds)\n"
+  },
+  {
+    "old": "    async def dispatch(i,old,m,g,final):\n        return await asyncio.wait_for(backend.call(i,old,m,g,final),cfg.timeout)\n",
+    "new": "    async def dispatch(i,old,m,g,final):\n        if ledger is not None:\n            return await asyncio.wait_for(backend.call(i,old,m,g,final,observed=True),cfg.timeout)\n        return await asyncio.wait_for(backend.call(i,old,m,g,final),cfg.timeout)\n"
+  },
+  {
+    "old": "                i,rev,old,m,g,final=pending.pop(task);new=task.result()\n                verify_transition(cfg,old,new,m,g,final)\n                store.commit(i,rev,new);rows[i]=(rev+1,new);commits+=1\n                if not final and new['round']<cfg.rounds:todo.append(i)\n",
+    "new": "                i,rev,old,m,g,final=pending.pop(task)\n                answer=task.result()\n                new=answer['state'] if ledger is not None else answer\n                verify_transition(cfg,old,new,m,g,final)\n                store.commit(i,rev,new);rows[i]=(rev+1,new);commits+=1\n                if ledger is not None:\n                    try:\n                        signal=answer['green_reading']\n                        reading=Reading(**signal)\n                    except (TypeError,KeyError,ValueError,OverflowError):\n                        reading=None  # corrupt worker clock is UNKNOWN, never synthetic zero\n                    try:\n                        ledger.commit(i,rev+1,reading,\n                                      attempts=new['attempts']-old['attempts'],\n                                      rejections=new['rejections']-old['rejections'],\n                                      profiled=len(new['performance_records'])-len(old['performance_records']),\n                                      perf_rejected=(sum(not p['accepted'] for p in new['performance_records'])\n                                                     -sum(not p['accepted'] for p in old['performance_records'])))\n                    except (TypeError,KeyError,ValueError,OverflowError):\n                        pass  # no telemetry side effect may change the committed state\n                if not final and new['round']<cfg.rounds:todo.append(i)\n"
+  },
+  {
+    "old": "    if cfg.topology is not None:\n        report['topology']={'leaf_count':sum(s['topology']['leaf_count'] for s in states),'islands':[s['topology'] for s in states]}\n    return report\n",
+    "new": "    if cfg.topology is not None:\n        report['topology']={'leaf_count':sum(s['topology']['leaf_count'] for s in states),'islands':[s['topology'] for s in states]}\n    if ledger is not None:\n        report['green_computing']=ledger.report(expected_commits=commits)\n    return report\n"
+  },
+  {
+    "old": "    p.add_argument('--performance-regression',action='store_true');p.add_argument('--resume',action='store_true');p.add_argument('--stop-after',type=int)\n",
+    "new": "    p.add_argument('--performance-regression',action='store_true');p.add_argument('--resume',action='store_true');p.add_argument('--stop-after',type=int)\n    p.add_argument('--green-watts',type=float,nargs=3,metavar=('LOW','MID','HIGH'))\n    p.add_argument('--green-power-source');p.add_argument('--green-intensity-g-per-kwh',type=float)\n    p.add_argument('--green-intensity-source')\n"
+  },
+  {
+    "old": "    args=vars(p.parse_args());db=args.pop('db');key_file=args.pop('key_file');mode=args.pop('backend');address=args.pop('ray_address');distinct=args.pop('distinct_nodes');resume=args.pop('resume');stop=args.pop('stop_after');policy=performance.Policy() if args.pop('performance_regression') else None\n",
+    "new": "    args=vars(p.parse_args());db=args.pop('db');key_file=args.pop('key_file');mode=args.pop('backend');address=args.pop('ray_address');distinct=args.pop('distinct_nodes');resume=args.pop('resume');stop=args.pop('stop_after');policy=performance.Policy() if args.pop('performance_regression') else None\n    watts=args.pop('green_watts');power_source=args.pop('green_power_source');intensity=args.pop('green_intensity_g_per_kwh');intensity_source=args.pop('green_intensity_source')\n    supplied=[watts,power_source,intensity,intensity_source]\n    if any(x is not None for x in supplied) and not all(x is not None for x in supplied):p.error('all four Green Computing settings are required together')\n    try:green=WorkerPowerScenario(*watts,intensity,power_source,intensity_source) if watts is not None else None\n    except ValueError as exc:p.error(str(exc))\n"
+  },
+  {
+    "old": "        r=asyncio.run(run_cluster(store,backend,stop_after=stop));r.update(backend=mode,worker_processes=len(backend.worker_pids))\n",
+    "new": "        r=asyncio.run(run_cluster(store,backend,stop_after=stop,green=green));r.update(backend=mode,worker_processes=len(backend.worker_pids))\n"
+  }
+]

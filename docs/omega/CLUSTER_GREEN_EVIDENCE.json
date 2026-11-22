@@ -1,0 +1,41 @@
+{
+  "base_head": "6e6ef80ff0ef88e30b0fc6c62970d97fc3a251c1",
+  "compile": {
+    "command": "python -m compileall -q omega_x_evolution/cluster_green.py tests/test_cluster_green.py tests/test_cluster_green_integration.py",
+    "result": "PASS"
+  },
+  "date": "2026-11-22",
+  "e2e": {
+    "reason": "full production repository sources and linked dependencies unavailable to isolated local workspace",
+    "result": "NOT_RUN",
+    "tests_count": 4
+  },
+  "environment": {
+    "os": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "pytest": "9.0.2",
+    "python": "3.13.5"
+  },
+  "files_sha256": {
+    "cluster_patches.json": "bb65ebd36ecdb755c44b91e3f359c4bdf38a7a0bedc4350bdc28df9138aec0b8",
+    "docs/omega/CLUSTER_GREEN_COMPUTING_20261122.md": "c8d2793fd97f2a1d4cb8433a0adb7f8931bf0046b7806a37a08bc5299e2e3172",
+    "green_unit.log": "ae71e614092be958a7cfd4cd73f52126ddcb6600de1dab4424e058adc05fc067",
+    "omega_x_evolution/cluster_green.py": "54bad49351017c892ec592e56f44e555b858775b4004310f55d3346d409fa868",
+    "red.log": "401850aba8caaf47f11ff4e9348435b3a54eb1d7ce458c4546539158125d22de",
+    "tests/test_cluster_green.py": "ea3904a24324ad6f49ce5c5d7fd4d7928768fae6792fa1e9cb11db38cc4525ee",
+    "tests/test_cluster_green_integration.py": "5f06de57cea354572345e4ae263ccbdf6ca76fb590ae1878906e4058669125ca"
+  },
+  "original_native_ray": "NOT_RUN",
+  "physical_measurement": "NOT_APPLICABLE",
+  "schema": "omega-x-green-cluster-evidence-v1",
+  "tdd_green": {
+    "command": "PYTHONPATH=. pytest -q --cov=omega_x_evolution.cluster_green --cov-report=term-missing tests/test_cluster_green.py",
+    "coverage_percent": 92,
+    "tests_failed": 0,
+    "tests_passed": 19
+  },
+  "tdd_red": {
+    "exit_code": 2,
+    "log": "red.log",
+    "result": "ModuleNotFoundError before implementation"
+  }
+}

@@ -12,6 +12,7 @@ from collections import deque
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from contextlib import contextmanager, closing
 from dataclasses import asdict, dataclass
+from functools import partial
 import hashlib
 import hmac
 import json
@@ -28,6 +29,7 @@ from .engine import (Archive, Artifact, Audit, BASELINE, Cascade, Expression,
 from . import performance, annealed, holographic, safety_synthesis, epigenetics
 from .topology import TopologicalArchive, TopologyPolicy
 from .workers import EvaluationInput, evaluate_one
+from .cluster_green import GreenLedger, Reading, WorkerPowerScenario, sample_worker_step
 
 MAX_ISLANDS = 512
 MAX_WORK = 100_000
@@ -276,8 +278,10 @@ class IslandActor:
         self._archive=a;self._state_key=wire(s);self._request_key=request;self._response=s
         return normalized(s)
 
-    def execute(self,*args):
-        return {'state':self.step(*args),'pid':os.getpid()}
+    def execute(self,*args,observed=False):
+        if type(observed) is not bool:raise ValueError('observation flag must be boolean')
+        def invoke(*items):return {'state':self.step(*items),'pid':os.getpid()}
+        return sample_worker_step(invoke,*args) if observed else invoke(*args)
 
 
 def _verify_record(row,new,local,champion,policy,grid):
@@ -485,8 +489,8 @@ class Store:
             if changed!=1:raise ClusterError('concurrent island commit')
 
 
-def _process(cfg,i,expected,args):
-    return IslandActor(cfg,i,expected).execute(*args)
+def _process(cfg,i,expected,args,observed=False):
+    return IslandActor(cfg,i,expected).execute(*args,observed=observed)
 
 
 class LocalBackend:
@@ -497,10 +501,13 @@ class LocalBackend:
         self.actors=None if processes else [IslandActor(cfg,i) for i in range(cfg.islands)]
         self.expected=contract(cfg)
 
-    async def call(self,i,*args):
+    async def call(self,i,*args,observed=False):
+        if type(observed) is not bool:raise ValueError('observation flag must be boolean')
         loop=asyncio.get_running_loop()
-        result=await (loop.run_in_executor(self.pool,_process,self.cfg,i,self.expected,args) if self.processes else loop.run_in_executor(self.pool,self.actors[i].execute,*args))
-        self.worker_pids.add(result['pid']);return result['state']
+        result=await (loop.run_in_executor(self.pool,_process,self.cfg,i,self.expected,args,observed)
+                      if self.processes else loop.run_in_executor(self.pool,partial(self.actors[i].execute,*args,observed=observed)))
+        self.worker_pids.add(result['pid'])
+        return result if observed else result['state']
 
     def close(self):self.pool.shutdown(wait=True,cancel_futures=True)
     def __enter__(self):return self
@@ -508,9 +515,9 @@ class LocalBackend:
 
 
 class RayIslandActor(IslandActor):
-    def execute(self,*args):
+    def execute(self,*args,observed=False):
         import ray
-        return {**super().execute(*args),'node_id':ray.get_runtime_context().get_node_id()}
+        return {**super().execute(*args,observed=observed),'node_id':ray.get_runtime_context().get_node_id()}
 
 
 class RayBackend:
@@ -544,11 +551,13 @@ class RayBackend:
                 self.actors.append(remote.options(scheduling_strategy=strategy).remote(cfg,i,expected))
         except BaseException:self.close();raise
 
-    async def call(self,i,*args):
-        result=await self.actors[i].execute.remote(*args)
+    async def call(self,i,*args,observed=False):
+        if type(observed) is not bool:raise ValueError('observation flag must be boolean')
+        result=await self.actors[i].execute.remote(*args,observed=observed)
         node=result['node_id']
         if not isinstance(node,str) or not node or (i in self.pinned and self.pinned[i]!=node):raise ClusterError('Ray node placement mismatch')
-        self.nodes.add(node);self.worker_pids.add((node,result['pid']));return result['state']
+        self.nodes.add(node);self.worker_pids.add((node,result['pid']))
+        return result if observed else result['state']
 
     def close(self):
         for a in self.actors:
@@ -560,7 +569,7 @@ class RayBackend:
     def __exit__(self,*args):self.close()
 
 
-async def run_cluster(store,backend,*,stop_after=None):
+async def run_cluster(store,backend,*,stop_after=None,green=None):
     """Independent island progress, bounded in-flight work, latest-value ring.
 
     A final drain delivers the last committed outbound elite from each neighbor.
@@ -569,10 +578,16 @@ async def run_cluster(store,backend,*,stop_after=None):
     cfg=store.cfg;store.open()
     if stop_after is not None and (type(stop_after) is not int or not 1<=stop_after<=cfg.islands*(cfg.rounds+1)):raise ValueError('invalid stop count')
     rows=[store.read(i) for i in range(cfg.islands)]
+    if green is not None and type(green) is not WorkerPowerScenario:
+        raise ValueError('typed optional worker power scenario required')
+    ledger=(GreenLedger(green,islands=cfg.islands,initial_revisions=tuple(rev for rev,_ in rows))
+            if green is not None else None)
     commits=0;pending={};todo=deque(i for i,(_,s) in enumerate(rows) if s['round']<cfg.rounds)
     draining=False
     def champion():return max((s['elite'] for _,s in rows),key=lambda x:(score(x['metrics']),x['id']))
     async def dispatch(i,old,m,g,final):
+        if ledger is not None:
+            return await asyncio.wait_for(backend.call(i,old,m,g,final,observed=True),cfg.timeout)
         return await asyncio.wait_for(backend.call(i,old,m,g,final),cfg.timeout)
     try:
         while True:
@@ -587,9 +602,26 @@ async def run_cluster(store,backend,*,stop_after=None):
             if not pending:break
             ready,_=await asyncio.wait(pending,return_when=asyncio.FIRST_COMPLETED)
             for task in sorted(ready,key=lambda t:pending[t][0]):
-                i,rev,old,m,g,final=pending.pop(task);new=task.result()
+                i,rev,old,m,g,final=pending.pop(task)
+                answer=task.result()
+                new=answer['state'] if ledger is not None else answer
                 verify_transition(cfg,old,new,m,g,final)
                 store.commit(i,rev,new);rows[i]=(rev+1,new);commits+=1
+                if ledger is not None:
+                    try:
+                        signal=answer['green_reading']
+                        reading=Reading(**signal)
+                    except (TypeError,KeyError,ValueError,OverflowError):
+                        reading=None  # corrupt worker clock is UNKNOWN, never synthetic zero
+                    try:
+                        ledger.commit(i,rev+1,reading,
+                                      attempts=new['attempts']-old['attempts'],
+                                      rejections=new['rejections']-old['rejections'],
+                                      profiled=len(new['performance_records'])-len(old['performance_records']),
+                                      perf_rejected=(sum(not p['accepted'] for p in new['performance_records'])
+                                                     -sum(not p['accepted'] for p in old['performance_records'])))
+                    except (TypeError,KeyError,ValueError,OverflowError):
+                        pass  # no telemetry side effect may change the committed state
                 if not final and new['round']<cfg.rounds:todo.append(i)
             if stop_after is not None and commits>=stop_after:break
     finally:
@@ -615,6 +647,8 @@ async def run_cluster(store,backend,*,stop_after=None):
         report['action_counts']=[sum(t['action']==i for s in states for t in s['trajectories']) for i in range(7)]
     if cfg.topology is not None:
         report['topology']={'leaf_count':sum(s['topology']['leaf_count'] for s in states),'islands':[s['topology'] for s in states]}
+    if ledger is not None:
+        report['green_computing']=ledger.report(expected_commits=commits)
     return report
 
 
@@ -627,7 +661,15 @@ def main():
     p.add_argument('--topology',action='store_true');p.add_argument('--topology-depth',type=int,default=4);p.add_argument('--topology-split-count',type=int,default=4);p.add_argument('--topology-window',type=int,default=64)
     p.add_argument('--epigenetic',action='store_true');p.add_argument('--annealed',action='store_true');p.add_argument('--holographic',action='store_true');p.add_argument('--formal-safety',action='store_true')
     p.add_argument('--performance-regression',action='store_true');p.add_argument('--resume',action='store_true');p.add_argument('--stop-after',type=int)
+    p.add_argument('--green-watts',type=float,nargs=3,metavar=('LOW','MID','HIGH'))
+    p.add_argument('--green-power-source');p.add_argument('--green-intensity-g-per-kwh',type=float)
+    p.add_argument('--green-intensity-source')
     args=vars(p.parse_args());db=args.pop('db');key_file=args.pop('key_file');mode=args.pop('backend');address=args.pop('ray_address');distinct=args.pop('distinct_nodes');resume=args.pop('resume');stop=args.pop('stop_after');policy=performance.Policy() if args.pop('performance_regression') else None
+    watts=args.pop('green_watts');power_source=args.pop('green_power_source');intensity=args.pop('green_intensity_g_per_kwh');intensity_source=args.pop('green_intensity_source')
+    supplied=[watts,power_source,intensity,intensity_source]
+    if any(x is not None for x in supplied) and not all(x is not None for x in supplied):p.error('all four Green Computing settings are required together')
+    try:green=WorkerPowerScenario(*watts,intensity,power_source,intensity_source) if watts is not None else None
+    except ValueError as exc:p.error(str(exc))
     if mode=='ray' and not address or mode!='ray' and (address or distinct):p.error('Ray requires --ray-address; Ray flags cannot be used with local backend')
     topology=TopologyPolicy(depth=args.pop('topology_depth'),split_count=args.pop('topology_split_count'),window=args.pop('topology_window'))
     enabled=args.pop('topology')
@@ -637,7 +679,7 @@ def main():
     backend=RayBackend(cfg,address=address,distinct_nodes=distinct) if mode=='ray' else LocalBackend(cfg,processes=mode=='process')
     with backend:
         store.open() if resume else store.initialize()
-        r=asyncio.run(run_cluster(store,backend,stop_after=stop));r.update(backend=mode,worker_processes=len(backend.worker_pids))
+        r=asyncio.run(run_cluster(store,backend,stop_after=stop,green=green));r.update(backend=mode,worker_processes=len(backend.worker_pids))
         if mode=='ray':r['observed_ray_nodes']=len(backend.nodes)
     print(json.dumps(r,indent=2,allow_nan=False))
 
