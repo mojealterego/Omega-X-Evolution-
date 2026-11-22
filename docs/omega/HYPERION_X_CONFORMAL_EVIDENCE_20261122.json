@@ -1,0 +1,51 @@
+{
+  "base_branch": "main",
+  "base_commit": "e5077e01bd1153e74def9154812d4b0c71629dce",
+  "compile": {
+    "exit": 0
+  },
+  "date": "2026-11-22",
+  "env": {
+    "coverage": "7.13.3",
+    "os": "Linux",
+    "pytest": "9.0.2",
+    "python": "3.13.5"
+  },
+  "full_repo_tested": false,
+  "gate09": "UNCHANGED",
+  "integration_status": "optional advisory module; no engine wiring",
+  "red": {
+    "exit": 2,
+    "result": "ModuleNotFoundError"
+  },
+  "release_authorized": false,
+  "repo": "mojealterego/Omega-X-Evolution-",
+  "schema": "omega-hyperion-conformal-evidence-v1",
+  "source": {
+    "basename": "Projekt Zaawansowanego Silnika AI.PDF",
+    "pages": 24,
+    "sha256": "9437acc6fcd2d5a552126f2ecc39989dafc0c9f509c5f424c015d034cb82e6ca"
+  },
+  "source_files": {
+    "docs/omega/HYPERION_X_CONFORMAL_INTAKE_20261122.md": {
+      "git_blob_sha": "9ac4746f305f3ba7109958dfc6a883e5d2eddc53",
+      "sha256": "32086c13cd30f0f41a8ea1a94539a5a22631b79086f7fce4980245de601fab4c"
+    },
+    "omega_x_evolution/hyperion_conformal.py": {
+      "git_blob_sha": "6d666f3f766579c979a281511dd6b3be957a7a57",
+      "sha256": "d80ab9f809f1feda85d6899021e24de1cfb80cead740b7828edb91a55eaeaafa"
+    },
+    "tests/test_hyperion_conformal.py": {
+      "git_blob_sha": "fe60f01f856eda763de0e8742635d1708978ba14",
+      "sha256": "ce1756944080d9fce50125919257aeb380cee2ea06f070a61b9580d81af01033"
+    }
+  },
+  "tests": {
+    "coverage_branch_inclusive_pct": 100,
+    "exit": 0,
+    "mode": "native-local",
+    "passed": 66,
+    "run": "PYTHONPATH=. python -m pytest -q tests/test_hyperion_conformal.py",
+    "simulations": "seeded iid/exact-ratio finite synthetic data; not hardware"
+  }
+}
