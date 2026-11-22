@@ -1,0 +1,62 @@
+{
+  "base_head": "f3a0d21e5ea8c386489ed0a77ac3147fc203c75d",
+  "date": "2026-11-22",
+  "environment": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]"
+  },
+  "files": {
+    "docs/omega/ASYNC_LIFECYCLE_PROPOSAL_20261122.md": {
+      "bytes": 4630,
+      "git_blob_sha": "cac555bc9201937b3ead6f3ee25e1cd5905dc9ec",
+      "sha256": "e2c8d97219544fab769ef1b75079459949e4f313aa0e3e7054b19b74132e835a"
+    },
+    "omega_x_evolution/async_lifecycle.py": {
+      "bytes": 8112,
+      "git_blob_sha": "2b9ed4e5658007c879fa84a02f8926107f5f12f9",
+      "sha256": "550c127f8f7522a61b6d8878c340fa4a721daecdaee3ab2c2d70d32f63c99210"
+    },
+    "tests/test_async_lifecycle_adapter.py": {
+      "bytes": 12155,
+      "git_blob_sha": "8a615766c98861fd77bf84904d6c837bc810fbd5",
+      "sha256": "ed7a59ff463bdf8f0a0f3eaf209c22f7ee7dc11f84603ab63509d876049a6119"
+    },
+    "tests/test_async_lifecycle_real_engine.py": {
+      "bytes": 2151,
+      "git_blob_sha": "3aabd8ab586686b24e6d407a9a79283df8d9f6dd",
+      "sha256": "f0d817bd8aa2ee69cb3109a7bcb4e23de7a7462e169f28caf9f21819a3fe3750"
+    }
+  },
+  "known_gaps": [
+    "no native Active Inference client",
+    "no native Titans/MCP client",
+    "full engine E2E not run locally",
+    "no FHE/Grover/TDA integration",
+    "release GATE-09 OPEN"
+  ],
+  "schema": "omega-async-lifecycle-research-evidence-v1",
+  "tests": {
+    "compileall": {
+      "cmd": "python -m compileall -q omega_x_evolution tests",
+      "exit": 0
+    },
+    "coverage": {
+      "cmd": "PYTHONPATH=. pytest -q --cov=omega_x_evolution.async_lifecycle --cov-branch --cov-report=term-missing tests/test_async_lifecycle_adapter.py",
+      "passed": 44,
+      "percent": 99
+    },
+    "green": {
+      "cmd": "PYTHONPATH=. pytest -q tests/test_async_lifecycle_adapter.py",
+      "failed": 0,
+      "passed": 44
+    },
+    "real_engine": {
+      "cmd": "PYTHONPATH=. pytest -q tests/test_async_lifecycle_real_engine.py",
+      "status": "NOT_RUN_LOCAL_FULL_REPO_UNAVAILABLE"
+    },
+    "red": {
+      "cmd": "PYTHONPATH=. pytest -q tests/test_async_lifecycle_adapter.py",
+      "result": "FAIL missing module, exit 2"
+    }
+  }
+}
