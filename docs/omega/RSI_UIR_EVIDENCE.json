@@ -1,0 +1,43 @@
+{
+  "base_main": "1f30f122e457198de7636f99ae712406530daeef",
+  "claimed_properties": [
+    "bounded u16 polynomial functional proof verification",
+    "no machine-policy capability escalation",
+    "HMAC wire authentication conditional on uncompromised key",
+    "external monotonic replay sequence contract"
+  ],
+  "compileall": {
+    "command": "python -m compileall -q omega_x_evolution/rsi_ir_guard.py tests/test_rsi_ir_guard.py",
+    "exit": 0
+  },
+  "environment": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.13.5"
+  },
+  "files_sha256": {
+    "docs/omega/RSI_UIR_ALIGNMENT_SCOPE_20261122.md": "57187bc63c71b65d93cfdb4eccfe1b0b47d8f4f773c2984f922f4b72e5ce980f",
+    "omega_x_evolution/rsi_ir_guard.py": "3134bce77e42b53f6eabfa502338480d89135f10b5a78e639c65a6b24acd485f",
+    "tests/test_rsi_ir_guard.py": "7b753456ebe811747f6f1dde0d1ad06749adff1363a0ed04b928a472ba282764"
+  },
+  "mode": "LOCAL_NATIVE_SOURCE_SUBSET",
+  "schema": "omega-rsi-uir-limited-v1",
+  "tests": {
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_rsi_ir_guard.py",
+    "failed": 0,
+    "not_run": [
+      "full-repository-suite",
+      "full actual polyglot/proof_kernel integration",
+      "native Zenoh transport",
+      "external replay anchor"
+    ],
+    "passed": 38
+  },
+  "unproved": [
+    "CEV",
+    "reward-hacking impossible",
+    "150 languages",
+    "sub-ms network and JIT",
+    "native Zenoh",
+    "end-to-end release gate"
+  ]
+}
