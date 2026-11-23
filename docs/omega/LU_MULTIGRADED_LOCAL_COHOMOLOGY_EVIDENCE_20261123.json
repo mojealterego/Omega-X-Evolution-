@@ -1,0 +1,49 @@
+{
+  "base_main_sha": "baef5e5af5fabbc88c59ab0c00761e32e331e3d0",
+  "branch": "main",
+  "coverage_report": "reports/coverage.log",
+  "files": {
+    "docs/omega/LU_MULTIGRADED_LOCAL_COHOMOLOGY_RESEARCH_20261123.md": {
+      "git_blob_sha": "45f0dd36335493ed00ef4494d77ef7cbba17c667",
+      "sha256": "9c6aff883c78a4774a23fca8d4322f9f8472c6c1a411f7cce3fd88b00e7a2211"
+    },
+    "omega_x_evolution/finite_box_local_cohomology.py": {
+      "git_blob_sha": "4d93ab1ca131913130c2584d2bc73985d2c2b424",
+      "sha256": "0d7bef86f281242032bbc16c35ed38622c81b6b43692a41a026fa24636e9959e"
+    },
+    "tests/test_finite_box_local_cohomology.py": {
+      "git_blob_sha": "8cf4b936dad9465c79e5bac55b69d09c59c61f51",
+      "sha256": "c188afff5407aa63d9a20a75e5ff7df2a8fbb625634f96c76f89870d9b44ef41"
+    }
+  },
+  "implementation_scope": "non-top finite box classifier, Bass-number formulas, global-dimension theorem, support filtration",
+  "not_verified": [
+    "full repo regression",
+    "full categorical theorem",
+    "top-degree category",
+    "hardware",
+    "formal proof",
+    "production deployment"
+  ],
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "pytest_version": "pytest 9.0.2",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "schema": "omega-x-lu-finite-box-evidence-v1",
+  "source_arxiv": "2609.11219v4",
+  "source_pages": 34,
+  "source_pdf_sha256": "ff52c2836df1902972dd199c0cb310ae07ccd940c1b94592c1a165fcd683aed1",
+  "test_commands": [
+    {
+      "cmd": "PYTHONPATH=. pytest -q tests/test_finite_box_local_cohomology.py before implementation",
+      "id": "LU-RED-001",
+      "log": "reports/red.log",
+      "result": "EXPECTED_FAIL; module not found"
+    },
+    {
+      "cmd": "PYTHONPATH=. pytest -q tests/test_finite_box_local_cohomology.py tests/test_finite_fitting.py",
+      "id": "LU-GREEN-001",
+      "log": "reports/regression.log",
+      "result": "PASS; 82 passed"
+    }
+  ]
+}
