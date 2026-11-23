@@ -1,0 +1,79 @@
+{
+  "base_branch": "main",
+  "base_head_at_start": "b36abfa463ea32cfc34be1f9d9ec4d3642c8eec3",
+  "checks": [
+    {
+      "command": "PYTHONPATH=. pytest -q tests/test_finite_fitting.py",
+      "exit_code": 2,
+      "id": "FITTING-RED-001",
+      "log": "red.log",
+      "result": "FAIL_COLLECTION_NO_MODULE"
+    },
+    {
+      "command": "PYTHONPATH=. pytest -q tests/test_finite_fitting.py",
+      "exit_code": 0,
+      "id": "FITTING-GREEN-001",
+      "log": "green.log",
+      "result": "39 passed"
+    },
+    {
+      "command": "PYTHONPATH=. pytest --cov=omega_x_evolution.finite_fitting --cov-branch --cov-report=term-missing -q tests/test_finite_fitting.py",
+      "exit_code": 0,
+      "id": "FITTING-COVERAGE-001",
+      "log": "coverage.log",
+      "result": "39 passed; 88% combined statement+branch coverage"
+    },
+    {
+      "command": "python -m compileall -q omega_x_evolution/finite_fitting.py tests/test_finite_fitting.py",
+      "exit_code": 0,
+      "id": "FITTING-COMPILE-001",
+      "result": "PASS"
+    }
+  ],
+  "claims": {
+    "external_formal_proof_checker_used": false,
+    "narrow_model_tested": true,
+    "real_repo_full_regression_tested": false,
+    "release_authorized": false,
+    "theorem_general_proved_by_tests": false
+  },
+  "environment": {
+    "pytest": "pytest 9.0.2",
+    "python": "3.13.5"
+  },
+  "model": "square_zero_local_artinian",
+  "recorded_at": "2026-11-23",
+  "rings": {
+    "embedding_dim": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "prime": [
+      2,
+      3,
+      5,
+      7,
+      11
+    ],
+    "random_seed": "none_exact_enumeration"
+  },
+  "schema": "omega_finite_fitting_evidence_v1",
+  "source_arxiv": "2608.03766v2",
+  "sources": {
+    "docs/omega/FINITE_FITTING_RESEARCH_20261123.md": {
+      "git_blob_sha": "6807e2a38e756f5806a5ee90fd50367122a10a3a",
+      "sha256": "c2672b95231ecc6aba66ee397f3484f5cbfa18017dcd6db3e4b76df50fdcb55e"
+    },
+    "omega_x_evolution/finite_fitting.py": {
+      "git_blob_sha": "9c404ecb0b2073d23b285697850a3cbffe0d3b31",
+      "sha256": "35bb955c3aceadfab0df48e9edcec36cdf629b6679e62bd101ad56216d476b3f"
+    },
+    "tests/test_finite_fitting.py": {
+      "git_blob_sha": "67acbd49fd4526fb76863a7756cade2b8ea3deac",
+      "sha256": "b8d4883b5127f50ca9166a964cc6f989c9a768d118a9bb00e1813cc1b1dca012"
+    }
+  },
+  "status": "NATIVE_LOCAL_TESTED_NOT_INTEGRATED"
+}
