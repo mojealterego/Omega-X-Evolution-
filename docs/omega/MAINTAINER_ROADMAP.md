@@ -164,3 +164,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v72 — HMAC and native PQ profiles (2026-11-24):** [verification](ONTOS_V72_CRYPTO_PROFILES_20261124.md). Native HMAC-SHA256 domain separation, bounded ML-DSA-65 and SLH-DSA-SHA2-128s public signature verification via OpenSSL 3.5.5, ML-KEM-768 public/ciphertext shape and actual native test roundtrip (not a signature). Eight focused tests PASS, zero skipped locally. Scope: profile interoperability and negative cases, not official PQ KATs, key custody, production KEM adapter or evaluator integration. C2SP and complete v72 acceptance remain OPEN; no changes to historical GATE-09.
+
+
+**L12 v72 — signed checkpoint note (2026-11-24):** [verification](ONTOS_V72_CHECKPOINT_NOTE_20261124.md). Implements bounded C2SP v1.0.0 three-line single Ed25519 log signature profile with pinned origin/name/public key, strict canonical Base64, size and empty-root checks. 23 new tests plus eight crypto-profile regressions = 31 PASS in current isolated subset. Does not imply external monotonic anchoring, witness cosignatures, or integrated acceptance. Official PQ KATs, production key custody/KEM, integrated v72 evidence and v73–v75 remain OPEN. Historical GATE-09 unchanged.

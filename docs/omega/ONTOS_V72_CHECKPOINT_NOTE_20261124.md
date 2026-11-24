@@ -1,0 +1,10 @@
+# L12 v72 — authenticated checkpoint note
+
+Base main: 13c3e202876de4427136a2a82844c7740e902981. Source: C2SP tlog-checkpoint v1.0.0 https://c2sp.org/tlog-checkpoint@v1.0.0 and signed-note https://c2sp.org/signed-note@v1.0.0-rc.1 . Deliberately restricted single Ed25519 log signer, no extensions or cosignatures, ASCII names <=255 bytes, note <=1024 bytes, size 0..2^63-1. Canonical decimal and Base64, exact LF wire and four-byte SHA-256 key identifier using type 0x01. Empty tree requires SHA-256(empty). Authentication uses the existing strict Ed25519 verifier against operator-pinned origin, name and public key. No authentication of arbitrary roots by Merkle proofs, no monotonic state, no cross-process witness, no full C2SP implementation claim.
+
+Environment: CPython 3.13.5, pytest 9.0.2, cryptography 46.0.4, OpenSSL 3.5.5, Linux. NATIVE local software. Existing dependency blobs independently reconstructed and matched: JCS 1b61af871b78740203cb2418b0a7ca8d1bd06884 and receipts 1854ada8924eb09f8bcf2efedce8ee852677df90. RED: python -m pytest -q tests/test_ontos_v72_checkpoint_note.py; missing module, exit 2; log SHA-256 a9992d247374ea889e80b5a662b6f7b4ec2312057779eef38d8ef7d83034cc8b.
+GREEN: python -m pytest -q tests, isolated subset: 31 passed in 0.57s, 0 skips, exit 0 (23 checkpoint cases and 8 prior crypto-profile cases); log SHA-256 023af0c8fdb81b22eab381a3f469c6358c35b1ca84f004df7498c2b4db5d7cbc. Compileall subset exit 0.
+
+Test IDs: test_exact_c2sp_body_key_id_and_signature, test_invalid_size (4), test_invalid_origin (5), test_empty_tree_root_and_length, test_malformed_or_modified_note_rejected (11), test_pinned_name_key_origin_and_key_id. Fixed public test seed bytes(range(32)), deterministic Ed25519 note bytes. Prior native PQ cases use ephemeral random keys. Production Git blob b36f544fe0f4935e31ddd5980b0e3d0fa227c788; test blob d507dfadd4ced5f828a35be540ed6ed75652cc64.
+
+Full repository regression NOT RUN: direct GitHub clone DNS unavailable. Earlier evidence unchanged. Signed checkpoint is not an anti-rollback guarantee. Existing bounded GATE-09 unchanged.
