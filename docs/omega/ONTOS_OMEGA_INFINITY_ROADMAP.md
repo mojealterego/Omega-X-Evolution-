@@ -284,3 +284,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v72 — nine-section evidence admission (2026-11-24):** [verification](ONTOS_V72_EVIDENCE_20261124.md). Strict Section 10 field/semantic validation and binding to externally supplied source/log/provenance/replay bytes, pinned scope and Ed25519 receipt; 39 new cases + 49 prior v72 cases = 88 PASS. A valid record authenticates the bytes and stated outcome only; never authorizes promotion. HMAC/PQC, C2SP checkpoint note interoperability, runtime integration and complete v72 acceptance remain OPEN. Historical GATE-09 unchanged.
+
+
+**L12–L111 planning registry (2026-11-24):** [implementation and verification](ULTRA_EVOLUTION_MAP_20261124.md). Registers all 100 level IDs/titles, 400 phase packages, ten epochs, eight tracks and sixteen cross contracts. Cycle checking includes cross edges and package phases; readiness uses transitive prerequisites and is not release authority. Ten map tests + 88 v72 cases = 98 PASS in isolated subset. Only L12 is binding in this new registry; 396 L13–L111 packages remain PROPOSED_NON_BINDING. Prior mandatory v81–v87 and L11 obligations are unchanged; no level promotion or new GATE-09.
