@@ -167,3 +167,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v72 — signed checkpoint note (2026-11-24):** [verification](ONTOS_V72_CHECKPOINT_NOTE_20261124.md). Implements bounded C2SP v1.0.0 three-line single Ed25519 log signature profile with pinned origin/name/public key, strict canonical Base64, size and empty-root checks. 23 new tests plus eight crypto-profile regressions = 31 PASS in current isolated subset. Does not imply external monotonic anchoring, witness cosignatures, or integrated acceptance. Official PQ KATs, production key custody/KEM, integrated v72 evidence and v73–v75 remain OPEN. Historical GATE-09 unchanged.
+
+
+**L12 v72 — authenticated checkpoint transitions (2026-11-24):** [evidence](ONTOS_V72_CHECKPOINT_CHAIN_20261124.md). Reuses actual signed-note and Merkle verification code, serializes competing appends and rejects rollback, equivocation and divergent proofs against an operator-pinned starting root. 6 new integration tests; 37/37 PASS including 31 prior checkpoint/PQ profile tests in local subset. Process-local only; simultaneous rollback of state and pin, cross-process persistence and external anchoring are not solved. v72 overall OPEN; v73–v75 and existing obligations unchanged. Historical GATE-09 unchanged.
