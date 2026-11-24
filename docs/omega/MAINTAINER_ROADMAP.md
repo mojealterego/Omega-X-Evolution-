@@ -149,3 +149,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v72 — bounded Merkle proof primitives (2026-11-24):** [native evidence and L11–L111 intake](ONTOS_V72_MERKLE_20261124.md). RFC 6962 SHA-256 inclusion and consistency, 528 inclusion and 560 prefix cases on trees of 1–32 leaves, 11 pytest cases PASS. Bounded generation and verifier inputs; empty root and malformed proofs fail closed. This is a mathematical sub-contract, not checkpoint authentication, external-anchor closure, or a new GATE-09. v72 remains OPEN for JCS, signed receipts, PQC and integration. v81–v87 preserved. L13–L111 proposals do not become binding by import.
+
+
+**L12 v72 — bounded JCS evidence preimages (2026-11-24):** [verification](ONTOS_V72_JCS_20261124.md). UTF-16 key ordering, finite binary64 formatting, strict duplicate/Unicode admission, 1 MiB/32-depth/65536-node budgets. 24 JCS and 11 Merkle tests PASS, including seed-72 differential parity with Node.js on 9997 finite binary64 values. TESTED within bounded profile; full RFC qualification, signed receipts, schema semantics and PQC remain OPEN. No change to evaluator, permissions or historical GATE-09.
