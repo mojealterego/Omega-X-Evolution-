@@ -302,3 +302,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v73 — one-shot blind holdout contract (2026-11-24):** [verification](ONTOS_V73_HOLDOUT_20261124.md). Frozen protocol/feature/artifact digest manifest, salted label commitment, distinct Ed25519 keys, one signed batch per candidate, no scores before external seal, missing and abstained rows remain in denominator. 12 new tests, local subset 63/63 PASS. HYBRID finite protocol with native cryptography; no claim of OS isolation, durable uniqueness, artifact execution provenance, multi-campaign privacy or actual full Suite A-D run. v73/v74 remain OPEN. Historical GATE-09 unchanged.
+
+
+**L12 v74 — preregistration and paired report engine (2026-11-24):** [verification](ONTOS_V74_CAMPAIGN_20261124.md). Enforces a pinned 30-seed, 36 primary/24 ablation configuration plan over A-D; explicit missing/failed accounting, generation separation, paired integer contrasts, seeded percentile bootstrap, exact/Monte Carlo sign flip and Holm adjustment. 12 new tests; 75/75 local subset PASS. Tested on 1800 synthetic fixture records, not actual source episodes. Source configuration identity/provenance, broker integration and full executed campaign remain OPEN; no new GATE-09.
