@@ -296,3 +296,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v72 — authenticated checkpoint transitions (2026-11-24):** [evidence](ONTOS_V72_CHECKPOINT_CHAIN_20261124.md). Reuses actual signed-note and Merkle verification code, serializes competing appends and rejects rollback, equivocation and divergent proofs against an operator-pinned starting root. 6 new integration tests; 37/37 PASS including 31 prior checkpoint/PQ profile tests in local subset. Process-local only; simultaneous rollback of state and pin, cross-process persistence and external anchoring are not solved. v72 overall OPEN; v73–v75 and existing obligations unchanged. Historical GATE-09 unchanged.
+
+
+**L12 v73 — authenticated finite A–E isolation boundary (2026-11-24):** [evidence](ONTOS_V73_ISOLATION_20261124.md). Existing v63/v66 transition and receiver integrated with v72 strict Ed25519; distinct pinned T_obj/T_ext authorities, tenant/session/history binding including trusted delivery tick, atomic commit, rejection of role confusion and forbidden model operations. 14 new cases + 37 earlier local cases = 51 PASS. HYBRID (native cryptography + finite deterministic model); no OS isolation, holdout broker, key custody or real capabilities claimed. v73/v81/v86 remain OPEN for remaining obligations; v72 and historical GATE-09 unchanged.
