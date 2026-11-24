@@ -197,3 +197,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v75 — mandatory fresh monotonic witness tip (2026-11-24):** [evidence](ONTOS_V75_WITNESS_GATE_20261124.md). Eight authenticated gate receipts, scope, evaluator pins, manifest and campaign digests committed to exact last leaf of independently pinned witness history. Missing anchor blocks final PASS; invalid anchor fails. Six new tests and modified regression, 102/102 PASS in isolated dependency slice, compileall PASS. Operational authority protocol exercised with test keys, no live TCB provisioning or complete repo regression. Historical GATE-09 unchanged; full L12 still BLOCKED.
+
+
+**L12 v72 — authenticated routine witness key rotation (2026-11-24):** [evidence](ONTOS_V72_ROTATION_20261124.md). Offline pinned authority signs exact old/new policy and receipt handoff, same Merkle root/size, monotonic epoch, retired-key exclusion, no environment escalation; eight new native-crypto/SQLite tests including v75 anchor compatibility. Local focused dependency regression 24/24 PASS; compileall PASS. Durable client epoch CAS, coordinated quiescence/recovery, emergency root rotation and independent operational deployment remain OPEN. Full repository regression still BLOCKED by archive/DNS access. Historical GATE-09 unchanged.
