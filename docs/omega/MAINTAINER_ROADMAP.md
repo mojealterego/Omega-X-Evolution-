@@ -182,3 +182,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v74 — reference A-D preregistration:** [frozen plan](ONTOS_V74_REFERENCE_PREREG_20261124.md). Integrates real v73 broker (C) and v74 report with v37 replay (A/B) and v62 noise (D). 3 focused tests PASS; reference plan pinned before complete execution. Original source configurations and full L12 acceptance remain OPEN.
+
+
+**L12 v74 — executed reference A-D campaign and authenticated report:** [results](ONTOS_V74_REFERENCE_EXECUTION_20261124.md), [signed attestation](ONTOS_V74_REFERENCE_ATTESTATION.json). 1800/1800 real reference runs (432000 trials), 30 holdout brokers, no missing runs. Report and 1800 record leaves bound to pinned plan in 1802-leaf signed history. 3 focused attestation tests PASS; actual attestation verified. Original source suite reproduction and target attainment OPEN; A/B reference results below source target. No automatic promotion or new GATE-09.
