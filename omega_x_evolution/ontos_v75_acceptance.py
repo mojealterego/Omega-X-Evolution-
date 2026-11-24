@@ -15,7 +15,8 @@ from .ontos_v72_jcs import canonical_json, parse_json
 from .ontos_v72_evidence import ArtifactBundle, verify_record
 from .ontos_v72_receipts import ReceiptScope, _prime_order_point
 from .ontos_v74_campaign import CampaignPlan, Configuration, Run, analyze_campaign
-from .ontos_v75_anchor import AnchorTrust, AnchorEvidence, review_leaf, verify_review_anchor
+from .ontos_v75_anchor import (AnchorTrust, AnchorEvidence, QuorumAnchorTrust, QuorumAnchorEvidence,
+                               review_leaf, verify_review_anchor)
 
 GATES = tuple(f'GATE-0{i}' for i in range(1,9))
 _HEX = re.compile(r'[0-9a-f]{64}\Z',re.ASCII)
@@ -110,8 +111,8 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes],
               commit_sha: str, tenant: str, source_campaign_sha256: str | None,
               trust: dict[str,tuple[ReceiptScope,bytes]],
               submissions: dict[str,GateEvidence],
-              anchor_trust: AnchorTrust | None = None,
-              anchor_evidence: AnchorEvidence | None = None) -> dict:
+              anchor_trust: AnchorTrust | QuorumAnchorTrust | None = None,
+              anchor_evidence: AnchorEvidence | QuorumAnchorEvidence | None = None) -> dict:
     """Use only externally pinned gate scopes and keys, never submitted trust roots.
 
     All eight gates are mandatory. A source campaign pin is required for 04/05;

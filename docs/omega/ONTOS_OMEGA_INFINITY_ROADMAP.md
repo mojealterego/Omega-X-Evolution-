@@ -332,3 +332,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v72 — fixed 3-of-4 monotonic witness quorum:** [evidence](ONTOS_V72_QUORUM_20261124.md). Native SQLite and Ed25519, roster/epoch-bound challenge, strict distinct signatures and pinned Merkle continuity. Ten focused tests PASS, one Byzantine key or one database rollback, 2+2 partition fail-closed, late recovery; divergent 2+2 fork can remain blocked. Review-leaf verifier implemented; gate reducer wiring, quorum reconfiguration, external custody and full repo regression remain OPEN. Not a consensus or production deployment. Historical GATE-09 unchanged.
+
+
+**L12 v75 — operator-pinned quorum anchor integration:** [evidence](ONTOS_V75_QUORUM_ANCHOR_20261124.md). Existing audit_l12 now accepts explicit QuorumAnchorTrust and QuorumAnchorEvidence; trusted policy determines verification path, no downgrade from quorum to single-witness evidence. Actual eight-gate reducer tested with complete synthetic fixture, including 1800 campaign records; 17/17 focused regression PASS. Historical GATE-09 unchanged; actual full L12 acceptance, independent operational provisioning, membership reconfiguration and full repo regression remain OPEN.

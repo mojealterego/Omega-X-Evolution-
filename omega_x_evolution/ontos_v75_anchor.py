@@ -10,11 +10,13 @@ from dataclasses import dataclass
 from hashlib import sha256
 import re
 
-from .ontos_v72_checkpoint_note import verify_note
+from .ontos_v72_checkpoint_note import Checkpoint, verify_note
 from .ontos_v72_jcs import canonical_json
 from .ontos_v72_merkle import leaf_hash, verify_inclusion
 from .ontos_v72_receipts import ReceiptScope, _prime_order_point
 from .ontos_v72_witness import WitnessPolicy, WitnessReceipt, verify_witness_transition
+
+from .ontos_v72_quorum import QuorumPolicy, QuorumCertificate, verify_quorum_review
 
 GATE_IDS = tuple(f'GATE-0{i}' for i in range(1, 9))
 _HEX = re.compile(r'[0-9a-f]{64}\Z', re.ASCII)
@@ -31,6 +33,19 @@ class AnchorTrust:
 class AnchorEvidence:
     current: WitnessReceipt
     consistency: tuple[bytes, ...]
+    inclusion: tuple[bytes, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class QuorumAnchorTrust:
+    policy: QuorumPolicy
+    previous: Checkpoint
+    challenge: bytes
+
+
+@dataclass(frozen=True, slots=True)
+class QuorumAnchorEvidence:
+    certificate: QuorumCertificate
     inclusion: tuple[bytes, ...]
 
 
@@ -64,13 +79,19 @@ def review_leaf(*, commit_sha: str, tenant: str, manifest_pin: str, campaign_pin
                            'gates': gates})
 
 
-def verify_review_anchor(data: bytes, trust: AnchorTrust, evidence: AnchorEvidence,
+def verify_review_anchor(data: bytes, trust: AnchorTrust | QuorumAnchorTrust,
+                         evidence: AnchorEvidence | QuorumAnchorEvidence,
                          evaluator_keys: tuple[bytes, ...]) -> bool:
     """Require operational authority and the exact review at the witness tip.
 
     A separate retained client pin and challenge are trusted inputs, not values
     learned from the candidate evidence. A newer tip invalidates older reviews.
     """
+    # The operator's trusted input selects the mode. Evidence cannot downgrade it.
+    if type(trust) is QuorumAnchorTrust:
+        return (type(evidence) is QuorumAnchorEvidence and verify_quorum_review(
+            data, trust.policy, trust.previous, trust.challenge, evidence.certificate,
+            evidence.inclusion, evaluator_keys))
     try:
         if (type(trust) is not AnchorTrust or type(evidence) is not AnchorEvidence
                 or type(trust.policy) is not WitnessPolicy or trust.policy.environment != 'operational'
