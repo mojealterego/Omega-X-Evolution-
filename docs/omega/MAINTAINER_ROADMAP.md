@@ -173,3 +173,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v73 — authenticated finite A–E isolation boundary (2026-11-24):** [evidence](ONTOS_V73_ISOLATION_20261124.md). Existing v63/v66 transition and receiver integrated with v72 strict Ed25519; distinct pinned T_obj/T_ext authorities, tenant/session/history binding including trusted delivery tick, atomic commit, rejection of role confusion and forbidden model operations. 14 new cases + 37 earlier local cases = 51 PASS. HYBRID (native cryptography + finite deterministic model); no OS isolation, holdout broker, key custody or real capabilities claimed. v73/v81/v86 remain OPEN for remaining obligations; v72 and historical GATE-09 unchanged.
+
+
+**L12 v73 — one-shot blind holdout contract (2026-11-24):** [verification](ONTOS_V73_HOLDOUT_20261124.md). Frozen protocol/feature/artifact digest manifest, salted label commitment, distinct Ed25519 keys, one signed batch per candidate, no scores before external seal, missing and abstained rows remain in denominator. 12 new tests, local subset 63/63 PASS. HYBRID finite protocol with native cryptography; no claim of OS isolation, durable uniqueness, artifact execution provenance, multi-campaign privacy or actual full Suite A-D run. v73/v74 remain OPEN. Historical GATE-09 unchanged.
