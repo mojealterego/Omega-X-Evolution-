@@ -179,3 +179,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v74 — preregistration and paired report engine (2026-11-24):** [verification](ONTOS_V74_CAMPAIGN_20261124.md). Enforces a pinned 30-seed, 36 primary/24 ablation configuration plan over A-D; explicit missing/failed accounting, generation separation, paired integer contrasts, seeded percentile bootstrap, exact/Monte Carlo sign flip and Holm adjustment. 12 new tests; 75/75 local subset PASS. Tested on 1800 synthetic fixture records, not actual source episodes. Source configuration identity/provenance, broker integration and full executed campaign remain OPEN; no new GATE-09.
+
+
+**L12 v74 — reference A-D preregistration:** [frozen plan](ONTOS_V74_REFERENCE_PREREG_20261124.md). Integrates real v73 broker (C) and v74 report with v37 replay (A/B) and v62 noise (D). 3 focused tests PASS; reference plan pinned before complete execution. Original source configurations and full L12 acceptance remain OPEN.
