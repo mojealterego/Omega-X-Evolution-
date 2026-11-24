@@ -287,3 +287,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12–L111 planning registry (2026-11-24):** [implementation and verification](ULTRA_EVOLUTION_MAP_20261124.md). Registers all 100 level IDs/titles, 400 phase packages, ten epochs, eight tracks and sixteen cross contracts. Cycle checking includes cross edges and package phases; readiness uses transitive prerequisites and is not release authority. Ten map tests + 88 v72 cases = 98 PASS in isolated subset. Only L12 is binding in this new registry; 396 L13–L111 packages remain PROPOSED_NON_BINDING. Prior mandatory v81–v87 and L11 obligations are unchanged; no level promotion or new GATE-09.
+
+
+**L12 v72 — HMAC and native PQ profiles (2026-11-24):** [verification](ONTOS_V72_CRYPTO_PROFILES_20261124.md). Native HMAC-SHA256 domain separation, bounded ML-DSA-65 and SLH-DSA-SHA2-128s public signature verification via OpenSSL 3.5.5, ML-KEM-768 public/ciphertext shape and actual native test roundtrip (not a signature). Eight focused tests PASS, zero skipped locally. Scope: profile interoperability and negative cases, not official PQ KATs, key custody, production KEM adapter or evaluator integration. C2SP and complete v72 acceptance remain OPEN; no changes to historical GATE-09.
