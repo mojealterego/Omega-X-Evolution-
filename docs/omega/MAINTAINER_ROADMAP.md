@@ -143,3 +143,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **2026-11-21 — ONTOS L11 v71:** [Model porównywania scenariuszy](ONTOS_V71_PARETO_RESEARCH.md), [przyjęcie 10 źródeł badawczych](RESEARCH_SOURCE_INTAKE_20261121.md) i [dowody SHA/test](V71_EVIDENCE.json). 74 ukierunkowane testy PASS (w tym 44 v69/v70), `compileall` PASS. Konserwatywne Pareto energii wall-plug, czasu i poprawności; brak ukrytego wypełniania UNKNOWN. **TESTED scenariuszowo / hardware OPEN / full L11 GATE-09 OPEN**; bez nowych obowiązkowych epok i bez zmian historycznego GATE-09.
+
+
+**ONTOS-TDA — bounded input corrective increment (2026-11-24):** [native TDD evidence](ONTOS_TDA_INPUT_BOUNDS_20261124.md). JSONL read requests bounded to 4097 bytes, strict 4096-byte wire limit, deterministic maximum JSON nesting. 4 RED failures reproduced; 8 focused tests PASS after correction. Full regression NOT RUN. No change to diagnostic mathematics, privileges or historical bounded GATE-09.

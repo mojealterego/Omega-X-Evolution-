@@ -21,6 +21,7 @@ MAX_DIMENSIONS = 16
 MAX_BATCH_ROWS = 4096
 MAX_OBSERVATIONS = 100_000_000
 MAX_ABS_VALUE = 1_000_000.0
+MAX_JSONL_LINE_BYTES = 4096
 
 
 def _points(value: Any, *, min_rows: int = 2, max_rows: int = MAX_POINTS,
@@ -225,6 +226,30 @@ class LatentReservoir:
 
 
 def _read_json(raw: str) -> Any:
+    # Valid latent input is a vector or a matrix: at most two array levels.
+    # Reject excessive nesting before invoking the recursive JSON decoder.
+    # Track quotes/escapes so delimiters in malformed string inputs are not
+    # counted as structural nesting; the numeric schema rejects strings later.
+    depth = 0
+    quoted = escaped = False
+    for char in raw:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in '[{':
+            depth += 1
+            if depth > 2:
+                raise ValueError('JSON nesting exceeds latent input limit')
+        elif char in ']}':
+            depth -= 1
+            if depth < 0:
+                raise ValueError('invalid JSON nesting')
     def no_special(_: str) -> None:
         raise ValueError('nonstandard JSON numeric value')
     def distinct(pairs):
@@ -234,7 +259,10 @@ def _read_json(raw: str) -> Any:
                 raise ValueError('duplicate JSON key')
             d[k] = v
         return d
-    return json.loads(raw, parse_constant=no_special, object_pairs_hook=distinct)
+    try:
+        return json.loads(raw, parse_constant=no_special, object_pairs_hook=distinct)
+    except RecursionError as exc:
+        raise ValueError('JSON nesting exceeds decoder limit') from exc
 
 
 def main() -> None:
@@ -260,11 +288,14 @@ def main() -> None:
                 raise ValueError('JSONL requires --dimensions')
             reservoir = LatentReservoir(dimensions=args.dimensions, capacity=args.capacity,
                                         seed=args.seed, max_observations=args.max_observations)
-            with args.input.open('r', encoding='utf-8') as handle:
-                for number, line in enumerate(handle, 1):
-                    if len(line.encode('utf-8')) > 4096:
+            # Bound the read itself, not just the size after allocation.
+            # Count wire bytes (including line terminators) before decoding.
+            with args.input.open('rb') as handle:
+                for number, line in enumerate(iter(
+                        lambda: handle.readline(MAX_JSONL_LINE_BYTES + 1), b''), 1):
+                    if len(line) > MAX_JSONL_LINE_BYTES:
                         raise ValueError(f'line too long at {number}')
-                    row = _read_json(line)
+                    row = _read_json(line.decode('utf-8'))
                     reservoir.ingest([row])
             report = reservoir.diagnose(min_rank=args.min_rank)
     except (ValueError, OSError, UnicodeError, json.JSONDecodeError) as exc:
