@@ -152,3 +152,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v72 — bounded JCS evidence preimages (2026-11-24):** [verification](ONTOS_V72_JCS_20261124.md). UTF-16 key ordering, finite binary64 formatting, strict duplicate/Unicode admission, 1 MiB/32-depth/65536-node budgets. 24 JCS and 11 Merkle tests PASS, including seed-72 differential parity with Node.js on 9997 finite binary64 values. TESTED within bounded profile; full RFC qualification, signed receipts, schema semantics and PQC remain OPEN. No change to evaluator, permissions or historical GATE-09.
+
+
+**L12 v72 — strict Ed25519 detached receipts (2026-11-24):** [verification](ONTOS_V72_RECEIPTS_20261124.md). Native cryptography signing and verification with public-only canonical prime-order point validation and S<L; detached receipt binds level, gate, commit, tenant, evaluator and actual canonical record digest. 14 receipt cases + 35 earlier v72 cases = 49 PASS. Authentication only, not truth of evidence or promotion. Section 10 schema, HMAC/PQC profiles, checkpoint notes, integration and v72 full acceptance remain OPEN; historical GATE-09 unchanged.
