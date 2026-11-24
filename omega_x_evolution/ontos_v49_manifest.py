@@ -137,3 +137,54 @@ def audit_inventory(records: tuple[SourceRecord, ...], payloads: dict[str, bytes
         'ready_for_integration': False,
         'manifest_sha256': hashlib.sha256(serialized).hexdigest(),
     }
+
+
+def read_source_archive(raw: bytes, archive_pin: str) -> dict[str, bytes]:
+    """Read a pinned, bounded ZIP of exact registered paths without extracting.
+
+    The caller must obtain the archive pin independently. This function only
+    transports bytes; pass its result to audit_inventory or v75 audit_l12 for
+    per-file verification. A partial archive cannot establish full acceptance.
+    Directory entries and wrapper paths are intentionally not accepted.
+    """
+    import io
+    import stat
+    import zipfile
+    import zlib
+
+    if (type(raw) is not bytes or not 0 < len(raw) <= 2 * _MAX_TOTAL
+            or type(archive_pin) is not str or not _SHA.fullmatch(archive_pin)
+            or hashlib.sha256(raw).hexdigest() != archive_pin):
+        raise ValueError('invalid archive bytes or pin')
+    payloads: dict[str, bytes] = {}
+    try:
+        with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+            entries = archive.infolist()
+            if not 0 < len(entries) <= len(SOURCE_PATHS):
+                raise ValueError('archive member count')
+            names: set[str] = set()
+            total = 0
+            for entry in entries:
+                name = entry.filename
+                kind = stat.S_IFMT(entry.external_attr >> 16)
+                if (name != entry.orig_filename or name not in SOURCE_PATHS
+                        or name in names or entry.is_dir() or kind not in (0, stat.S_IFREG)
+                        or entry.external_attr & 0x10 or entry.flag_bits & 1
+                        or entry.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED)):
+                    raise ValueError('invalid archive member')
+                names.add(name)
+                if not 0 <= entry.file_size <= _MAX_FILE:
+                    raise ValueError('archive member byte budget')
+                total += entry.file_size
+                if total > _MAX_TOTAL:
+                    raise ValueError('archive total byte budget')
+            for entry in entries:
+                with archive.open(entry) as member:
+                    data = member.read(entry.file_size + 1)
+                if len(data) != entry.file_size:
+                    raise ValueError('archive member size mismatch')
+                payloads[entry.filename] = data
+    except (zipfile.BadZipFile, NotImplementedError, RuntimeError, OSError,
+            EOFError, zlib.error, UnicodeError, OverflowError) as exc:
+        raise ValueError('invalid source archive') from exc
+    return {path: payloads[path] for path in SOURCE_PATHS if path in payloads}
