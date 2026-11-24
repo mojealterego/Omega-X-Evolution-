@@ -20,3 +20,10 @@ class ShinkaProposal:
         if isinstance(cost,(float,int)) and math.isfinite(cost) and cost>=0:self.reported_cost+=cost
         if getattr(response,'num_tool_calls',0) or not isinstance(response.content,str):raise ValueError('invalid provider response')
         return response.content
+
+
+    @classmethod
+    def from_omega_gateway(cls, client_factory=None):
+        """Explicit local-only route, using the existing Shinka adapter."""
+        model = "local/omega-local@http://127.0.0.1:8788/v1?api_key_env=OMEGA_GATEWAY_TOKEN"
+        return cls({"fast": model, "deep": model}, client_factory=client_factory)
