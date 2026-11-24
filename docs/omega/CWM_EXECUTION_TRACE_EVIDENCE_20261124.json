@@ -1,0 +1,65 @@
+{
+  "artifact_checksums_sha256": {
+    "docs/omega/CWM_EXECUTION_TRACE_GUARD_20261124.md": "01fe5b57397205e9fd081758eef8e9c692954c0ab0d1975bdf19702d4f807dbe",
+    "omega_x_evolution/code_world_trace.py": "b78a0d03db50ca1120754ebcc1053a75dd327316bbd6aad6939fbeee22caf2bb",
+    "reports/coverage_final.log": "11e0f784363e87c49ba63be7c2d09e4d88a5513f67141637c2318754942cf91d",
+    "reports/green0.log": "d6f6b04ecdbf3654ef561da792e47070b0df98e2f383f3f52649298864b3b950",
+    "reports/green_final.log": "11e0f784363e87c49ba63be7c2d09e4d88a5513f67141637c2318754942cf91d",
+    "reports/red.log": "393ba129955dbd9c17563c946a5518b92a44333a1297fc2aad4f987ae03e1922",
+    "reports/red2.log": "2fb99ceab98e5d8cfbd1a8bf8f752a932994276b8a12fbeac8e81145a2641b0a",
+    "tests/test_code_world_trace.py": "26ed981103c912601b55e1c3dcb63d45e40719cb59666bba9afaeef9e98a08c1"
+  },
+  "base_main": "93c2cec2ec3490b3dbbefb42149920cca08b9b0c",
+  "checks": {
+    "BUILD-01": {
+      "command": "python -m compileall -q omega_x_evolution/code_world_trace.py tests/test_code_world_trace.py",
+      "result": "PASS"
+    },
+    "TDD-RED-01": {
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_code_world_trace.py",
+      "error": "ModuleNotFoundError",
+      "log": "reports/red.log",
+      "result": "EXPECTED_FAILURE"
+    },
+    "TDD-RED-02": {
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_code_world_trace.py",
+      "error": "test_nested_ir_conversion_caps_depth_even_before_program_validation",
+      "log": "reports/red2.log",
+      "result": "EXPECTED_FAILURE"
+    },
+    "UNIT-01": {
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_code_world_trace.py --cov=omega_x_evolution.code_world_trace --cov-branch --cov-report=term-missing",
+      "concurrent_cases": 128,
+      "coverage_percent": 97,
+      "log": "reports/coverage_final.log",
+      "randomized_differential_cases": 600,
+      "result": "PASS",
+      "seed": 20261124,
+      "test_cases": 60
+    }
+  },
+  "production_polyglot_blob": "53289dcf148ad7159af67ae2e997eeae0a41ca85",
+  "schema": "omega-cwm-trace-evidence-v1",
+  "source": "Meta FAIR CWM arXiv:2510.02387v1",
+  "source_git_blobs": {
+    "omega_x_evolution/code_world_trace.py": "05c4d52eb7e804199d9cf41a9a8bb01ef989a6ba",
+    "tests/test_code_world_trace.py": "bec91f37b24afc408a71a45885657df71471ad1b"
+  },
+  "status": {
+    "DEPLOYED": false,
+    "GATE_09": "UNCHANGED",
+    "IMPLEMENTED": true,
+    "LOCAL_TESTED": true,
+    "NATIVE_REPO_TESTED": false,
+    "REAL_CWM_CONNECTED": false
+  },
+  "testbed": {
+    "coverage": "7.13.3",
+    "full_repo_copy_available": false,
+    "mode": "ISOLATED-SOURCE-CONTRACT-EXCERPT",
+    "pytest": "9.0.2",
+    "python": "3.13.5",
+    "snapshot_sha256": "eb9edf869f5891c9d4d553c562a46ca9a07b6d2f72e112b0ec55866bd1bffc71",
+    "system": "Linux-6.18.57-x86_64-with-glibc2.41"
+  }
+}
