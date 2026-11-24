@@ -191,3 +191,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v72 — durable monotonic witness / key provisioning (2026-11-24):** [evidence](ONTOS_V72_WITNESS_20261124.md). Real SQLite durable CAS, C2SP log validation, signed fresh challenge, separated key roles, encrypted PKCS8 provisioning, and retained client pin consistency including restored-witness fork detection. 11/11 focused tests, two process crash points, real 1802-leaf reference checkpoint admitted in temporary simulation store. HYBRID; external witness hosting and operational TCB provisioning are NOT performed, joint rollback of all trust domains remains out of scope. Full clone DNS failure and archive transfer unavailable; full regression still OPEN. Historical GATE-09 unchanged.
+
+
+**v72 witness regression follow-up:** pinned main `94ecb3752669cfbf7272522d94aab2e2fe29dda5`, 89/89 PASS in exact-blob isolated subset (11 witness + 78 existing Merkle/JCS/receipt/checkpoint-note/checkpoint-chain tests), no skips, `python -m pytest -q tests` exit 0 in 4.43 s. Full repository regression not run; external archive still unavailable. See [witness evidence](ONTOS_V72_WITNESS_20261124.md).

@@ -12,3 +12,32 @@ Fault schedule: kill before commit exit 91, kill after committed advance before 
 Actual v74 integration probe: read existing signed reference checkpoint from Git blob 13f1bf93f3209291b71142fa0699923badbf168b, pin its log key, verify signed note tree size 1802 root ee2167b0df32c77b6cb21654bae59833f7981e81dc07b813e40eccc813b5c2ac, provision a fresh encrypted witness key in TemporaryDirectory, initialize with that trusted note, reload key and store, verify fresh challenge-bound receipt revision 0. Log SHA256 5a30485688cb7ff96e193a988bd8f35117a971ad10072a228533884bb453cf4f. Temporary key and store discarded; not an independent live witness or new production attestation. Existing reference JSON SHA256 unchanged bbff6f68a67b06a7af5262f7c265f2ce6036c9fca41e406502f8020d0b9abdc6.
 
 Full regression: git ls-remote to repository failed DNS exit 128; connector tree returned 914 entries nontruncated, binary codeload archive not transferred. No paid external runner started. No full repo PASS, historical GATE-09 unchanged.
+
+## Extended exact-blob regression
+
+At main 94ecb3752669cfbf7272522d94aab2e2fe29dda5, reconstructed the following exact Git blobs into an isolated test directory (minimal empty package initializer only for this subset, not part of repository changes). No repository-wide pytest configuration/conftest or unrelated packages were run.
+
+| File | Git blob SHA-1 |
+|---|---|
+| omega_x_evolution/ontos_v72_checkpoint_chain.py | c197c1353d529997616ad73422506629935d0133 |
+| omega_x_evolution/ontos_v72_checkpoint_note.py | b36f544fe0f4935e31ddd5980b0e3d0fa227c788 |
+| omega_x_evolution/ontos_v72_jcs.py | 1b61af871b78740203cb2418b0a7ca8d1bd06884 |
+| omega_x_evolution/ontos_v72_merkle.py | 4aa346d41fd27e654b1df1e5fd01df88d269407f |
+| omega_x_evolution/ontos_v72_receipts.py | 1854ada8924eb09f8bcf2efedce8ee852677df90 |
+| omega_x_evolution/ontos_v72_witness.py | c75f1fc7e349d6491ab0c03f2959fcc6219499e7 |
+| tests/test_ontos_v72_checkpoint_chain.py | 83e69f83b25ae07740217fb6bffb8b8c969ba5f3 |
+| tests/test_ontos_v72_checkpoint_note.py | d507dfadd4ced5f828a35be540ed6ed75652cc64 |
+| tests/test_ontos_v72_jcs.py | 2c8ea12e38d1d7dc8cbcce6c353cf8ed777558c7 |
+| tests/test_ontos_v72_merkle.py | a96ca6e9dd0f929b78039f2c966c3f28ee0c747f |
+| tests/test_ontos_v72_receipts.py | 2fc2f8c9c5eefeab01e4e5f5045c0bfa3983aa85 |
+| tests/test_ontos_v72_witness.py | 9d1a1f99ed5fc45195008de94ef04f881d0e082e |
+
+Command: python -m pytest -q tests. Exit 0. Actual output:
+
+```
+........................................................................ [ 80%]
+.................                                                        [100%]
+89 passed in 4.43s
+```
+
+Log SHA-256 b70c73913d2266513f0808dc9aa010eeda7c42e4d2281a0b5a045e83de65a136. 11 new + 78 pre-existing tests, 0 skips; includes independent Node ECMAScript differential oracle, RFC8032 test vector, finite Merkle proof cases and native SQLite process-crash recovery. This is a verified dependency-slice regression, not full repository regression. No deployment or external runner cost incurred.
