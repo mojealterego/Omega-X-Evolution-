@@ -272,3 +272,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **ONTOS-TDA — bounded input corrective increment (2026-11-24):** [native TDD evidence](ONTOS_TDA_INPUT_BOUNDS_20261124.md). JSONL read requests bounded to 4097 bytes, strict 4096-byte wire limit, deterministic maximum JSON nesting. 4 RED failures reproduced; 8 focused tests PASS after correction. Full regression NOT RUN. No change to diagnostic mathematics, privileges or historical bounded GATE-09.
+
+
+**L12 v72 — bounded Merkle proof primitives (2026-11-24):** [native evidence and L11–L111 intake](ONTOS_V72_MERKLE_20261124.md). RFC 6962 SHA-256 inclusion and consistency, 528 inclusion and 560 prefix cases on trees of 1–32 leaves, 11 pytest cases PASS. Bounded generation and verifier inputs; empty root and malformed proofs fail closed. This is a mathematical sub-contract, not checkpoint authentication, external-anchor closure, or a new GATE-09. v72 remains OPEN for JCS, signed receipts, PQC and integration. v81–v87 preserved. L13–L111 proposals do not become binding by import.
