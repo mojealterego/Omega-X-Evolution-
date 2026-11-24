@@ -188,3 +188,6 @@ The v35.3 corrective release addresses residual acceptance without adding a stag
 
 
 **L12 v75 — gate admission and actual review:** [evidence](ONTOS_V75_ACCEPTANCE_20261124.md), [machine-readable gates](ONTOS_V75_L12_GATES.json). 33/33 registry identity verification PASS; 0/33 original source bytes, licenses unreviewed, full L12 01–09 BLOCKED. Actual reference run reproduced byte-identically (1800/1800); attestation verified again. 13/13 focused local integration tests, compileall PASS. v75 gate verifier implemented and tested, full-scope acceptance OPEN. Historical GATE-09 unchanged.
+
+
+**L12 v72 — durable monotonic witness / key provisioning (2026-11-24):** [evidence](ONTOS_V72_WITNESS_20261124.md). Real SQLite durable CAS, C2SP log validation, signed fresh challenge, separated key roles, encrypted PKCS8 provisioning, and retained client pin consistency including restored-witness fork detection. 11/11 focused tests, two process crash points, real 1802-leaf reference checkpoint admitted in temporary simulation store. HYBRID; external witness hosting and operational TCB provisioning are NOT performed, joint rollback of all trust domains remains out of scope. Full clone DNS failure and archive transfer unavailable; full regression still OPEN. Historical GATE-09 unchanged.
