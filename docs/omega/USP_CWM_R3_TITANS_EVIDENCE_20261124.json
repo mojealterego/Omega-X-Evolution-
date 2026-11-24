@@ -1,0 +1,75 @@
+{
+  "base_branch": "main",
+  "base_head_at_review": "93c2cec2ec3490b3dbbefb42149920cca08b9b0c",
+  "date": "2026-11-24",
+  "files": {
+    "docs/omega/USP_CWM_R3_TITANS_INTAKE_20261124.md": "f47728ba0e389e4a740eb17fd22c266a8bb566d9168a869b740b97168413cc89",
+    "omega_x_evolution/usp_contract.py": "d7ba44dc92a622580940d2db9131e8e198e7f979771bbe74f4185170d8ad5df9",
+    "reports/coverage.log": "72b8af92f5f96f39757d07428492503270f57425241c11549d2d861b2f5dfbd3",
+    "reports/green.log": "d4695a47ea4c35ae04655874c1f14044b6285bf2a61beae37efbfcc6458f43b8",
+    "reports/red.log": "5a0bcd4a06212597991b85bff2460c896414291ddaad719f54c2c21a97b1b9e9",
+    "tests/test_usp_contract.py": "5ee900cbd235f5c4c6e5cda3d24da99b3f089669959110e9ec9fcd4426461b16"
+  },
+  "full_repo_tested": false,
+  "gate_09_updated": false,
+  "module": "OMEGA-X USP five-view bounded diagnostic implementation",
+  "release_authorized": false,
+  "scope": {
+    "implemented": [
+      "USP five diagnostic views",
+      "exact bounded matching",
+      "schema and output validation",
+      "dataset-family aggregation",
+      "CLI"
+    ],
+    "not_implemented": [
+      "actual CWM model weights",
+      "R3Mem trained compression",
+      "Titans trained test-time neural memory",
+      "online MCP tool interface",
+      "full repo regression",
+      "native integration",
+      "model benchmark reproduction"
+    ]
+  },
+  "sources": {
+    "2025.findings-acl.235 (1).pdf": "e1ae03adfc762bc6fa559de7077851314d1f307b93c6177aa9e9c0e6e0b03312",
+    "2510.02387v1.PDF": "661116b39758fbbe43cb4cb15266b6e8f8aab9779d26ab4f96ffe7631858de8a",
+    "2610.34343v1.pdf": "c4a668431df1c778802a9794008c195a2a5f21bb48e178e4bfea2e02ec3da753",
+    "5479_Titans_Learning_to_Memori.pdf": "9b0f0c4a0163abab6bc2f8acb105ae3c95f3fff25573aa71a252b0b9c040bf78",
+    "557661924_1786317938658057_6511429830363523883_n.PDF": "f905e8584ee56cda2885400f07fd99ad92e769f2f45fd36a34b078790812f174",
+    "NeurIPS-2025-titans-learning-to-memorize-at-test-time-Paper-Conference.pdf": "9b0f0c4a0163abab6bc2f8acb105ae3c95f3fff25573aa71a252b0b9c040bf78"
+  },
+  "status": "LOCAL_IMPLEMENTED_TESTED_NOT_COMMITTED",
+  "target_repository": "mojealterego/Omega-X-Evolution-",
+  "tests": {
+    "TDD-RED": {
+      "command": "python -m pytest -q tests/test_usp_contract.py",
+      "evidence": "reports/red.log",
+      "exit_code": 2,
+      "outcome": "EXPECTED_FAIL_MODULE_MISSING"
+    },
+    "USP-COMPILE": {
+      "command": "python -m compileall -q omega_x_evolution/usp_contract.py tests/test_usp_contract.py",
+      "exit_code": 0
+    },
+    "USP-COVERAGE": {
+      "command": "python -m pytest -q --disable-warnings --cov=omega_x_evolution.usp_contract --cov-branch --cov-report=term-missing tests/test_usp_contract.py",
+      "coverage_percent_including_branches": 91,
+      "evidence": "reports/coverage.log",
+      "passed": 53
+    },
+    "USP-FIVE-VIEW-USP-ASSIGN-ORACLE-USP-FAIL-CLOSED-USP-AGGREGATE-CLI": {
+      "command": "python -m pytest -q tests/test_usp_contract.py",
+      "evidence": "reports/green.log",
+      "failed": 0,
+      "mode": "ISOLATED_PYTHON_NATIVE",
+      "passed": 53
+    }
+  },
+  "toolchain": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "pytest": "9.0.2",
+    "python": "3.13.5"
+  }
+}
