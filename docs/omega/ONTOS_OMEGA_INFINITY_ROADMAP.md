@@ -281,3 +281,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v72 — strict Ed25519 detached receipts (2026-11-24):** [verification](ONTOS_V72_RECEIPTS_20261124.md). Native cryptography signing and verification with public-only canonical prime-order point validation and S<L; detached receipt binds level, gate, commit, tenant, evaluator and actual canonical record digest. 14 receipt cases + 35 earlier v72 cases = 49 PASS. Authentication only, not truth of evidence or promotion. Section 10 schema, HMAC/PQC profiles, checkpoint notes, integration and v72 full acceptance remain OPEN; historical GATE-09 unchanged.
+
+
+**L12 v72 — nine-section evidence admission (2026-11-24):** [verification](ONTOS_V72_EVIDENCE_20261124.md). Strict Section 10 field/semantic validation and binding to externally supplied source/log/provenance/replay bytes, pinned scope and Ed25519 receipt; 39 new cases + 49 prior v72 cases = 88 PASS. A valid record authenticates the bytes and stated outcome only; never authorizes promotion. HMAC/PQC, C2SP checkpoint note interoperability, runtime integration and complete v72 acceptance remain OPEN. Historical GATE-09 unchanged.
