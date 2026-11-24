@@ -15,6 +15,7 @@ from .ontos_v72_jcs import canonical_json, parse_json
 from .ontos_v72_evidence import ArtifactBundle, verify_record
 from .ontos_v72_receipts import ReceiptScope, _prime_order_point
 from .ontos_v74_campaign import CampaignPlan, Configuration, Run, analyze_campaign
+from .ontos_v75_anchor import AnchorTrust, AnchorEvidence, review_leaf, verify_review_anchor
 
 GATES = tuple(f'GATE-0{i}' for i in range(1,9))
 _HEX = re.compile(r'[0-9a-f]{64}\Z',re.ASCII)
@@ -108,12 +109,15 @@ def _source_campaign(data, pin):
 def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes], *,
               commit_sha: str, tenant: str, source_campaign_sha256: str | None,
               trust: dict[str,tuple[ReceiptScope,bytes]],
-              submissions: dict[str,GateEvidence]) -> dict:
+              submissions: dict[str,GateEvidence],
+              anchor_trust: AnchorTrust | None = None,
+              anchor_evidence: AnchorEvidence | None = None) -> dict:
     """Use only externally pinned gate scopes and keys, never submitted trust roots.
 
     All eight gates are mandatory. A source campaign pin is required for 04/05;
     a reviewed source claim is attested by the trusted full-scope evaluators.
     The source campaign marker alone does not prove an experiment occurred.
+    GATE-09 additionally requires the exact review at the fresh witness tip.
     """
     ReceiptScope('L12','GATE-01',commit_sha,tenant,'policy')
     if (not _hex(manifest_pin) or source_campaign_sha256 is not None and not _hex(source_campaign_sha256)
@@ -128,6 +132,7 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes],
         pair[0].__post_init__()
     manifest = verify_manifest(raw_manifest,manifest_pin,payloads)
     results = {}
+    authenticated_receipts = {}
     for gate in GATES:
         if gate in ('GATE-01','GATE-08') and manifest['status']=='FAIL':
             results[gate]='FAIL'; continue
@@ -137,7 +142,11 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes],
         if gate not in trust or type(item) is not GateEvidence:
             results[gate]='FAIL'; continue
         scope,key = trust[gate]
-        check = verify_record(item.record,item.receipt,scope,key,item.artifacts)
+        try:
+            receipt = parse_json(canonical_json(item.receipt))
+        except (ValueError,TypeError,RecursionError):
+            results[gate]='FAIL'; continue
+        check = verify_record(item.record,receipt,scope,key,item.artifacts)
         if not check['authenticated']:
             results[gate]='FAIL'; continue
         rec = item.record
@@ -157,9 +166,22 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes],
                 results[gate]='FAIL'; continue
         if gate=='GATE-07' and not rec['fault_model']['crash_restart_tested']:
             results[gate]='FAIL'; continue
+        authenticated_receipts[gate] = receipt
         results[gate]='PASS'
     final = 'FAIL' if 'FAIL' in results.values() else 'PASS' if all(x=='PASS' for x in results.values()) else 'BLOCKED'
+    anchor_status = 'BLOCKED'
+    if final == 'PASS':
+        if anchor_trust is not None and anchor_evidence is not None:
+            try:
+                leaf = review_leaf(commit_sha=commit_sha,tenant=tenant,manifest_pin=manifest_pin,
+                                   campaign_pin=source_campaign_sha256,trust=trust,
+                                   receipts=authenticated_receipts)
+                anchor_status = 'PASS' if verify_review_anchor(leaf,anchor_trust,anchor_evidence,
+                    tuple(key for _,key in trust.values())) else 'FAIL'
+            except (ValueError,TypeError,KeyError,RecursionError):
+                anchor_status = 'FAIL'
+        final = anchor_status
     results['GATE-09'] = final
     return {'schema':'omega-v75-l12-review-v1','commit_sha':commit_sha,'tenant':tenant,
             'manifest':manifest,'gates':results,'source_campaign_sha256':source_campaign_sha256,
-            'engineering_acceptance_status':final,'release_authorized':False}
+            'engineering_acceptance_status':final,'anchor_status':anchor_status,'release_authorized':False}

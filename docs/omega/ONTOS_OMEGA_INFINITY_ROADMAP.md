@@ -320,3 +320,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **v72 witness regression follow-up:** pinned main `94ecb3752669cfbf7272522d94aab2e2fe29dda5`, 89/89 PASS in exact-blob isolated subset (11 witness + 78 existing Merkle/JCS/receipt/checkpoint-note/checkpoint-chain tests), no skips, `python -m pytest -q tests` exit 0 in 4.43 s. Full repository regression not run; external archive still unavailable. See [witness evidence](ONTOS_V72_WITNESS_20261124.md).
+
+
+**L12 v75 — mandatory fresh monotonic witness tip (2026-11-24):** [evidence](ONTOS_V75_WITNESS_GATE_20261124.md). Eight authenticated gate receipts, scope, evaluator pins, manifest and campaign digests committed to exact last leaf of independently pinned witness history. Missing anchor blocks final PASS; invalid anchor fails. Six new tests and modified regression, 102/102 PASS in isolated dependency slice, compileall PASS. Operational authority protocol exercised with test keys, no live TCB provisioning or complete repo regression. Historical GATE-09 unchanged; full L12 still BLOCKED.

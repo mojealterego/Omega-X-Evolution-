@@ -92,7 +92,8 @@ def test_all_evidence_required_reducer_fixture():
     pairs={g:evidence(g,sha(raw),campaign) for g in GATES}
     trust={g:p[0] for g,p in pairs.items()}; submissions={g:p[1] for g,p in pairs.items()}
     r=run(raw,payloads,trust,submissions,campaign)
-    assert r['gates']['GATE-09']=='PASS' and r['release_authorized'] is False
+    assert r['gates']['GATE-09']=='BLOCKED' and r['release_authorized'] is False
+    assert r['anchor_status']=='BLOCKED' and all(r['gates'][g]=='PASS' for g in GATES)
     submissions.pop('GATE-06')
     assert run(raw,payloads,trust,submissions,campaign)['gates']['GATE-09']=='BLOCKED'
 
@@ -118,3 +119,41 @@ def test_signed_source_marker_without_complete_records_rejected():
     raw,payloads=manifest(); campaign=canonical_json({'source_reproduction_verified':True,'test_keys_only':False})
     trust,sub=evidence('GATE-04',sha(raw),campaign)
     assert run(raw,payloads,{'GATE-04':trust},{'GATE-04':sub},campaign)['gates']['GATE-04']=='FAIL'
+
+
+def test_final_gate_requires_exact_fresh_witness_tip(tmp_path):
+    from dataclasses import replace
+    from omega_x_evolution.ontos_v72_checkpoint_note import Checkpoint, sign_note
+    from omega_x_evolution.ontos_v72_merkle import leaf_hash, merkle_root, consistency_proof, inclusion_proof
+    from omega_x_evolution.ontos_v72_witness import WitnessPolicy, WitnessStore
+    from omega_x_evolution.ontos_v75_anchor import AnchorTrust, AnchorEvidence, review_leaf
+    raw,payloads=manifest(); campaign=source_fixture()
+    pairs={g:evidence(g,sha(raw),campaign) for g in GATES}
+    trust={g:p[0] for g,p in pairs.items()}; submissions={g:p[1] for g,p in pairs.items()}
+    # Public fixture keys exercise the operational-authority protocol only.
+    log=Ed25519PrivateKey.from_private_bytes(bytes([72])*32)
+    signer=Ed25519PrivateKey.from_private_bytes(bytes([73])*32)
+    origin='omega/l12-fixture'
+    policy=WitnessPolicy('operational',origin,origin,log.public_key().public_bytes_raw(),signer.public_key().public_bytes_raw())
+    leaf=review_leaf(commit_sha=COMMIT,tenant='fixture',manifest_pin=sha(raw),campaign_pin=sha(campaign),
+                     trust=trust,receipts={g:s.receipt for g,s in submissions.items()})
+    leaves=(leaf_hash(b'genesis'),leaf_hash(leaf))
+    def note(items):
+        return sign_note(Checkpoint(origin,len(items),merkle_root(items)),origin,log)
+    store=WitnessStore.initialize(tmp_path/'review.sqlite',policy,signer,note(leaves[:1]))
+    previous=store.read(b'p'*32)
+    assert store.advance(note(leaves),consistency_proof(leaves,1),expected_revision=0)=='ADVANCED'
+    pin=AnchorTrust(policy,previous,b'c'*32)
+    proof=AnchorEvidence(store.read(pin.challenge),consistency_proof(leaves,1),inclusion_proof(leaves,1))
+    def audit(anchor):
+        return audit_l12(raw,sha(raw),payloads,commit_sha=COMMIT,tenant='fixture',source_campaign_sha256=sha(campaign),
+                         trust=trust,submissions=submissions,anchor_trust=pin,anchor_evidence=anchor)
+    assert audit(proof)['gates']['GATE-09']=='PASS'
+    assert audit(proof)['release_authorized'] is False
+    assert audit(replace(proof,inclusion=()))['gates']['GATE-09']=='FAIL'
+    assert audit(None)['gates']['GATE-09']=='BLOCKED'
+    # Another authentic PASS receipt for the same gate is not the anchored review.
+    item=submissions['GATE-02']; record={**item.record,'decision':{'status':'PASS','reason':'Different signed fixture'}}
+    submissions['GATE-02']=GateEvidence(record,sign_receipt(record,trust['GATE-02'][0],KEY),item.artifacts)
+    r=audit(proof)
+    assert all(r['gates'][g]=='PASS' for g in GATES) and r['gates']['GATE-09']=='FAIL'
