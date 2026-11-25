@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+___________ ERROR collecting tests/test_ontos_v72_quorum_rotation.py ___________
+ImportError while importing test module '/mnt/data/omega_work/tests/test_ontos_v72_quorum_rotation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_ontos_v72_quorum_rotation.py:10: in <module>
+    from omega_x_evolution.ontos_v72_quorum_rotation import (
+E   ModuleNotFoundError: No module named 'omega_x_evolution.ontos_v72_quorum_rotation'
+=========================== short test summary info ============================
+ERROR tests/test_ontos_v72_quorum_rotation.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.19s

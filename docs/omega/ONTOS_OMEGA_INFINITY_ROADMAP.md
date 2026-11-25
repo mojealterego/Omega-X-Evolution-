@@ -341,3 +341,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v75 — typed ZIP manifest admission (2026-11-25):** [evidence](ONTOS_V75_MANIFEST_ARCHIVE_20261125.md). Shared production verifier supports both legacy byte dictionary and independently pinned SourceArchive, wired into audit_l12. 10 new + 13 prior tests = 23/23 PASS in isolated native subset, compileall PASS. Full-reducer integration test added but NOT RUN; full regression, original 33 source payloads, source campaign and operational TCB remain OPEN. Historical GATE-09 unchanged.
+
+
+**L12 v72 — planned single-member quorum handoff (2026-11-25):** [evidence](ONTOS_V72_QUORUM_ROTATION_20261125.md). Two native 3-of-4 certificates, newcomer vote, offline authority, next epoch and retired-key exclusion, old Merkle floor consistency; 14 new cases and 23 earlier archive/manifest cases = 37 PASS, compileall PASS. Existing SQLite witnesses reopened and post-rotation append verified. Durable client quorum pin CAS, authority approval serialization, old-epoch quiescence and v75 wiring remain OPEN; no autonomous consensus or deployment claim. Full regression still blocked by DNS. Historical GATE-09 unchanged. [Hardware source intake](ONTOS_HARDWARE_INTAKE_20261125.md) records 6 ZIP and 4 PDF hashes and qualification mapping, not original v49 suite acquisition.
