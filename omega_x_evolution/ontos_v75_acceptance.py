@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from hashlib import sha256
 import re
 
-from .ontos_v49_manifest import SourceRecord, audit_inventory
+from .ontos_v75_manifest import SourceArchive, verify_manifest
 from .ontos_v72_jcs import canonical_json, parse_json
 from .ontos_v72_evidence import ArtifactBundle, verify_record
 from .ontos_v72_receipts import ReceiptScope, _prime_order_point
@@ -24,25 +24,6 @@ _HEX = re.compile(r'[0-9a-f]{64}\Z',re.ASCII)
 
 def _hex(value):
     return type(value) is str and _HEX.fullmatch(value) is not None
-
-
-def verify_manifest(raw: bytes, pin: str, payloads: dict[str,bytes]) -> dict:
-    """Verify exact registered inventory, byte digests and conservative reuse policy."""
-    failed = {'status':'FAIL','inventory_verified':False,'registered':0,'checked_blobs':0,
-              'release_authorized':False}
-    try:
-        if type(raw) is not bytes or len(raw)>1024*1024 or not _hex(pin) or sha256(raw).hexdigest()!=pin:
-            return failed
-        obj = parse_json(raw)
-        if type(obj) is not dict or obj.get('schema')!='ontos-source-register-v49-v1' or type(obj.get('entries')) is not list or len(obj['entries'])!=33:
-            return failed
-        result = audit_inventory(tuple(SourceRecord(**row) for row in obj['entries']),payloads)
-        if result['manifest_sha256']!=obj.get('entry_digest_sha256'):
-            return failed
-        return {**result,'status':'PASS' if result['eligible_for_manual_review'] else 'BLOCKED',
-                'inventory_verified':True,'register_file_sha256':pin,'release_authorized':False}
-    except (ValueError,TypeError,KeyError,RecursionError):
-        return failed
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,7 +88,7 @@ def _source_campaign(data, pin):
         return False
 
 
-def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes], *,
+def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] | SourceArchive, *,
               commit_sha: str, tenant: str, source_campaign_sha256: str | None,
               trust: dict[str,tuple[ReceiptScope,bytes]],
               submissions: dict[str,GateEvidence],

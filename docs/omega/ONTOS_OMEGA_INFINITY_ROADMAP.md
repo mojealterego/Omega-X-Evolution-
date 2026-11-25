@@ -338,3 +338,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 source acquisition — pinned ZIP admission (2026-11-24):** [evidence](ONTOS_V49_SOURCE_ARCHIVE_20261124.md). Native bounded read-only ZIP input feeds v49 inventory and v75 payload contract. 13/13 targeted tests PASS, compileall PASS. Actual original source bytes remain 0/33; source license and provenance review, full source campaign and full repository regression remain OPEN. Historical GATE-09 unchanged.
+
+
+**L12 v75 — typed ZIP manifest admission (2026-11-25):** [evidence](ONTOS_V75_MANIFEST_ARCHIVE_20261125.md). Shared production verifier supports both legacy byte dictionary and independently pinned SourceArchive, wired into audit_l12. 10 new + 13 prior tests = 23/23 PASS in isolated native subset, compileall PASS. Full-reducer integration test added but NOT RUN; full regression, original 33 source payloads, source campaign and operational TCB remain OPEN. Historical GATE-09 unchanged.

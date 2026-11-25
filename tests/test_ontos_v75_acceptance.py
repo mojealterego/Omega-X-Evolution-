@@ -157,3 +157,21 @@ def test_final_gate_requires_exact_fresh_witness_tip(tmp_path):
     submissions['GATE-02']=GateEvidence(record,sign_receipt(record,trust['GATE-02'][0],KEY),item.artifacts)
     r=audit(proof)
     assert all(r['gates'][g]=='PASS' for g in GATES) and r['gates']['GATE-09']=='FAIL'
+
+
+
+def test_full_reducer_archive_admission_preserves_gate_policy():
+    from io import BytesIO
+    from zipfile import ZipFile
+    from omega_x_evolution.ontos_v75_acceptance import SourceArchive
+
+    raw, payloads = manifest()
+    buffer = BytesIO()
+    with ZipFile(buffer, 'w') as z:
+        for path, data in payloads.items():
+            z.writestr(path, data)
+    packed = buffer.getvalue()
+    assert run(raw, SourceArchive(packed, sha(packed)), {}, {}) == run(raw, payloads, {}, {})
+    denied = run(raw, SourceArchive(packed, '0' * 64), {}, {})
+    assert denied['gates']['GATE-01'] == denied['gates']['GATE-08'] == denied['gates']['GATE-09'] == 'FAIL'
+    assert denied['release_authorized'] is False
