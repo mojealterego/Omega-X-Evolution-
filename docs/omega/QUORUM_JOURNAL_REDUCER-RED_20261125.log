@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/test_ontos_v75_journal_gate.py _____________
+ImportError while importing test module '/mnt/data/omega_journal_work/tests/test_ontos_v75_journal_gate.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_ontos_v75_journal_gate.py:15: in <module>
+    from omega_x_evolution.ontos_v75_acceptance import audit_l12, GateEvidence, GATES, gate_provenance, JournalQuorumAnchorTrust
+E   ImportError: cannot import name 'JournalQuorumAnchorTrust' from 'omega_x_evolution.ontos_v75_acceptance' (/mnt/data/omega_journal_work/omega_x_evolution/ontos_v75_acceptance.py)
+=========================== short test summary info ============================
+ERROR tests/test_ontos_v75_journal_gate.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.17s

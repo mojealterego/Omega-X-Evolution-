@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- /opt/pyvenv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.5', 'Platform': 'Linux-6.18.57-x86_64-with-glibc2.41', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'anyio': '4.13.0', 'ddtrace': '4.4.0', 'Faker': '40.1.2', 'asyncio': '1.3.0', 'cov': '7.0.0', 'json-report': '1.5.0', 'metadata': '3.1.1'}, 'PLATFORM': 'linux/amd64', 'CI': 'true'}
+rootdir: /mnt/data/omega_journal_work
+plugins: anyio-4.13.0, ddtrace-4.4.0, Faker-40.1.2, asyncio-1.3.0, cov-7.0.0, json-report-1.5.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 24 items
+
+tests/test_ontos_epoch_journal_core.py::test_append_reopen_and_stale_cursor PASSED [  4%]
+tests/test_ontos_epoch_journal_core.py::test_invalid_event_does_not_change_state PASSED [  8%]
+tests/test_ontos_epoch_journal_core.py::test_two_competing_writers_commit_exactly_one PASSED [ 12%]
+tests/test_ontos_epoch_journal_core.py::test_restored_backup_rejected_against_retained_floor PASSED [ 16%]
+tests/test_ontos_epoch_journal_core.py::test_tampered_storage_is_rejected[UPDATE events SET payload=x'00'] PASSED [ 20%]
+tests/test_ontos_epoch_journal_core.py::test_tampered_storage_is_rejected[UPDATE events SET digest=zeroblob(32)] PASSED [ 25%]
+tests/test_ontos_epoch_journal_core.py::test_tampered_storage_is_rejected[UPDATE events SET sequence=2] PASSED [ 29%]
+tests/test_ontos_epoch_journal_core.py::test_tampered_storage_is_rejected[UPDATE bootstrap SET digest=zeroblob(32)] PASSED [ 33%]
+tests/test_ontos_epoch_journal_core.py::test_wrong_bootstrap_and_divergent_floor PASSED [ 37%]
+tests/test_ontos_epoch_journal_core.py::test_unsafe_path_and_implicit_initialization PASSED [ 41%]
+tests/test_ontos_epoch_journal_core.py::test_event_size_and_cursor_bounds PASSED [ 45%]
+tests/test_ontos_epoch_journal_core.py::test_process_exit_during_sqlite_transaction[False] PASSED [ 50%]
+tests/test_ontos_epoch_journal_core.py::test_process_exit_during_sqlite_transaction[True] PASSED [ 54%]
+tests/test_ontos_epoch_journal_core.py::test_full_journal_budget_replays_and_cannot_grow PASSED [ 58%]
+tests/test_ontos_epoch_journal_core.py::test_oversized_persisted_payload_fails_closed PASSED [ 62%]
+tests/test_ontos_v72_quorum_journal.py::test_rotate_reopen_and_restore_against_external_floor PASSED [ 66%]
+tests/test_ontos_v72_quorum_journal.py::test_competing_rotations_and_old_epoch_replay PASSED [ 70%]
+tests/test_ontos_v72_quorum_journal.py::test_v75_review_leaf_persistence_role_separation_and_cas PASSED [ 75%]
+tests/test_ontos_v72_quorum_journal.py::test_review_with_actual_forbidden_evaluator_in_leaf[authority] PASSED [ 79%]
+tests/test_ontos_v72_quorum_journal.py::test_review_with_actual_forbidden_evaluator_in_leaf[retired] PASSED [ 83%]
+tests/test_ontos_v75_journal_gate.py::test_actual_reducer_commits_and_returns_cursor PASSED [ 87%]
+tests/test_ontos_v75_journal_gate.py::test_incomplete_gates_and_wrong_proof_do_not_mutate PASSED [ 91%]
+tests/test_ontos_v75_journal_gate.py::test_legacy_anchor_unchanged_and_journal_race PASSED [ 95%]
+tests/test_ontos_v75_journal_gate.py::test_restored_client_db_and_missing_store_never_pass PASSED [100%]
+
+============================= 24 passed in 25.73s ==============================

@@ -1,0 +1,2 @@
+fatal: unable to access 'https://github.com/mojealterego/Omega-X-Evolution-/': Could not resolve host: github.com
+git ls-remote exit=128

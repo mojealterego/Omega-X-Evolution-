@@ -9,6 +9,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from hashlib import sha256
 import re
+import sqlite3
+
+from .ontos_epoch_journal_core import Cursor
+from .ontos_v72_quorum_journal import QuorumEpochJournal
 
 from .ontos_v75_manifest import SourceArchive, verify_manifest
 from .ontos_v72_jcs import canonical_json, parse_json
@@ -24,6 +28,20 @@ _HEX = re.compile(r'[0-9a-f]{64}\Z',re.ASCII)
 
 def _hex(value):
     return type(value) is str and _HEX.fullmatch(value) is not None
+
+
+@dataclass(frozen=True, slots=True)
+class JournalQuorumAnchorTrust:
+    """Operator-selected durable quorum; retain the returned cursor independently."""
+    journal: QuorumEpochJournal
+    expected: Cursor
+    challenge: bytes
+
+    def __post_init__(self):
+        if (type(self.journal) is not QuorumEpochJournal or type(self.expected) is not Cursor
+                or type(self.challenge) is not bytes or len(self.challenge) != 32):
+            raise ValueError('typed journal, retained cursor and challenge required')
+        self.expected.__post_init__()
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,7 +110,7 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
               commit_sha: str, tenant: str, source_campaign_sha256: str | None,
               trust: dict[str,tuple[ReceiptScope,bytes]],
               submissions: dict[str,GateEvidence],
-              anchor_trust: AnchorTrust | QuorumAnchorTrust | None = None,
+              anchor_trust: AnchorTrust | QuorumAnchorTrust | JournalQuorumAnchorTrust | None = None,
               anchor_evidence: AnchorEvidence | QuorumAnchorEvidence | None = None) -> dict:
     """Use only externally pinned gate scopes and keys, never submitted trust roots.
 
@@ -100,6 +118,8 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
     a reviewed source claim is attested by the trusted full-scope evaluators.
     The source campaign marker alone does not prove an experiment occurred.
     GATE-09 additionally requires the exact review at the fresh witness tip.
+    Journal mode commits that review under CAS before returning PASS. The caller
+    must retain the returned anchor_cursor in an independent trust domain.
     """
     ReceiptScope('L12','GATE-01',commit_sha,tenant,'policy')
     if (not _hex(manifest_pin) or source_campaign_sha256 is not None and not _hex(source_campaign_sha256)
@@ -152,18 +172,39 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
         results[gate]='PASS'
     final = 'FAIL' if 'FAIL' in results.values() else 'PASS' if all(x=='PASS' for x in results.values()) else 'BLOCKED'
     anchor_status = 'BLOCKED'
+    anchor_cursor = None
     if final == 'PASS':
         if anchor_trust is not None and anchor_evidence is not None:
             try:
                 leaf = review_leaf(commit_sha=commit_sha,tenant=tenant,manifest_pin=manifest_pin,
                                    campaign_pin=source_campaign_sha256,trust=trust,
                                    receipts=authenticated_receipts)
-                anchor_status = 'PASS' if verify_review_anchor(leaf,anchor_trust,anchor_evidence,
-                    tuple(key for _,key in trust.values())) else 'FAIL'
+                keys = tuple(trust[gate][1] for gate in GATES)
+                if type(anchor_trust) is JournalQuorumAnchorTrust:
+                    anchor_trust.__post_init__()
+                    if type(anchor_evidence) is not QuorumAnchorEvidence:
+                        anchor_status = 'FAIL'
+                    else:
+                        update = anchor_trust.journal.commit_review(anchor_trust.expected, leaf,
+                            anchor_evidence.certificate, anchor_evidence.inclusion, keys,
+                            challenge=anchor_trust.challenge)
+                        if update.status == 'COMMITTED':
+                            cursor = update.snapshot.cursor
+                            anchor_cursor = {'sequence': cursor.sequence, 'digest': cursor.digest.hex()}
+                            anchor_status = 'PASS'
+                        else:
+                            anchor_status = 'FAIL' if update.status == 'REJECTED' else 'BLOCKED'
+                else:
+                    anchor_status = 'PASS' if verify_review_anchor(leaf,anchor_trust,anchor_evidence, keys) else 'FAIL'
+            except (sqlite3.Error, OSError):
+                anchor_status = 'BLOCKED'
             except (ValueError,TypeError,KeyError,RecursionError):
                 anchor_status = 'FAIL'
         final = anchor_status
     results['GATE-09'] = final
-    return {'schema':'omega-v75-l12-review-v1','commit_sha':commit_sha,'tenant':tenant,
+    result = {'schema':'omega-v75-l12-review-v1','commit_sha':commit_sha,'tenant':tenant,
             'manifest':manifest,'gates':results,'source_campaign_sha256':source_campaign_sha256,
             'engineering_acceptance_status':final,'anchor_status':anchor_status,'release_authorized':False}
+    if type(anchor_trust) is JournalQuorumAnchorTrust:
+        result['anchor_cursor'] = anchor_cursor
+    return result
