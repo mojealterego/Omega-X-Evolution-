@@ -350,3 +350,5 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 — managed journal foundation (2026-11-26):** [evidence](ONTOS_MANAGED_JOURNAL_20261126.md). Generation/cursor fencing, separate durable SQLite intent/floor, non-destructive segment rollover; 17/17 isolated native tests PASS. Generic layer implemented/tested; quorum codec, managed v75 integration, remote revocation, independent production custody and full regression remain OPEN. Full L12 BLOCKED.
+
+**Managed journal follow-up:** orphan successor now fences old writes until rollover activation; regression reproduced RED and fixed, 18/18 isolated tests PASS. Quorum integration remains OPEN.

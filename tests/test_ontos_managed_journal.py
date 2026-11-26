@@ -211,3 +211,19 @@ def test_multiple_generations_keep_distinct_fences(env):
     assert snap.state == b'genesisABC'
     assert snap.fence.generation == 3
     assert m.append(initial.fence, b'old').status == 'STALE'
+
+
+def test_orphan_rollover_fences_old_generation(env, monkeypatch):
+    m, initial, anchor, segments = env
+    first = m.append(initial.fence, b'a').snapshot
+    def fail(*args):
+        raise RuntimeError('after new segment creation')
+    monkeypatch.setattr(m, '_activate', fail)
+    with pytest.raises(RuntimeError):
+        m.compact(first.fence)
+    reopened = manager(anchor, segments)
+    assert reopened.append(first.fence, b'b').status == 'ROLLOVER_PENDING'
+    assert reopened.read() == first
+    rolled = reopened.compact(first.fence).snapshot
+    assert reopened.append(first.fence, b'b').status == 'STALE'
+    assert reopened.append(rolled.fence, b'b').snapshot.state == b'genesisab'

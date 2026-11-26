@@ -20,3 +20,10 @@ Test cases: stale append/rollover, restored journal, compaction preservation and
 
 ## Remaining integration
 ManagedJournal is a generic storage layer, not yet wired into QuorumEpochJournal or audit_l12. Its segment generation is distinct from cryptographic membership epoch. Membership rotation must explicitly invalidate old capabilities through the gateway; remotely running legacy witnesses remain outside scope. Typed complete quorum state codec, preserving all retired keys and nonce history, and managed GATE-09 integration remain OPEN. Full L12 remains BLOCKED.
+
+## Orphan rollover fencing regression
+Base 7e449c6432b9a1df3bb57a6ea50475efcbb85141. Previously a new segment could be created before the anchor activation, then an append to the old generation would change the expected bootstrap and permanently block the retry. Append now returns ROLLOVER_PENDING while a successor path exists (including a dangling symlink); compact validates the exact empty successor and activates it. Malformed or inaccessible successor remains fail-closed.
+- RED python -m pytest -q tests/test_ontos_managed_journal.py -k orphan_rollover_fences_old_generation: exit 1 (COMMITTED instead of ROLLOVER_PENDING), log SHA256 c77736426cba537d5916cd0b8aac377e215c3c7aca05547a24ed0f6e537cfb84.
+- GREEN same command: 1 passed, 17 deselected, 0.06s.
+- Full isolated subset python -m pytest -q tests: 18 passed, 3.73s; log SHA256 30a154406671ac96cf17978d954a72ec319f4d42d65eb72c873e2de4fe8ed317.
+- Compileall exit 0. New implementation blob 69ad7abaf41c653ae2e31111c86945f0fe8147ae; tests a1ea345267cf2e673d5530c6eb01a8d6c4b65ada.

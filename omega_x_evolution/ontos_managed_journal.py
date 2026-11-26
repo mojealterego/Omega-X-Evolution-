@@ -46,7 +46,7 @@ class ManagedSnapshot(Generic[S]):
 
 @dataclass(frozen=True, slots=True)
 class ManagedUpdate(Generic[S]):
-    status: Literal['COMMITTED', 'STALE', 'REJECTED', 'EXHAUSTED', 'COMPACTED']
+    status: Literal['COMMITTED', 'STALE', 'REJECTED', 'EXHAUSTED', 'COMPACTED', 'ROLLOVER_PENDING']
     snapshot: ManagedSnapshot[S]
 
 
@@ -184,6 +184,11 @@ class ManagedJournal(Generic[S]):
             current, journal, _ = self._current(db)
             if expected != current.fence:
                 return ManagedUpdate('STALE', current)
+            # A successor file can survive an interruption before activation.
+            # Freeze the source state until compact() verifies and activates it.
+            if (expected.generation < MAX_GENERATION
+                    and os.path.lexists(self._path(expected.generation + 1))):
+                return ManagedUpdate('ROLLOVER_PENDING', current)
             if expected.cursor.sequence == MAX_EVENTS:
                 return ManagedUpdate('EXHAUSTED', current)
             try:
