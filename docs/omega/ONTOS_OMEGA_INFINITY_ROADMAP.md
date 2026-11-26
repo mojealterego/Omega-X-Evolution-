@@ -354,3 +354,5 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 **Managed journal follow-up:** orphan successor now fences old writes until rollover activation; regression reproduced RED and fixed, 18/18 isolated tests PASS. Quorum integration remains OPEN.
 
 **L12 — quorum state structural codec (2026-11-26):** [evidence](ONTOS_QUORUM_STATE_CODEC_20261126.md). OQS v1 bounded canonical binary record preserves all retired keys and ordered nonce history within explicit capacity; 26/26 isolated native tests PASS. Typed journal adapter, actual quorum replay across rollover, managed v75 integration and full L12 remain OPEN/BLOCKED.
+
+**L12 — managed quorum integration (2026-11-26):** [evidence](ONTOS_MANAGED_QUORUM_20261126.md). Existing typed quorum state, joint rotation, replay and review now use the fenced segmented gateway with OQS v1; 6/6 cases passed across two native invocations, 26/26 codec regression. v75 audit reducer integration, legacy migration, remote revocation, full regression and full L12 remain OPEN/BLOCKED. No production deployment or latency acceptance claimed.
