@@ -347,3 +347,6 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 
 
 **L12 v72/v75 — authenticated quorum epoch journal (2026-11-25):** [evidence](ONTOS_V72_QUORUM_JOURNAL_20261125.md). Native SQLite append-only replay, bounded 256 events / 32768 bytes per event, externally retained cursor, authenticated handoff and nonce history, transactional CAS review commit before GATE-09 PASS in operator-selected journal mode. 24/24 isolated tests PASS (15 core, 5 quorum, 4 full reducer), compileall PASS. Synthetic 33-file ZIP and 1800-record campaign exercise the real reducer, not actual original source reproduction. Full repository regression unavailable (DNS); independent cursor retention, old service quiescence/revocation, authority serialization, compaction and production provisioning remain OPEN. Historical bounded GATE-09 unchanged; actual full L12 remains BLOCKED.
+
+
+**L12 — managed journal foundation (2026-11-26):** [evidence](ONTOS_MANAGED_JOURNAL_20261126.md). Generation/cursor fencing, separate durable SQLite intent/floor, non-destructive segment rollover; 17/17 isolated native tests PASS. Generic layer implemented/tested; quorum codec, managed v75 integration, remote revocation, independent production custody and full regression remain OPEN. Full L12 BLOCKED.
