@@ -138,7 +138,7 @@ class Read:
 def read_bytes(scope,r):
     if (type(r) is not Read or type(r.fence) is not Fence or type(r.query) is not Query
             or not _int(r.epoch,1,MAX_ROTATIONS+1) or type(r.operation) is not str
-            or r.operation not in ('recall','weights','explain','r2','r3','r4') or not _name(r.key)
+            or r.operation not in ('recall','weights','explain','r2','r3','r4','hyperrag') or not _name(r.key)
             or not _time(r.issued) or not _time(r.expires) or not 0<r.expires-r.issued<=64
             or type(r.signature) is not bytes or len(r.signature)!=64):
         raise ValueError('invalid read')
