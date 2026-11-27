@@ -26,6 +26,22 @@ def _real(value: object, lo: float, hi: float) -> bool:
 
 
 @dataclass(frozen=True, slots=True)
+class PolicyConfig:
+    """Bounded experimental controls; defaults preserve the reference policy."""
+    recurrent: bool = True
+    floor: float = _FLOOR
+    hazard: float = _REGIME_HAZARD
+    ood_limit: float = .5
+    confidence_min: float = .5
+
+    def __post_init__(self):
+        if (type(self.recurrent) is not bool or not _real(self.floor,1e-6,.08)
+                or not _real(self.hazard,0.,1.) or not _real(self.ood_limit,0.,1.)
+                or not _real(self.confidence_min,0.,1.)):
+            raise ValueError('bounded policy configuration')
+
+
+@dataclass(frozen=True, slots=True)
 class SensorFrame:
     discrete: int
     continuous: tuple[float, ...]
@@ -47,7 +63,7 @@ class Decision:
     predicted_success: float
 
 
-def _predict(posterior: tuple[float, ...], action: int) -> tuple[float, ...]:
+def _predict(posterior: tuple[float, ...], action: int, hazard: float = _REGIME_HAZARD) -> tuple[float, ...]:
     out = [0.]*12
     for r in range(3):
         for s in range(4):
@@ -59,7 +75,7 @@ def _predict(posterior: tuple[float, ...], action: int) -> tuple[float, ...]:
                 transitions = ((s,.35),(min(3,s+1),.65))
             for ns, weight in transitions:
                 for nr in range(3):
-                    shift = (1-_REGIME_HAZARD) if nr==r else _REGIME_HAZARD/2
+                    shift = (1-hazard) if nr==r else hazard/2
                     out[nr*4+ns] += posterior[r*4+s]*weight*shift
     total=math.fsum(out)
     return tuple(x/total for x in out)
@@ -67,15 +83,22 @@ def _predict(posterior: tuple[float, ...], action: int) -> tuple[float, ...]:
 
 class ObservationPolicy:
     """12-state joint Bayesian filter, bounded to 240 decisions per episode."""
-    def __init__(self):
+    def __init__(self, config: PolicyConfig = PolicyConfig()):
+        if type(config) is not PolicyConfig:
+            raise ValueError('typed policy configuration required')
+        config.__post_init__()
+        self._config=config
         self._prior=(1/12,)*12
         self._count=0
-        self._filter=BeliefFilter(prior_mix=0.,floor=_FLOOR)
+        self._filter=BeliefFilter(prior_mix=0.,floor=config.floor)
 
     def decide(self, frame: SensorFrame) -> Decision:
         if type(frame) is not SensorFrame or self._count>=240:
             raise ValueError('sensor type or decision horizon')
         frame.__post_init__()
+        self._config.__post_init__()
+        if not self._config.recurrent:
+            self._prior=(1/12,)*12
         d, v, damage = frame.discrete, frame.continuous, frame.damage
         # Relative log densities, using the known generative mixture, never
         # the environment's sampled OOD bit. The common Gaussian constant
@@ -101,8 +124,8 @@ class ObservationPolicy:
         posterior=self._filter.update(self._prior,likelihood).posterior
         scores=tuple(math.fsum(posterior[r*4+s] for r in range(3) for s in range(4) if (r+s)%4==a) for a in range(4))
         best=max(range(4),key=scores.__getitem__)
-        action=5 if ood>.5 or scores[best]<.5 else best
-        self._prior=_predict(posterior,action)
+        action=5 if ood>self._config.ood_limit or scores[best]<self._config.confidence_min else best
+        self._prior=_predict(posterior,action,self._config.hazard)
         self._count+=1
         return Decision(action,posterior,ood,scores[best])
 
