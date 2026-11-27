@@ -148,14 +148,14 @@ def read_bytes(scope,r):
         f.cursor.digest.hex(),f.lineage.hex()],r.epoch,r.operation,r.key,asdict(r.query),r.issued,r.expires])
 
 
-def _reduce(scope,events,*,verify=None):
+def _reduce(scope,events,*,verify=None,payload_check=None,event_preimage=event_bytes):
     nodes={}; revoked=set(); reader=scope.reader; retired={reader,scope.writer,scope.revoker}; epoch=1; head=scope.pin
     evolution=scope.evolution; migrated_at=0
     for seq,raw in enumerate(events,1):
         e=_event(raw); b=parse_json(e.body)
         if e.previous!=head or e.sequence!=seq or type(b) is not dict or canonical_json(b)!=e.body:
             raise ValueError('invalid event chain')
-        if verify is not None and not verify(scope.writer if e.kind=='put' else scope.revoker,event_bytes(scope,e),e.signature):
+        if verify is not None and not verify(scope.writer if e.kind=='put' else scope.revoker,event_preimage(scope,e),e.signature):
             raise ValueError('invalid event signature')
         if e.kind in ('rotate','migrate'):
             fields={'epoch','reader'}
@@ -195,7 +195,11 @@ def _reduce(scope,events,*,verify=None):
                     or (evidence=='observed' and any(p['evidence']!='observed' for p in ancestry))):
                 raise ValueError('invalid causal or temporal lineage')
             payload=b['payload']
-            if kind=='R0':
+            if payload_check is not None:
+                if kind=='R1' and (evidence!='observed' or not parents):
+                    raise ValueError('invalid R1 lineage')
+                payload_check(b)
+            elif kind=='R0':
                 if set(payload)!={'key','value'} or not _name(payload['key']) or type(payload['value']) is not str or len(payload['value'])>512:
                     raise ValueError('invalid R0 payload')
             else:
@@ -227,19 +231,26 @@ class OTCEJournal:
         self._verify_event=lru_cache(maxsize=128)(strict_verify)
         self._journal=ManagedJournal(anchor,segments,self._hash,self._replay,self._encode,self._decode)
 
+    def _state_pin(self): return self._scope.pin
+
+    def _event_bytes(self,e): return event_bytes(self._scope,e)
+
+    def _reduce(self,events,*,verify=None):
+        return _reduce(self._scope,events,verify=verify)
+
     def _encode(self,events):
         if type(events) is not tuple or len(events)>MAX_EVENTS: raise ValueError('event budget')
-        return canonical_json([self._scope.pin,[r.hex() for r in events]])
+        return canonical_json([self._state_pin(),[r.hex() for r in events]])
 
     def _hash(self,events): return sha256(DOMAIN+b'state\x00'+self._encode(events)).digest()
 
     def _decode(self,raw):
         try:
             pin,rows=parse_json(raw)
-            if pin!=self._scope.pin or type(rows) is not list or len(rows)>MAX_EVENTS: raise ValueError('scope')
+            if pin!=self._state_pin() or type(rows) is not list or len(rows)>MAX_EVENTS: raise ValueError('scope')
             events=tuple(bytes.fromhex(r) for r in rows)
             if self._encode(events)!=raw: raise ValueError('noncanonical state')
-            _reduce(self._scope,events,verify=self._verify_event)
+            self._reduce(events,verify=self._verify_event)
             return events
         except (TypeError,KeyError,AttributeError,OverflowError) as exc: raise ValueError('invalid state') from exc
 
@@ -247,13 +258,13 @@ class OTCEJournal:
         if len(events)>=MAX_EVENTS: return None
         try:
             e=_event(raw)
-            if not self._verify_event(self._scope.writer if e.kind=='put' else self._scope.revoker,event_bytes(self._scope,e),e.signature): return None
-            out=events+(raw,); _reduce(self._scope,out); return out
+            if not self._verify_event(self._scope.writer if e.kind=='put' else self._scope.revoker,self._event_bytes(e),e.signature): return None
+            out=events+(raw,); self._reduce(out); return out
         except (ValueError,TypeError,KeyError,AttributeError,OverflowError): return None
 
     def _result(self,status,snapshot):
         if status not in ('INITIALIZED','COMMITTED','COMPACTED','RECOVERED'): return Result(status,None,None,None)
-        return Result(status,snapshot.fence,_reduce(self._scope,snapshot.state)[4],len(snapshot.state))
+        return Result(status,snapshot.fence,self._reduce(snapshot.state)[4],len(snapshot.state))
 
     def initialize(self): return self._result('INITIALIZED',self._journal.initialize(()))
 
@@ -268,13 +279,13 @@ class OTCEJournal:
     def compact(self,expected):
         u=self._journal.compact(expected); return self._result(u.status,u.snapshot)
 
-    def read(self,r: Read,*,retained: Fence,now: int):
+    def _selection(self,r: Read,*,retained: Fence,now: int):
         preimage=read_bytes(self._scope,r)
         if not _time(now) or not r.issued<=now<r.expires: raise ValueError('read outside trusted clock interval')
         if type(retained) is not Fence: raise ValueError('independently retained fence required')
         if r.fence!=retained: raise IntegrityError('request differs from independently retained fence')
         snap=self._journal.read(retained)
-        nodes,revoked,reader,epoch,_,evolution,migrated_at=_reduce(self._scope,snap.state)
+        nodes,revoked,reader,epoch,_,evolution,migrated_at=self._reduce(snap.state)
         if r.epoch!=epoch or not strict_verify(reader,preimage,r.signature): raise ValueError('read authorization')
         q=r.query; visible={}; selected=[]
         for i,n in nodes.items():
@@ -285,6 +296,11 @@ class OTCEJournal:
                     or (n['branch']!='actual' and (n['branch']!=q.branch or t['forecast']!=q.forecast))): continue
             visible[i]=n
             if n['branch']==q.branch and t['start']<=q.valid<t['end']: selected.append(n)
+        return selected,evolution
+
+    def read(self,r: Read,*,retained: Fence,now: int):
+        selected,evolution=self._selection(r,retained=retained,now=now)
+        q=r.query
         if r.operation=='recall':
             for n in reversed(selected):
                 if n['kind']=='R0' and n['evidence']==('observed' if q.branch=='actual' else 'simulated') and n['payload']['key']==r.key:
