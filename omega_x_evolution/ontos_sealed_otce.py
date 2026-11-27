@@ -198,12 +198,15 @@ class SealedOTCEJournal(OTCEJournal):
                 return None
             if r.operation=='weights':
                 if q.branch!='actual': raise ValueError('no simulated training')
-                stats=Statistics.zero(self._scope.dimension)
-                for n in selected:
-                    if n['kind']=='R1':
-                        p=self._decrypt(db,n); stats=stats.delta(tuple(p['x']),p['y'],1)
-                return stats.ridge(1)
+                return self._weights_locked(db,selected)
             return [{**{k:v for k,v in n.items() if k!='payload'},'view_evolution':evolution} for n in selected]
+
+    def _weights_locked(self,db,selected):
+        stats=Statistics.zero(self._scope.dimension)
+        for n in selected:
+            if n['kind']=='R1':
+                p=self._decrypt(db,n); stats=stats.delta(tuple(p['x']),p['y'],1)
+        return stats.ridge(1)
 
     def purge(self,retained,*,now):
         """Remove wrapped keys for revoked/expired descendants and abandoned puts.

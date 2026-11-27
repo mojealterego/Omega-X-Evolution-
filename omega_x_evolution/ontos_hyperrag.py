@@ -115,14 +115,17 @@ def _rank(rows,s,evolution):
 
 class HyperRAGJournal(OperatorJournal):
     """Dedicated signed retrieval endpoint; same sealed journal and vault."""
-    def search(self,r: Read,s: Search,*,retained,now):
+    def _search_locked(self,db,r: Read,s: Search,*,retained,now):
         self._operator(r,'hyperrag')
         if r.key!=search_key(self._state_pin(),s): raise ValueError('search commitment mismatch')
+        selected,evolution=self._selection(r,retained=retained,now=now)
+        rows=[]
+        for n in selected:
+            if n['kind']=='R0' and n['evidence']=='observed' and n['payload']['key']==s.shard:
+                rows.append((n,self._decrypt(db,n)['value']))
+        # Fail closed on FTS5 absence or corruption; no silent fallback.
+        return _rank(rows,s,evolution)
+
+    def search(self,r: Read,s: Search,*,retained,now):
         with self._vault() as db:
-            selected,evolution=self._selection(r,retained=retained,now=now)
-            rows=[]
-            for n in selected:
-                if n['kind']=='R0' and n['evidence']=='observed' and n['payload']['key']==s.shard:
-                    rows.append((n,self._decrypt(db,n)['value']))
-            # Fail closed on FTS5 absence or corruption; no silent fallback.
-            return _rank(rows,s,evolution)
+            return self._search_locked(db,r,s,retained=retained,now=now)
