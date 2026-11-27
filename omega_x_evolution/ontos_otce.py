@@ -104,7 +104,7 @@ class Event:
 
     def wire(self):
         if (not _pin(self.previous) or not _int(self.sequence,1,MAX_EVENTS)
-                or type(self.kind) is not str or self.kind not in ('put','revoke','rotate')
+                or type(self.kind) is not str or self.kind not in ('put','revoke','rotate','migrate')
                 or type(self.body) is not bytes or not 1<=len(self.body)<=2048
                 or type(self.signature) is not bytes or len(self.signature)!=64):
             raise ValueError('invalid event')
@@ -150,18 +150,27 @@ def read_bytes(scope,r):
 
 def _reduce(scope,events,*,verify=None):
     nodes={}; revoked=set(); reader=scope.reader; retired={reader,scope.writer,scope.revoker}; epoch=1; head=scope.pin
+    evolution=scope.evolution; migrated_at=0
     for seq,raw in enumerate(events,1):
         e=_event(raw); b=parse_json(e.body)
         if e.previous!=head or e.sequence!=seq or type(b) is not dict or canonical_json(b)!=e.body:
             raise ValueError('invalid event chain')
         if verify is not None and not verify(scope.writer if e.kind=='put' else scope.revoker,event_bytes(scope,e),e.signature):
             raise ValueError('invalid event signature')
-        if e.kind=='rotate':
-            if set(b)!={'epoch','reader'} or not _int(b['epoch'],2,MAX_ROTATIONS+1) or b['epoch']!=epoch+1 or not _pin(b['reader']):
+        if e.kind in ('rotate','migrate'):
+            fields={'epoch','reader'}
+            if e.kind=='migrate':
+                fields.update(('evolution','encoder'))
+                if (not _int(b.get('evolution'),1,MAX_TIME) or b['evolution']!=evolution+1
+                        or b.get('encoder')!=scope.encoder):
+                    raise ValueError('migration requires next evolution and unchanged encoder')
+            if set(b)!=fields or not _int(b['epoch'],2,MAX_ROTATIONS+1) or b['epoch']!=epoch+1 or not _pin(b['reader']):
                 raise ValueError('invalid policy rotation')
             reader=bytes.fromhex(b['reader'])
             if reader in retired: raise ValueError('reused role key')
             retired.add(reader); epoch=b['epoch']
+            if e.kind=='migrate':
+                evolution=b['evolution']; migrated_at=seq
         elif e.kind=='revoke':
             if set(b)!={'id'} or not _name(b['id']) or b['id'] not in nodes or b['id'] in revoked:
                 raise ValueError('invalid revoke')
@@ -179,7 +188,7 @@ def _reduce(scope,events,*,verify=None):
                     or not _name(branch) or not _pin(b['source']) or type(b['time']) is not dict or type(b['payload']) is not dict):
                 raise ValueError('invalid capsule')
             t=Coordinates(**b['time']); ancestry=[nodes[p] for p in parents]
-            if (t.evolution!=scope.evolution or t.causal!=max((p['time']['causal']+1 for p in ancestry),default=0)
+            if (t.evolution!=evolution or t.causal!=max((p['time']['causal']+1 for p in ancestry),default=0)
                     or any(t.cognitive<p['time']['cognitive'] or t.observed<p['time']['observed'] for p in ancestry)
                     or (branch=='actual')!=(t.forecast is None) or (branch!='actual')!=(evidence=='simulated')
                     or any(p['branch'] not in ('actual',branch) for p in ancestry)
@@ -198,7 +207,7 @@ def _reduce(scope,events,*,verify=None):
             b['output']=_digest(b'output',b)
             nodes[i]=b
         head=_digest(b'head',[scope.pin,raw.hex()])
-    return nodes,revoked,reader,epoch,head
+    return nodes,revoked,reader,epoch,head,evolution,migrated_at
 
 
 @dataclass(frozen=True, slots=True)
@@ -265,14 +274,14 @@ class OTCEJournal:
         if type(retained) is not Fence: raise ValueError('independently retained fence required')
         if r.fence!=retained: raise IntegrityError('request differs from independently retained fence')
         snap=self._journal.read(retained)
-        nodes,revoked,reader,epoch,_=_reduce(self._scope,snap.state)
+        nodes,revoked,reader,epoch,_,evolution,migrated_at=_reduce(self._scope,snap.state)
         if r.epoch!=epoch or not strict_verify(reader,preimage,r.signature): raise ValueError('read authorization')
         q=r.query; visible={}; selected=[]
         for i,n in nodes.items():
             t=n['time']
             if (i in revoked or not now<t['expires'] or t['observed']>min(q.observed,now)
                     or n['transaction']>q.known or t['cognitive']>q.cognitive or t['causal']>q.causal
-                    or t['evolution']!=q.evolution or any(p not in visible for p in n['parents'])
+                    or q.evolution!=evolution or q.known<migrated_at or any(p not in visible for p in n['parents'])
                     or (n['branch']!='actual' and (n['branch']!=q.branch or t['forecast']!=q.forecast))): continue
             visible[i]=n
             if n['branch']==q.branch and t['start']<=q.valid<t['end']: selected.append(n)
@@ -287,4 +296,4 @@ class OTCEJournal:
             for n in selected:
                 if n['kind']=='R1': stats=stats.delta(tuple(n['payload']['x']),n['payload']['y'],1)
             return stats.ridge(1)
-        return [{k:v for k,v in n.items() if k!='payload'} for n in selected]
+        return [{**{k:v for k,v in n.items() if k!='payload'}, 'view_evolution':evolution} for n in selected]
