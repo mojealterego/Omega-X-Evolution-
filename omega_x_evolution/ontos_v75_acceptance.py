@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from hashlib import sha256
 import re
 import sqlite3
+from typing import TYPE_CHECKING
 
 from .ontos_epoch_journal_core import Cursor
 from .ontos_v72_quorum_journal import QuorumEpochJournal
@@ -21,6 +22,10 @@ from .ontos_v72_receipts import ReceiptScope, _prime_order_point
 from .ontos_v74_campaign import CampaignPlan, Configuration, Run, analyze_campaign
 from .ontos_v75_anchor import (AnchorTrust, AnchorEvidence, QuorumAnchorTrust, QuorumAnchorEvidence,
                                review_leaf, verify_review_anchor)
+
+if TYPE_CHECKING:
+    from .ontos_managed_journal import Fence
+    from .ontos_managed_quorum import ManagedQuorumEpochJournal
 
 GATES = tuple(f'GATE-0{i}' for i in range(1,9))
 _HEX = re.compile(r'[0-9a-f]{64}\Z',re.ASCII)
@@ -41,6 +46,24 @@ class JournalQuorumAnchorTrust:
         if (type(self.journal) is not QuorumEpochJournal or type(self.expected) is not Cursor
                 or type(self.challenge) is not bytes or len(self.challenge) != 32):
             raise ValueError('typed journal, retained cursor and challenge required')
+        self.expected.__post_init__()
+
+
+@dataclass(frozen=True, slots=True)
+class ManagedJournalQuorumAnchorTrust:
+    """Operator-pinned segmented quorum; retain the complete returned fence."""
+    journal: ManagedQuorumEpochJournal
+    expected: Fence
+    challenge: bytes
+
+    def __post_init__(self):
+        # The managed gateway uses Linux flock; keep legacy paths importable
+        # on platforms that do not support it.
+        from .ontos_managed_journal import Fence
+        from .ontos_managed_quorum import ManagedQuorumEpochJournal
+        if (type(self.journal) is not ManagedQuorumEpochJournal or type(self.expected) is not Fence
+                or type(self.challenge) is not bytes or len(self.challenge) != 32):
+            raise ValueError('typed managed journal, retained fence and challenge required')
         self.expected.__post_init__()
 
 
@@ -110,7 +133,7 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
               commit_sha: str, tenant: str, source_campaign_sha256: str | None,
               trust: dict[str,tuple[ReceiptScope,bytes]],
               submissions: dict[str,GateEvidence],
-              anchor_trust: AnchorTrust | QuorumAnchorTrust | JournalQuorumAnchorTrust | None = None,
+              anchor_trust: AnchorTrust | QuorumAnchorTrust | JournalQuorumAnchorTrust | ManagedJournalQuorumAnchorTrust | None = None,
               anchor_evidence: AnchorEvidence | QuorumAnchorEvidence | None = None) -> dict:
     """Use only externally pinned gate scopes and keys, never submitted trust roots.
 
@@ -119,7 +142,8 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
     The source campaign marker alone does not prove an experiment occurred.
     GATE-09 additionally requires the exact review at the fresh witness tip.
     Journal mode commits that review under CAS before returning PASS. The caller
-    must retain the returned anchor_cursor in an independent trust domain.
+    must retain the returned anchor_cursor or complete anchor_fence in an
+    independent trust domain. Managed mode never falls back to legacy mode.
     """
     ReceiptScope('L12','GATE-01',commit_sha,tenant,'policy')
     if (not _hex(manifest_pin) or source_campaign_sha256 is not None and not _hex(source_campaign_sha256)
@@ -173,6 +197,7 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
     final = 'FAIL' if 'FAIL' in results.values() else 'PASS' if all(x=='PASS' for x in results.values()) else 'BLOCKED'
     anchor_status = 'BLOCKED'
     anchor_cursor = None
+    anchor_fence = None
     if final == 'PASS':
         if anchor_trust is not None and anchor_evidence is not None:
             try:
@@ -180,7 +205,7 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
                                    campaign_pin=source_campaign_sha256,trust=trust,
                                    receipts=authenticated_receipts)
                 keys = tuple(trust[gate][1] for gate in GATES)
-                if type(anchor_trust) is JournalQuorumAnchorTrust:
+                if type(anchor_trust) in (JournalQuorumAnchorTrust, ManagedJournalQuorumAnchorTrust):
                     anchor_trust.__post_init__()
                     if type(anchor_evidence) is not QuorumAnchorEvidence:
                         anchor_status = 'FAIL'
@@ -189,8 +214,15 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
                             anchor_evidence.certificate, anchor_evidence.inclusion, keys,
                             challenge=anchor_trust.challenge)
                         if update.status == 'COMMITTED':
-                            cursor = update.snapshot.cursor
-                            anchor_cursor = {'sequence': cursor.sequence, 'digest': cursor.digest.hex()}
+                            if type(anchor_trust) is ManagedJournalQuorumAnchorTrust:
+                                fence = update.snapshot.fence
+                                anchor_fence = {'generation': fence.generation,
+                                                'sequence': fence.cursor.sequence,
+                                                'digest': fence.cursor.digest.hex(),
+                                                'lineage': fence.lineage.hex()}
+                            else:
+                                cursor = update.snapshot.cursor
+                                anchor_cursor = {'sequence': cursor.sequence, 'digest': cursor.digest.hex()}
                             anchor_status = 'PASS'
                         else:
                             anchor_status = 'FAIL' if update.status == 'REJECTED' else 'BLOCKED'
@@ -207,4 +239,6 @@ def audit_l12(raw_manifest: bytes, manifest_pin: str, payloads: dict[str,bytes] 
             'engineering_acceptance_status':final,'anchor_status':anchor_status,'release_authorized':False}
     if type(anchor_trust) is JournalQuorumAnchorTrust:
         result['anchor_cursor'] = anchor_cursor
+    if type(anchor_trust) is ManagedJournalQuorumAnchorTrust:
+        result['anchor_fence'] = anchor_fence
     return result
