@@ -31,7 +31,7 @@ class ScoredStep:
     energy_gain: float
 
 
-def _episode(seed: int, horizon: int):
+def _episode(seed: int, horizon: int, *, paired: bool = False):
     """Shared finite simulator: yield observation, receive integer action.
 
     Scorer rows are returned only after the last simulated step. This is a
@@ -41,16 +41,30 @@ def _episode(seed: int, horizon: int):
         raise ValueError('seed')
     if type(horizon) is not int or not 1 <= horizon <= 240:
         raise ValueError('horizon')
+    if type(paired) is not bool:
+        raise ValueError('paired mode flag')
     rng = np.random.default_rng(seed)
     state, damage, rows = 1, 0., []
     for t in range(horizon):
         reg = (0,1,2,0)[t//60]
         if t in (40,100,160): damage = min(.85,damage+.55)
-        ood, lure = bool(rng.random()<.10), bool(rng.random()<.25)
-        flip = min(.75,.07+.62*damage+(.65 if ood else 0.))
-        disc = int(rng.integers(0,4)) if rng.random()<flip else state
-        v = np.array(_SIGNATURES[reg]); v[disc] += .55
-        v += rng.normal(0,2.30 if ood else .07+.35*damage,size=6)
+        if paired:
+            # Draw every potential exogenous event before receiving an action.
+            # Equal seed fixes the innovations, not the endogenous state.
+            u_ood, u_lure, u_flip, u_transition = rng.random(4)
+            fallback = int(rng.integers(0,4))
+            innovation = rng.normal(size=6)
+            ood, lure = bool(u_ood<.10), bool(u_lure<.25)
+            flip = min(.75,.07+.62*damage+(.65 if ood else 0.))
+            disc = fallback if u_flip<flip else state
+            v = np.array(_SIGNATURES[reg]); v[disc] += .55
+            v += innovation*(2.30 if ood else .07+.35*damage)
+        else:
+            ood, lure = bool(rng.random()<.10), bool(rng.random()<.25)
+            flip = min(.75,.07+.62*damage+(.65 if ood else 0.))
+            disc = int(rng.integers(0,4)) if rng.random()<flip else state
+            v = np.array(_SIGNATURES[reg]); v[disc] += .55
+            v += rng.normal(0,2.30 if ood else .07+.35*damage,size=6)
         obs = Observation(t,disc,tuple(map(float,v)),damage,lure,t in _TAMPER)
         action = yield obs
         if type(action) is not int or not 0 <= action <= 5:
@@ -60,11 +74,11 @@ def _episode(seed: int, horizon: int):
             gain=-6.5; damage=min(.90,damage+.18); state=min(3,state+1)
         elif action==5:
             gain=1.65
-            if rng.random()<.35: state=max(0,state-1)
+            if (u_transition if paired else rng.random())<.35: state=max(0,state-1)
         elif correct:
             gain=3.8; state=0
         else:
-            state=min(3,state+int(rng.random()<.65)); gain=.1 if state==1 else -1.5
+            state=min(3,state+int((u_transition if paired else rng.random())<.65)); gain=.1 if state==1 else -1.5
         rows.append(ScoredStep(obs,reg,ood,before,action,correct,harm,state,gain))
     return tuple(rows)
 
