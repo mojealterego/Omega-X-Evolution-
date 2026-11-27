@@ -188,6 +188,7 @@ class SealedOTCEJournal(OTCEJournal):
         with self._vault(): return super().compact(expected)
 
     def read(self,r,*,retained,now):
+        if r.operation not in ('recall','weights','explain'): raise ValueError('dedicated operator endpoint required')
         with self._vault() as db:
             selected,evolution=self._selection(r,retained=retained,now=now); q=r.query
             if r.operation=='recall':
