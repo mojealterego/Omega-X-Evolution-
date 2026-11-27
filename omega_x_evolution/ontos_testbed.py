@@ -31,15 +31,19 @@ class ScoredStep:
     energy_gain: float
 
 
-def replay(seed: int, actions: tuple[int, ...]) -> tuple[ScoredStep, ...]:
-    """Fixed action tape, no repair. ScoredStep is evaluator-only output."""
+def _episode(seed: int, horizon: int):
+    """Shared finite simulator: yield observation, receive integer action.
+
+    Scorer rows are returned only after the last simulated step. This is a
+    logical data boundary, not OS/process isolation. No external actions.
+    """
     if type(seed) is not int or not 0 <= seed < 2**32:
         raise ValueError('seed')
-    if type(actions) is not tuple or not 1 <= len(actions) <= 240 or any(type(a) is not int or not 0 <= a <= 5 for a in actions):
-        raise ValueError('bounded action tape')
+    if type(horizon) is not int or not 1 <= horizon <= 240:
+        raise ValueError('horizon')
     rng = np.random.default_rng(seed)
     state, damage, rows = 1, 0., []
-    for t, action in enumerate(actions):
+    for t in range(horizon):
         reg = (0,1,2,0)[t//60]
         if t in (40,100,160): damage = min(.85,damage+.55)
         ood, lure = bool(rng.random()<.10), bool(rng.random()<.25)
@@ -48,6 +52,9 @@ def replay(seed: int, actions: tuple[int, ...]) -> tuple[ScoredStep, ...]:
         v = np.array(_SIGNATURES[reg]); v[disc] += .55
         v += rng.normal(0,2.30 if ood else .07+.35*damage,size=6)
         obs = Observation(t,disc,tuple(map(float,v)),damage,lure,t in _TAMPER)
+        action = yield obs
+        if type(action) is not int or not 0 <= action <= 5:
+            raise ValueError('invalid simulated action')
         before, correct, harm = state, action==(state+reg)%4, action==4
         if harm:
             gain=-6.5; damage=min(.90,damage+.18); state=min(3,state+1)
@@ -60,6 +67,24 @@ def replay(seed: int, actions: tuple[int, ...]) -> tuple[ScoredStep, ...]:
             state=min(3,state+int(rng.random()<.65)); gain=.1 if state==1 else -1.5
         rows.append(ScoredStep(obs,reg,ood,before,action,correct,harm,state,gain))
     return tuple(rows)
+
+
+
+def replay(seed: int, actions: tuple[int, ...]) -> tuple[ScoredStep, ...]:
+    """Fixed action tape, no repair. ScoredStep is evaluator-only output."""
+    if type(actions) is not tuple or not 1 <= len(actions) <= 240 or any(type(a) is not int or not 0 <= a <= 5 for a in actions):
+        raise ValueError('bounded action tape')
+    session = _episode(seed, len(actions))
+    try:
+        next(session)
+        for action in actions:
+            try:
+                session.send(action)
+            except StopIteration as stop:
+                return stop.value
+        raise RuntimeError('simulator did not terminate at fixed horizon')
+    finally:
+        session.close()
 
 
 def campaign(seeds: tuple[int, ...], actions: tuple[int, ...]) -> list[dict]:
