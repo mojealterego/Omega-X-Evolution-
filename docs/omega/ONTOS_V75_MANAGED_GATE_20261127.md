@@ -12,3 +12,10 @@ Base main 3cd67105b252570059ed82b0f06473d9a445f3f2. The actual audit_l12 reducer
 - Source blob 86a57226dbb46b5ad11314958cee112e962a9ad3; test blob c11c54bea8b5b394fc183ce67c6db81d6de7fe93. Test IDs are pytest node IDs.
 
 Scoped native acceptance integration tested. Full project GATE-09 remains BLOCKED: original 33-source archive and genuine full-source campaign and operational trust provisioning not verified. Direct git ls-remote failed DNS; connector works, full upstream test suite not run. No production deployment or independent physical custody. Next: actual bounded ablation campaign and source-faithful evidence closure.
+
+## Supplemental native regression, after code commit 51318d950a7efece97558d945028add465390d5e
+
+The managed quorum suite was split to avoid the earlier execution timeout, without omitting tests:
+- OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_ontos_managed_quorum.py -k 'not actual_state_codec_digest_and_history_capacity': exit 0, 5 passed, 1 deselected in 23.94s. SHA256 cd9958057b4aaa144d218ac5a489009b2e13141dc4ef1cad0675b9c21421cfa6.
+- OPENBLAS_NUM_THREADS=1 python -m pytest -q tests/test_ontos_managed_quorum.py -k actual_state_codec_digest_and_history_capacity: exit 0, 1 passed, 5 deselected in 0.64s. SHA256 65e1a7c2d426908f8bd429c4d0d8fa5d07fc45c8c8cd38d5a5324a47140adf7f.
+The six native tests include actual joint rotation, retired-key exclusion, rollover, reopen, retained challenge history at capacity 32768, prepared intent recovery, and tampered compacted bootstrap rejection. Total 202 distinct tests passed across four GREEN runs, not full upstream regression. Linux 6.18.57 x86_64. Raw logs under [evidence/v75-managed-20261127](evidence/v75-managed-20261127/). No new operational trust claims or change to acceptance status.
