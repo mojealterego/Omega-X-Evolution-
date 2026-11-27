@@ -86,7 +86,8 @@ def transition(state: Session, frame: Frame) -> Session:
     record = f'{frame.channel}:{frame.kind}:{frame.nonce}'
     base = dict(last_tick=frame.tick, seen_nonces=state.seen_nonces + (frame.nonce,),
                 audit=state.audit + (record,))
-    if frame.tick > state.deadline or frame.kind in ('veto', 'timeout'):
+    # Valid alarms are hard vetoes in every phase, not only OBSERVED.
+    if frame.tick > state.deadline or frame.kind in ('veto', 'timeout', 'alarm'):
         return replace(state, **base, caps=frozenset(), phase='LOCKDOWN', pending_cap=None)
     if frame.kind == 'restart':
         return replace(state, **base, phase='LOCKDOWN' if state.phase == 'LOCKDOWN' else 'IDLE',
@@ -96,8 +97,6 @@ def transition(state: Session, frame: Frame) -> Session:
     if frame.channel == 'A' and state.phase == 'IDLE':
         return replace(state, **base, phase='OBSERVED')
     if frame.channel == 'B' and state.phase == 'OBSERVED':
-        if frame.kind == 'alarm':
-            return replace(state, **base, caps=frozenset(), phase='LOCKDOWN')
         return replace(state, **base, phase='ASSESSED')
     if frame.channel in ('C', 'D') and state.phase == 'ASSESSED':
         if frame.cap not in state.caps:
