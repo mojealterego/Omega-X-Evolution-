@@ -422,3 +422,5 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 **Stage 30b / partial 31–32 — APEX physics and robust scheduling (2026-11-28):** [evidence](OMEGA_APEX_PHYSICS_PLANNER_20261128.md). Six model equations, conservative offline table and bounded robust schedule search execute actual Twin. 65 APEX tests PASS (23 new). Stage30c cross-plan feedback and Stage33 OTCM/checkpoint integration OPEN; full L12 BLOCKED.
 
 **Stage 33a — durable APEX campaign (2026-11-28):** [evidence](OMEGA_APEX_CAMPAIGN_20261128.md). Existing native ONTOS journal integrated with actual Twin; 72 APEX tests PASS (7 new). Stage33 PARTIAL, no operational custody or OTCM/DGM integration claim. Stage30c OPEN; full L12 BLOCKED.
+
+**Stage 32b — model MPC (2026-11-28):** [evidence](OMEGA_APEX_MPC_20261128.md). Receding-horizon controller executes real Twin and replans each event. 83 APEX cases PASS. Scope partial; full APEX-HRL, Stage30c DGM and full L12 remain open/blocked.
