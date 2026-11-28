@@ -75,6 +75,25 @@ def _capture(source,db,r,w,s,retained,now):
 
 
 @dataclass(frozen=True,slots=True)
+class Selector:
+    stride: int
+    fast: int
+    deep: int
+
+    def __post_init__(self):
+        if not _int(self.stride,0,3) or not all(_int(x,0,16) for x in (self.fast,self.deep)):
+            raise ValueError('bounded selector IR')
+
+    def seed(self,role,seed):
+        self.__post_init__()
+        if role not in ('fast','deep') or not _int(seed,0,2**32-1): raise ValueError('proposal input')
+        return (self.stride*seed+(self.fast if role=='fast' else self.deep))%(2**32)
+
+    def wire(self): return [self.stride,self.fast,self.deep]
+
+
+
+@dataclass(frozen=True,slots=True)
 class MemoryProposal:
     source: HyperRAGJournal
     retrieval: Read
@@ -85,6 +104,7 @@ class MemoryProposal:
     pool: tuple[tuple[str,int,int,int],...]
     commitment: str
     runtime: str
+    selector: Selector=Selector(1,0,0)
 
     @classmethod
     def bind(cls,source,r,w,s,*,retained,clock):
@@ -95,11 +115,14 @@ class MemoryProposal:
         return cls(source,r,w,s,retained,clock,pool,pin,_runtime())
 
     def contract(self):
-        return {'schema':'memory-proposal-v1','input':self.commitment,'runtime':self.runtime}
+        if type(self.selector) is not Selector: raise ValueError('typed selector required')
+        self.selector.__post_init__()
+        return {'schema':'memory-proposal-v2','input':self.commitment,'runtime':self.runtime,'selector':self.selector.wire()}
 
     @contextmanager
     def guard(self):
         """Revalidate under cooperating source lock; no lock across async work."""
+        self.contract()
         if type(self.source) is not HyperRAGJournal or not callable(self.clock):
             raise IntegrityError('invalid memory adapter')
         with self.source._vault() as db:
@@ -116,6 +139,7 @@ class MemoryProposal:
         if model not in ('fast','deep') or not _int(seed,0,2**32-1) or type(prompt) is not str or len(prompt)>8192:
             raise ValueError('invalid proposal request')
         parent=json.loads(prompt)['parent']; Expression(parent)
+        self.contract(); seed=self.selector.seed(model,seed)
         if not self.pool:
             return await simulated_proposal(model,prompt,seed)
         # Stable integer selection; neither clock nor external provider affects replay.
