@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pytest
 from omega_x_evolution.checkpoint import CheckpointError
 from omega_x_evolution.durable_checkpoint import DurableCheckpointStore
-from omega_x_evolution.engine import run
+from test_engine_memory import run
 from test_engine_memory import fixture, bind, cfg
 
 

@@ -377,22 +377,38 @@ def _restore(state, contract, rng, cascade, archive, router, buf):
         raise CheckpointError('invalid checkpoint state') from exc
 
 
-async def run(cfg: Config, proposal: Proposal=simulated_proposal, *, checkpoint: CheckpointStore | None = None, resume: bool = False, evaluation_processes: int = 1, performance_policy=None):
+async def run(cfg: Config, proposal: Proposal=simulated_proposal, *, checkpoint: CheckpointStore | None = None, resume: bool = False, evaluation_processes: int = 1, performance_policy=None, source_fence=None, legacy_research: bool=False):
     if type(evaluation_processes) is not int or not 1 <= evaluation_processes <= 32:
         raise ValueError('evaluation_processes must be between 1 and 32')
     if evaluation_processes == 1:
-        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=None, performance_policy=performance_policy)
+        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=None, performance_policy=performance_policy, source_fence=source_fence, legacy_research=legacy_research)
     with ProcessPoolExecutor(max_workers=evaluation_processes, mp_context=get_context('spawn')) as executor:
-        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=executor, performance_policy=performance_policy)
+        return await _run(cfg, proposal, checkpoint=checkpoint, resume=resume, executor=executor, performance_policy=performance_policy, source_fence=source_fence, legacy_research=legacy_research)
 
 
-async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore | None, resume: bool, executor, performance_policy=None):
+async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore | None, resume: bool, executor, performance_policy=None, source_fence=None, legacy_research=False):
     if resume and checkpoint is None:
         raise ValueError('resume requires checkpoint')
-    memory=None
-    if type(proposal).__module__==__package__+'.engine_memory':
-        from .engine_memory import MemoryProposal
-        if type(proposal) is MemoryProposal: memory=proposal
+    from .durable_checkpoint import DurableCheckpointStore
+    from .fenced_checkpoint import FencedCheckpointStore
+    from .engine_memory import MemoryProposal
+    from .ontos_managed_journal import Fence
+    from .ontos_epoch_journal_core import IntegrityError
+    memory=proposal if type(proposal) is MemoryProposal else None
+    if type(legacy_research) is not bool:
+        raise ValueError('explicit boolean legacy research flag required')
+    if memory is not None:
+        if type(source_fence) is not Fence or source_fence!=memory.retained:
+            raise IntegrityError('independently retained source fence required')
+        source_fence.__post_init__()
+        if legacy_research: raise ValueError('memory cannot use legacy research checkpoints')
+    elif source_fence is not None:
+        raise ValueError('source fence requires memory proposal')
+    if checkpoint is not None and type(checkpoint) not in (FencedCheckpointStore,DurableCheckpointStore):
+        if not (legacy_research and memory is None and proposal is simulated_proposal and type(checkpoint) is CheckpointStore):
+            raise ValueError('fenced checkpoint required; legacy offline research needs explicit opt-in')
+    if legacy_research and (type(checkpoint) is not CheckpointStore or proposal is not simulated_proposal):
+        raise ValueError('legacy research requires an exact offline legacy checkpoint')
     if checkpoint is not None and proposal is not simulated_proposal and memory is None:
         raise ValueError('checkpoint replay currently supports offline proposals only')
     if memory is not None and checkpoint is not None and performance_policy is not None:

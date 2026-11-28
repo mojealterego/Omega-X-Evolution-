@@ -195,7 +195,7 @@ class DGMJournal:
             values=[]
             for seed in group:
                 with self._guard(source_fence): pass
-                report=await run(replace(self.plan.config,seed=seed),proposal,evaluation_processes=evaluation_processes)
+                report=await run(replace(self.plan.config,seed=seed),proposal,evaluation_processes=evaluation_processes,source_fence=source_fence)
                 values.append(_metric(report))
             if not _valid_metrics(values,self.plan.config.budget): raise IntegrityError('invalid evaluator metrics')
             return values

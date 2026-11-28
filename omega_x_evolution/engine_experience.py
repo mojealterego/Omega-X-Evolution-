@@ -271,7 +271,7 @@ class ExperienceJournal:
             for seed in seeds:
                 self.view(retained,dgm_fence,source_fence=source_fence)
                 rows.append(_metric(await run(replace(self.dgm.plan.config,seed=seed),
-                                              replace(self.dgm.memory,selector=selector))))
+                                              replace(self.dgm.memory,selector=selector),source_fence=source_fence)))
             if not _valid_metrics(rows,self.dgm.plan.config.budget):
                 raise IntegrityError('invalid assessment metrics')
             return rows

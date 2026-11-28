@@ -39,8 +39,8 @@ def test_parallel_matches_serial(seed):
 def test_resume_across_execution_backends(tmp_path):
     cfg = Config(seed=5, generations=4, islands=2, workers=2)
     store = CheckpointStore(tmp_path/'run.db', b'x'*32)
-    asyncio.run(run(replace(cfg,generations=2), checkpoint=store))
-    assert asyncio.run(run(cfg, checkpoint=store, resume=True, evaluation_processes=2)) == asyncio.run(run(cfg))
+    asyncio.run(run(replace(cfg,generations=2), checkpoint=store, legacy_research=True))
+    assert asyncio.run(run(cfg, checkpoint=store, legacy_research=True, resume=True, evaluation_processes=2)) == asyncio.run(run(cfg))
 
 
 @pytest.mark.parametrize('value', [0, -1, 33, True])
@@ -54,17 +54,17 @@ def test_failed_worker_batch_preserves_last_commit(tmp_path, monkeypatch):
     from shinka.omega import engine
     cfg = Config(seed=5, generations=2, islands=2, workers=2)
     store = CheckpointStore(tmp_path/'run.db', b'x'*32)
-    asyncio.run(run(cfg, checkpoint=store))
+    asyncio.run(run(cfg, checkpoint=store, legacy_research=True))
     before = store.load()
     original = engine.evaluate_batch
     async def fail_batch(jobs, executor):
         raise BrokenProcessPool('simulated worker loss')
     monkeypatch.setattr(engine, 'evaluate_batch', fail_batch)
     with pytest.raises(BrokenProcessPool):
-        asyncio.run(run(replace(cfg,generations=3), checkpoint=store, resume=True))
+        asyncio.run(run(replace(cfg,generations=3), checkpoint=store, legacy_research=True, resume=True))
     assert store.load() == before
     monkeypatch.setattr(engine, 'evaluate_batch', original)
-    assert asyncio.run(run(replace(cfg,generations=3), checkpoint=store, resume=True)) == asyncio.run(run(replace(cfg,generations=3)))
+    assert asyncio.run(run(replace(cfg,generations=3), checkpoint=store, legacy_research=True, resume=True)) == asyncio.run(run(replace(cfg,generations=3)))
 
 
 def test_broken_process_pool_propagates_failure():

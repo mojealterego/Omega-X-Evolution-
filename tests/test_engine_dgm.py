@@ -88,7 +88,7 @@ def test_clock_expiry_and_plan_binding(tmp_path):
 
 
 def test_selector_is_bound_to_actual_engine_contract(tmp_path):
-    from omega_x_evolution.engine import run
+    from test_engine_memory import run
     p,j,f,s,clock,m,plan,d,h,*_=setup(tmp_path)
     mutated=replace(m,selector=Selector(0,1,1))
     assert mutated.contract()!=m.contract()
@@ -157,10 +157,11 @@ def test_native_parallel_round_matches_serial(tmp_path):
 
 
 def test_changed_selector_rejects_engine_checkpoint(tmp_path):
-    from omega_x_evolution.engine import run
+    from test_engine_memory import run
     from omega_x_evolution.checkpoint import CheckpointStore, CheckpointError
     p,j,f,s,clock,m,plan,d,h,*_=setup(tmp_path)
-    checkpoint=CheckpointStore(tmp_path/'engine.db',b'k'*32)
+    from test_engine_memory import store
+    checkpoint=store(tmp_path,'engine.db')
     asyncio.run(run(plan.config,m,checkpoint=checkpoint))
     with pytest.raises(CheckpointError):
         asyncio.run(run(replace(plan.config,generations=2),replace(m,selector=Selector(0,0,0)),checkpoint=checkpoint,resume=True))

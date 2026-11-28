@@ -3,7 +3,7 @@ from dataclasses import replace
 
 import pytest
 from omega_x_evolution.checkpoint import CheckpointStore, CheckpointError
-from omega_x_evolution.engine import Config, run, simulated_proposal, Expression
+from omega_x_evolution.engine import Config, run as engine_run, simulated_proposal, Expression
 from omega_x_evolution.engine_memory import MemoryProposal
 from omega_x_evolution.ontos_hyperrag import Search
 from omega_x_evolution.ontos_epoch_journal_core import IntegrityError
@@ -29,7 +29,19 @@ def bind(p,j,f,s,clock):
 def cfg(n=2): return Config(seed=101,generations=n,islands=1,workers=2,budget=100,concurrency=2)
 
 
-def store(tmp,name): return CheckpointStore(tmp/name,b'k'*32)
+def store(tmp,name):
+    from omega_x_evolution.durable_checkpoint import DurableCheckpointStore
+    from hashlib import sha256
+    a,b=tmp/(name+'-anchor'),tmp/(name+'-data')
+    a.mkdir(mode=0o700,exist_ok=True); b.mkdir(mode=0o700,exist_ok=True)
+    s=DurableCheckpointStore(b/name,b'k'*32,anchor=a/'floor.db',anchor_key=b'a'*32,run_id=sha256(name.encode()).digest())
+    if not s.anchor.exists(): s.provision()
+    return s
+
+
+async def run(cfg,proposal=simulated_proposal,**kwargs):
+    if type(proposal) is MemoryProposal: kwargs['source_fence']=proposal.retained
+    return await engine_run(cfg,proposal,**kwargs)
 
 
 def test_actual_engine_resume_equals_uninterrupted(tmp_path):
@@ -68,7 +80,7 @@ def test_expiry_without_fence_change(tmp_path):
     f=put(p,j,f,node('z',value='scheduler square 1000 10 1000',expires=10))
     a=bind(p,j,f,s,clock); clock[0]=10
     with pytest.raises(IntegrityError): asyncio.run(run(cfg(1),a,checkpoint=store(tmp_path,'run.db')))
-    assert not (tmp_path/'run.db').exists()
+    assert not store(tmp_path,'run.db').path.exists()
 
 
 def test_source_changes_during_actual_evaluation(tmp_path,monkeypatch):
@@ -101,7 +113,7 @@ def test_parallel_replay_and_no_raw_memory_in_checkpoint(tmp_path):
     asyncio.run(run(cfg(1),a,checkpoint=store(tmp_path,'parallel.db')))
     resumed=asyncio.run(run(cfg(2),bind(p,j,f,s,clock),checkpoint=store(tmp_path,'parallel.db'),resume=True,evaluation_processes=2))
     assert whole==resumed
-    raw=(tmp_path/'parallel.db').read_bytes()
+    raw=store(tmp_path,'parallel.db').path.read_bytes()
     assert b'scheduler ratio 2000 10 2000' not in raw and b'__import__' not in raw
 
 
@@ -144,7 +156,7 @@ def test_wall_clock_gate_disallowed_for_deterministic_checkpoint(tmp_path):
     p,j,f,s,clock=fixture(tmp_path); a=bind(p,j,f,s,clock)
     with pytest.raises(ValueError,match='wall-clock'):
         asyncio.run(run(cfg(1),a,checkpoint=store(tmp_path,'run.db'),performance_policy=Policy()))
-    assert not (tmp_path/'run.db').exists()
+    assert not store(tmp_path,'run.db').path.exists()
 
 
 def test_final_guard_without_checkpoint(tmp_path,monkeypatch):

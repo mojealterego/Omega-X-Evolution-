@@ -103,4 +103,4 @@ async def run_fenced_memory(cfg, proposal, *, source_fence, checkpoint,
         raise IntegrityError('independently retained source fence mismatch')
     source_fence.__post_init__()
     return await run(cfg, proposal, checkpoint=checkpoint, resume=resume,
-                     evaluation_processes=evaluation_processes)
+                     evaluation_processes=evaluation_processes, source_fence=source_fence)

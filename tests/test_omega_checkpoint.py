@@ -9,7 +9,7 @@ KEY = b'k' * 32
 CFG = Config(seed=5, generations=5, islands=2, workers=2)
 
 def execute(cfg, store=None, resume=False):
-    return asyncio.run(run(cfg, checkpoint=store, resume=resume))
+    return asyncio.run(run(cfg, checkpoint=store, resume=resume, legacy_research=store is not None))
 
 def test_resume_matches_uninterrupted_run(tmp_path):
     s = CheckpointStore(tmp_path/'state.db', KEY)
@@ -96,7 +96,7 @@ def test_cli_resume_across_processes(tmp_path):
     import sys
     path=tmp_path/'state.db'; key=tmp_path/'key'; key.write_bytes(KEY)
     command=[sys.executable,'-m','shinka.omega','--seed','5','--islands','2','--workers','2']
-    options=['--checkpoint',str(path),'--checkpoint-key-file',str(key)]
+    options=['--checkpoint',str(path),'--checkpoint-key-file',str(key),'--legacy-research-checkpoint']
     subprocess.run(command+['--generations','2']+options,check=True,capture_output=True,timeout=15)
     resumed=subprocess.run(command+['--generations','5','--resume']+options,check=True,capture_output=True,timeout=15)
     assert json.loads(resumed.stdout)==json.loads(json.dumps(execute(CFG)))
