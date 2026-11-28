@@ -420,3 +420,5 @@ Dokumentacja: [EXT-01..07 i kryteria](ONTOS_EXTENSIONS_V81_V87.md), [diagram sek
 **Stage 30a — APEX stateful twin (2026-11-28):** [evidence](OMEGA_APEX_TWIN_20261128.md). 13 new and 29 shield regression tests PASS; exact baseline and new code blob identities verified. APEX-03/04 PARTIAL, modeled atomic transitions only. Stage30 cross-plan feedback and remaining twin physics OPEN; full L12 BLOCKED.
 
 **Stage 30b / partial 31–32 — APEX physics and robust scheduling (2026-11-28):** [evidence](OMEGA_APEX_PHYSICS_PLANNER_20261128.md). Six model equations, conservative offline table and bounded robust schedule search execute actual Twin. 65 APEX tests PASS (23 new). Stage30c cross-plan feedback and Stage33 OTCM/checkpoint integration OPEN; full L12 BLOCKED.
+
+**Stage 33a — durable APEX campaign (2026-11-28):** [evidence](OMEGA_APEX_CAMPAIGN_20261128.md). Existing native ONTOS journal integrated with actual Twin; 72 APEX tests PASS (7 new). Stage33 PARTIAL, no operational custody or OTCM/DGM integration claim. Stage30c OPEN; full L12 BLOCKED.
