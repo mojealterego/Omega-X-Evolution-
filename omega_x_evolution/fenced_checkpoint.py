@@ -95,7 +95,9 @@ async def run_fenced_memory(cfg, proposal, *, source_fence, checkpoint,
     from .ontos_epoch_journal_core import IntegrityError
     from .ontos_managed_journal import Fence
 
-    if type(proposal) is not MemoryProposal or type(checkpoint) is not FencedCheckpointStore:
+    from .durable_checkpoint import DurableCheckpointStore
+
+    if type(proposal) is not MemoryProposal or type(checkpoint) not in (FencedCheckpointStore, DurableCheckpointStore):
         raise ValueError('typed memory proposal and fenced checkpoint required')
     if type(source_fence) is not Fence or source_fence != proposal.retained:
         raise IntegrityError('independently retained source fence mismatch')
