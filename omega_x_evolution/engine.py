@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import ast
 import asyncio
+from contextlib import nullcontext
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import get_context
 from dataclasses import asdict, dataclass, replace
@@ -388,8 +389,16 @@ async def run(cfg: Config, proposal: Proposal=simulated_proposal, *, checkpoint:
 async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore | None, resume: bool, executor, performance_policy=None):
     if resume and checkpoint is None:
         raise ValueError('resume requires checkpoint')
-    if checkpoint is not None and proposal is not simulated_proposal:
+    memory=None
+    if type(proposal).__module__==__package__+'.engine_memory':
+        from .engine_memory import MemoryProposal
+        if type(proposal) is MemoryProposal: memory=proposal
+    if checkpoint is not None and proposal is not simulated_proposal and memory is None:
         raise ValueError('checkpoint replay currently supports offline proposals only')
+    if memory is not None and checkpoint is not None and performance_policy is not None:
+        raise ValueError('wall-clock performance policy cannot promise deterministic memory replay')
+    def source_guard(): return memory.guard() if memory is not None else nullcontext()
+    with source_guard(): pass
     from . import performance
     if performance_policy is not None and (not isinstance(performance_policy,performance.Policy) or min(cfg.generations*cfg.islands*cfg.workers,cfg.budget)>performance.MAX_ATTEMPTS):
         raise ValueError('invalid performance policy or profiling attempt cap')
@@ -403,6 +412,7 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
     rejects=attempts=0; best=score(baseline); stagnation=0; sem=asyncio.Semaphore(cfg.concurrency)
     completed=0; stopped=False
     contract=_checkpoint_contract(cfg) if checkpoint is not None else None
+    if contract is not None and memory is not None: contract['memory_proposal']=memory.contract()
     if contract is not None and perf_context is not None: contract['performance_regression']=perf_context
     def snapshot():
         state=_snapshot(contract,rng,cascade,archive,router,buf,attempts,rejects,best,stagnation,stopped)
@@ -410,7 +420,7 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
         if perf_context is not None: state['performance_records']=perf_records
         return state
     if resume:
-        completed,state=checkpoint.load()
+        with source_guard(): completed,state=checkpoint.load()
         if completed>cfg.generations:
             raise CheckpointError('requested target predates checkpoint')
         attempts,rejects,best,stagnation,stopped=_restore(state,contract,rng,cascade,archive,router,buf)
@@ -422,9 +432,10 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
     else:
         for i in range(cfg.islands):archive.add(Artifact(f'seed-{i}',None,i,0,BASELINE,Genome(),baseline))
         if checkpoint is not None:
-            checkpoint.initialize(snapshot())
+            with source_guard(): checkpoint.initialize(snapshot())
     async def request(arm,prompt,seed):
         async with sem:
+            if memory is not None: return await memory(arm.id,prompt,seed)
             try:return await asyncio.wait_for(proposal(arm.id,prompt,seed),cfg.proposal_timeout)
             except Exception:return None
     for gen in range(completed+1,cfg.generations+1) if not stopped else ():
@@ -477,13 +488,15 @@ async def _run(cfg: Config, proposal: Proposal, *, checkpoint: CheckpointStore |
         current=score(archive.best().metrics);stagnation=stagnation+1 if current<=best+1e-9 else 0;best=max(best,current)
         cascade.advance(cfg.seed+gen)
         stopped=not jobs
-        if checkpoint is not None:
-            checkpoint.save(gen,snapshot())
+        with source_guard():
+            if checkpoint is not None: checkpoint.save(gen,snapshot())
         if stopped:break
     champion=archive.best()
     report={'mode':'offline-simulation' if proposal is simulated_proposal else 'external-proposal-adapter','benchmark':VERSION,'baseline_score':score(baseline),'champion_score':score(champion.metrics),'champion':champion.code,'champion_metrics':champion.metrics,'champion_genome':champion.genome.__dict__,'holdout_quality':cascade.heldout(champion.code),'baseline_holdout_quality':cascade.heldout(BASELINE),'attempts':attempts,'rejections':rejects,'spent':router.spent,'budget_unit':'synthetic proposal credits (not USD)','lineage_size':len(archive.lineage),'occupied_cells':sum(len(c) for c in archive.cells),'model_pulls':{a.id:a.pulls for a in router.arms},'sft':[{'prompt':t.prompt,'completion':t.patch} for t in buf.sft],'dpo':buf.pairs()}
 
     report['formal_rule_count']=audit.rules.count
+    if memory is not None:
+        report.update(mode='memory-guided-offline',memory_contract=memory.contract(),release_authorized=False)
     if perf_context is not None:
         report['performance_regression']={'context':perf_context,'records':perf_records,'profiled':len(perf_records),'rejected':sum(not r['accepted'] for r in perf_records)}
-    return report
+    with source_guard(): return report
